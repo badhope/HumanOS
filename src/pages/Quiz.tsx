@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Clock, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Clock, AlertCircle, CheckCircle } from 'lucide-react';
 import { PageTransition } from '@/components/molecules';
 import { Button, Progress, Card } from '@/components/atoms';
 import { useSettingsStore } from '@/store/settingsStore';
 import { useQuizStore } from '@/store/quizStore';
 import { fetchAssessmentBySlug } from '@/features/assessment/registry';
+import QuestionCard from '@/components/molecules/QuestionCard';
 import type { AssessmentDefinition } from '@/shared/types';
 
 const Quiz: React.FC = () => {
@@ -20,6 +21,8 @@ const Quiz: React.FC = () => {
     nextQuestion,
     prevQuestion,
     setCurrentAssessment,
+    setCurrentQuestionIndex,
+    completeQuiz,
     resetQuiz,
   } = useQuizStore();
 
@@ -55,6 +58,23 @@ const Quiz: React.FC = () => {
 
     loadAssessment();
   }, [assessmentId, setCurrentAssessment, resetQuiz]);
+
+  const handleJumpToQuestion = (index: number) => {
+    setCurrentQuestionIndex(index);
+  };
+
+  const handleSubmit = () => {
+    completeQuiz();
+    if (assessmentId) {
+      const resultData = {
+        assessmentId,
+        answers,
+        completedAt: new Date().toISOString(),
+      };
+      localStorage.setItem(`quiz_result_${assessmentId}`, JSON.stringify(resultData));
+    }
+    navigate(`/results/${assessmentId}`);
+  };
 
   if (loading) {
     return (
@@ -115,7 +135,7 @@ const Quiz: React.FC = () => {
     if (currentQuestionIndex < totalQuestions - 1) {
       nextQuestion();
     } else {
-      navigate(`/results/${assessmentId}`);
+      handleSubmit();
     }
   };
 
@@ -125,13 +145,16 @@ const Quiz: React.FC = () => {
     }
   };
 
+  const allAnswered = Object.keys(answers).length === totalQuestions;
+  const unansweredCount = totalQuestions - Object.keys(answers).length;
+
   return (
     <PageTransition>
       <div className="min-h-screen px-4 py-8">
         <div className="mx-auto max-w-2xl">
           <Button
             variant="ghost"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/categories')}
             leftIcon={<ArrowLeft className="w-4 h-4" />}
             className="mb-4"
           >
@@ -200,6 +223,9 @@ const Quiz: React.FC = () => {
                           {String.fromCharCode(65 + index)}
                         </span>
                         <span className="flex-1">{option.text}</span>
+                        {isSelected && (
+                          <CheckCircle className="w-5 h-5 text-primary-500" />
+                        )}
                       </div>
                     </button>
                   );
@@ -219,12 +245,25 @@ const Quiz: React.FC = () => {
             </Button>
             <Button
               onClick={handleNext}
-              rightIcon={currentQuestionIndex === totalQuestions - 1 ? undefined : <ArrowRight className="w-4 h-4" />}
+              rightIcon={currentQuestionIndex === totalQuestions - 1 ? <CheckCircle className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
             >
-              {currentQuestionIndex === totalQuestions - 1 ? '查看结果' : '下一题'}
+              {currentQuestionIndex === totalQuestions - 1 ? '提交并查看结果' : '下一题'}
             </Button>
           </div>
+
+          {!allAnswered && currentQuestionIndex === totalQuestions - 1 && (
+            <p className="mt-4 text-center text-sm text-amber-600 dark:text-amber-400">
+              您还有 {unansweredCount} 道题未作答
+            </p>
+          )}
         </div>
+
+        <QuestionCard
+          assessment={assessment}
+          currentQuestionIndex={currentQuestionIndex}
+          answers={answers}
+          onJumpToQuestion={handleJumpToQuestion}
+        />
       </div>
     </PageTransition>
   );

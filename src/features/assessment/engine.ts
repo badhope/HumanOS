@@ -122,9 +122,10 @@ function evaluateCondition(
       return value < (conditionValue as number);
     case 'eq':
       return value === conditionValue;
-    case 'between':
+    case 'between': {
       const [min, max] = conditionValue as [number, number];
       return value >= min && value <= max;
+    }
     default:
       return false;
   }

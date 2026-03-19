@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Lock } from 'lucide-react';
 import { PageTransition } from '@/components/molecules';
 import { Button, Card, Badge } from '@/components/atoms';
 import { useSettingsStore } from '@/store/settingsStore';
 import { ASSESSMENT_CATEGORIES } from '@/shared/constants';
 import { getAssessmentsByCategory } from '@/features/assessment/registry';
 import type { AssessmentRegistryItem, AssessmentCategory } from '@/shared/types';
+
+const COMPLETED_MODULES = ['mbti-basic'];
 
 const AssessmentList: React.FC = () => {
   const { category } = useParams<{ category: string }>();
@@ -38,6 +40,14 @@ const AssessmentList: React.FC = () => {
   }, [category]);
 
   const categoryInfo = category ? ASSESSMENT_CATEGORIES[category as keyof typeof ASSESSMENT_CATEGORIES] : null;
+
+  const handleAssessmentClick = (assessment: AssessmentRegistryItem) => {
+    if (COMPLETED_MODULES.includes(assessment.slug)) {
+      navigate(`/quiz/${assessment.slug}`);
+    } else {
+      navigate(`/maintenance?module=${assessment.slug}&name=${encodeURIComponent(assessment.name)}`);
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -126,50 +136,66 @@ const AssessmentList: React.FC = () => {
             initial="hidden"
             animate="visible"
           >
-            {assessments.map((assessment) => (
-              <motion.div key={assessment.id} variants={itemVariants}>
-                <Card
-                  className="cursor-pointer hover:shadow-lg transition-shadow duration-200 h-full"
-                  onClick={() => navigate(`/quiz/${assessment.slug}`)}
-                >
-                  <div className="p-6 flex flex-col h-full">
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                        {assessment.name}
-                      </h3>
-                      <Badge className={difficultyColors[assessment.difficulty]}>
-                        {assessment.difficulty === 'easy' ? '简单' :
-                         assessment.difficulty === 'medium' ? '中等' : '困难'}
-                      </Badge>
-                    </div>
+            {assessments.map((assessment) => {
+              const isCompleted = COMPLETED_MODULES.includes(assessment.slug);
+              return (
+                <motion.div key={assessment.id} variants={itemVariants}>
+                  <Card
+                    className={`cursor-pointer hover:shadow-lg transition-shadow duration-200 h-full ${
+                      !isCompleted ? 'opacity-75' : ''
+                    }`}
+                    onClick={() => handleAssessmentClick(assessment)}
+                  >
+                    <div className="p-6 flex flex-col h-full">
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                          {assessment.name}
+                        </h3>
+                        <div className="flex items-center gap-2">
+                          <Badge className={difficultyColors[assessment.difficulty]}>
+                            {assessment.difficulty === 'easy' ? '简单' :
+                             assessment.difficulty === 'medium' ? '中等' : '困难'}
+                          </Badge>
+                          {!isCompleted && (
+                            <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                              <Lock className="w-3 h-3 mr-1" />
+                              即将开放
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
 
-                    <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
-                      {assessment.shortDescription}
-                    </p>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
+                        {assessment.shortDescription}
+                      </p>
 
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {assessment.tags.slice(0, 3).map(tag => (
-                        <span
-                          key={tag}
-                          className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded"
-                        >
-                          {tag}
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {assessment.tags.slice(0, 3).map(tag => (
+                          <span
+                            key={tag}
+                            className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                        <span className="flex items-center gap-1">
+                          <span>⏱</span> {assessment.estimatedMinutes} 分钟
                         </span>
-                      ))}
+                        <span className="flex items-center gap-1">
+                          <span>📝</span> {assessment.questionCount} 题
+                        </span>
+                        {isCompleted && (
+                          <span className="text-green-500 font-medium">完整版</span>
+                        )}
+                      </div>
                     </div>
-
-                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="flex items-center gap-1">
-                        <span>⏱</span> {assessment.estimatedMinutes} 分钟
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <span>📝</span> {assessment.questionCount} 题
-                      </span>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
+                  </Card>
+                </motion.div>
+              );
+            })}
           </motion.div>
 
           {assessments.length === 0 && (

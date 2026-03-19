@@ -9,7 +9,7 @@
   "author": "Humanity Team",
   "language": "zh-CN",
   "estimatedMinutes": 10,
-  "questionCount": 12,
+  "questionCount": 16,
   "difficulty": "easy",
   "tags": ["人格", "性格", "MBTI", "职业", "自我探索"],
   "dimensions": [
@@ -42,62 +42,280 @@
       "TF": { "weights": { "T": 1, "F": -1 } },
       "JP": { "weights": { "J": 1, "P": -1 } }
     },
-    "normalize": true,
-    "minScore": -12,
-    "maxScore": 12
+    "normalize": true
   },
   "resultProfiles": [
     {
       "id": "INTJ",
       "name": "建筑师",
-      "description": "您是一位富有想象力和战略思维的人，善于分析问题，具有强烈的独立性和目标导向。",
+      "description": "您是一位富有想象力和战略思维的人。您善长分析问题，具有强烈的独立性和目标导向。您喜欢追求知识，对能力提升有很高的期待。作为建筑师型，您是天然的领导者，善于从宏观角度规划长远目标。",
       "conditions": [
-        { "dimension": "EI", "operator": "lte", "value": 0 },
-        { "dimension": "SN", "operator": "gte", "value": 0 },
-        { "dimension": "TF", "operator": "gte", "value": 0 },
-        { "dimension": "JP", "operator": "gte", "value": 0 }
+        { "dimension": "EI", "operator": "lt", "value": 0 },
+        { "dimension": "SN", "operator": "gt", "value": 0 },
+        { "dimension": "TF", "operator": "gt", "value": 0 },
+        { "dimension": "JP", "operator": "gt", "value": 0 }
       ],
-      "tags": ["理性", "独立", "战略"],
-      "careers": ["战略咨询", "金融分析", "科研人员", "软件架构师"]
+      "tags": ["理性", "独立", "战略", "分析"],
+      "strengths": ["逻辑思维清晰", "战略规划能力强", "独立自主", "标准高", "善于分析"],
+      "weaknesses": ["可能显得冷漠", "过度批判", "不善于表达情感"],
+      "careers": ["战略咨询师", "金融分析师", "软件架构师", "科研人员", "大学教授"],
+      "relationships": "您在关系中寻求深度和理解，重视智识交流。请学会表达情感，而不只是停留在思考层面。",
+      "growth": "建议您多参与社交活动，学会欣赏多元价值观，适当表达内心的情感。"
+    },
+    {
+      "id": "INTP",
+      "name": "逻辑学家",
+      "description": "您是一位思想的探索者，对知识充满渴望。您逻辑性强，善于分析，喜欢抽象概念。您安静而内敛，重视智识的深度而非广度。作为逻辑学家型，您是创新的源泉，善于发现系统中的漏洞并提出改进方案。",
+      "conditions": [
+        { "dimension": "EI", "operator": "lt", "value": 0 },
+        { "dimension": "SN", "operator": "gt", "value": 0 },
+        { "dimension": "TF", "operator": "gt", "value": 0 },
+        { "dimension": "JP", "operator": "lt", "value": 0 }
+      ],
+      "tags": ["理性", "好奇", "创新", "逻辑"],
+      "strengths": ["善于逻辑分析", "求知欲强", "思维创新", "客观公正", "善于理论构建"],
+      "weaknesses": ["可能脱离实际", "不善于执行", "忽视情感"],
+      "careers": ["数据科学家", "哲学家", "软件工程师", "大学教授", "系统分析师"],
+      "relationships": "您重视智识交流和独立性。请学会更多地表达情感，而不是仅仅停留在思考层面。",
+      "growth": "建议您将想法付诸实践，多关注他人的情感需求，学会在社交中展现自己。"
+    },
+    {
+      "id": "ENTJ",
+      "name": "指挥官",
+      "description": "您是一位果断而有魄力的领导者，天生具有战略眼光和非凡的组织能力。您自信满满，善于激励他人，敢于做出艰难决定。作为指挥官型，您是推动变革的引擎，善于将愿景变为现实。",
+      "conditions": [
+        { "dimension": "EI", "operator": "gt", "value": 0 },
+        { "dimension": "SN", "operator": "gt", "value": 0 },
+        { "dimension": "TF", "operator": "gt", "value": 0 },
+        { "dimension": "JP", "operator": "gt", "value": 0 }
+      ],
+      "tags": ["果断", "领导", "战略", "自信"],
+      "strengths": ["领导力强", "决策果断", "战略思维", "自信坚定", "善于激励"],
+      "weaknesses": ["可能显得傲慢", "缺乏耐心", "忽视他人感受"],
+      "careers": ["企业高管", "律师", "管理顾问", "创业者", "政治家"],
+      "relationships": "您在关系中倾向于主动和直接。请注意在表达关切时平衡果断与温柔。",
+      "growth": "建议您多倾听他人意见，学会接受不完美，对他人的贡献表示认可。"
+    },
+    {
+      "id": "ENTP",
+      "name": "辩论家",
+      "description": "您是一位充满创意和好奇心的思想者，喜欢智识的碰撞和新鲜挑战。您善于发现可能性，思维敏捷，是天然的辩论家。作为辩论家型，您善于启发他人思考，是创新的推动者。",
+      "conditions": [
+        { "dimension": "EI", "operator": "gt", "value": 0 },
+        { "dimension": "SN", "operator": "gt", "value": 0 },
+        { "dimension": "TF", "operator": "gt", "value": 0 },
+        { "dimension": "JP", "operator": "lt", "value": 0 }
+      ],
+      "tags": ["创意", "好奇", "辩论", "创新"],
+      "strengths": ["思维敏捷", "创造力强", "善于辩论", "适应力强", "多才多艺"],
+      "weaknesses": ["可能缺乏专注", "三分钟热度", "喜欢抬杠"],
+      "careers": ["营销策划", "创业者", "律师", "公关专家", "投资人"],
+      "relationships": "您在关系中喜欢智识碰撞和新鲜感。请记得在追逐可能性时珍惜已建立的情感联系。",
+      "growth": "建议您学会专注和坚持，尊重他人的感受和意见，在追求目标时不要伤害他人。"
+    },
+    {
+      "id": "INFJ",
+      "name": "提倡者",
+      "description": "您是一位理想主义且富有同理心的人。您有强烈的价值观，追求有意义的生活，渴望帮助他人成为更好的自己。您安静而坚定，是他人的精神导师。作为提倡者型，您是理想与行动的桥梁。",
+      "conditions": [
+        { "dimension": "EI", "operator": "lt", "value": 0 },
+        { "dimension": "SN", "operator": "gt", "value": 0 },
+        { "dimension": "TF", "operator": "lt", "value": 0 },
+        { "dimension": "JP", "operator": "gt", "value": 0 }
+      ],
+      "tags": ["理想", "同理心", "创意", "坚持"],
+      "strengths": ["理想主义", "有同理心", "洞察力强", "创造力强", "坚守原则"],
+      "weaknesses": ["过度完美主义", "敏感脆弱", "不切实际"],
+      "careers": ["心理咨询师", "作家", "人力资源经理", "社工", "教师"],
+      "relationships": "您在关系中追求深度的精神连接。请学会照顾自己的需求，而不仅是他人的期望。",
+      "growth": "建议您设定健康的边界，接受不完美，允许自己也有软弱的时候。"
+    },
+    {
+      "id": "INFP",
+      "name": "调停者",
+      "description": "您是一位温柔而有理想的梦想家。您重视真实的情感，追求内心的和谐，善于理解他人的立场。您安静而内敛，但内心世界丰富多彩。作为调停者型，您是创意的艺术家和心灵的治愈者。",
+      "conditions": [
+        { "dimension": "EI", "operator": "lt", "value": 0 },
+        { "dimension": "SN", "operator": "gt", "value": 0 },
+        { "dimension": "TF", "operator": "lt", "value": 0 },
+        { "dimension": "JP", "operator": "lt", "value": 0 }
+      ],
+      "tags": ["理想", "同理心", "创意", "敏感"],
+      "strengths": ["富有同理心", "创意丰富", "理想主义", "适应力强", "善于沟通"],
+      "weaknesses": ["过度理想化", "情绪波动", "不善于冲突"],
+      "careers": ["作家", "艺术家", "心理咨询师", "教师", "社会工作者"],
+      "relationships": "您在关系中重视情感的真实和深度。请勇敢表达自己的需求和边界。",
+      "growth": "建议您学会面对冲突，设定优先级，将理想付诸实践而不是只停留在想象。"
+    },
+    {
+      "id": "ENFJ",
+      "name": "主人公",
+      "description": "您是一位充满热情和有感染力的领导者。您善于激励他人，具有强烈的社会责任感和领导力。您慷慨而富有魅力，是他人的精神领袖。作为主人公型，您是天生的激励者和变革推动者。",
+      "conditions": [
+        { "dimension": "EI", "operator": "gt", "value": 0 },
+        { "dimension": "SN", "operator": "gt", "value": 0 },
+        { "dimension": "TF", "operator": "lt", "value": 0 },
+        { "dimension": "JP", "operator": "gt", "value": 0 }
+      ],
+      "tags": ["热情", "领导", "同理心", "理想"],
+      "strengths": ["激励能力强", "富有同理心", "领导力强", "善于沟通", "有感染力"],
+      "weaknesses": ["过度付出", "容易受影响", "追求认可"],
+      "careers": ["教师", "培训师", "人力资源经理", "社会活动家", "政治家"],
+      "relationships": "您在关系中善于激励和理解他人。请注意不要过度牺牲自己来满足他人。",
+      "growth": "建议您学会说不，关注自己的需求而不是总想着取悦他人，接受不是所有人都会喜欢自己。"
     },
     {
       "id": "ENFP",
       "name": "竞选者",
-      "description": "您是一位充满热情和创意的人，善于激励他人，具有强烈的表达欲和探索精神。",
+      "description": "您是一位充满热情和创意的冒险家。您热爱生活，追求新鲜感，善于激励他人。您乐观开朗，是朋友圈中的活力源泉。作为竞选者型，您是创意的激发者和可能性的探索者。",
       "conditions": [
-        { "dimension": "EI", "operator": "gte", "value": 0 },
-        { "dimension": "SN", "operator": "gte", "value": 0 },
-        { "dimension": "TF", "operator": "lte", "value": 0 },
-        { "dimension": "JP", "operator": "lte", "value": 0 }
+        { "dimension": "EI", "operator": "gt", "value": 0 },
+        { "dimension": "SN", "operator": "gt", "value": 0 },
+        { "dimension": "TF", "operator": "lt", "value": 0 },
+        { "dimension": "JP", "operator": "lt", "value": 0 }
       ],
-      "tags": ["热情", "创意", "激励"],
-      "careers": ["市场营销", "公关", "培训师", "创意总监"]
+      "tags": ["热情", "创意", "冒险", "乐观"],
+      "strengths": ["热情洋溢", "创意丰富", "适应力强", "善于激励", "富有魅力"],
+      "weaknesses": ["容易分心", "三分钟热度", "过度情绪化"],
+      "careers": ["市场营销", "创意总监", "记者", "导游", "演员"],
+      "relationships": "您在关系中带来活力和新鲜感。请学会在自由探索和承诺之间找到平衡。",
+      "growth": "建议您学会坚持和专注，面对困难时不要逃避，培养长期规划的能力。"
     },
     {
       "id": "ISTJ",
       "name": "物流师",
-      "description": "您是一位务实可靠的人，做事认真负责，注重细节，具有强烈的责任感和原则性。",
+      "description": "您是一位务实可靠的人，做事认真负责，注重细节，具有强烈的责任感和原则性。您言出必行，值得信赖，是他人可以依靠的坚实后盾。作为物流师型，您是秩序的守护者和承诺的践行者。",
       "conditions": [
-        { "dimension": "EI", "operator": "lte", "value": 0 },
-        { "dimension": "SN", "operator": "lte", "value": 0 },
-        { "dimension": "TF", "operator": "gte", "value": 0 },
-        { "dimension": "JP", "operator": "gte", "value": 0 }
+        { "dimension": "EI", "operator": "lt", "value": 0 },
+        { "dimension": "SN", "operator": "lt", "value": 0 },
+        { "dimension": "TF", "operator": "gt", "value": 0 },
+        { "dimension": "JP", "operator": "gt", "value": 0 }
       ],
-      "tags": ["务实", "可靠", "负责"],
-      "careers": ["财务管理", "审计", "律师", "行政主管"]
+      "tags": ["务实", "可靠", "负责", "传统"],
+      "strengths": ["责任感强", "可靠可靠", "注重细节", "有原则性", "执行力强"],
+      "weaknesses": ["可能死板", "不善于变通", "忽视情感"],
+      "careers": ["财务管理", "审计", "律师", "行政主管", "军官"],
+      "relationships": "您在关系中重视责任和承诺。请记得表达情感，让伴侣感受到您的爱意。",
+      "growth": "建议您学会灵活变通，接受新事物，多表达赞赏和感激之情。"
+    },
+    {
+      "id": "ISFJ",
+      "name": "守卫者",
+      "description": "您是一位温柔体贴的人，善良而可靠，善于照顾他人需求。您默默付出，不求回报，是他人温暖避风港。您重视传统和责任，是忠诚的伙伴。作为守卫者型，您是守护者和支持者。",
+      "conditions": [
+        { "dimension": "EI", "operator": "lt", "value": 0 },
+        { "dimension": "SN", "operator": "lt", "value": 0 },
+        { "dimension": "TF", "operator": "lt", "value": 0 },
+        { "dimension": "JP", "operator": "gt", "value": 0 }
+      ],
+      "tags": ["温暖", "关怀", "责任", "传统"],
+      "strengths": ["温柔体贴", "有责任感", "乐于助人", "忠诚可靠", "注重细节"],
+      "weaknesses": ["过度付出", "不善于拒绝", "忽视自己"],
+      "careers": ["护士", "教师", "社会工作者", "图书管理员", "人力资源"],
+      "relationships": "您在关系中善于照顾他人需求。请学会接受他人的关心，而不只是付出。",
+      "growth": "建议您学会说不，照顾自己的需求，相信自己的价值不只在于付出。"
+    },
+    {
+      "id": "ESTJ",
+      "name": "总经理",
+      "description": "您是一位务实有责任感的领导者，具有强大的组织能力和执行能力。您注重效率和秩序，遵守规则，是天生的管理者。您直言不讳，有话直说。作为总经理型，您是秩序的建立者和目标的达成者。",
+      "conditions": [
+        { "dimension": "EI", "operator": "gt", "value": 0 },
+        { "dimension": "SN", "operator": "lt", "value": 0 },
+        { "dimension": "TF", "operator": "gt", "value": 0 },
+        { "dimension": "JP", "operator": "gt", "value": 0 }
+      ],
+      "tags": ["务实", "组织", "领导", "传统"],
+      "strengths": ["组织能力强", "执行力强", "责任感强", "直接坦诚", "善于管理"],
+      "weaknesses": ["可能缺乏弹性", "过于评判", "不善于情感表达"],
+      "careers": ["项目经理", "行政主管", "质量管理", "金融经理", "军官"],
+      "relationships": "您在关系中重视秩序和效率。请记得在规划中留出浪漫和弹性。",
+      "growth": "建议您多倾听不同的声音，尊重他人的感受，学会欣赏过程中的美好。"
     },
     {
       "id": "ESFJ",
       "name": "执政官",
-      "description": "您是一位热情友善的人，善于社交，关注他人需求，喜欢帮助和照顾别人。",
+      "description": "您是一位热情友善的人，善于社交，关注他人需求，喜欢帮助和照顾别人。您有很强的人际交往能力，是朋友圈中的粘合剂。您乐于分享，重视和谐。作为执政官型，您是关系的建立者和维护者。",
       "conditions": [
-        { "dimension": "EI", "operator": "gte", "value": 0 },
-        { "dimension": "SN", "operator": "lte", "value": 0 },
-        { "dimension": "TF", "operator": "lte", "value": 0 },
-        { "dimension": "JP", "operator": "gte", "value": 0 }
+        { "dimension": "EI", "operator": "gt", "value": 0 },
+        { "dimension": "SN", "operator": "lt", "value": 0 },
+        { "dimension": "TF", "operator": "lt", "value": 0 },
+        { "dimension": "JP", "operator": "gt", "value": 0 }
       ],
-      "tags": ["友善", "关怀", "责任"],
-      "careers": ["人力资源", "教师", "护士", "社会工作者"]
+      "tags": ["友善", "关怀", "社交", "传统"],
+      "strengths": ["善于社交", "有同理心", "乐于助人", "负责任", "受欢迎"],
+      "weaknesses": ["过度在意他人", "不善于冲突", "容易妥协"],
+      "careers": ["人力资源", "教师", "护士", "客户服务", "社会工作者"],
+      "relationships": "您在关系中重视和谐和关怀。请学会说"不"，并尊重自己的需求。",
+      "growth": "建议您设定健康的边界，接受冲突是正常的，学会在不伤害关系的前提下表达不同意见。"
+    },
+    {
+      "id": "ISTP",
+      "name": "鉴赏家",
+      "description": "您是一位冷静务实的人，善于分析和解决实际问题。您动手能力强，喜欢研究事物的运作原理。您安静而独立，享受独处的时间。作为鉴赏家型，您是问题的解决者和效率的追求者。",
+      "conditions": [
+        { "dimension": "EI", "operator": "lt", "value": 0 },
+        { "dimension": "SN", "operator": "lt", "value": 0 },
+        { "dimension": "TF", "operator": "gt", "value": 0 },
+        { "dimension": "JP", "operator": "lt", "value": 0 }
+      ],
+      "tags": ["务实", "分析", "独立", "灵活"],
+      "strengths": ["分析能力强", "动手能力强", "适应力强", "冷静务实", "多才多艺"],
+      "weaknesses": ["不善于表达", "可能冷漠", "冒险行为"],
+      "careers": ["工程师", "机械师", "飞行员", "IT支持", "建筑师"],
+      "relationships": "您在关系中给予空间和自由。请主动表达您的关心，而不只是通过行动。",
+      "growth": "建议您多表达情感和想法，参与社交活动，学会在关系中展现更多的自己。"
+    },
+    {
+      "id": "ISFP",
+      "name": "探险家",
+      "description": "您是一位温柔敏感的人，重视当下的美好体验，追求自由和真实。您有很强的审美能力和艺术气质，享受创造的过程。您安静而不张扬。作为探险家型，您是美的发现者和生活的艺术家。",
+      "conditions": [
+        { "dimension": "EI", "operator": "lt", "value": 0 },
+        { "dimension": "SN", "operator": "lt", "value": 0 },
+        { "dimension": "TF", "operator": "lt", "value": 0 },
+        { "dimension": "JP", "operator": "lt", "value": 0 }
+      ],
+      "tags": ["艺术", "敏感", "自由", "创造"],
+      "strengths": ["审美能力强", "创意丰富", "敏感细腻", "适应力强", "善于动手"],
+      "weaknesses": ["容易焦虑", "不善于规划", "逃避冲突"],
+      "careers": ["设计师", "摄影师", "艺术家", "室内设计师", "厨师"],
+      "relationships": "您在关系中重视当下的美好体验。请学会为未来做规划，而不是只看现在。",
+      "growth": "建议您尝试制定长期目标，学会面对困难而不是逃避，建立稳定的承诺关系。"
+    },
+    {
+      "id": "ESTP",
+      "name": "企业家",
+      "description": "您是一位充满活力和实用主义的人，喜欢行动和即时结果。您善于社交，享受生活的刺激，是朋友圈中的开心果。您直接而务实，善于即时解决问题。作为企业家型，您是行动的冒险者和机会的捕捉者。",
+      "conditions": [
+        { "dimension": "EI", "operator": "gt", "value": 0 },
+        { "dimension": "SN", "operator": "lt", "value": 0 },
+        { "dimension": "TF", "operator": "gt", "value": 0 },
+        { "dimension": "JP", "operator": "lt", "value": 0 }
+      ],
+      "tags": ["活力", "务实", "社交", "适应"],
+      "strengths": ["善于社交", "务实行动", "适应力强", "善于谈判", "有魅力"],
+      "weaknesses": ["可能冲动", "缺乏耐心", "忽视长期后果"],
+      "careers": ["销售", "企业家", "活动策划", "经纪人", "房地产"],
+      "relationships": "您在关系中享受当下的刺激。请学会倾听和深入交流，而不只是表面的社交。",
+      "growth": "建议您三思而后行，考虑决定的长期影响，学会深入的情感交流。"
+    },
+    {
+      "id": "ESFP",
+      "name": "表演者",
+      "description": "您是一位乐观开朗的人，喜欢成为关注的焦点，享受生活的舞台。您充满活力，有很强的表达能力，是朋友圈中的明星。您热情而友好，喜欢带来欢乐。作为表演者型，您是生活的艺术家和欢乐的传播者。",
+      "conditions": [
+        { "dimension": "EI", "operator": "gt", "value": 0 },
+        { "dimension": "SN", "operator": "lt", "value": 0 },
+        { "dimension": "TF", "operator": "lt", "value": 0 },
+        { "dimension": "JP", "operator": "lt", "value": 0 }
+      ],
+      "tags": ["乐观", "表演", "社交", "热情"],
+      "strengths": ["乐观开朗", "善于社交", "有表现力", "富有魅力", "适应力强"],
+      "weaknesses": ["可能浅薄", "注意力分散", "过度追求认可"],
+      "careers": ["演员", "主持人", "市场营销", "活动策划", "摄影师"],
+      "relationships": "您在关系中带来欢乐和活力。请学会面对困难时的深度情感交流。",
+      "growth": "建议您培养专注力和耐心，学会面对负面情绪而不是逃避，建立深度的情感连接。"
     }
   ],
   "questions": [
@@ -107,10 +325,10 @@
       "type": "single-choice",
       "dimension": "EI",
       "options": [
-        { "id": "A", "text": "主动与陌生人交谈，享受社交的乐趣", "value": 2 },
+        { "id": "A", "text": "主动与陌生人交谈，享受社交的乐趣", "value": 3 },
         { "id": "B", "text": "与熟悉的人聊天，对陌生人保持距离", "value": 1 },
         { "id": "C", "text": "观察别人，等待别人来接近", "value": -1 },
-        { "id": "D", "text": "一个人安静地待着，避免社交", "value": -2 }
+        { "id": "D", "text": "一个人安静地待着，享受独处", "value": -3 }
       ]
     },
     {
@@ -119,10 +337,10 @@
       "type": "single-choice",
       "dimension": "EI",
       "options": [
-        { "id": "A", "text": "约朋友一起出去玩，参加聚会", "value": 2 },
+        { "id": "A", "text": "约朋友一起出去玩，参加聚会", "value": 3 },
         { "id": "B", "text": "和几个好朋友小聚", "value": 1 },
         { "id": "C", "text": "在家看书或看电影", "value": -1 },
-        { "id": "D", "text": "独自去户外探索或旅行", "value": -2 }
+        { "id": "D", "text": "独自去户外探索或旅行", "value": -3 }
       ]
     },
     {
@@ -131,10 +349,10 @@
       "type": "single-choice",
       "dimension": "EI",
       "options": [
-        { "id": "A", "text": "有些不自在，需要找人交流", "value": -2 },
+        { "id": "A", "text": "有些不自在，需要找人交流", "value": -3 },
         { "id": "B", "text": "有点无聊，但能接受", "value": -1 },
         { "id": "C", "text": "享受独处的宁静时光", "value": 1 },
-        { "id": "D", "text": "非常充实，可以深度思考", "value": 2 }
+        { "id": "D", "text": "非常充实，可以深度思考", "value": 3 }
       ]
     },
     {
@@ -143,10 +361,10 @@
       "type": "single-choice",
       "dimension": "SN",
       "options": [
-        { "id": "A", "text": "具体的事实和数据", "value": -2 },
+        { "id": "A", "text": "具体的事实和数据", "value": -3 },
         { "id": "B", "text": "实际可行的方案", "value": -1 },
-        { "id": "C", "text": "未来的可能性", "value": 1 },
-        { "id": "D", "text": "抽象的概念和关联", "value": 2 }
+        { "id": "C", "text": "未来的可能性和趋势", "value": 1 },
+        { "id": "D", "text": "抽象的概念和深层含义", "value": 3 }
       ]
     },
     {
@@ -157,8 +375,8 @@
       "options": [
         { "id": "A", "text": "扣人心弦的故事情节", "value": -1 },
         { "id": "B", "text": "生动真实的人物描写", "value": -1 },
-        { "id": "C", "text": "深刻的人生哲理", "value": 1 },
-        { "id": "D", "text": "作者独特的写作风格", "value": 2 }
+        { "id": "C", "text": "深刻的人生哲理和寓意", "value": 1 },
+        { "id": "D", "text": "作者独特的写作风格和创新表达", "value": 3 }
       ]
     },
     {
@@ -167,10 +385,10 @@
       "type": "single-choice",
       "dimension": "SN",
       "options": [
-        { "id": "A", "text": "看详细的教程和步骤说明", "value": -2 },
+        { "id": "A", "text": "看详细的教程和步骤说明", "value": -3 },
         { "id": "B", "text": "边做边学，遇到问题再查资料", "value": -1 },
         { "id": "C", "text": "先了解整体框架和原理", "value": 1 },
-        { "id": "D", "text": "尝试不同方法，探索创新", "value": 2 }
+        { "id": "D", "text": "尝试不同方法，探索创新", "value": 3 }
       ]
     },
     {
@@ -179,10 +397,10 @@
       "type": "single-choice",
       "dimension": "TF",
       "options": [
-        { "id": "A", "text": "基于客观分析和逻辑推理", "value": 2 },
-        { "id": "B", "text": "权衡利弊得失", "value": 1 },
+        { "id": "A", "text": "基于客观分析和逻辑推理", "value": 3 },
+        { "id": "B", "text": "权衡利弊得失，理性判断", "value": 1 },
         { "id": "C", "text": "考虑对他人的影响", "value": -1 },
-        { "id": "D", "text": "听从内心的感受", "value": -2 }
+        { "id": "D", "text": "听从内心的感受", "value": -3 }
       ]
     },
     {
@@ -191,8 +409,8 @@
       "type": "single-choice",
       "dimension": "TF",
       "options": [
-        { "id": "A", "text": "帮他分析问题，提出解决方案", "value": 2 },
-        { "id": "B", "text": "给予安慰和情感支持", "value": -2 },
+        { "id": "A", "text": "帮他分析问题，提出解决方案", "value": 3 },
+        { "id": "B", "text": "给予安慰和情感支持", "value": -3 },
         { "id": "C", "text": "先倾听，再给建议", "value": 1 },
         { "id": "D", "text": "分享类似经历表示理解", "value": -1 }
       ]
@@ -203,10 +421,10 @@
       "type": "single-choice",
       "dimension": "TF",
       "options": [
-        { "id": "A", "text": "公平公正的原则", "value": 2 },
-        { "id": "B", "text": "和谐的人际关系", "value": -2 },
+        { "id": "A", "text": "公平公正的原则", "value": 3 },
+        { "id": "B", "text": "和谐的人际关系", "value": -3 },
         { "id": "C", "text": "效率和结果", "value": 1 },
-        { "id": "D", "text": "每个人的感受", "value": -1 }
+        { "id": "D", "text": "每个人的感受和需求", "value": -1 }
       ]
     },
     {
@@ -215,10 +433,10 @@
       "type": "single-choice",
       "dimension": "JP",
       "options": [
-        { "id": "A", "text": "提前计划，有条不紊", "value": 2 },
+        { "id": "A", "text": "提前计划，有条不紊", "value": 3 },
         { "id": "B", "text": "大致计划，保留弹性", "value": 1 },
         { "id": "C", "text": "随机应变，顺其自然", "value": -1 },
-        { "id": "D", "text": "灵活自由，不受约束", "value": -2 }
+        { "id": "D", "text": "灵活自由，不受约束", "value": -3 }
       ]
     },
     {
@@ -227,10 +445,10 @@
       "type": "single-choice",
       "dimension": "JP",
       "options": [
-        { "id": "A", "text": "严格遵守，按照计划执行", "value": 2 },
+        { "id": "A", "text": "严格遵守，按照计划执行", "value": 3 },
         { "id": "B", "text": "基本遵守，需要时微调", "value": 1 },
         { "id": "C", "text": "根据情况灵活调整", "value": -1 },
-        { "id": "D", "text": "不太在意，随性而为", "value": -2 }
+        { "id": "D", "text": "不太在意，随性而为", "value": -3 }
       ]
     },
     {
@@ -239,10 +457,58 @@
       "type": "single-choice",
       "dimension": "JP",
       "options": [
-        { "id": "A", "text": "明确的目标和截止日期", "value": 2 },
+        { "id": "A", "text": "明确的目标和截止日期", "value": 3 },
         { "id": "B", "text": "有清晰的任务清单", "value": 1 },
         { "id": "C", "text": "有挑战性的项目", "value": -1 },
-        { "id": "D", "text": "自由探索的空间", "value": -2 }
+        { "id": "D", "text": "自由探索的空间", "value": -3 }
+      ]
+    },
+    {
+      "id": "mbti-q13",
+      "text": "在与他人讨论问题时，您通常：",
+      "type": "single-choice",
+      "dimension": "EI",
+      "options": [
+        { "id": "A", "text": "积极发言，喜欢主导讨论", "value": 3 },
+        { "id": "B", "text": "适时发表看法", "value": 1 },
+        { "id": "C", "text": "倾向于倾听和思考", "value": -1 },
+        { "id": "D", "text": "安静聆听，很少发言", "value": -3 }
+      ]
+    },
+    {
+      "id": "mbti-q14",
+      "text": "您更容易被什么吸引：",
+      "type": "single-choice",
+      "dimension": "SN",
+      "options": [
+        { "id": "A", "text": "具体的、真实存在的事物", "value": -3 },
+        { "id": "B", "text": "实用的、有价值的信息", "value": -1 },
+        { "id": "C", "text": "新颖的想法和可能性", "value": 1 },
+        { "id": "D", "text": "富有想象力的创意和理论", "value": 3 }
+      ]
+    },
+    {
+      "id": "mbti-q15",
+      "text": "当您需要做出重要决定时：",
+      "type": "single-choice",
+      "dimension": "TF",
+      "options": [
+        { "id": "A", "text": "列出演利弊，全面分析", "value": 3 },
+        { "id": "B", "text": "考虑对相关人的影响", "value": -3 },
+        { "id": "C", "text": "相信自己的直觉", "value": 1 },
+        { "id": "D", "text": "听从信任的人的建议", "value": -1 }
+      ]
+    },
+    {
+      "id": "mbti-q16",
+      "text": "您对突发的计划变动怎么看：",
+      "type": "single-choice",
+      "dimension": "JP",
+      "options": [
+        { "id": "A", "text": "感到不安，希望一切按计划进行", "value": 3 },
+        { "id": "B", "text": "有些不适应，但能调整", "value": 1 },
+        { "id": "C", "text": "无所谓，变化是正常的", "value": -1 },
+        { "id": "D", "text": "很高兴，有新鲜感和刺激", "value": -3 }
       ]
     }
   ]
