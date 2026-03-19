@@ -10,7 +10,7 @@
  * npx playwright test
  */
 
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'https://badhope.github.io/humanity';
 
