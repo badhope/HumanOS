@@ -66,8 +66,12 @@ export interface ResultProfileDefinition {
   description: string;
   conditions: ResultCondition[];
   tags?: string[];
+  strengths?: string[];
+  weaknesses?: string[];
   recommendations?: string[];
   careers?: string[];
+  relationships?: string;
+  growth?: string;
 }
 
 export interface AssessmentDefinition {
@@ -91,7 +95,7 @@ export interface AssessmentDefinition {
 }
 
 export interface AssessmentResult {
-  id?: number;
+  id?: number | string;
   assessmentId: string;
   assessmentSlug: string;
   assessmentName: string;

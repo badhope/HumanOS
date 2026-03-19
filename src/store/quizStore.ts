@@ -10,6 +10,7 @@ interface QuizState {
   setAnswer: (questionId: string, value: number) => void;
   nextQuestion: () => void;
   prevQuestion: () => void;
+  setCurrentQuestionIndex: (index: number) => void;
   completeQuiz: () => void;
   resetQuiz: () => void;
 }
@@ -44,6 +45,9 @@ export const useQuizStore = create<QuizState>((set) => ({
     set((state) => ({
       currentQuestionIndex: Math.max(0, state.currentQuestionIndex - 1),
     })),
+
+  setCurrentQuestionIndex: (index) =>
+    set({ currentQuestionIndex: index }),
 
   completeQuiz: () =>
     set({
