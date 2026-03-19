@@ -1,6 +1,6 @@
 {
-  "name": "HumanOS",
-  "short_name": "HumanOS",
+  "name": "Humanity",
+  "short_name": "Humanity",
   "description": "人类测评平台 - 探索人性的多维入口",
   "start_url": "/",
   "display": "standalone",
