@@ -1,0 +1,63 @@
+{
+  "id": "mbti",
+  "assessmentId": "mbti",
+  "name": "MBTI 职业性格测试",
+  "category": "personality",
+  "description": "基于迈尔斯-布里格斯类型指标，揭示你的性格倾向与职业匹配",
+  "duration": 15,
+  "questionCount": 93,
+  "difficulty": "medium",
+  "version": "1.0.0",
+  "dimensions": [
+    {
+      "id": "EI",
+      "name": "外向-内向",
+      "description": "能量指向：你是从外部世界还是内部世界获取能量"
+    },
+    {
+      "id": "SN",
+      "name": "感觉-直觉",
+      "description": "获取信息：你更关注实际信息还是可能性"
+    },
+    {
+      "id": "TF",
+      "name": "思考-情感",
+      "description": "决策方式：你更依赖逻辑还是情感"
+    },
+    {
+      "id": "JP",
+      "name": "判断-知觉",
+      "description": "生活方式：你喜欢计划还是灵活"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "在社交场合中，你通常会：",
+      "dimension": "EI",
+      "options": [
+        { "id": "q1_a", "text": "主动与陌生人交谈", "value": 1 },
+        { "id": "q1_b", "text": "等待别人来接近你", "value": 2 }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "你更倾向于：",
+      "dimension": "SN",
+      "options": [
+        { "id": "q2_a", "text": "提前规划安排", "value": 1 },
+        { "id": "q2_b", "text": "随机应变", "value": 2 }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "你更容易被什么所吸引：",
+      "dimension": "TF",
+      "options": [
+        { "id": "q3_a", "text": "事实和数据", "value": 1 },
+        { "id": "q3_b", "text": "创意和可能性", "value": 2 }
+      ]
+    }
+  ],
+  "analysisTemplate": "根据你的回答，你的MBTI类型可能是 {type}。这种类型的人通常 {description}。适合的职业包括：{careers}。"
+}
