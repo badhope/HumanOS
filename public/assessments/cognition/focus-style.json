@@ -1,0 +1,329 @@
+{
+  "id": "focus-style",
+  "slug": "focus-style",
+  "name": "注意力与思维风格",
+  "category": "cognition",
+  "description": "注意力与思维风格反映了您在信息处理过程中的习惯和偏好。本测评帮助您了解自己在持续注意力、切换灵活性、细节敏感度三个维度上的特点，作为认知风格自我探索的参考。请注意，这不是能力测试，结果反映的是您的自然偏好，而非能力高低。",
+  "shortDescription": "了解您的注意力特点与思维风格",
+  "version": "1.0.0",
+  "author": "Humanity Team",
+  "language": "zh-CN",
+  "estimatedMinutes": 10,
+  "questionCount": 15,
+  "difficulty": "easy",
+  "tags": ["注意力", "思维风格", "认知偏好", "自我认知"],
+  "dimensions": [
+    {
+      "id": "sustainedAttention",
+      "name": "持续注意力",
+      "description": "您长时间专注于一项任务的倾向和能力"
+    },
+    {
+      "id": "switchingFlexibility",
+      "name": "切换灵活性",
+      "description": "您在不同任务或话题之间转换的舒适度和效率"
+    },
+    {
+      "id": "detailSensitivity",
+      "name": "细节敏感度",
+      "description": "您对细节的关注程度和信息捕捉能力"
+    }
+  ],
+  "scoring": {
+    "type": "weighted",
+    "dimensionScores": {
+      "sustainedAttention": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "switchingFlexibility": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "detailSensitivity": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } }
+    },
+    "normalize": true,
+    "minScore": 15,
+    "maxScore": 60
+  },
+  "resultProfiles": [
+    {
+      "id": "deep-focus",
+      "name": "深度专注型",
+      "description": "您是深度专注型思维者，擅长长时间集中注意力在一项任务上。您善于进入“心流”状态，能够在专注中享受到高度的成就感。您更适合需要持续投入、独立完成的工作模式。",
+      "conditions": [
+        { "dimension": "sustainedAttention", "operator": "gte", "value": 3.5 },
+        { "dimension": "switchingFlexibility", "operator": "lt", "value": 2.5 }
+      ],
+      "tags": ["深度专注", "独立工作", "持久力"],
+      "styleDescription": "您在需要长时间专注的任务中表现出色，如研究、写作、编程、深度分析等。您容易对被打断感到不耐烦，更喜欢一段完整的不被打扰的时间来完成工作。",
+      "recommendations": [
+        "为深度工作预留整块时间，关闭不必要的通知",
+        "在效率高峰期处理最具挑战性的任务",
+        "学会使用时间管理技巧，如番茄工作法来平衡专注和休息",
+        "在需要多任务协作时，提前与他人沟通您的工作节奏"
+      ]
+    },
+    {
+      "id": "flexible-switcher",
+      "name": "灵活切换型",
+      "description": "您是灵活切换型思维者，善于在多种任务之间自如转换。您不喜欢被单一任务束缚太久，擅长同时处理多个项目或快速响应变化。您更适合快节奏、多任务、需要广泛联系不同领域的工作。",
+      "conditions": [
+        { "dimension": "switchingFlexibility", "operator": "gte", "value": 3.5 },
+        { "dimension": "sustainedAttention", "operator": "lt", "value": 2.5 }
+      ],
+      "tags": ["灵活", "多任务", "适应力"],
+      "styleDescription": "您在需要快速切换上下文、协调多方面工作、应对不确定性时表现出色。您思维活跃，擅长联想和跨界思考，但对重复性高的任务容易感到无聊。",
+      "recommendations": [
+        "选择能够让您接触多样化任务的工作环境",
+        "使用清单和任务管理工具来组织多个并行项目",
+        "在需要深度专注时，主动创造专注环境而非依赖自律",
+        "将创意想法及时记录，避免在切换任务时丢失灵感"
+      ]
+    },
+    {
+      "id": "balanced-optimizer",
+      "name": "平衡优化型",
+      "description": "您是平衡优化型思维者，能够根据任务需求灵活调整自己的注意力模式。您既能在需要时深度专注，也能在必要时快速切换。这种灵活性使您在多种工作场景中都能适应良好。",
+      "conditions": [
+        { "dimension": "sustainedAttention", "operator": "between", "value": [2.5, 3.5] },
+        { "dimension": "switchingFlexibility", "operator": "between", "value": [2.5, 3.5] }
+      ],
+      "tags": ["平衡", "适应", "灵活"],
+      "styleDescription": "您没有极端的专注或切换偏好，能够根据任务性质和工作环境灵活调整。您可能在团队协作和独立工作之间找到平衡，在深度分析和快速响应之间灵活切换。",
+      "recommendations": [
+        "善用您的适应性，在不同场景中发挥优势",
+        "有意识地识别不同任务所需的最佳思维模式",
+        "通过明确计划来主动管理注意力的分配",
+        "当感到模式失衡时，及时调整工作节奏"
+      ]
+    },
+    {
+      "id": "detail-oriented",
+      "name": "细节敏感型",
+      "description": "您对细节有敏锐的感知，能够注意到他人容易忽略的信息。这种特质使您在需要高精度、追求完美、发现潜在问题的任务中表现出色。",
+      "conditions": [
+        { "dimension": "detailSensitivity", "operator": "gte", "value": 3.5 }
+      ],
+      "tags": ["细节导向", "精准", "审慎"],
+      "styleDescription": "您善于发现不一致之处，对信息质量有较高要求。您可能更倾向于慢工出细活，在交出成果前反复检查和完善。这种特质在需要高准确性的工作中非常有价值。",
+      "recommendations": [
+        "在需要高精度的任务中发挥您的细节敏感优势",
+        "建立检查清单等系统性方法来组织您的细致工作",
+        "学会接受“足够好”而不仅是“完美”",
+        "将精力集中在最重要的细节上，避免过度完美主义"
+      ]
+    },
+    {
+      "id": "holistic-synthesizer",
+      "name": "整体把握型",
+      "description": "您更倾向于从整体和全局角度把握信息，对细节的注意力相对较弱。这种特质使您在需要把握大势、整合资源、看到整体框架的任务中表现出色。",
+      "conditions": [
+        { "dimension": "detailSensitivity", "operator": "lt", "value": 2.5 }
+      ],
+      "tags": ["整体导向", "整合", "战略思维"],
+      "styleDescription": "您擅长看到事物之间的联系和整体发展趋势，可能对繁琐的细节缺乏耐心。您倾向于先建立框架，再逐步填充内容，在需要战略眼光和创新能力的工作中更有优势。",
+      "recommendations": [
+        "在需要全局把握的任务中发挥您的优势",
+        "对于需要细节的工作，可以与细节敏感型的人协作",
+        "使用结构化工具来帮助您组织细节信息",
+        "培养定期检查清单的习惯，弥补对细节注意的自然偏好"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "focus-q1",
+      "text": "当我专注于一项重要任务时，我可以连续工作很长时间而不感到疲劳",
+      "type": "likert-5",
+      "dimension": "sustainedAttention",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q2",
+      "text": "在一天中，我喜欢尝试不同类型的任务，而不是长时间做同一件事",
+      "type": "likert-5",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q3",
+      "text": "我经常能注意到别人忽略的细节，比如文档中的错别字或表格中的数据不一致",
+      "type": "likert-5",
+      "dimension": "detailSensitivity",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q4",
+      "text": "当我被打断后（比如突然有人找我），我很难重新回到之前的工作状态",
+      "type": "likert-5",
+      "dimension": "sustainedAttention",
+      "reverse": true,
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 4 },
+        { "id": "B", "text": "不同意", "value": 3 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 1 },
+        { "id": "E", "text": "非常同意", "value": 0 }
+      ]
+    },
+    {
+      "id": "focus-q5",
+      "text": "我能够轻松地在不同项目之间切换，不需要太多调整时间",
+      "type": "likert-5",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q6",
+      "text": "在阅读一篇文章时，我会注意到段落排版、字体大小等视觉细节",
+      "type": "likert-5",
+      "dimension": "detailSensitivity",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q7",
+      "text": "我喜欢一次性完成一件完整的事情，而不是分多次、间断地做",
+      "type": "likert-5",
+      "dimension": "sustainedAttention",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q8",
+      "text": "同时处理多个任务时（如边开会边做笔记），我仍然能保持较好的效率",
+      "type": "likert-5",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q9",
+      "text": "我更容易记住事情的整体框架，而不是具体的细节",
+      "type": "likert-5",
+      "dimension": "detailSensitivity",
+      "reverse": true,
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 4 },
+        { "id": "B", "text": "不同意", "value": 3 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 1 },
+        { "id": "E", "text": "非常同意", "value": 0 }
+      ]
+    },
+    {
+      "id": "focus-q10",
+      "text": "长时间的会议或培训对我来说很难保持注意力集中",
+      "type": "likert-5",
+      "dimension": "sustainedAttention",
+      "reverse": true,
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 4 },
+        { "id": "B", "text": "不同意", "value": 3 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 1 },
+        { "id": "E", "text": "非常同意", "value": 0 }
+      ]
+    },
+    {
+      "id": "focus-q11",
+      "text": "当工作计划突然调整时，我能很快适应新的安排",
+      "type": "likert-5",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q12",
+      "text": "我倾向于先关注文章或报告的主要观点，而不是一开始就注意到格式或排版问题",
+      "type": "likert-5",
+      "dimension": "detailSensitivity",
+      "reverse": true,
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 4 },
+        { "id": "B", "text": "不同意", "value": 3 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 1 },
+        { "id": "E", "text": "非常同意", "value": 0 }
+      ]
+    },
+    {
+      "id": "focus-q13",
+      "text": "我在做需要高度集中的任务时（如考试、编程），能够排除周围的干扰",
+      "type": "likert-5",
+      "dimension": "sustainedAttention",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q14",
+      "text": "我擅长在短时间内切换到完全不同的思维模式（比如从分析数据切换到创意讨论）",
+      "type": "likert-5",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-q15",
+      "text": "我经常能在别人没有注意到的地方发现错误或问题",
+      "type": "likert-5",
+      "dimension": "detailSensitivity",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    }
+  ]
+}

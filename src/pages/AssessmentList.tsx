@@ -9,7 +9,16 @@ import { ASSESSMENT_CATEGORIES } from '@/shared/constants';
 import { getAssessmentsByCategory } from '@/features/assessment/registry';
 import type { AssessmentRegistryItem, AssessmentCategory } from '@/shared/types';
 
-const COMPLETED_MODULES = ['mbti-basic'];
+const COMPLETED_MODULES = [
+  'mbti-basic',
+  'stress-check',
+  'resilience-basic',
+  'logic-lite',
+  'focus-style',
+  'values-spectrum',
+  'holland-basic',
+  'work-style-basic',
+];
 
 const AssessmentList: React.FC = () => {
   const { category } = useParams<{ category: string }>();

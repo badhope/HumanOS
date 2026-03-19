@@ -1,0 +1,328 @@
+{
+  "id": "resilience-basic",
+  "slug": "resilience-basic",
+  "name": "心理韧性评估",
+  "category": "psychology",
+  "description": "心理韧性是指您在面对挫折、压力和困境时的恢复与适应能力。本测评帮助您了解自己在情绪恢复、适应能力、寻求支持和坚持力四个维度上的表现，作为自我探索和成长的参考。",
+  "shortDescription": "了解您的心理韧性水平与恢复能力",
+  "version": "1.0.0",
+  "author": "Humanity Team",
+  "language": "zh-CN",
+  "estimatedMinutes": 8,
+  "questionCount": 16,
+  "difficulty": "easy",
+  "tags": ["心理韧性", "抗压能力", "情绪调节", "自我成长"],
+  "dimensions": [
+    {
+      "id": "emotionalRecovery",
+      "name": "情绪恢复",
+      "description": "您在经历负面情绪后恢复平静的能力"
+    },
+    {
+      "id": "adaptability",
+      "name": "适应能力",
+      "description": "您在面对环境变化时的调整和应对能力"
+    },
+    {
+      "id": "supportSeeking",
+      "name": "支持寻求",
+      "description": "您在困难时主动寻求他人帮助和支持的倾向"
+    },
+    {
+      "id": "persistence",
+      "name": "坚持力",
+      "description": "您在面对困难和挑战时坚持目标的程度"
+    }
+  ],
+  "scoring": {
+    "type": "weighted",
+    "dimensionScores": {
+      "emotionalRecovery": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "adaptability": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "supportSeeking": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "persistence": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } }
+    },
+    "normalize": true,
+    "minScore": 16,
+    "maxScore": 64
+  },
+  "resultProfiles": [
+    {
+      "id": "high-resilience",
+      "name": "高韧性人群",
+      "description": "您的心理韧性较强，能够较好地应对生活中的挫折和压力。您具备良好的情绪调节能力，面对变化能较快适应，在困难面前往往能保持积极态度并找到前进的动力。",
+      "conditions": [
+        { "dimension": "emotionalRecovery", "operator": "gte", "value": 3.5 },
+        { "dimension": "adaptability", "operator": "gte", "value": 3.5 }
+      ],
+      "tags": ["高韧性", "适应力强", "情绪稳定"],
+      "strengths": [
+        "情绪调节能力强，不易被负面情绪长时间困扰",
+        "面对变化能快速调整自己的状态",
+        "在压力下仍能保持冷静思考",
+        "愿意主动寻求支持和建议"
+      ],
+      "recommendations": [
+        "继续保持当前的生活方式和应对策略",
+        "可以尝试将您的经验分享给需要帮助的人",
+        "适度挑战自我，走出舒适区进一步成长"
+      ]
+    },
+    {
+      "id": "moderate-resilience",
+      "name": "中等韧性人群",
+      "description": "您的心理韧性处于中等水平，有一定的抗压能力。在大多数情况下您能够应对生活中的挑战，但在面对重大压力时可能需要更多时间来恢复和调整。",
+      "conditions": [
+        { "dimension": "emotionalRecovery", "operator": "between", "value": [2.5, 3.5] },
+        { "dimension": "adaptability", "operator": "between", "value": [2.5, 3.5] }
+      ],
+      "tags": ["中等韧性", "有潜力", "可提升"],
+      "strengths": [
+        "具备基本的情绪调节意识",
+        "能够适应一定程度的环境变化",
+        "在支持性环境中表现良好"
+      ],
+      "recommendations": [
+        "建立规律的作息和运动习惯，有助于提升韧性基础",
+        "学习一些简单的情绪调节技巧，如深呼吸和正念冥想",
+        "主动拓展社交支持网络，不要独自承担所有压力",
+        "设定阶段性目标，培养小步前进的成就感"
+      ]
+    },
+    {
+      "id": "developing-resilience",
+      "name": "成长型韧性",
+      "description": "您目前可能正在经历较大的压力或刚刚经历了挫折，这是每个人都会遇到的正常阶段。您具备成长和提升的潜力，只要给予适当的关注和支持，就能逐步增强心理韧性。",
+      "conditions": [
+        { "dimension": "emotionalRecovery", "operator": "lt", "value": 2.5 },
+        { "dimension": "adaptability", "operator": "lt", "value": 2.5 }
+      ],
+      "tags": ["成长中", "需关注", "可改善"],
+      "strengths": [
+        "您愿意参与测评，说明有自我认知和改变的意愿",
+        "韧性不是固定的特质，是可以学习和提升的",
+        "每个人的恢复节奏不同，不必与他人比较"
+      ],
+      "recommendations": [
+        "从每天的小事开始，建立积极的应对模式",
+        "保证充足的睡眠和营养，这是心理健康的基礎",
+        "尝试记录每天发生的好事，培养积极视角",
+        "如果感到压力过大，不要犹豫寻求专业支持",
+        "可以从小目标开始，逐步建立完成任务的信心"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "resilience-q1",
+      "text": "当经历一件让我非常沮丧的事情后，我通常需要很长时间才能恢复好心情",
+      "type": "likert-5",
+      "dimension": "emotionalRecovery",
+      "reverse": true,
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 4 },
+        { "id": "B", "text": "不同意", "value": 3 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 1 },
+        { "id": "E", "text": "非常同意", "value": 0 }
+      ]
+    },
+    {
+      "id": "resilience-q2",
+      "text": "面对计划外的变化（如突然的工作调整、生活变动），我通常能较快适应",
+      "type": "likert-5",
+      "dimension": "adaptability",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q3",
+      "text": "当遇到困难时，我愿意主动向朋友或家人寻求支持和建议",
+      "type": "likert-5",
+      "dimension": "supportSeeking",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q4",
+      "text": "即使一件事很难推进，我也会坚持尝试，直到有结果",
+      "type": "likert-5",
+      "dimension": "persistence",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q5",
+      "text": "我能够从失败中吸取教训，把挫折当作成长的机会",
+      "type": "likert-5",
+      "dimension": "adaptability",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q6",
+      "text": "当我感到压力大或情绪低落时，我会主动做一些让自己放松的事",
+      "type": "likert-5",
+      "dimension": "emotionalRecovery",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q7",
+      "text": "我更倾向于自己解决问题，而不是依赖他人的帮助",
+      "type": "likert-5",
+      "dimension": "supportSeeking",
+      "reverse": true,
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 4 },
+        { "id": "B", "text": "不同意", "value": 3 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 1 },
+        { "id": "E", "text": "非常同意", "value": 0 }
+      ]
+    },
+    {
+      "id": "resilience-q8",
+      "text": "遇到挫折时，我倾向于相信这只是暂时的，情况会好起来的",
+      "type": "likert-5",
+      "dimension": "persistence",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q9",
+      "text": "在经历紧张的情况后，我通常能在当天就恢复平静",
+      "type": "likert-5",
+      "dimension": "emotionalRecovery",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q10",
+      "text": "我能够接受自己无法控制的事情，并把精力放在我能改变的事情上",
+      "type": "likert-5",
+      "dimension": "adaptability",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q11",
+      "text": "当事情没有按计划发展时，我会感到非常沮丧并想放弃",
+      "type": "likert-5",
+      "dimension": "persistence",
+      "reverse": true,
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 4 },
+        { "id": "B", "text": "不同意", "value": 3 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 1 },
+        { "id": "E", "text": "非常同意", "value": 0 }
+      ]
+    },
+    {
+      "id": "resilience-q12",
+      "text": "我有一个可以倾诉的人际支持网络（家人、朋友、同事等）",
+      "type": "likert-5",
+      "dimension": "supportSeeking",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q13",
+      "text": "我相信自己有能力应对生活中出现的各种挑战",
+      "type": "likert-5",
+      "dimension": "persistence",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q14",
+      "text": "我会主动学习和尝试新的方法来应对压力",
+      "type": "likert-5",
+      "dimension": "adaptability",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q15",
+      "text": "当我心情不好时，我通常会找事情做来转移注意力",
+      "type": "likert-5",
+      "dimension": "emotionalRecovery",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    },
+    {
+      "id": "resilience-q16",
+      "text": "我认为困难和挫折是人生不可避免的部分，重要的是如何面对它们",
+      "type": "likert-5",
+      "dimension": "persistence",
+      "options": [
+        { "id": "A", "text": "非常不同意", "value": 0 },
+        { "id": "B", "text": "不同意", "value": 1 },
+        { "id": "C", "text": "一般", "value": 2 },
+        { "id": "D", "text": "同意", "value": 3 },
+        { "id": "E", "text": "非常同意", "value": 4 }
+      ]
+    }
+  ]
+}
