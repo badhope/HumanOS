@@ -5,13 +5,14 @@
   "category": "ideology",
   "description": "探索您在传统与变革、权威与自由、个人与集体、务实与理想四个价值维度上的倾向，帮助您更清晰地认识自己的内在价值取向。",
   "shortDescription": "发现您的核心价值取向",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Humanity Team",
   "language": "zh-CN",
   "estimatedMinutes": 10,
   "questionCount": 12,
   "difficulty": "easy",
   "tags": ["价值观", "人生观", "信念", "自我认知"],
+  "disclaimer": "本测评为自我认知参考，结果反映的是您在特定维度的倾向程度，不代表任何绝对立场。价值观是复杂的，您的选择可能因情境而异。",
   "dimensions": [
     {
       "id": "traditionChange",
@@ -55,7 +56,34 @@
         { "dimension": "traditionChange", "operator": "lte", "value": -1 },
         { "dimension": "authorityLiberty", "operator": "lte", "value": -1 }
       ],
-      "tags": ["传统", "权威", "稳定"]
+      "tags": ["传统", "权威", "稳定"],
+      "summary": "您在价值观光谱上倾向于传统与权威一端。您重视历史经验和既有的社会秩序，相信稳定是进步的基础。",
+      "highlights": [
+        "尊重传统价值观和历史智慧",
+        "重视社会秩序和等级制度的作用",
+        "倾向于在既有框架内寻求改变",
+        "对快速变革持谨慎态度"
+      ],
+      "strengths": [
+        "重视经验和传统的智慧",
+        "维护社会稳定的责任感",
+        "在不确定性环境中保持冷静",
+        "重视承诺和义务"
+      ],
+      "dimensionInterpretation": {
+        "traditionChange": "您倾向于尊重传统，认为历史经验包含有价值的智慧。",
+        "authorityLiberty": "您重视秩序和权威的作用，认为这有助于社会稳定运行。",
+        "individualCollective": "您在个人与集体维度上可能偏向某一方。",
+        "pragmatismIdealism": "您在务实与理想维度上可能偏向某一方。"
+      },
+      "recommendations": [
+        "在与不同价值观的人交流时，保持开放心态",
+        "在尊重传统的同时，也接纳合理的创新",
+        "理解他人可能持有不同价值取向，这些取向本身并无对错",
+        "在决策时可以更多考虑变革带来的潜在益处"
+      ],
+      "balanceNotes": "传统与变革是社会发展的两极，各有其价值。完全保守可能导致停滞，完全激进可能带来混乱。找到平衡点需要智慧。",
+      "discussionNotes": "传统价值观并不意味着拒绝改变，而是在改变时更加审慎，重视历史经验的参考价值。"
     },
     {
       "id": "progressive-libertarian",
@@ -65,7 +93,34 @@
         { "dimension": "traditionChange", "operator": "gte", "value": 1 },
         { "dimension": "authorityLiberty", "operator": "gte", "value": 1 }
       ],
-      "tags": ["进步", "自由", "创新"]
+      "tags": ["进步", "自由", "创新"],
+      "summary": "您在价值观光谱上倾向于变革与自由一端。您相信个人自由是社会进步的动力，支持通过创新打破陈规。",
+      "highlights": [
+        "支持社会变革和创新",
+        "重视个人自由和选择权",
+        "倾向于质疑既有规则的有效性",
+        "对传统束缚持批判态度"
+      ],
+      "strengths": [
+        "开放创新的思维方式",
+        "勇于挑战不合理规则",
+        "重视个人发展和自我实现",
+        "适应变化的能力"
+      ],
+      "dimensionInterpretation": {
+        "traditionChange": "您倾向于支持变革，相信创新能带来进步。",
+        "authorityLiberty": "您重视个人自由，倾向于减少不必要的约束。",
+        "individualCollective": "您在个人与集体维度上可能偏向某一方。",
+        "pragmatismIdealism": "您在务实与理想维度上可能偏向某一方。"
+      },
+      "recommendations": [
+        "在推动变革时，理解保守观点中的合理成分",
+        "尊重传统中可能存在的智慧",
+        "理解自由与责任是并行的",
+        "在创新时考虑对他人和 社会的影响"
+      ],
+      "balanceNotes": "自由与责任、创新与稳定都是社会必需的。绝对的自由可能导致混乱，而忽视合理传统可能失去宝贵经验。",
+      "discussionNotes": "进步取向并不意味着否定一切传统，而是在继承中发展，在批判中创新。"
     },
     {
       "id": "balanced-centrist",
@@ -75,7 +130,34 @@
         { "dimension": "traditionChange", "operator": "between", "value": [-1, 1] },
         { "dimension": "authorityLiberty", "operator": "between", "value": [-1, 1] }
       ],
-      "tags": ["平衡", "中庸", "务实"]
+      "tags": ["平衡", "中庸", "务实"],
+      "summary": "您在价值观光谱上处于相对平衡的位置。这种平衡使您能够根据具体情况灵活调整立场，而不是被单一价值取向所束缚。",
+      "highlights": [
+        "能够在传统与变革之间找到平衡点",
+        "既重视秩序也珍视自由",
+        "根据情境灵活调整价值观",
+        "避免极端立场"
+      ],
+      "strengths": [
+        "灵活的思维方式",
+        "包容不同观点的能力",
+        "根据事实调整立场",
+        "在复杂问题上保持理性"
+      ],
+      "dimensionInterpretation": {
+        "traditionChange": "您在传统与变革之间保持平衡，既不完全保守也不完全激进。",
+        "authorityLiberty": "您在权威与自由之间保持平衡，理解两者的价值。",
+        "individualCollective": "您在个人与集体之间保持平衡。",
+        "pragmatismIdealism": "您在务实与理想之间保持平衡。"
+      },
+      "recommendations": [
+        "继续保持这种平衡的价值观",
+        "在不同情境下灵活运用不同价值取向",
+        "成为不同观点之间的沟通桥梁",
+        "避免因为追求平衡而变得没有立场"
+      ],
+      "balanceNotes": "真正的中庸不是骑墙，而是在理解两极的基础上找到最优解。这需要智慧和洞察力。",
+      "discussionNotes": "平衡不意味着平庸，而是在充分理解各种可能后做出最适合的选择。"
     },
     {
       "id": "individualist-pragmatist",
@@ -85,9 +167,235 @@
         { "dimension": "individualCollective", "operator": "gte", "value": 1 },
         { "dimension": "pragmatismIdealism", "operator": "lte", "value": -1 }
       ],
-      "tags": ["个人", "务实", "效率"]
+      "tags": ["个人", "务实", "效率"],
+      "summary": "您在价值观上倾向于个人发展和务实取向。您更看重可量化的成果和实际效益。",
+      "highlights": [
+        "重视个人发展和自我实现",
+        "做事讲究效率和实际效果",
+        "倾向于结果导向的思维方式",
+        "看重个人努力和成就"
+      ],
+      "strengths": [
+        "目标导向的行动力",
+        "务实的处事方式",
+        "注重效率和效果",
+        "自我驱动的精神"
+      ],
+      "dimensionInterpretation": {
+        "traditionChange": "您在传统与变革维度上可能有特定倾向。",
+        "authorityLiberty": "您在权威与自由维度上可能有特定倾向。",
+        "individualCollective": "您明显倾向于个人发展。",
+        "pragmatismIdealism": "您明显倾向于务实取向。"
+      },
+      "recommendations": [
+        "在追求个人目标时，考虑对周围人的影响",
+        "在务实的同时，也关注过程和原则",
+        "理解集体利益与个人利益可能存在的共赢可能",
+        "在务实与理想之间找到个人平衡"
+      ],
+      "balanceNotes": "个人发展与集体利益、务实与理想并不必然对立。找到它们的结合点可以实现双赢。",
+      "discussionNotes": "务实取向是一种宝贵的能力，结合更高的理想可以让务实更有方向感。"
+    },
+    {
+      "id": "collectivist-idealist",
+      "name": "集体理想型",
+      "description": "您更注重集体利益和理想追求，愿意为更大的目标付出。",
+      "conditions": [
+        { "dimension": "individualCollective", "operator": "lte", "value": -1 },
+        { "dimension": "pragmatismIdealism", "operator": "gte", "value": 1 }
+      ],
+      "tags": ["集体", "理想", "奉献"],
+      "summary": "您在价值观上倾向于集体主义和理想主义。您相信更高远的目标，愿意为更大的善付出。",
+      "highlights": [
+        "重视集体利益高于个人得失",
+        "有理想主义情怀和使命感",
+        "愿意为更大的目标奉献",
+        "关注社会问题和公共利益"
+      ],
+      "strengths": [
+        "强烈的社会责任感和使命感",
+        "为理想坚持不懈的精神",
+        "关注长远和整体利益",
+        "在集体中找到人生意义"
+      ],
+      "dimensionInterpretation": {
+        "traditionChange": "您在传统与变革维度上可能有特定倾向。",
+        "authorityLiberty": "您在权威与自由维度上可能有特定倾向。",
+        "individualCollective": "您明显倾向于集体利益。",
+        "pragmatismIdealism": "您明显倾向于理想追求。"
+      },
+      "recommendations": [
+        "在关注集体利益时，也照顾好自己和家人的需求",
+        "理想与务实结合，让理想更可实现",
+        "理解并非所有人都认同您的理想，尊重多样性",
+        "找到坚持理想与适应现实之间的平衡"
+      ],
+      "balanceNotes": "理想主义是社会进步的动力，但过度理想化可能导致与现实脱节。将理想落地需要务实的策略。",
+      "discussionNotes": "理想主义不是空想，而是在理解现实的基础上提出更高的目标，并为之努力。"
+    },
+    {
+      "id": "moderate-tradition",
+      "name": "温和保守型",
+      "description": "您在价值观上总体偏向传统，但并非极端，保持着对新事物的开放态度。",
+      "conditions": [
+        { "dimension": "traditionChange", "operator": "between", "value": [-2, 0] },
+        { "dimension": "authorityLiberty", "operator": "between", "value": [-1, 0] }
+      ],
+      "tags": ["温和", "保守", "稳重"],
+      "summary": "您在价值观上偏向传统和秩序，但保持着一定的开放性。您重视稳定，但也理解变化的需要。",
+      "highlights": [
+        "总体倾向传统但不过激",
+        "重视既有经验和智慧",
+        "对变化持谨慎但开放的立场",
+        "重视社会稳定和个人责任"
+      ],
+      "strengths": [
+        "稳重的处事方式",
+        "尊重传统和经验",
+        "在变化面前保持理性",
+        "平衡传统与创新"
+      ],
+      "dimensionInterpretation": {
+        "traditionChange": "您倾向于传统，但并非完全排斥变化。",
+        "authorityLiberty": "您倾向于秩序和规范，但理解自由的价值。",
+        "individualCollective": "您在个人与集体维度上可能有特定倾向。",
+        "pragmatismIdealism": "您在务实与理想维度上可能有特定倾向。"
+      },
+      "recommendations": [
+        "继续保持这种平衡的传统取向",
+        "在必要时支持合理的变革",
+        "成为保守与进步之间的沟通者",
+        "分享传统智慧给年轻一代"
+      ],
+      "balanceNotes": "温和保守不是落后，而是在谨慎中保持智慧。适度的保守为社会提供稳定的力量。",
+      "discussionNotes": "传统不是固守过去，而是在继承中创新。温和保守者往往是最有效的变革推动者。"
+    },
+    {
+      "id": "libertarian-individualist",
+      "name": "自由个人型",
+      "description": "您极度重视个人自由和自我实现，不太受传统和社会规范的约束。",
+      "conditions": [
+        { "dimension": "authorityLiberty", "operator": "gte", "value": 2 },
+        { "dimension": "individualCollective", "operator": "gte", "value": 2 }
+      ],
+      "tags": ["自由", "个人主义", "自主"],
+      "summary": "您在价值观上极度偏向个人自由和自主。您相信个人是自己命运的主宰，不太认同外部权威和集体规范的约束。",
+      "highlights": [
+        "极度重视个人自由和自主权",
+        "倾向于质疑和挑战权威",
+        "相信个人判断胜于群体意见",
+        "重视自我实现和个人成长"
+      ],
+      "strengths": [
+        "强烈的自主精神",
+        "不随波逐流的独立性",
+        "勇于质疑不合理规则",
+        "强烈的个人责任感"
+      ],
+      "dimensionInterpretation": {
+        "traditionChange": "您在传统与变革维度上可能有特定倾向。",
+        "authorityLiberty": "您极度重视自由，倾向于减少外部约束。",
+        "individualCollective": "您极度重视个人，轻视集体规范。",
+        "pragmatismIdealism": "您在务实与理想维度上可能有特定倾向。"
+      },
+      "recommendations": [
+        "在追求个人自由时，考虑对他人权利的尊重",
+        "理解社会规范有时是为了保护所有人",
+        "自由与责任是并行的",
+        "在坚持自我的同时保持开放心态"
+      ],
+      "balanceNotes": "个人自由是宝贵价值，但自由是有限度的。认识到这一点是成熟自由主义者的标志。",
+      "discussionNotes": "真正的自由主义者不是无政府主义者，而是在尊重他人自由的基础上追求自己的自由。"
+    },
+    {
+      "id": "communal-pragmatist",
+      "name": "集体务实型",
+      "description": "您既重视集体利益，也讲究实际效果，关注眼前可实现的目标。",
+      "conditions": [
+        { "dimension": "individualCollective", "operator": "lte", "value": -1 },
+        { "dimension": "pragmatismIdealism", "operator": "lte", "value": -1 }
+      ],
+      "tags": ["集体", "务实", "实际"],
+      "summary": "您在价值观上倾向于集体利益和务实取向。您关注可实现的目标，注重实际行动效果。",
+      "highlights": [
+        "重视集体利益高于个人得失",
+        "关注实际可实现的目标",
+        "讲究方法和策略的实效性",
+        "关注当下的具体问题"
+      ],
+      "strengths": [
+        "务实的处事方式",
+        "关注实际问题的解决",
+        "团队合作精神",
+        "脚踏实地的态度"
+      ],
+      "dimensionInterpretation": {
+        "traditionChange": "您在传统与变革维度上可能有特定倾向。",
+        "authorityLiberty": "您在权威与自由维度上可能有特定倾向。",
+        "individualCollective": "您明显倾向于集体利益。",
+        "pragmatismIdealism": "您明显倾向于务实取向。"
+      },
+      "recommendations": [
+        "在务实的同时，保持对更高理想的追求",
+        "在集体利益与个人发展之间找到平衡",
+        "理解短期利益与长期利益的协调",
+        "在解决当下问题时，不忘长远目标"
+      ],
+      "balanceNotes": "务实与集体主义的结合是一种稳健的力量，但过度务实可能导致短视。",
+      "discussionNotes": "务实的集体主义者往往是最有效的问题解决者，因为他们既关注现实，又能凝聚集体力量。"
     }
   ],
+  "dimensionInterpretations": {
+    "traditionChange": {
+      "high_change": "您是变革取向，支持创新和打破陈规。您相信变化是社会进步的必要条件。",
+      "moderate_change": "您倾向于支持变革，但会在评估后谨慎行动。",
+      "balanced": "您在传统与变革之间保持平衡，能够根据情况灵活选择。",
+      "moderate_tradition": "您倾向于尊重传统，但并不排斥合理的变革。",
+      "high_tradition": "您是传统取向，重视历史经验和既有智慧，认为稳定是基础。"
+    },
+    "authorityLiberty": {
+      "high_liberty": "您极度重视个人自由，倾向于减少外部约束和权威。",
+      "moderate_liberty": "您倾向于自由，但理解一定规则存在的必要性。",
+      "balanced": "您在权威与自由之间保持平衡，认为两者都很重要。",
+      "moderate_authority": "您倾向于秩序和规范，但理解自由的价值。",
+      "high_authority": "您重视权威和秩序，认为这有助于社会稳定。"
+    },
+    "individualCollective": {
+      "high_individual": "您极度重视个人发展和自我实现，以个人成就为导向。",
+      "moderate_individual": "您倾向于个人发展，但也会考虑集体利益。",
+      "balanced": "您在个人与集体之间保持平衡，认为两者可以协调。",
+      "moderate_collective": "您倾向于集体利益，但也会关注个人需求。",
+      "high_collective": "您极度重视集体利益，愿意为集体目标牺牲个人得失。"
+    },
+    "pragmatismIdealism": {
+      "high_pragmatic": "您极度务实，关注可量化的成果和实际效果。",
+      "moderate_pragmatic": "您倾向于务实，但会保持一定的理想追求。",
+      "balanced": "您在务实与理想之间保持平衡。",
+      "moderate_idealism": "您倾向于理想主义，但会考虑现实约束。",
+      "high_idealism": "您极度理想主义，愿意为远大目标付出。"
+    }
+  },
+  "summaryTemplates": {
+    "overall": "您的价值观光谱评估显示，您在 {dimensions} 维度上倾向于 {tendencies}。{summary}",
+    "dimensionDetail": "在 {dimension} 维度，您的得分为 {score}，表现为 {interpretation}"
+  },
+  "interpretationNotes": {
+    "aboutSpectrum": "价值观光谱不是对错之分，而是不同倾向的描述。每种倾向都有其价值和局限。",
+    "aboutContext": "价值观会因情境而变化。测试结果反映的是您在一般情境下的总体倾向。",
+    "aboutComplexity": "真实的价值观比任何测试都复杂。测试结果只是一个参考，不是对您价值的全面定义。",
+    "aboutGrowth": "了解自己的价值观倾向可以帮助您做出更符合内心的选择，也可以启发您对不同价值观的理解和尊重。"
+  },
+  "balanceNotes": {
+    "whatIsBalance": "价值观的平衡不是简单地处于中间位置，而是在充分理解各种价值后做出的最优选择。",
+    "whyImportant": "理解不同价值观的合理性可以帮助我们更好地与他人相处，更理性地参与公共讨论。",
+    "howToUse": "将测试结果作为自我了解的起点，而非结论。真实的价值观需要在生活实践中不断探索和确认。"
+  },
+  "discussionNotes": {
+    "traditionVsChange": "传统与变革并非对立，而是社会发展的两极。没有传统的变革是激进，没有变革的传统是僵化。",
+    "authorityVsLiberty": "权威与自由需要平衡。过多的权威可能导致压迫，过多的自由可能导致混乱。",
+    "individualVsCollective": "个人与集体并非零和游戏。健康的个人发展有助于集体进步，而集体繁荣也为个人发展创造条件。",
+    "pragmatismVsIdealism": "务实与理想应该相互补充。没有务实的理想是空想，没有理想的务实是短视。"
+  },
   "questions": [
     {
       "id": "values-q1",

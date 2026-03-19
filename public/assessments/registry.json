@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-03-19",
+  "lastUpdated": "2026-03-20",
   "assessments": [
     {
       "id": "mbti-basic",
@@ -14,7 +14,7 @@
       "difficulty": "easy",
       "tags": ["人格", "性格", "MBTI", "职业", "自我探索"],
       "filePath": "assessments/personality/mbti-basic.json",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "status": "active"
     },
     {
@@ -25,11 +25,11 @@
       "description": "通过评估您在压力负荷、情绪波动、恢复能力三个维度上的表现，帮助您了解当前的心理压力状态，并提供科学的调节建议。",
       "shortDescription": "了解您的压力水平与心理状态",
       "estimatedMinutes": 8,
-      "questionCount": 12,
+      "questionCount": 15,
       "difficulty": "easy",
       "tags": ["压力", "心理健康", "情绪", "压力管理"],
       "filePath": "assessments/psychology/stress-check.json",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "status": "active"
     },
     {
@@ -104,7 +104,7 @@
       "difficulty": "medium",
       "tags": ["职业", "兴趣", "霍兰德", "生涯规划", "职业发展"],
       "filePath": "assessments/career/holland-basic.json",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "status": "active"
     },
     {
