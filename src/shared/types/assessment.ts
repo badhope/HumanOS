@@ -6,10 +6,36 @@ export type Difficulty = 'easy' | 'medium' | 'hard';
 
 export type AssessmentStatus = 'active' | 'beta' | 'deprecated';
 
+export type VersionLevel = 'lite' | 'standard' | 'expert';
+
+export interface VersionInfo {
+  level: VersionLevel;
+  name: string;
+  description: string;
+  estimatedMinutes: number;
+  questionCount: number;
+  recommended: boolean;
+  status: AssessmentStatus;
+}
+
+export interface AssessmentFamily {
+  familyId: string;
+  familyName: string;
+  category: AssessmentCategory;
+  description: string;
+  shortDescription: string;
+  icon: string;
+  color: string;
+  versions: VersionInfo[];
+  tags: string[];
+}
+
 export interface AssessmentRegistryItem {
   id: string;
   slug: string;
   name: string;
+  familyId: string;
+  familyName: string;
   category: AssessmentCategory;
   description: string;
   shortDescription: string;
@@ -20,6 +46,8 @@ export interface AssessmentRegistryItem {
   filePath: string;
   version: string;
   status: AssessmentStatus;
+  versionLevel?: VersionLevel;
+  recommended?: boolean;
 }
 
 export interface DimensionDefinition {

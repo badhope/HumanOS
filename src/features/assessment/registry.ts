@@ -2,9 +2,12 @@ import type {
   AssessmentRegistryItem,
   AssessmentDefinition,
   AssessmentCategory,
+  AssessmentFamily,
+  VersionLevel,
 } from '@/shared/types';
 
 const REGISTRY_PATH = 'assessments/registry.json';
+const FAMILY_REGISTRY_PATH = 'assessments/family-registry.json';
 
 interface RegistryData {
   version: string;
@@ -12,7 +15,14 @@ interface RegistryData {
   assessments: AssessmentRegistryItem[];
 }
 
+interface FamilyRegistryData {
+  version: string;
+  lastUpdated: string;
+  families: AssessmentFamily[];
+}
+
 let cachedRegistry: RegistryData | null = null;
+let cachedFamilyRegistry: FamilyRegistryData | null = null;
 
 function getBasePath(): string {
   return import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -44,6 +54,63 @@ export async function fetchAssessmentRegistry(): Promise<RegistryData> {
     console.error('Error fetching assessment registry:', error);
     throw error;
   }
+}
+
+export async function fetchFamilyRegistry(): Promise<FamilyRegistryData> {
+  if (cachedFamilyRegistry) {
+    return cachedFamilyRegistry;
+  }
+
+  try {
+    const registryPath = resolvePath(FAMILY_REGISTRY_PATH);
+    const response = await fetch(registryPath);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch family registry: ${response.status}`);
+    }
+    const data: FamilyRegistryData = await response.json();
+    cachedFamilyRegistry = data;
+    return data;
+  } catch (error) {
+    console.error('Error fetching family registry:', error);
+    throw error;
+  }
+}
+
+export async function getAllFamilies(): Promise<AssessmentFamily[]> {
+  const familyRegistry = await fetchFamilyRegistry();
+  return familyRegistry.families;
+}
+
+export async function getFamilyById(familyId: string): Promise<AssessmentFamily | undefined> {
+  const familyRegistry = await fetchFamilyRegistry();
+  return familyRegistry.families.find(f => f.familyId === familyId);
+}
+
+export async function getFamiliesByCategory(category: AssessmentCategory): Promise<AssessmentFamily[]> {
+  const familyRegistry = await fetchFamilyRegistry();
+  return familyRegistry.families.filter(f => f.category === category);
+}
+
+export async function getAssessmentVersions(familyId: string): Promise<AssessmentFamily['versions']> {
+  const family = await getFamilyById(familyId);
+  return family?.versions || [];
+}
+
+export async function getRecommendedVersion(familyId: string): Promise<AssessmentFamily['versions'][0] | undefined> {
+  const versions = await getAssessmentVersions(familyId);
+  return versions.find(v => v.recommended) || versions[0];
+}
+
+export async function getVersionByLevel(familyId: string, level: VersionLevel): Promise<AssessmentFamily['versions'][0] | undefined> {
+  const versions = await getAssessmentVersions(familyId);
+  return versions.find(v => v.level === level);
+}
+
+export async function getAssessmentSlugByVersion(familyId: string, level: VersionLevel): Promise<string | undefined> {
+  const version = await getVersionByLevel(familyId, level);
+  if (!version) return undefined;
+  const slug = `${familyId}-${level}`;
+  return slug;
 }
 
 export async function getAssessmentsByCategory(

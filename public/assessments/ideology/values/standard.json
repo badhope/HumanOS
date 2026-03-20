@@ -1,0 +1,393 @@
+{
+  "id": "values-standard",
+  "slug": "values-standard",
+  "familyId": "values",
+  "familyName": "价值观光谱",
+  "category": "ideology",
+  "description": "价值观光谱标准版，24道题全面评估您在传统与变革、权威与自由、个人与集体、务实与理想四个核心价值维度上的倾向。",
+  "shortDescription": "24题标准版价值观光谱测试",
+  "versionLevel": "standard",
+  "version": "1.0.0",
+  "estimatedMinutes": 8,
+  "questionCount": 24,
+  "difficulty": "easy",
+  "tags": ["价值观", "人生观", "信念", "自我认知"],
+  "disclaimer": "本测评为自我认知参考，结果反映的是您在特定维度的倾向程度，不代表任何绝对立场。价值观是复杂的，您的选择可能因情境而异。",
+  "dimensions": [
+    {
+      "id": "traditionChange",
+      "name": "传统与变革",
+      "description": "您对传统价值观和变革创新的态度倾向"
+    },
+    {
+      "id": "authorityLiberty",
+      "name": "权威与自由",
+      "description": "您对秩序权威和个人自由的看重程度"
+    },
+    {
+      "id": "individualCollective",
+      "name": "个人与集体",
+      "description": "您更看重个人发展还是集体利益"
+    },
+    {
+      "id": "pragmatismIdealism",
+      "name": "务实与理想",
+      "description": "您倾向于务实解决问题还是追求理想目标"
+    },
+    {
+      "id": "securityFreedom",
+      "name": "安全与冒险",
+      "description": "您在稳定安全和冒险进取之间的倾向"
+    },
+    {
+      "id": "materialismHumanism",
+      "name": "物质与人文",
+      "description": "您更看重物质成就还是精神追求"
+    }
+  ],
+  "scoring": {
+    "type": "weighted",
+    "dimensionScores": {
+      "traditionChange": { "weights": { "tradition": -2, "moderate_tradition": -1, "balanced": 0, "moderate_change": 1, "change": 2 } },
+      "authorityLiberty": { "weights": { "authority": -2, "moderate_authority": -1, "balanced": 0, "moderate_liberty": 1, "liberty": 2 } },
+      "individualCollective": { "weights": { "individual": 2, "moderate_individual": 1, "balanced": 0, "moderate_collective": -1, "collective": -2 } },
+      "pragmatismIdealism": { "weights": { "pragmatic": -2, "moderate_pragmatic": -1, "balanced": 0, "moderate_idealism": 1, "idealism": 2 } },
+      "securityFreedom": { "weights": { "security": -2, "moderate_security": -1, "balanced": 0, "moderate_freedom": 1, "freedom": 2 } },
+      "materialismHumanism": { "weights": { "materialism": -2, "moderate_materialism": -1, "balanced": 0, "moderate_humanism": 1, "humanism": 2 } }
+    },
+    "normalize": true,
+    "minScore": -48,
+    "maxScore": 48
+  },
+  "questions": [
+    {
+      "id": "val-std-1",
+      "text": "在社会发展中，您更倾向于？",
+      "type": "single-choice",
+      "dimension": "traditionChange",
+      "options": [
+        { "id": "A", "text": "尊重传统，从历史经验中汲取智慧", "value": -2 },
+        { "id": "B", "text": "传统有一定价值，但需要与时俱进", "value": 0 },
+        { "id": "C", "text": "支持变革，认为创新是社会进步的动力", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-2",
+      "text": "您认为社会秩序的基础应该是？",
+      "type": "single-choice",
+      "dimension": "authorityLiberty",
+      "options": [
+        { "id": "A", "text": "强有力的领导和明确的规则", "value": -2 },
+        { "id": "B", "text": "需要平衡秩序与个人自由", "value": 0 },
+        { "id": "C", "text": "个人自由应受到最大保护", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-3",
+      "text": "当个人利益与集体利益冲突时，您通常会？",
+      "type": "single-choice",
+      "dimension": "individualCollective",
+      "options": [
+        { "id": "A", "text": "优先考虑集体利益", "value": -2 },
+        { "id": "B", "text": "寻求个人与集体的平衡点", "value": 0 },
+        { "id": "C", "text": "优先保护个人利益", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-4",
+      "text": "您更看重的是？",
+      "type": "single-choice",
+      "dimension": "pragmatismIdealism",
+      "options": [
+        { "id": "A", "text": "解决实际问题的可行方案", "value": -2 },
+        { "id": "B", "text": "平衡现实与理想追求", "value": 0 },
+        { "id": "C", "text": "追求崇高的理想和目标", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-5",
+      "text": "面对传统习俗时，您的态度是？",
+      "type": "single-choice",
+      "dimension": "traditionChange",
+      "options": [
+        { "id": "A", "text": "尊重并遵守传统习俗", "value": -2 },
+        { "id": "B", "text": "选择性遵守有意义的习俗", "value": 0 },
+        { "id": "C", "text": "习俗应该随着时代改变", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-6",
+      "text": "您对权威人物（如领导、专家）的态度是？",
+      "type": "single-choice",
+      "dimension": "authorityLiberty",
+      "options": [
+        { "id": "A", "text": "尊重并愿意服从", "value": -2 },
+        { "id": "B", "text": "尊重但保持独立思考", "value": 0 },
+        { "id": "C", "text": "质疑并要求充分的理由", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-7",
+      "text": "在团队合作中，您更重视的是？",
+      "type": "single-choice",
+      "dimension": "individualCollective",
+      "options": [
+        { "id": "A", "text": "团队的整体成就", "value": -2 },
+        { "id": "B", "text": "个人成长与团队和谐的平衡", "value": 0 },
+        { "id": "C", "text": "个人的突出表现和成长", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-8",
+      "text": "当制定计划时，您更倾向于？",
+      "type": "single-choice",
+      "dimension": "pragmatismIdealism",
+      "options": [
+        { "id": "A", "text": "制定切实可行的方案", "value": -2 },
+        { "id": "B", "text": "设定理想目标同时考虑现实", "value": 0 },
+        { "id": "C", "text": "设定远大的理想目标", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-9",
+      "text": "您对"稳定"的理解是？",
+      "type": "single-choice",
+      "dimension": "traditionChange",
+      "options": [
+        { "id": "A", "text": "社会稳定的基石", "value": -2 },
+        { "id": "B", "text": "需要适度，需要动态平衡", "value": 0 },
+        { "id": "C", "text": "稳定可能导致停滞", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-10",
+      "text": "您认为规则的主要作用是？",
+      "type": "single-choice",
+      "dimension": "authorityLiberty",
+      "options": [
+        { "id": "A", "text": "维护社会秩序的必要手段", "value": -2 },
+        { "id": "B", "text": "平衡自由与秩序的工具", "value": 0 },
+        { "id": "C", "text": "有时会限制个人发展", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-11",
+      "text": "成功意味着什么？",
+      "type": "single-choice",
+      "dimension": "individualCollective",
+      "options": [
+        { "id": "A", "text": "为社会和他人做出贡献", "value": -2 },
+        { "id": "B", "text": "个人成就与社会认可的平衡", "value": 0 },
+        { "id": "C", "text": "实现个人价值和自我目标", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-12",
+      "text": "面对现实与理想差距时，您通常会？",
+      "type": "single-choice",
+      "dimension": "pragmatismIdealism",
+      "options": [
+        { "id": "A", "text": "接受现实，调整目标", "value": -2 },
+        { "id": "B", "text": "在现实基础上逐步接近理想", "value": 0 },
+        { "id": "C", "text": "坚持理想，寻找新的路径", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-13",
+      "text": "您更愿意在什么环境中工作？",
+      "type": "single-choice",
+      "dimension": "securityFreedom",
+      "options": [
+        { "id": "A", "text": "稳定可预期的大机构", "value": -2 },
+        { "id": "B", "text": "稳定的但有一定变化的环境", "value": 0 },
+        { "id": "C", "text": "充满变化和机会的创业环境", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-14",
+      "text": "您更看重人生的哪个方面？",
+      "type": "single-choice",
+      "dimension": "materialismHumanism",
+      "options": [
+        { "id": "A", "text": "物质安全和生活保障", "value": -2 },
+        { "id": "B", "text": "物质与精神兼顾", "value": 0 },
+        { "id": "C", "text": "精神成长和自我实现", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-15",
+      "text": "面对新技术的态度是？",
+      "type": "single-choice",
+      "dimension": "traditionChange",
+      "options": [
+        { "id": "A", "text": "谨慎评估，确认安全后才接受", "value": -2 },
+        { "id": "B", "text": "感兴趣但也会考虑风险", "value": 0 },
+        { "id": "C", "text": "积极拥抱新技术", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-16",
+      "text": "您认为教育的主要目的应该是？",
+      "type": "single-choice",
+      "dimension": "authorityLiberty",
+      "options": [
+        { "id": "A", "text": "传授既定知识和技能", "value": -2 },
+        { "id": "B", "text": "培养能力同时传授知识", "value": 0 },
+        { "id": "C", "text": "激发创造力和独立思考", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-17",
+      "text": "在帮助他人时，您更看重的是？",
+      "type": "single-choice",
+      "dimension": "individualCollective",
+      "options": [
+        { "id": "A", "text": "解决他们的实际困难", "value": -2 },
+        { "id": "B", "text": "短期帮助与长期发展的平衡", "value": 0 },
+        { "id": "C", "text": "帮助他们独立成长", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-18",
+      "text": "当您的想法与大多数人不同时，您会？",
+      "type": "single-choice",
+      "dimension": "authorityLiberty",
+      "options": [
+        { "id": "A", "text": "顺从主流观点", "value": -2 },
+        { "id": "B", "text": "保留意见但也不强加于人", "value": 0 },
+        { "id": "C", "text": "坚持表达并说服他人", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-19",
+      "text": "您对"金钱"的态度是？",
+      "type": "single-choice",
+      "dimension": "materialismHumanism",
+      "options": [
+        { "id": "A", "text": "金钱是安全和成功的基石", "value": -2 },
+        { "id": "B", "text": "金钱重要但不是全部", "value": 0 },
+        { "id": "C", "text": "金钱不能买来真正的幸福", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-20",
+      "text": "在职业选择上，您更看重？",
+      "type": "single-choice",
+      "dimension": "securityFreedom",
+      "options": [
+        { "id": "A", "text": "稳定的工作和收入", "value": -2 },
+        { "id": "B", "text": "稳定与发展的平衡", "value": 0 },
+        { "id": "C", "text": "个人兴趣和成长机会", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-21",
+      "text": "面对风险时，您的反应通常是？",
+      "type": "single-choice",
+      "dimension": "securityFreedom",
+      "options": [
+        { "id": "A", "text": "尽量规避风险", "value": -2 },
+        { "id": "B", "text": "评估风险后做决定", "value": 0 },
+        { "id": "C", "text": "愿意承担风险以换取机会", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-22",
+      "text": "您对"公平"的理解是？",
+      "type": "single-choice",
+      "dimension": "individualCollective",
+      "options": [
+        { "id": "A", "text": "机会均等，各尽所能", "value": -2 },
+        { "id": "B", "text": "公平需要考虑不同情况", "value": 0 },
+        { "id": "C", "text": "结果均等才是真正的公平", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-23",
+      "text": "您认为应该如何评价一个人的价值？",
+      "type": "single-choice",
+      "dimension": "materialismHumanism",
+      "options": [
+        { "id": "A", "text": "以成就和贡献来衡量", "value": -2 },
+        { "id": "B", "text": "成就与人品兼顾", "value": 0 },
+        { "id": "C", "text": "以人格和品德来衡量", "value": 2 }
+      ]
+    },
+    {
+      "id": "val-std-24",
+      "text": "当面对重大人生选择时，您更倾向于？",
+      "type": "single-choice",
+      "dimension": "pragmatismIdealism",
+      "options": [
+        { "id": "A", "text": "选择最实际、最可行的方案", "value": -2 },
+        { "id": "B", "text": "平衡现实与理想", "value": 0 },
+        { "id": "C", "text": "追随内心的理想和热情", "value": 2 }
+      ]
+    }
+  ],
+  "resultProfiles": [
+    {
+      "id": "conservative-authority",
+      "name": "传统权威型",
+      "description": "您倾向于尊重传统和权威，重视社会稳定和秩序。",
+      "conditions": [
+        { "dimension": "traditionChange", "operator": "lte", "value": -1 },
+        { "dimension": "authorityLiberty", "operator": "lte", "value": -1 }
+      ],
+      "tags": ["传统", "权威", "稳定"],
+      "summary": "您在价值观光谱上倾向于传统与权威一端。",
+      "highlights": [
+        "尊重传统价值观和历史智慧",
+        "重视社会秩序和等级制度的作用",
+        "倾向于在既有框架内寻求改变"
+      ],
+      "recommendations": [
+        "在与不同价值观的人交流时，保持开放心态",
+        "在尊重传统的同时，也接纳合理的创新"
+      ],
+      "balanceNotes": "传统与变革是社会发展的两极，各有其价值。"
+    },
+    {
+      "id": "progressive-libertarian",
+      "name": "进步自由型",
+      "description": "您支持变革和个人自由，倾向于打破传统束缚。",
+      "conditions": [
+        { "dimension": "traditionChange", "operator": "gte", "value": 1 },
+        { "dimension": "authorityLiberty", "operator": "gte", "value": 1 }
+      ],
+      "tags": ["进步", "自由", "创新"],
+      "summary": "您在价值观光谱上倾向于变革与自由一端。",
+      "highlights": [
+        "支持社会变革和创新",
+        "重视个人自由和选择权",
+        "倾向于突破传统框架"
+      ],
+      "recommendations": [
+        "在追求变革时也要理解传统价值的意义",
+        "尊重不同价值观的人群"
+      ],
+      "balanceNotes": "自由与责任并存才能实现真正的进步。"
+    },
+    {
+      "id": "balanced-spectrum",
+      "name": "平衡光谱型",
+      "description": "您的价值观分布在光谱的中间区域，倾向于在各种价值取向上保持平衡。",
+      "conditions": [
+        { "dimension": "traditionChange", "operator": "between", "value": [-1, 1] },
+        { "dimension": "authorityLiberty", "operator": "between", "value": [-1, 1] }
+      ],
+      "tags": ["平衡", "中庸", "务实"],
+      "summary": "您在价值观光谱上倾向于中庸平衡。",
+      "highlights": [
+        "能在传统与变革间找到平衡点",
+        "重视秩序也尊重个人自由",
+        "善于在不同情境中灵活调整"
+      ],
+      "recommendations": [
+        "继续保持平衡的价值观",
+        "在不同场合灵活运用不同的价值取向"
+      ],
+      "balanceNotes": "平衡不是折中，而是在理解两端价值后的智慧选择。"
+    }
+  ]
+}

@@ -1,0 +1,694 @@
+{
+  "id": "resilience-expert",
+  "slug": "resilience-expert",
+  "familyId": "resilience",
+  "familyName": "心理韧性评估",
+  "category": "psychology",
+  "description": "心理韧性专家版，32道题深度评估，包含六个核心维度和多个子维度分析，提供详尽的个人韧性画像与发展建议。",
+  "shortDescription": "32题专家版深度心理韧性评估",
+  "versionLevel": "expert",
+  "version": "1.0.0",
+  "estimatedMinutes": 12,
+  "questionCount": 32,
+  "difficulty": "medium",
+  "tags": ["心理韧性", "抗压能力", "情绪调节", "自我成长", "深度评估"],
+  "disclaimer": "本测评为自我探索性质，不作为医学诊断依据。如感到持续心理困扰，请寻求专业帮助。",
+  "dimensions": [
+    {
+      "id": "emotionalRecovery",
+      "name": "情绪恢复",
+      "description": "您在经历负面情绪后恢复平静的能力"
+    },
+    {
+      "id": "emotionalAwareness",
+      "name": "情绪觉察",
+      "description": "您对自身情绪的识别和理解能力"
+    },
+    {
+      "id": "adaptability",
+      "name": "适应能力",
+      "description": "您在面对环境变化时的调整和应对能力"
+    },
+    {
+      "id": "flexibility",
+      "name": "心理灵活性",
+      "description": "您在困境中灵活调整思维和策略的能力"
+    },
+    {
+      "id": "supportSeeking",
+      "name": "支持寻求",
+      "description": "您在困难时主动寻求他人帮助和支持的倾向"
+    },
+    {
+      "id": "supportGiving",
+      "name": "支持给予",
+      "description": "您在他人需要时提供帮助和支持的倾向"
+    },
+    {
+      "id": "persistence",
+      "name": "坚持力",
+      "description": "您在面对困难和挑战时坚持目标的程度"
+    },
+    {
+      "id": "goalClarity",
+      "name": "目标清晰度",
+      "description": "您对个人目标的清晰程度和坚持程度"
+    },
+    {
+      "id": "stressTolerance",
+      "name": "压力承受",
+      "description": "您在高压情境下保持功能的能力"
+    },
+    {
+      "id": "crisisResponse",
+      "name": "危机应对",
+      "description": "您在紧急或危机情况下的反应模式"
+    },
+    {
+      "id": "selfEfficacy",
+      "name": "自我效能",
+      "description": "您对自己应对困难能力的信心程度"
+    },
+    {
+      "id": "growthMindset",
+      "name": "成长心态",
+      "description": "您将困难视为成长机会的倾向"
+    }
+  ],
+  "scoring": {
+    "type": "weighted",
+    "dimensionScores": {
+      "emotionalRecovery": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "emotionalAwareness": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "adaptability": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "flexibility": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "supportSeeking": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "supportGiving": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "persistence": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "goalClarity": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "stressTolerance": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "crisisResponse": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "selfEfficacy": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "growthMindset": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } }
+    },
+    "normalize": true,
+    "minScore": 32,
+    "maxScore": 128
+  },
+  "questions": [
+    {
+      "id": "res-exp-1",
+      "text": "当遭遇挫折或失败后，您通常需要多长时间恢复情绪平稳？",
+      "type": "single-choice",
+      "dimension": "emotionalRecovery",
+      "options": [
+        { "id": "A", "text": "很快，几个小时内就能恢复", "value": 4 },
+        { "id": "B", "text": "需要一两天时间", "value": 3 },
+        { "id": "C", "text": "需要好几天才能平复", "value": 2 },
+        { "id": "D", "text": "往往会持续困扰我很久", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-2",
+      "text": "当您熟悉的工作环境或生活节奏发生重大变化时，您的适应速度如何？",
+      "type": "single-choice",
+      "dimension": "adaptability",
+      "options": [
+        { "id": "A", "text": "很快就能调整并适应", "value": 4 },
+        { "id": "B", "text": "需要一段时间，但能逐渐适应", "value": 3 },
+        { "id": "C", "text": "适应得很慢，感到很不适应", "value": 2 },
+        { "id": "D", "text": "很难适应变化，容易感到焦虑", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-3",
+      "text": "当您遇到困难或面临巨大压力时，您会怎么做？",
+      "type": "single-choice",
+      "dimension": "supportSeeking",
+      "options": [
+        { "id": "A", "text": "主动向朋友、家人或专业人士寻求帮助", "value": 4 },
+        { "id": "B", "text": "有时会向他人倾诉，但也能自己消化", "value": 3 },
+        { "id": "C", "text": "很少寻求他人帮助，倾向于自己解决", "value": 2 },
+        { "id": "D", "text": "从不寻求帮助，独自承受", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-4",
+      "text": "当您设定了一个重要目标但进展遇到阻碍时，您通常会？",
+      "type": "single-choice",
+      "dimension": "persistence",
+      "options": [
+        { "id": "A", "text": "坚持不懈地努力，直到克服障碍", "value": 4 },
+        { "id": "B", "text": "尝试调整方法，但仍然朝目标努力", "value": 3 },
+        { "id": "C", "text": "会犹豫是否要继续，甚至想放弃", "value": 2 },
+        { "id": "D", "text": "很快就放弃或改变目标", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-5",
+      "text": "面对负面反馈或批评时，您的第一反应是？",
+      "type": "single-choice",
+      "dimension": "emotionalRecovery",
+      "options": [
+        { "id": "A", "text": "冷静分析，认为这是改进的机会", "value": 4 },
+        { "id": "B", "text": "会有些难过，但能较快调整心态", "value": 3 },
+        { "id": "C", "text": "会感到受伤，需要一些时间恢复", "value": 2 },
+        { "id": "D", "text": "会陷入负面情绪，很久无法释怀", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-6",
+      "text": "当您需要学习一项全新的技能或知识时，您的态度是？",
+      "type": "single-choice",
+      "dimension": "adaptability",
+      "options": [
+        { "id": "A", "text": "充满期待，视挑战为成长机会", "value": 4 },
+        { "id": "B", "text": "有些紧张，但会努力去学", "value": 3 },
+        { "id": "C", "text": "感到压力，对学习效果缺乏信心", "value": 2 },
+        { "id": "D", "text": "抗拒变化，倾向于待在舒适区", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-7",
+      "text": "您与朋友或家人谈论自己的困难和问题的频率是？",
+      "type": "single-choice",
+      "dimension": "supportSeeking",
+      "options": [
+        { "id": "A", "text": "经常分享，寻求建议和支持", "value": 4 },
+        { "id": "B", "text": "有时会分享，但不经常", "value": 3 },
+        { "id": "C", "text": "很少分享，担心给别人添麻烦", "value": 2 },
+        { "id": "D", "text": "几乎从不分享，独自面对", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-8",
+      "text": "在完成一个长期项目或任务时，您的坚持程度如何？",
+      "type": "single-choice",
+      "dimension": "persistence",
+      "options": [
+        { "id": "A", "text": "始终保持动力，能坚持到底", "value": 4 },
+        { "id": "B", "text": "会有懈怠，但能自我激励完成", "value": 3 },
+        { "id": "C", "text": "经常需要外部督促才能继续", "value": 2 },
+        { "id": "D", "text": "很容易半途而废", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-9",
+      "text": "当您感到情绪低落或压力大时，您的恢复策略通常是？",
+      "type": "single-choice",
+      "dimension": "emotionalRecovery",
+      "options": [
+        { "id": "A", "text": "主动做一些让自己放松的事，很快调整", "value": 4 },
+        { "id": "B", "text": "等一等，让时间帮助自己恢复", "value": 3 },
+        { "id": "C", "text": "需要他人安慰或陪伴才能好转", "value": 2 },
+        { "id": "D", "text": "不知道如何调节，陷入其中", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-10",
+      "text": "您认为自己面对逆境时的整体能力如何？",
+      "type": "single-choice",
+      "dimension": "selfEfficacy",
+      "options": [
+        { "id": "A", "text": "很强，能从容应对各种困难", "value": 4 },
+        { "id": "B", "text": "较强，大多数困难都能克服", "value": 3 },
+        { "id": "C", "text": "一般，有时会被困难击垮", "value": 2 },
+        { "id": "D", "text": "较弱，容易被困难打倒", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-11",
+      "text": "在工作中或生活中突然出现紧急情况时，您的反应是？",
+      "type": "single-choice",
+      "dimension": "crisisResponse",
+      "options": [
+        { "id": "A", "text": "保持冷静，迅速思考应对方案", "value": 4 },
+        { "id": "B", "text": "有些紧张，但能设法应对", "value": 3 },
+        { "id": "C", "text": "容易慌乱，需要时间理清头绪", "value": 2 },
+        { "id": "D", "text": "完全不知所措，需要他人帮助", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-12",
+      "text": "您是否相信自己有能力处理生活中出现的各种挑战？",
+      "type": "single-choice",
+      "dimension": "selfEfficacy",
+      "options": [
+        { "id": "A", "text": "非常有信心，相信自己能克服大多数挑战", "value": 4 },
+        { "id": "B", "text": "比较有信心，能处理常见的困难", "value": 3 },
+        { "id": "C", "text": "信心一般，对自己的能力存疑", "value": 2 },
+        { "id": "D", "text": "缺乏信心，觉得自己无法应对", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-13",
+      "text": "当您经历了一次失败后，再次尝试的意愿如何？",
+      "type": "single-choice",
+      "dimension": "growthMindset",
+      "options": [
+        { "id": "A", "text": "很快振作起来，愿意立即再尝试", "value": 4 },
+        { "id": "B", "text": "需要短暂调整，然后愿意再试", "value": 3 },
+        { "id": "C", "text": "需要较长时间恢复勇气", "value": 2 },
+        { "id": "D", "text": "很长时间都不敢再尝试", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-14",
+      "text": "当您所在的团队或家庭经历困难时期，您的表现通常是？",
+      "type": "single-choice",
+      "dimension": "supportGiving",
+      "options": [
+        { "id": "A", "text": "主动站出来，帮助大家一起渡过难关", "value": 4 },
+        { "id": "B", "text": "做好自己的本职工作，同时支持他人", "value": 3 },
+        { "id": "C", "text": "需要他人给予支持和鼓励", "value": 2 },
+        { "id": "D", "text": "自己也受到影响，难以给予帮助", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-15",
+      "text": "您处理冲突或矛盾的方式通常是？",
+      "type": "single-choice",
+      "dimension": "flexibility",
+      "options": [
+        { "id": "A", "text": "积极面对，寻求双赢的解决方案", "value": 4 },
+        { "id": "B", "text": "理性分析，努力找到解决方法", "value": 3 },
+        { "id": "C", "text": "尽量避免冲突，或者顺从他人", "value": 2 },
+        { "id": "D", "text": "感到非常不安，不知如何处理", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-16",
+      "text": "当您同时面临多项任务或责任时，您的感受和表现是？",
+      "type": "single-choice",
+      "dimension": "stressTolerance",
+      "options": [
+        { "id": "A", "text": "能有效组织，顺利完成各项任务", "value": 4 },
+        { "id": "B", "text": "有些压力，但能合理安排完成", "value": 3 },
+        { "id": "C", "text": "感到不堪重负，效率下降", "value": 2 },
+        { "id": "D", "text": "完全混乱，不知道从何开始", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-17",
+      "text": "您对自己情绪的觉察和管理能力如何？",
+      "type": "single-choice",
+      "dimension": "emotionalAwareness",
+      "options": [
+        { "id": "A", "text": "能清晰觉察自己的情绪并有效调节", "value": 4 },
+        { "id": "B", "text": "大多数时候能意识到自己的情绪", "value": 3 },
+        { "id": "C", "text": "有时会事后才意识到自己的情绪反应", "value": 2 },
+        { "id": "D", "text": "经常被情绪控制，事后后悔", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-18",
+      "text": "面对重大的人生决定时，您的态度是？",
+      "type": "single-choice",
+      "dimension": "selfEfficacy",
+      "options": [
+        { "id": "A", "text": "相信自己能做出最好的选择，并承担后果", "value": 4 },
+        { "id": "B", "text": "谨慎考虑后能做出决定", "value": 3 },
+        { "id": "C", "text": "很难做决定，总是犹豫不决", "value": 2 },
+        { "id": "D", "text": "害怕做决定，总是依赖他人的意见", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-19",
+      "text": "您在面对不如意的事情时，多久能接受现实并向前看？",
+      "type": "single-choice",
+      "dimension": "adaptability",
+      "options": [
+        { "id": "A", "text": "很快，能迅速调整心态面对现实", "value": 4 },
+        { "id": "B", "text": "需要几天时间，但能逐步接受", "value": 3 },
+        { "id": "C", "text": "需要较长时间才能释怀", "value": 2 },
+        { "id": "D", "text": "很长时间都无法接受，陷入其中", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-20",
+      "text": "您认为过去经历过的困难对您的影响是？",
+      "type": "single-choice",
+      "dimension": "growthMindset",
+      "options": [
+        { "id": "A", "text": "让我变得更强大，更有经验", "value": 4 },
+        { "id": "B", "text": "让我学到了一些东西", "value": 3 },
+        { "id": "C", "text": "留下了一些阴影，但我在努力克服", "value": 2 },
+        { "id": "D", "text": "对我造成了持续的负面影响", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-21",
+      "text": "当原来的计划无法实现时，您通常会？",
+      "type": "single-choice",
+      "dimension": "flexibility",
+      "options": [
+        { "id": "A", "text": "迅速调整目标或方法，继续前进", "value": 4 },
+        { "id": "B", "text": "分析原因，制定新的计划", "value": 3 },
+        { "id": "C", "text": "感到沮丧，需要时间接受", "value": 2 },
+        { "id": "D", "text": "完全迷失方向，不知该怎么办", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-22",
+      "text": "您对自己未来能否实现目标的信念是？",
+      "type": "single-choice",
+      "dimension": "goalClarity",
+      "options": [
+        { "id": "A", "text": "非常相信，有清晰的愿景和路径", "value": 4 },
+        { "id": "B", "text": "比较相信，大方向明确", "value": 3 },
+        { "id": "C", "text": "不确定，对未来有些迷茫", "value": 2 },
+        { "id": "D", "text": "缺乏信心，觉得很难实现", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-23",
+      "text": "当您看到他人成功时，您的想法通常是？",
+      "type": "single-choice",
+      "dimension": "growthMindset",
+      "options": [
+        { "id": "A", "text": "为他们高兴，同时相信自己也能进步", "value": 4 },
+        { "id": "B", "text": "受到激励，想要学习他们的方法", "value": 3 },
+        { "id": "C", "text": "有些羡慕，但觉得那只是少数人的事", "value": 2 },
+        { "id": "D", "text": "感到自卑，觉得自己比不上别人", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-24",
+      "text": "您在感到孤独或被隔离时，会怎么做？",
+      "type": "single-choice",
+      "dimension": "supportSeeking",
+      "options": [
+        { "id": "A", "text": "主动联系朋友或参加社交活动", "value": 4 },
+        { "id": "B", "text": "等待合适的机会，主动创造联系", "value": 3 },
+        { "id": "C", "text": "等待他人来联系自己", "value": 2 },
+        { "id": "D", "text": "选择独处，不太愿意主动联系", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-25",
+      "text": "面对一个看起来无法解决的问题时，您的反应是？",
+      "type": "single-choice",
+      "dimension": "crisisResponse",
+      "options": [
+        { "id": "A", "text": "尝试分解问题，从能解决的部分开始", "value": 4 },
+        { "id": "B", "text": "寻求他人意见，共同探讨解决方案", "value": 3 },
+        { "id": "C", "text": "感到无力，拖延处理", "value": 2 },
+        { "id": "D", "text": "完全放弃，认为根本无法解决", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-26",
+      "text": "您觉得自己对生活的掌控感如何？",
+      "type": "single-choice",
+      "dimension": "selfEfficacy",
+      "options": [
+        { "id": "A", "text": "很强，能主动塑造自己的生活", "value": 4 },
+        { "id": "B", "text": "较强，能影响生活的主要方面", "value": 3 },
+        { "id": "C", "text": "一般，生活推着我走", "value": 2 },
+        { "id": "D", "text": "较弱，觉得自己无法掌控", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-27",
+      "text": "当您的想法与大多数人不同时，您会？",
+      "type": "single-choice",
+      "dimension": "flexibility",
+      "options": [
+        { "id": "A", "text": "坚持自己的想法，同时尊重他人观点", "value": 4 },
+        { "id": "B", "text": "表达自己的看法，但愿意倾听", "value": 3 },
+        { "id": "C", "text": "倾向于顺从主流意见", "value": 2 },
+        { "id": "D", "text": "不敢表达，选择隐藏自己的想法", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-28",
+      "text": "您如何描述您的人生目标或使命？",
+      "type": "single-choice",
+      "dimension": "goalClarity",
+      "options": [
+        { "id": "A", "text": "有清晰明确的目标和人生使命", "value": 4 },
+        { "id": "B", "text": "有比较清晰的方向和追求", "value": 3 },
+        { "id": "C", "text": "有一些想法，但还不够明确", "value": 2 },
+        { "id": "D", "text": "不太清楚，还在探索中", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-29",
+      "text": "当您必须结束一段重要的关系或告别一个重要的人时，您的调整速度是？",
+      "type": "single-choice",
+      "dimension": "emotionalRecovery",
+      "options": [
+        { "id": "A", "text": "能较快接受并继续前行", "value": 4 },
+        { "id": "B", "text": "需要一些时间，但能逐步恢复", "value": 3 },
+        { "id": "C", "text": "需要很长时间才能释怀", "value": 2 },
+        { "id": "D", "text": "很长时间都无法走出来", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-30",
+      "text": "您对“我可以从失败中学习”这句话的认同程度是？",
+      "type": "single-choice",
+      "dimension": "growthMindset",
+      "options": [
+        { "id": "A", "text": "完全认同，失败是最好的老师", "value": 4 },
+        { "id": "B", "text": "比较认同，失败有价值", "value": 3 },
+        { "id": "C", "text": "不太确定，要看具体情况", "value": 2 },
+        { "id": "D", "text": "不认同，失败只会带来负面影响", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-31",
+      "text": "当您经历身体上的不适或疾病时，您的应对方式是？",
+      "type": "single-choice",
+      "dimension": "stressTolerance",
+      "options": [
+        { "id": "A", "text": "积极治疗，同时保持乐观心态", "value": 4 },
+        { "id": "B", "text": "配合治疗，相信会好起来", "value": 3 },
+        { "id": "C", "text": "感到焦虑，对恢复缺乏信心", "value": 2 },
+        { "id": "D", "text": "感到绝望，认为情况会越来越糟", "value": 1 }
+      ]
+    },
+    {
+      "id": "res-exp-32",
+      "text": "您如何看待自己应对生活中各种挑战的历史经历？",
+      "type": "single-choice",
+      "dimension": "selfEfficacy",
+      "options": [
+        { "id": "A", "text": "很自豪，我成功克服了大多数挑战", "value": 4 },
+        { "id": "B", "text": "比较满意，虽然有些遗憾但总体还行", "value": 3 },
+        { "id": "C", "text": "有些失望，觉得自己可以做得更好", "value": 2 },
+        { "id": "D", "text": "不满意，觉得自己总是失败", "value": 1 }
+      ]
+    }
+  ],
+  "resultProfiles": [
+    {
+      "id": "high-resilience",
+      "name": "高韧性人群",
+      "description": "您的心理韧性非常强，能够出色地应对生活中的各种挫折和压力。您具备卓越的情绪调节能力和适应能力，面对困境能保持积极态度，是天生的领导者和支持者。",
+      "conditions": [
+        { "dimension": "emotionalRecovery", "operator": "gte", "value": 3.5 },
+        { "dimension": "adaptability", "operator": "gte", "value": 3.5 },
+        { "dimension": "selfEfficacy", "operator": "gte", "value": 3.5 }
+      ],
+      "tags": ["高韧性", "适应力强", "情绪稳定", "领导力", "支持者"],
+      "summary": "您的心理韧性评估为卓越水平。您拥有出色的情绪调节能力、适应能力和自我效能感，能够在各种压力下保持功能正常并有效恢复。",
+      "highlights": [
+        "能够从压力事件后快速恢复情绪平稳",
+        "面对环境变化能迅速调整自己的状态",
+        "对挫折有健康的认知，能够从中汲取教训",
+        "拥有有效的问题解决策略和应对机制",
+        "能够在危机中保持冷静并带领他人"
+      ],
+      "strengths": [
+        "情绪调节能力强，不易被负面情绪长时间困扰",
+        "面对变化能快速调整自己的状态",
+        "在压力下仍能保持冷静思考",
+        "愿意主动寻求支持和建议",
+        "对困难有积极的解释风格",
+        "能够同时给予和寻求支持",
+        "拥有清晰的个人目标和成长心态"
+      ],
+      "dimensionInterpretation": {
+        "emotionalRecovery": "您在情绪恢复维度表现卓越，能够迅速从负面情绪中走出来，这是一项极其宝贵的心理资源。",
+        "emotionalAwareness": "您对自身情绪有高度觉察，能够早期识别情绪变化并采取行动。",
+        "adaptability": "您的适应能力非常强，无论面对何种变化都能快速找到新的平衡点。",
+        "flexibility": "您在心理灵活性方面表现突出，能够在困境中灵活调整策略。",
+        "supportSeeking": "您在支持寻求方面表现成熟，善于利用人际资源。",
+        "supportGiving": "您在支持给予方面同样出色，是他人的重要支持来源。",
+        "persistence": "您在坚持力方面表现出色，面对困难不会轻易放弃。",
+        "goalClarity": "您有清晰的人生目标和方向，这为您的韧性提供了坚实的基础。",
+        "stressTolerance": "您的压力承受能力很强，能在高压力情境下保持冷静和功能正常。",
+        "crisisResponse": "您在危机应对方面表现卓越，能够在紧急情况下做出正确判断。",
+        "selfEfficacy": "您的自我效能感非常强，对自己的能力有坚定的信心。",
+        "growthMindset": "您拥有真正的成长心态，视困难为成长机会。"
+      },
+      "recommendations": [
+        "继续保持当前健康的生活方式和压力管理策略",
+        "考虑将您的经验分享给他人，成为他人的支持资源",
+        "适度挑战自我，走出舒适区进一步成长",
+        "在帮助他人时也要关注自己的状态，避免过度消耗",
+        "可以尝试领导或 mentoring 角色，帮助他人提升韧性"
+      ],
+      "actionTips": [
+        "保持规律的自我关怀习惯，如定期运动和充足睡眠",
+        "继续学习新技能，保持成长心态",
+        "建立更广泛的社会支持网络",
+        "定期反思和更新自己的人生目标"
+      ]
+    },
+    {
+      "id": "moderate-resilience",
+      "name": "中等韧性人群",
+      "description": "您的心理韧性处于中等偏上水平，有较好的抗压能力。您在大多数情况下能够有效应对挑战，在某些维度上有突出表现，在其他方面还有提升空间。",
+      "conditions": [
+        { "dimension": "emotionalRecovery", "operator": "between", "value": [2.5, 3.5] },
+        { "dimension": "adaptability", "operator": "between", "value": [2.5, 3.5] }
+      ],
+      "tags": ["中等韧性", "有潜力", "平衡发展"],
+      "summary": "您的心理韧性评估为良好水平。在大多数情况下您能够应对挑战，有自己的优势领域，同时某些方面还有提升空间。",
+      "highlights": [
+        "有一定的情绪调节能力，可以进一步提升",
+        "面对变化时需要更长时间适应",
+        "在必要时愿意寻求他人支持",
+        "对挫折有一定的承受能力",
+        "有成长心态的萌芽，愿意从失败中学习"
+      ],
+      "strengths": [
+        "对挫折有一定的承受能力",
+        "愿意在需要时寻求帮助",
+        "能够坚持完成重要的目标",
+        "对自身状态有一定的觉察",
+        "愿意倾听他人意见"
+      ],
+      "dimensionInterpretation": {
+        "emotionalRecovery": "您的情绪恢复能力处于良好水平，通过练习可以进一步提升。",
+        "emotionalAwareness": "您对情绪的觉察能力有提升空间，更早识别情绪有助于管理。",
+        "adaptability": "您的适应能力可以进一步培养，多接触新事物有助于提升适应能力。",
+        "flexibility": "在策略灵活性方面您可以尝试更多的调整和变化。",
+        "supportSeeking": "您在支持寻求方面表现良好，善于利用人际资源。",
+        "supportGiving": "您在支持给予方面可以更加主动。",
+        "persistence": "您的坚持力处于良好水平，设定阶段性目标有助于保持动力。",
+        "goalClarity": "您的人生目标比较清晰，可以进一步明确和细化。",
+        "stressTolerance": "您的压力承受能力可以进一步增强。",
+        "crisisResponse": "您在危机情况下的反应可以更加冷静和有效。",
+        "selfEfficacy": "您的自我效能感处于良好水平，积累成功经验可以增强自信。",
+        "growthMindset": "您已经开始将困难视为成长机会，这是很好的起点。"
+      },
+      "recommendations": [
+        "继续学习情绪调节技巧，如正念冥想或深呼吸练习",
+        "主动建立支持网络，在需要时善于利用",
+        "设定阶段性目标来锻炼坚持力",
+        "通过积累小的成功经验来提升自我效能感",
+        "尝试在团队中承担更多支持性角色"
+      ],
+      "actionTips": [
+        "每天花10-15分钟练习正念冥想",
+        "建立固定的社交活动维护支持网络",
+        "每周设定一个小目标并坚持完成",
+        "记录自己的成功经历，增强自信心",
+        "学习新的应对策略并尝试在生活中应用"
+      ]
+    },
+    {
+      "id": "developing-resilience",
+      "name": "发展中的韧性",
+      "description": "您的心理韧性正在发展中，有一定的抗压基础但在多个维度上需要持续培养。您具有成长的潜力，通过有意识的练习和经验积累可以显著提升韧性水平。",
+      "conditions": [
+        { "dimension": "emotionalRecovery", "operator": "between", "value": [2.0, 3.0] },
+        { "dimension": "selfEfficacy", "operator": "lt", "value": 3.0 }
+      ],
+      "tags": ["发展中", "有潜力", "需要培养"],
+      "summary": "您的心理韧性评估为发展中水平。您正在建立应对困难的信心和能力，通过持续练习可以逐步提升韧性水平。",
+      "highlights": [
+        "对自身情绪有一定觉察，这是进步的基础",
+        "愿意在需要时寻求支持",
+        "有一定的坚持能力，但可以更强",
+        "开始意识到成长心态的重要性"
+      ],
+      "strengths": [
+        "有自我觉察的意愿",
+        "愿意承认自己的不足",
+        "对学习新技能持开放态度"
+      ],
+      "dimensionInterpretation": {
+        "emotionalRecovery": "建议您建立更多有效的情绪调节策略。",
+        "emotionalAwareness": "建议通过情绪日记等方式提升情绪觉察。",
+        "adaptability": "可以通过逐步接触新环境来提升适应能力。",
+        "flexibility": "尝试在小事上练习灵活调整。",
+        "supportSeeking": "您的支持寻求意愿很好，可以更主动一些。",
+        "supportGiving": "给予支持也能增强自己的韧性。",
+        "persistence": "可以通过设定小目标来培养坚持力。",
+        "goalClarity": "建议更深入地思考人生目标和方向。",
+        "stressTolerance": "需要学习系统的压力管理技巧。",
+        "crisisResponse": "可以学习一些危机应对的基本策略。",
+        "selfEfficacy": "建议从容易的任务开始，积累成功经验。",
+        "growthMindset": "开始将困难视为学习机会是很好的开始。"
+      },
+      "recommendations": [
+        "建立规律的情绪觉察和调节习惯",
+        "主动建立支持网络，与可信赖的人分享感受",
+        "从小事做起，逐步提升抗压能力",
+        "学习专业的压力管理技巧",
+        "考虑寻求专业心理咨询进一步提升"
+      ],
+      "actionTips": [
+        "每天花5-10分钟进行情绪觉察练习",
+        "尝试建立规律的运动习惯",
+        "学习基础的放松技巧如深呼吸",
+        "每周尝试一件小小的挑战性事务",
+        "建立自己的支持小团队"
+      ]
+    },
+    {
+      "id": "low-resilience",
+      "name": "需要关注的韧性",
+      "description": "您的心理韧性相对较弱，面对压力和挫折时恢复需要更多时间和支持。建议您通过系统的训练和练习，配合专业支持来提升心理韧性。",
+      "conditions": [
+        { "dimension": "emotionalRecovery", "operator": "lt", "value": 2.5 },
+        { "dimension": "adaptability", "operator": "lt", "value": 2.5 }
+      ],
+      "tags": ["需要关注", "需要支持", "可培养"],
+      "summary": "您的心理韧性评估为需要关注的水平。面对困难时您可能更容易感到压力，恢复也需要更多时间。",
+      "highlights": [
+        "情绪波动可能较大，恢复需要更长时间",
+        "面对变化时适应性较差",
+        "可能不善于寻求他人支持",
+        "对自我的信心可能需要加强"
+      ],
+      "strengths": [
+        "有自己的应对方式",
+        "对自身状态有觉察",
+        "愿意承认自己的不足"
+      ],
+      "dimensionInterpretation": {
+        "emotionalRecovery": "建议您学习更多情绪调节策略，如情绪识别和表达。",
+        "emotionalAwareness": "提升情绪觉察是第一步，可以从每天的情绪记录开始。",
+        "adaptability": "可以通过小步骤练习来提升适应能力，逐步接触新环境。",
+        "flexibility": "练习在小事上调整方法，培养灵活性。",
+        "supportSeeking": "建议您建立更广泛的支持网络，学会接受他人帮助。",
+        "supportGiving": "给予支持也能增强自己的韧性。",
+        "persistence": "可以通过设定可实现的小目标来培养坚持力。",
+        "goalClarity": "建议更深入地思考人生目标和方向。",
+        "stressTolerance": "需要学习压力管理技巧，逐步提高压力承受能力。",
+        "crisisResponse": "可以学习一些危机应对的基本策略。",
+        "selfEfficacy": "建议从容易的任务开始，积累成功经验来提升自信。",
+        "growthMindset": "尝试将困难视为学习机会而非失败。"
+      },
+      "recommendations": [
+        "考虑学习专业的压力管理技巧",
+        "主动与朋友家人交流，建立支持网络",
+        "从小事做起，逐步提升抗压能力",
+        "如感到持续困扰，建议寻求专业心理咨询",
+        "建立规律的自我关怀习惯"
+      ],
+      "actionTips": [
+        "每天记录情绪变化，提升自我觉察",
+        "尝试建立规律的运动习惯",
+        "学习基础的放松技巧如深呼吸",
+        "从完成小目标开始积累成功体验",
+        "寻找一个信任的人建立稳定的支持关系"
+      ]
+    }
+  ]
+}
