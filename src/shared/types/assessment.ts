@@ -112,6 +112,84 @@ export interface AssessmentResult {
   reliability?: number;
 }
 
+export interface DimensionScore {
+  dimensionId: string;
+  dimensionName: string;
+  rawScore: number;
+  normalizedScore: number;
+  percentage: number;
+  description: string;
+  isPrimary: boolean;
+  letter: string;
+}
+
+export interface Highlight {
+  id: string;
+  text: string;
+  type: 'strength' | 'trait' | 'preference' | 'potential';
+}
+
+export interface Recommendation {
+  id: string;
+  text: string;
+  priority: 'high' | 'medium' | 'low';
+  category?: string;
+}
+
+export interface ResultRecord {
+  id?: number;
+  assessmentId: string;
+  assessmentSlug: string;
+  assessmentName: string;
+  category: AssessmentCategory;
+  version: string;
+  startedAt: string;
+  completedAt: string;
+  durationSpent: number;
+  answerCount: number;
+  answers: Record<string, number>;
+  rawScores: Record<string, number>;
+  normalizedScores: Record<string, number>;
+  percentiles: Record<string, number>;
+  resultProfileId: string;
+  resultProfileName: string;
+  resultType: string;
+  summary: string;
+  highlights: Highlight[];
+  recommendations: Recommendation[];
+  aiAnalysis: string;
+  metadata: Record<string, unknown>;
+}
+
+export interface DraftRecord {
+  id?: number;
+  assessmentId: string;
+  assessmentSlug: string;
+  assessmentName: string;
+  category: AssessmentCategory;
+  answers: Record<string, number>;
+  currentQuestionIndex: number;
+  totalQuestions: number;
+  startedAt: string;
+  updatedAt: string;
+  isAbandoned: boolean;
+}
+
+export interface LocalProfile {
+  id?: number;
+  nickname: string;
+  createdAt: string;
+  updatedAt: string;
+  totalAssessments: number;
+  totalDurationSpent: number;
+  lastAssessmentAt: string | null;
+  favoriteCategory: AssessmentCategory | null;
+  settings: {
+    theme: string;
+    fontSize: number;
+  };
+}
+
 export interface CategoryInfo {
   id: AssessmentCategory;
   name: string;

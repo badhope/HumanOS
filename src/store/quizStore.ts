@@ -11,6 +11,7 @@ interface QuizState {
   nextQuestion: () => void;
   prevQuestion: () => void;
   setCurrentQuestionIndex: (index: number) => void;
+  setStartTime: (time: Date) => void;
   completeQuiz: () => void;
   resetQuiz: () => void;
 }
@@ -48,6 +49,9 @@ export const useQuizStore = create<QuizState>((set) => ({
 
   setCurrentQuestionIndex: (index) =>
     set({ currentQuestionIndex: index }),
+
+  setStartTime: (time) =>
+    set({ startTime: time }),
 
   completeQuiz: () =>
     set({

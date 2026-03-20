@@ -35,8 +35,8 @@ This strategy ensures a polished, complete experience for each assessment type b
 | MBTI Assessment | ✅ Complete | Full closed-loop from quiz to detailed results |
 | Assessment Registry | ✅ Complete | JSON-based dynamic loading system |
 | 5 Assessment Categories | ✅ Complete | Personality, Psychology, Cognition, Ideology, Career |
-| 8 Question Banks | ✅ Complete | Content储备 (storage), ready for integration |
-| Local Storage | ✅ Complete | Quiz history and settings persistence |
+| 8 Question Banks | ✅ Complete | Content ready for integration |
+| Local Data Closed-Loop | ✅ Complete | Results, drafts, history, settings persistence |
 | GitHub Pages Deployment | ✅ Complete | Automated CI/CD pipeline |
 | HashRouter Configuration | ✅ Complete | SPA routing for GitHub Pages subdirectory |
 
@@ -68,12 +68,15 @@ This strategy ensures a polished, complete experience for each assessment type b
 
 - **Dynamic Assessment Loading** - Extensible JSON-based question bank system
 - **Multiple Assessment Types** - Single-choice, multiple-choice, Likert scale, ranking
-- **Local-First Data** - All data stored in browser localStorage (no backend required)
+- **Local-First Data** - All data stored in browser IndexedDB/localStorage (no backend required)
 - **Responsive Design** - Mobile-friendly with dark mode support
 - **3D Visual Experience** - Three.js immersive background effects
-- **Smooth Animations** - Framer Motion powered transitions
+- **Smooth Animations** - Framer Motion powered transitions with configurable animation levels
 - **Multi-Dimensional Analysis** - Radar charts, bar charts, distribution visualization
 - **Category-Based Organization** - 5 major assessment categories
+- **Quiz Draft Auto-Save** - Progress automatically saved and restorable
+- **Personal Data Center** - History records, drafts management, settings center
+- **Theme & Preferences** - Light/dark/system theme, font size, animation level controls
 
 ---
 
@@ -229,23 +232,37 @@ Each assessment is a self-contained JSON file containing:
 
 ### Storage Strategy
 
-| Data Type | Storage Method | Key Pattern |
+| Data Type | Storage Method | Description |
 |-----------|---------------|-------------|
-| Quiz Results | localStorage | `quiz_result_{assessmentId}` |
-| User Settings | Zustand + localStorage | `humanOS_settings` |
-| Answer Drafts | localStorage | `quiz_draft_{assessmentId}` |
+| Quiz Results | Dexie (IndexedDB) | Persistent storage via `db.results` table |
+| Quiz Drafts | Dexie (IndexedDB) | Auto-saved progress via `db.drafts` table |
+| User Settings | Zustand + Dexie | Dual persistence via `db.settings` table |
+| User Profile | Dexie (IndexedDB) | Via `db.profile` table |
 
 ### Data Flow
 
-1. User starts quiz → `quizStore` initializes
-2. Answers saved to `quizStore` (memory)
-3. On quiz completion → results saved to localStorage
-4. Results page reads from localStorage for display
-5. Profile page reads history from localStorage
+```
+App Initialization
+  → initializeDatabase() [Dexie DB open]
+  → initializeSettings() [Write defaults if empty]
+  → settingsStore.syncFromDB() [Load settings to store]
+
+Quiz Flow
+  → User starts quiz → quizStore initializes
+  → Answers saved to quizStore (memory)
+  → handleAutoSave() saves draft to Dexie every 2 seconds (if enabled)
+  → beforeunload saves draft backup to localStorage
+  → On quiz completion → result saved to Dexie
+  → Draft automatically deleted after successful submission
+
+Profile Flow
+  → syncProfileFromResults() aggregates data
+  → History, drafts, settings all read from Dexie
+```
 
 ### No Backend
 
-This is a purely static application. All data persists in the user's browser. There is:
+This is a purely static application. All data persists in the user's browser using IndexedDB (via Dexie). There is:
 - No user authentication
 - No cloud sync
 - No server-side processing
@@ -304,22 +321,22 @@ fetchAssessmentBySlug(slug)
 
 ## Roadmap / Next Steps
 
-### Phase 1: Complete Current Modules (In Progress)
+### Phase 1: Local Data Closed-Loop (Completed ✅)
 
 | Priority | Task | Status |
 |----------|------|--------|
-| P0 | Universal results page | 🔧 In Progress |
-| P0 | Profile history integration | 🔧 In Progress |
-| P1 | Individual module result pages | 📋 Planned |
-| P1 | Quiz draft auto-save | 📋 Planned |
+| P0 | Universal results page | ✅ Completed |
+| P0 | Profile history integration | ✅ Completed |
+| P1 | Individual module result pages | 🔧 In Progress |
+| P1 | Quiz draft auto-save | ✅ Completed |
 
 ### Phase 2: Feature Expansion
 
 | Priority | Feature | Status |
 |----------|---------|--------|
-| P2 | Data center / history management | 📋 Planned |
-| P2 | Settings center (theme, language, font) | 📋 Planned |
-| P2 | Quiz progress persistence | 📋 Planned |
+| P2 | Settings center (theme, font, animation) | ✅ Completed |
+| P2 | Draft management UI | ✅ Completed |
+| P2 | Data export/import | 🔧 In Progress |
 | P2 | Share functionality | 📋 Planned |
 
 ### Phase 3: Advanced Features
@@ -395,11 +412,11 @@ Output is in `dist/` directory.
 
 ### Current Limitations
 
-1. **Results page is MBTI-specific**: `/results/:assessmentId` shows full results only for MBTI. Other assessments show a "completed" message.
-2. **Local storage only**: History is tied to browser/device. No cloud sync.
+1. **Results page is MBTI-specific**: `/results/:assessmentId` shows full results only for MBTI. Other assessments show a "completed" message after submission.
+2. **Local storage only**: History, drafts, and settings are tied to browser/device. No cloud sync.
 3. **No user accounts**: Pure static app without authentication.
-4. **No AI analysis**: Reports are pre-defined, not AI-generated.
-5. **No export**: No PDF, poster, or sharing features yet.
+4. **No AI analysis**: Reports are pre-defined based on scoring rules, not AI-generated.
+5. **Draft auto-save requires `autoSaveDraft` enabled**: Draft saving is controlled by user setting.
 
 ### Browser Support
 
@@ -413,7 +430,7 @@ Output is in `dist/` directory.
 - This is a frontend-only static site
 - No backend server required
 - No database server required
-- All data persists in browser localStorage
+- All data persists in browser IndexedDB/localStorage (via Dexie)
 
 ---
 

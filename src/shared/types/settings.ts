@@ -6,6 +6,8 @@ export interface UserSettings {
   fontSize: number;
   animationLevel: AnimationLevel;
   reducedMotion: boolean;
+  showTimer: boolean;
+  autoSaveDraft: boolean;
 }
 
 export const defaultSettings: UserSettings = {
@@ -13,4 +15,11 @@ export const defaultSettings: UserSettings = {
   fontSize: 16,
   animationLevel: 'medium',
   reducedMotion: false,
+  showTimer: true,
+  autoSaveDraft: true,
 };
+
+export interface SettingRecord {
+  key: string;
+  value: string | number | boolean;
+}

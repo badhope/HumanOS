@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Share2, RefreshCw, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Share2, RefreshCw, CheckCircle, Clock, BarChart3, Sparkles } from 'lucide-react';
 import { PageTransition } from '@/components/molecules';
 import { Button, Card, Badge, Progress } from '@/components/atoms';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -13,7 +14,9 @@ import {
   generateDimensionDescriptions,
   generateRecommendations,
 } from '@/features/assessment/scoring';
-import type { AssessmentDefinition } from '@/shared/types';
+import { saveResult, getLatestResultByAssessmentSlug, getResultByResultId } from '@/features/storage/resultService';
+import { syncProfileFromResults } from '@/features/storage/profileService';
+import type { ResultRecord } from '@/shared/types';
 
 interface DimensionResult {
   name: string;
@@ -25,6 +28,10 @@ interface DimensionResult {
 }
 
 interface FullResultData {
+  id?: number;
+  assessmentId: string;
+  assessmentSlug: string;
+  assessmentName: string;
   mbtiType: string;
   typeName: string;
   typeDescription: string;
@@ -35,27 +42,28 @@ interface FullResultData {
   relationships: string;
   recommendations: string[];
   careers: string[];
-}
-
-interface StoredResultData {
-  assessmentId: string;
-  answers: Record<string, number>;
+  durationSpent: number;
+  answerCount: number;
   completedAt: string;
+  category: string;
 }
 
-const Results: React.FC = () => {
+const Results: FC = () => {
   const { assessmentId } = useParams<{ assessmentId: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { animationLevel, reducedMotion } = useSettingsStore();
   const storeAnswers = useQuizStore((state) => state.answers);
   const storeIsCompleted = useQuizStore((state) => state.isCompleted);
+  const startTime = useQuizStore((state) => state.startTime);
   const { resetQuiz } = useQuizStore();
 
-  const [, setAssessment] = useState<AssessmentDefinition | null>(null);
   const [resultData, setResultData] = useState<FullResultData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isRestoredFromStorage, setIsRestoredFromStorage] = useState(false);
+  const [resultId, setResultId] = useState<number | null>(null);
+  const [savingResult, setSavingResult] = useState(false);
 
   useEffect(() => {
     async function loadResult() {
@@ -65,22 +73,45 @@ const Results: React.FC = () => {
         return;
       }
 
-      let answers = storeAnswers;
+      const resultIdParam = searchParams.get('resultId');
+      let loadedResult: ResultRecord | null = null;
+      let answers: Record<string, number> = {};
       let isCompleted = storeIsCompleted;
+      let resultSource: 'store' | 'storage' | 'db' = 'store';
 
-      if (!isCompleted || Object.keys(answers).length === 0) {
+      if (resultIdParam) {
+        const rid = parseInt(resultIdParam, 10);
+        if (!isNaN(rid)) {
+          const result = await getResultByResultId(rid);
+          if (result) {
+            loadedResult = result;
+            answers = loadedResult.answers;
+            isCompleted = true;
+            resultSource = 'db';
+          }
+        }
+      }
+
+      if (!loadedResult) {
+        const result = await getLatestResultByAssessmentSlug(assessmentId);
+        if (result) {
+          loadedResult = result;
+          answers = loadedResult.answers;
+          isCompleted = true;
+          resultSource = 'db';
+        }
+      }
+
+      if (!loadedResult && (!isCompleted || Object.keys(storeAnswers).length === 0)) {
         const storedData = localStorage.getItem(`quiz_result_${assessmentId}`);
         if (storedData) {
           try {
-            const parsed: StoredResultData = JSON.parse(storedData);
+            const parsed = JSON.parse(storedData);
             if (parsed.assessmentId === assessmentId && parsed.answers) {
               answers = parsed.answers;
               isCompleted = true;
+              resultSource = 'storage';
               setIsRestoredFromStorage(true);
-              useQuizStore.setState({
-                answers,
-                isCompleted: true,
-              });
             }
           } catch (e) {
             console.error('Failed to parse stored result:', e);
@@ -101,8 +132,6 @@ const Results: React.FC = () => {
           setLoading(false);
           return;
         }
-
-        setAssessment(assessmentData);
 
         const { dimensionScores, mbtiType } = calculateMBTIScores(assessmentData, answers);
         const profile = getResultProfile(assessmentData, mbtiType, dimensionScores);
@@ -138,7 +167,12 @@ const Results: React.FC = () => {
         const relationships = getRelationships(mbtiType);
         const careers = profile?.careers || getDefaultCareers(mbtiType);
 
+        const durationSpent = startTime ? Math.round((Date.now() - startTime.getTime()) / 1000) : (loadedResult?.durationSpent || 0);
+
         const fullResult: FullResultData = {
+          assessmentId,
+          assessmentSlug: assessmentData.slug,
+          assessmentName: assessmentData.name,
           mbtiType,
           typeName: profile?.name || `${mbtiType}型`,
           typeDescription: profile?.description || `${mbtiType}是一种有趣的人格类型。`,
@@ -149,9 +183,58 @@ const Results: React.FC = () => {
           relationships,
           recommendations,
           careers,
+          durationSpent,
+          answerCount: Object.keys(answers).length,
+          completedAt: loadedResult?.completedAt || new Date().toISOString(),
+          category: assessmentData.category,
         };
 
         setResultData(fullResult);
+
+        if (resultSource !== 'db') {
+          setSavingResult(true);
+          try {
+            const resultRecord: Omit<ResultRecord, 'id'> = {
+              assessmentId,
+              assessmentSlug: assessmentData.slug,
+              assessmentName: assessmentData.name,
+              category: assessmentData.category,
+              version: assessmentData.version,
+              startedAt: startTime?.toISOString() || new Date().toISOString(),
+              completedAt: new Date().toISOString(),
+              durationSpent,
+              answerCount: Object.keys(answers).length,
+              answers,
+              rawScores: dimensionScores,
+              normalizedScores: dimensionScores,
+              percentiles: {},
+              resultProfileId: profile?.id || mbtiType,
+              resultProfileName: profile?.name || `${mbtiType}型`,
+              resultType: mbtiType,
+              summary: profile?.description || `${mbtiType}是一种有趣的人格类型。`,
+              highlights: strengths.map((s, i) => ({ id: `h${i}`, text: s, type: 'strength' as const })),
+              recommendations: recommendations.map((r, i) => ({ id: `r${i}`, text: r, priority: 'medium' as const })),
+              aiAnalysis: '',
+              metadata: {},
+            };
+
+            const savedId = await saveResult(resultRecord);
+            setResultId(savedId);
+            if (loadedResult?.id) {
+              setResultId(loadedResult.id);
+            }
+
+            await syncProfileFromResults();
+
+            localStorage.removeItem(`quiz_result_${assessmentId}`);
+          } catch (err) {
+            console.error('Failed to save result:', err);
+          } finally {
+            setSavingResult(false);
+          }
+        } else if (loadedResult?.id) {
+          setResultId(loadedResult.id);
+        }
       } catch (err) {
         console.error('Failed to load result:', err);
         setError('加载结果失败，请稍后重试');
@@ -161,7 +244,7 @@ const Results: React.FC = () => {
     }
 
     loadResult();
-  }, [assessmentId, storeAnswers, storeIsCompleted]);
+  }, [assessmentId, storeAnswers, storeIsCompleted, startTime, searchParams]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -198,6 +281,10 @@ const Results: React.FC = () => {
     );
   }
 
+  const handleViewHistory = () => {
+    navigate('/profile?tab=history');
+  };
+
   return (
     <PageTransition>
       <div className="min-h-screen px-4 py-12">
@@ -221,6 +308,8 @@ const Results: React.FC = () => {
               <CheckCircle className="w-3 h-3 mr-1" />
               测评完成
               {isRestoredFromStorage && ' (已恢复)'}
+              {savingResult && ' (保存中...)'}
+              {resultId && !savingResult && ` (已保存 #${resultId})`}
             </Badge>
             <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
               {resultData.mbtiType}
@@ -228,9 +317,14 @@ const Results: React.FC = () => {
             <p className="text-xl text-primary-500 font-medium mb-2">
               {resultData.typeName}
             </p>
-            <p className="text-gray-600 dark:text-gray-400">
-              基于 {Object.keys(storeAnswers).length} 道题目的回答
-            </p>
+            <div className="flex items-center justify-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+              <span className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                {Math.round(resultData.durationSpent / 60)}分钟
+              </span>
+              <span>•</span>
+              <span>{resultData.answerCount} 道题</span>
+            </div>
           </motion.div>
 
           <motion.div
@@ -248,7 +342,8 @@ const Results: React.FC = () => {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <BarChart3 className="w-5 h-5" />
                 四维人格分析
               </h2>
               <div className="space-y-4">
@@ -282,7 +377,8 @@ const Results: React.FC = () => {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
                 性格优势
               </h2>
               <Card className="p-4">
@@ -299,6 +395,33 @@ const Results: React.FC = () => {
 
             <motion.div variants={itemVariants}>
               <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+                潜在成长空间
+              </h2>
+              <Card className="p-4">
+                <ul className="space-y-2">
+                  {resultData.potentialRisks.map((risk, i) => (
+                    <li key={i} className="flex items-start gap-2 text-gray-700 dark:text-gray-300">
+                      <span className="text-amber-500 mt-1">•</span>
+                      {risk}
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+                人际关系
+              </h2>
+              <Card className="p-4">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {resultData.relationships}
+                </p>
+              </Card>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
                 成长建议
               </h2>
               <Card className="p-4">
@@ -310,6 +433,24 @@ const Results: React.FC = () => {
                     </li>
                   ))}
                 </ul>
+              </Card>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+                适合的职业方向
+              </h2>
+              <Card className="p-4">
+                <div className="flex flex-wrap gap-2">
+                  {resultData.careers.map((career, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 text-sm"
+                    >
+                      {career}
+                    </span>
+                  ))}
+                </div>
               </Card>
             </motion.div>
 
@@ -337,12 +478,22 @@ const Results: React.FC = () => {
                   leftIcon={<RefreshCw className="w-4 h-4" />}
                   onClick={() => {
                     resetQuiz();
-                    navigate('/quiz/mbti-basic');
+                    navigate(`/quiz/${assessmentId}`);
                   }}
                 >
                   重新测试
                 </Button>
               </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleViewHistory}
+              >
+                查看历史记录
+              </Button>
             </motion.div>
 
             <motion.div variants={itemVariants}>
@@ -447,23 +598,23 @@ function getRelationships(mbtiType: string): string {
 function getDefaultCareers(mbtiType: string): string[] {
   const careerMap: Record<string, string[]> = {
     'INTJ': ['战略咨询师', '金融分析师', '软件架构师', '科研人员'],
-    'INTP': ['数据科学家', '哲学家', '软件工程师', '大学教授'],
-    'ENTJ': ['企业高管', '律师', '管理顾问', '创业者'],
-    'ENTP': ['营销策划', '创业者', '律师', '公关专家'],
-    'INFJ': ['心理咨询师', '作家', '人力资源经理', '社工'],
-    'INFP': ['作家', '艺术家', '心理咨询师', '教师'],
-    'ENFJ': ['教师', '培训师', '人力资源经理', '社会活动家'],
-    'ENFP': ['市场营销', '创意总监', '记者', '导游'],
-    'ISTJ': ['财务管理', '审计', '律师', '行政主管'],
-    'ISFJ': ['护士', '教师', '社会工作者', '图书管理员'],
-    'ESTJ': ['项目经理', '行政主管', '质量管理', '金融经理'],
-    'ESFJ': ['人力资源', '教师', '护士', '客户服务'],
-    'ISTP': ['工程师', '机械师', '飞行员', 'IT支持'],
-    'ISFP': ['设计师', '摄影师', '艺术家', '室内设计师'],
-    'ESTP': ['销售', '企业家', '活动策划', '经纪人'],
-    'ESFP': ['演员', '主持人', '市场营销', '活动策划'],
+    'INTP': ['研究员', '数据科学家', '哲学家', '软件工程师'],
+    'ENTJ': ['企业高管', '律师', '管理咨询师', '创业者'],
+    'ENTP': ['企业家', '投资人', '律师', '公关专家'],
+    'INFJ': ['心理咨询师', '作家', '社会工作者', '人力资源总监'],
+    'INFP': ['作家', '艺术家', '心理咨询师', '语言治疗师'],
+    'ENFJ': ['教师', '人力资源经理', '心理咨询师', '培训师'],
+    'ENFP': ['营销顾问', '记者', '演员', '摄影师'],
+    'ISTJ': ['财务会计', '审计师', '律师', '行政经理'],
+    'ISFJ': ['护士', '人力资源助理', '图书馆员', '社会工作者'],
+    'ESTJ': ['项目经理', '银行经理', '质量管理师', '保险代理人'],
+    'ESFJ': ['教师', '护士', '人力资源经理', '客户服务顾问'],
+    'ISTP': ['工程师', '机械师', '飞行员', '运动员'],
+    'ISFP': ['艺术家', '设计师', '摄影师', '插画师'],
+    'ESTP': ['企业家', '销售经理', '旅游代理', '活动策划'],
+    'ESFP': ['演员', '主持人', '营销人员', '公关专员'],
   };
-  return careerMap[mbtiType] || ['通用职业发展'];
+  return careerMap[mbtiType] || ['职业探索中'];
 }
 
 export default Results;

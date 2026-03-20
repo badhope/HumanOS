@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
@@ -8,7 +8,7 @@ import { useSettingsStore } from '@/store/settingsStore';
 import { ASSESSMENT_CATEGORIES } from '@/shared/constants';
 import type { AssessmentCategory } from '@/shared/types';
 
-const Categories: React.FC = () => {
+const Categories: FC = () => {
   const navigate = useNavigate();
   const { animationLevel, reducedMotion } = useSettingsStore();
 

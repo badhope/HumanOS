@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Suspense, lazy } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
@@ -17,8 +18,42 @@ const NotFound = lazy(() => import('@/pages/NotFound'));
 
 function App() {
   const location = useLocation();
-  const { animationLevel } = useSettingsStore();
+  const { animationLevel, theme, fontSize } = useSettingsStore();
   const isHomePage = location.hash === '' || location.hash === '#/';
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else if (theme === 'light') {
+      root.classList.remove('dark');
+    } else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+    }
+
+    root.style.fontSize = `${fontSize}px`;
+  }, [theme, fontSize]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (theme === 'system') {
+        if (e.matches) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [theme]);
 
   return (
     <div className="relative min-h-screen overflow-hidden">

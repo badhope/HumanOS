@@ -1,11 +1,11 @@
-import React from 'react';
+import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { useSettingsStore } from '@/store/settingsStore';
 
-const Home: React.FC = () => {
+const Home: FC = () => {
   const { animationLevel, reducedMotion } = useSettingsStore();
 
   const titleVariants = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Construction, ArrowLeft, Sparkles, CheckCircle } from 'lucide-react';
@@ -6,7 +6,7 @@ import { PageTransition } from '@/components/molecules';
 import { Button, Card } from '@/components/atoms';
 import { useSettingsStore } from '@/store/settingsStore';
 
-const Maintenance: React.FC = () => {
+const Maintenance: FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { animationLevel, reducedMotion } = useSettingsStore();

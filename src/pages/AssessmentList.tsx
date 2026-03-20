@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { FC } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Lock } from 'lucide-react';
@@ -20,7 +21,7 @@ const COMPLETED_MODULES = [
   'work-style-basic',
 ];
 
-const AssessmentList: React.FC = () => {
+const AssessmentList: FC = () => {
   const { category } = useParams<{ category: string }>();
   const navigate = useNavigate();
   const { animationLevel, reducedMotion } = useSettingsStore();

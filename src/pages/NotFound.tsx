@@ -1,10 +1,10 @@
-import React from 'react';
+import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, ArrowLeft } from 'lucide-react';
 import { Button, Card } from '@/components/atoms';
 
-const NotFound: React.FC = () => {
+const NotFound: FC = () => {
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-12">
       <div className="relative z-10 mx-auto max-w-md text-center">

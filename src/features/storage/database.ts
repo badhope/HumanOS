@@ -1,5 +1,11 @@
 import Dexie, { type Table } from 'dexie';
-import type { AssessmentResult, UserSettings } from '@/shared/types';
+import type {
+  ResultRecord,
+  DraftRecord,
+  LocalProfile,
+} from '@/shared/types';
+
+export { type ResultRecord, type DraftRecord, type LocalProfile };
 
 export interface SettingRecord {
   key: string;
@@ -7,7 +13,9 @@ export interface SettingRecord {
 }
 
 export class HumanOSDatabase extends Dexie {
-  assessments!: Table<AssessmentResult, number>;
+  results!: Table<ResultRecord, number>;
+  drafts!: Table<DraftRecord, number>;
+  profile!: Table<LocalProfile, number>;
   settings!: Table<SettingRecord, string>;
 
   constructor() {
@@ -17,67 +25,30 @@ export class HumanOSDatabase extends Dexie {
       assessments: '++id, assessmentId, category, completedAt',
       settings: 'key',
     });
+
+    this.version(2).stores({
+      results: '++id, assessmentId, assessmentSlug, category, completedAt, resultType',
+      drafts: '++id, assessmentId, assessmentSlug, updatedAt',
+      settings: 'key',
+      profile: '++id',
+    });
   }
 }
 
 export const db = new HumanOSDatabase();
 
-export async function saveAssessmentResult(
-  result: Omit<AssessmentResult, 'id'>
-): Promise<number> {
-  return await db.assessments.add(result as AssessmentResult);
-}
-
-export async function getAssessmentResults(): Promise<AssessmentResult[]> {
-  return await db.assessments.orderBy('completedAt').reverse().toArray();
-}
-
-export async function getAssessmentResultById(
-  assessmentId: string
-): Promise<AssessmentResult | undefined> {
-  return await db.assessments
-    .where('assessmentId')
-    .equals(assessmentId)
-    .first();
-}
-
-export async function deleteAssessmentResult(id: number): Promise<void> {
-  await db.assessments.delete(id);
-}
-
-export async function saveSetting(
-  key: string,
-  value: string | number | boolean
-): Promise<void> {
-  await db.settings.put({ key, value });
-}
-
-export async function getSetting(key: string): Promise<string | number | boolean | undefined> {
-  const record = await db.settings.get(key);
-  return record?.value;
-}
-
-export async function getAllSettings(): Promise<Record<string, string | number | boolean>> {
-  const records = await db.settings.toArray();
-  return records.reduce(
-    (acc, { key, value }) => {
-      acc[key] = value;
-      return acc;
-    },
-    {} as Record<string, string | number | boolean>
-  );
-}
-
-export async function initializeSettings(
-  defaultSettings: UserSettings
-): Promise<void> {
-  const existingSettings = await db.settings.count();
-  if (existingSettings === 0) {
-    await db.settings.bulkPut(
-      Object.entries(defaultSettings).map(([key, value]) => ({
-        key,
-        value,
-      }))
-    );
+export async function initializeDatabase(): Promise<void> {
+  try {
+    await db.open();
+  } catch (error) {
+    console.error('Failed to initialize database:', error);
+    throw error;
   }
+}
+
+export async function clearDatabase(): Promise<void> {
+  await db.results.clear();
+  await db.drafts.clear();
+  await db.profile.clear();
+  await db.settings.clear();
 }
