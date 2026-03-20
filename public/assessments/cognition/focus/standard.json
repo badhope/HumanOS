@@ -1,0 +1,446 @@
+{
+  "id": "focus-standard",
+  "slug": "focus-standard",
+  "familyId": "focus",
+  "familyName": "注意力与思维风格",
+  "category": "cognition",
+  "description": "注意力与思维风格标准版，20道题全面评估您在持续注意力、切换灵活性、细节敏感度三个维度上的特点。",
+  "shortDescription": "20题标准版注意力与思维风格测试",
+  "versionLevel": "standard",
+  "version": "1.0.0",
+  "estimatedMinutes": 8,
+  "questionCount": 20,
+  "difficulty": "easy",
+  "tags": ["注意力", "思维风格", "认知偏好", "自我认知"],
+  "disclaimer": "这是认知风格测试，不是能力测试。您的结果反映的是信息处理的自然偏好，与智力或工作能力无关。",
+  "dimensions": [
+    {
+      "id": "sustainedAttention",
+      "name": "持续注意力",
+      "description": "您长时间专注于一项任务的倾向和能力"
+    },
+    {
+      "id": "switchingFlexibility",
+      "name": "切换灵活性",
+      "description": "您在不同任务或话题之间转换的舒适度和效率"
+    },
+    {
+      "id": "detailSensitivity",
+      "name": "细节敏感度",
+      "description": "您对细节的关注程度和信息捕捉能力"
+    },
+    {
+      "id": "attentionStability",
+      "name": "注意力稳定性",
+      "description": "您的注意力在不同时间段保持一致的程度"
+    },
+    {
+      "id": "selectiveAttention",
+      "name": "选择性注意",
+      "description": "您在复杂环境中筛选关键信息的能力"
+    }
+  ],
+  "scoring": {
+    "type": "weighted",
+    "dimensionScores": {
+      "sustainedAttention": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "switchingFlexibility": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "detailSensitivity": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "attentionStability": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } },
+      "selectiveAttention": { "weights": { "high": 4, "medium_high": 3, "medium": 2, "low": 1 } }
+    },
+    "normalize": true,
+    "minScore": 20,
+    "maxScore": 80
+  },
+  "questions": [
+    {
+      "id": "focus-std-1",
+      "text": "当您需要完成一项需要长时间集中注意力的任务时，您的表现通常是？",
+      "type": "single-choice",
+      "dimension": "sustainedAttention",
+      "options": [
+        { "id": "A", "text": "能长时间专注，不容易分心", "value": 4 },
+        { "id": "B", "text": "开始能专注，但后期会有些分散", "value": 3 },
+        { "id": "C", "text": "只能短时间保持专注", "value": 2 },
+        { "id": "D", "text": "很难长时间集中注意力", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-2",
+      "text": "在工作中突然需要切换到另一项任务时，您的反应是？",
+      "type": "single-choice",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "能很快切换并投入新任务", "value": 4 },
+        { "id": "B", "text": "需要一点时间调整，但能切换", "value": 3 },
+        { "id": "C", "text": "切换比较困难，需要较长时间", "value": 2 },
+        { "id": "D", "text": "非常抗拒切换，难以转换注意力", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-3",
+      "text": "您对细节的关注程度如何？",
+      "type": "single-choice",
+      "dimension": "detailSensitivity",
+      "options": [
+        { "id": "A", "text": "非常关注，容易注意到细节", "value": 4 },
+        { "id": "B", "text": "比较关注，大部分细节能注意到", "value": 3 },
+        { "id": "C", "text": "偶尔注意细节，有时会忽略", "value": 2 },
+        { "id": "D", "text": "不太关注细节，更看重整体", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-4",
+      "text": "当您阅读一篇文章时，您更关注的是？",
+      "type": "single-choice",
+      "dimension": "detailSensitivity",
+      "options": [
+        { "id": "A", "text": "文章的整体论点和逻辑结构", "value": 1 },
+        { "id": "B", "text": "主要论点以及关键细节", "value": 3 },
+        { "id": "C", "text": "所有细节都尽量不遗漏", "value": 4 },
+        { "id": "D", "text": "感兴趣的部分，其他快速浏览", "value": 2 }
+      ]
+    },
+    {
+      "id": "focus-std-5",
+      "text": "您在嘈杂或有多重任务的环境中工作时的表现是？",
+      "type": "single-choice",
+      "dimension": "sustainedAttention",
+      "options": [
+        { "id": "A", "text": "能在嘈杂环境中保持专注", "value": 4 },
+        { "id": "B", "text": "会受到一些干扰，但能克服", "value": 3 },
+        { "id": "C", "text": "容易被干扰，效率下降明显", "value": 2 },
+        { "id": "D", "text": "完全无法集中注意力", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-6",
+      "text": "您更喜欢哪种工作方式？",
+      "type": "single-choice",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "在一段时间内只做一件事", "value": 1 },
+        { "id": "B", "text": "偶尔可以同时处理几件事", "value": 2 },
+        { "id": "C", "text": "经常需要在多任务间切换", "value": 3 },
+        { "id": "D", "text": "多任务切换对我来说很自然", "value": 4 }
+      ]
+    },
+    {
+      "id": "focus-std-7",
+      "text": "当您寻找一个丢失的东西时，您通常会？",
+      "type": "single-choice",
+      "dimension": "detailSensitivity",
+      "options": [
+        { "id": "A", "text": "系统性地搜索每个角落，不放过任何地方", "value": 4 },
+        { "id": "B", "text": "先想可能在哪里，然后重点搜索", "value": 3 },
+        { "id": "C", "text": "先问问自己最后一次看到是什么时候", "value": 2 },
+        { "id": "D", "text": "让注意力自然引导，可能很快就找到", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-8",
+      "text": "您完成需要深度思考任务（如写报告、解决问题）后的感受是？",
+      "type": "single-choice",
+      "dimension": "sustainedAttention",
+      "options": [
+        { "id": "A", "text": "很满足，享受深度投入的过程", "value": 4 },
+        { "id": "B", "text": "有些疲惫，但总体有成就感", "value": 3 },
+        { "id": "C", "text": "感到非常疲惫，需要休息很久", "value": 2 },
+        { "id": "D", "text": "很难坚持完成，中途就想放弃", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-9",
+      "text": "当您正在专注做一件事时有人找您，您的反应通常是？",
+      "type": "single-choice",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "立刻放下手上的事去回应", "value": 4 },
+        { "id": "B", "text": "简单回应后尽快回到原来的任务", "value": 3 },
+        { "id": "C", "text": "会有些烦躁，但会尽量配合", "value": 2 },
+        { "id": "D", "text": "非常反感被打断，需要时间重新专注", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-10",
+      "text": "您认为自己更适合哪种工作场景？",
+      "type": "single-choice",
+      "dimension": "sustainedAttention",
+      "options": [
+        { "id": "A", "text": "独立完成、深度思考、长时间沉浸的工作", "value": 4 },
+        { "id": "B", "text": "需要一定深度但也有团队协作的工作", "value": 3 },
+        { "id": "C", "text": "快节奏、多任务、需要经常切换的工作", "value": 2 },
+        { "id": "D", "text": "灵活多变、有新鲜感的工作", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-11",
+      "text": "您在一天中的哪个时间段注意力最集中？",
+      "type": "single-choice",
+      "dimension": "attentionStability",
+      "options": [
+        { "id": "A", "text": "上午，头脑最清醒的时候", "value": 4 },
+        { "id": "B", "text": "下午，但状态比较稳定", "value": 3 },
+        { "id": "C", "text": "晚上，夜深人静时效率最高", "value": 2 },
+        { "id": "D", "text": "不确定，注意力波动很大", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-12",
+      "text": "当您在一个有很多信息的场景中（如会议室、教室）时，您的注意力是？",
+      "type": "single-choice",
+      "dimension": "selectiveAttention",
+      "options": [
+        { "id": "A", "text": "能自动筛选出最重要的信息", "value": 4 },
+        { "id": "B", "text": "会注意到大部分信息，需要时能回忆", "value": 3 },
+        { "id": "C", "text": "容易被无关信息干扰，主次分不清", "value": 2 },
+        { "id": "D", "text": "信息太多时会感到不知所措", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-13",
+      "text": "您进行需要高度专注的活动（如驾驶、精密操作）时？",
+      "type": "single-choice",
+      "dimension": "sustainedAttention",
+      "options": [
+        { "id": "A", "text": "能长时间保持高度集中", "value": 4 },
+        { "id": "B", "text": "能保持，但偶尔会走神", "value": 3 },
+        { "id": "C", "text": "一段时间后注意力明显下降", "value": 2 },
+        { "id": "D", "text": "很难长时间保持集中", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-14",
+      "text": "当您同时有多个任务需要完成时，您会？",
+      "type": "single-choice",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "按重要性和紧急程度排序，依次完成", "value": 4 },
+        { "id": "B", "text": "尝试交替进行，切换时需要几分钟调整", "value": 3 },
+        { "id": "C", "text": "很难决定先做哪个，犹豫不决", "value": 2 },
+        { "id": "D", "text": "要么拖延，要么手忙脚乱", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-15",
+      "text": "您在检查工作或文档时，发现错误的概率是？",
+      "type": "single-choice",
+      "dimension": "detailSensitivity",
+      "options": [
+        { "id": "A", "text": "很高，能发现大多数错误", "value": 4 },
+        { "id": "B", "text": "比较高，关键错误能发现", "value": 3 },
+        { "id": "C", "text": "一般，有时会漏掉一些", "value": 2 },
+        { "id": "D", "text": "经常漏掉细节错误", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-16",
+      "text": "当您需要学习一项新技术时，您的学习方式是？",
+      "type": "single-choice",
+      "dimension": "attentionStability",
+      "options": [
+        { "id": "A", "text": "一次性投入大量时间深入学习", "value": 4 },
+        { "id": "B", "text": "分成几次学习，每次都比较专注", "value": 3 },
+        { "id": "C", "text": "需要分段学习，中间容易分心", "value": 2 },
+        { "id": "D", "text": "很难持续关注，经常半途而废", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-17",
+      "text": "在社交聚会中，您的注意力通常是？",
+      "type": "single-choice",
+      "dimension": "selectiveAttention",
+      "options": [
+        { "id": "A", "text": "能自然关注对话的重点和关键人物", "value": 4 },
+        { "id": "B", "text": "会注意到周围发生的事，但能回到主要对话", "value": 3 },
+        { "id": "C", "text": "经常被周围的事情分散注意力", "value": 2 },
+        { "id": "D", "text": "很难集中注意力，容易走神", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-18",
+      "text": "您对重复性工作的耐受程度是？",
+      "type": "single-choice",
+      "dimension": "sustainedAttention",
+      "options": [
+        { "id": "A", "text": "能保持专注直到完成", "value": 4 },
+        { "id": "B", "text": "开始有些无聊，但能坚持", "value": 3 },
+        { "id": "C", "text": "很容易感到无聊，注意力下降", "value": 2 },
+        { "id": "D", "text": "完全无法忍受重复性工作", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-19",
+      "text": "当您正在思考一个问题时，别人问您一个简单的问题，您的反应是？",
+      "type": "single-choice",
+      "dimension": "switchingFlexibility",
+      "options": [
+        { "id": "A", "text": "能迅速切换回答，然后快速回到原问题", "value": 4 },
+        { "id": "B", "text": "需要几秒钟重新组织思绪", "value": 3 },
+        { "id": "C", "text": "需要较长时间才能重新集中", "value": 2 },
+        { "id": "D", "text": "思路完全被打断，很难找回", "value": 1 }
+      ]
+    },
+    {
+      "id": "focus-std-20",
+      "text": "您觉得自己的注意力在什么情况下最容易被分散？",
+      "type": "single-choice",
+      "dimension": "attentionStability",
+      "options": [
+        { "id": "A", "text": "很少分心，注意力很稳定", "value": 4 },
+        { "id": "B", "text": "在疲劳或无聊时容易分心", "value": 3 },
+        { "id": "C", "text": "在有外部干扰时容易分心", "value": 2 },
+        { "id": "D", "text": "经常不自觉地就走神了", "value": 1 }
+      ]
+    }
+  ],
+  "resultProfiles": [
+    {
+      "id": "deep-focus",
+      "name": "深度专注型",
+      "description": "您是深度专注型思维者，擅长长时间集中注意力在一项任务上。您善于进入"心流"状态，能够在专注中享受到高度的成就感。",
+      "conditions": [
+        { "dimension": "sustainedAttention", "operator": "gte", "value": 3.5 },
+        { "dimension": "switchingFlexibility", "operator": "lt", "value": 2.5 }
+      ],
+      "tags": ["深度专注", "独立工作", "持久力"],
+      "summary": "您的注意力特点以深度专注为主导，擅长长时间沉浸在一项任务中。",
+      "highlights": [
+        "能够长时间专注于复杂任务而不易分心",
+        "擅长进入心流状态，在专注中获得满足感",
+        "在需要深度思考的任务中表现优异",
+        "对中断和打扰非常敏感"
+      ],
+      "strengths": [
+        "深度思考和复杂问题解决能力",
+        "长时间维持注意力的能力",
+        "独立工作时效率最高",
+        "在专注领域能够达到较高水平"
+      ],
+      "dimensionInterpretation": {
+        "sustainedAttention": "您的持续注意力很强，擅长长时间专注于单一任务。",
+        "switchingFlexibility": "您在任务切换方面相对较弱，可能不喜欢频繁变换工作内容。",
+        "detailSensitivity": "您的细节敏感度处于中等水平，在需要时能够关注细节。",
+        "attentionStability": "您的注意力稳定性较好，能在较长时间内保持一致。",
+        "selectiveAttention": "您在需要时能够筛选关键信息。"
+      },
+      "styleDescription": "您在需要长时间专注的任务中表现出色，如研究、写作、编程、深度分析等。",
+      "recommendations": [
+        "为深度工作预留整块时间，关闭不必要的通知",
+        "在效率高峰期处理最具挑战性的任务",
+        "学会使用时间管理技巧，如番茄工作法来平衡专注和休息",
+        "在需要多任务协作时，提前与他人沟通您的工作节奏"
+      ],
+      "idealWorkStyle": "独立完成、深度思考、长时间沉浸的工作环境"
+    },
+    {
+      "id": "flexible-switcher",
+      "name": "灵活切换型",
+      "description": "您是灵活切换型思维者，善于在多种任务之间自如转换。您不喜欢被单一任务束缚太久，擅长同时处理多个项目或快速响应变化。",
+      "conditions": [
+        { "dimension": "switchingFlexibility", "operator": "gte", "value": 3.5 },
+        { "dimension": "sustainedAttention", "operator": "lt", "value": 2.5 }
+      ],
+      "tags": ["灵活", "多任务", "适应力"],
+      "summary": "您的注意力特点以灵活切换为主导，擅长在不同任务之间快速转换。",
+      "highlights": [
+        "善于在不同任务之间快速切换",
+        "能够同时处理多个项目而不感到压力",
+        "在快节奏环境中反而更加兴奋",
+        "擅长处理意外情况和紧急任务"
+      ],
+      "strengths": [
+        "多任务协调能力强",
+        "适应变化的能力强",
+        "在动态环境中表现最佳",
+        "善于处理意外情况和紧急任务"
+      ],
+      "dimensionInterpretation": {
+        "sustainedAttention": "您在长时间专注方面相对较弱，更喜欢任务多样性。",
+        "switchingFlexibility": "您的任务切换能力很强，能快速在不同任务间转换。",
+        "detailSensitivity": "您的细节敏感度可能不是最高，但能把握关键信息。",
+        "attentionStability": "您在不同时间段注意力可能有波动。",
+        "selectiveAttention": "您在复杂环境中能快速筛选关键信息。"
+      },
+      "styleDescription": "您在需要快速响应和多任务协调的环境中表现出色，如项目管理、客户服务、应急响应等。",
+      "recommendations": [
+        "选择需要多任务协调的工作环境",
+        "使用工具管理多个并行项目",
+        "为不同任务设定清晰的切换仪式感",
+        "在专注力要求高的工作中设定明确的时间段"
+      ],
+      "idealWorkStyle": "快节奏、多任务、需要广泛联系不同领域的工作环境"
+    },
+    {
+      "id": "balanced-attention",
+      "name": "平衡型",
+      "description": "您的注意力特点比较平衡，在持续专注和灵活切换方面都有一定能力，能根据任务需要调整工作方式。",
+      "conditions": [
+        { "dimension": "sustainedAttention", "operator": "between", "value": [2.5, 3.5] },
+        { "dimension": "switchingFlexibility", "operator": "between", "value": [2.5, 3.5] }
+      ],
+      "tags": ["平衡", "适应力", "灵活"],
+      "summary": "您的注意力特点比较平衡，能根据任务需要调整工作方式。",
+      "highlights": [
+        "能在需要时深度专注，也能灵活切换",
+        "适应能力较强，能根据环境调整",
+        "在不同工作场景中都能发挥不错"
+      ],
+      "strengths": [
+        "工作方式灵活多变",
+        "能适应不同的工作要求",
+        "既享受深度工作也能处理多任务"
+      ],
+      "dimensionInterpretation": {
+        "sustainedAttention": "您的持续注意力和切换灵活性比较平衡。",
+        "switchingFlexibility": "您能在不同模式间切换但不会过于频繁。",
+        "detailSensitivity": "您对细节有适度的关注。",
+        "attentionStability": "您的注意力在不同时间相对稳定。",
+        "selectiveAttention": "您在复杂环境中能有效筛选信息。"
+      },
+      "styleDescription": "您能根据任务特点调整工作方式，在不同场景中都能发挥不错。",
+      "recommendations": [
+        "根据任务特点选择最适合的工作方式",
+        "在需要时可以有意识地培养某一方面的能力",
+        "善用您的平衡能力在团队中发挥桥梁作用"
+      ],
+      "idealWorkStyle": "能根据任务需要灵活调整工作方式的环境"
+    },
+    {
+      "id": "detail-oriented",
+      "name": "细节导向型",
+      "description": "您是细节导向型思维者，对细节有高度的敏感度和关注度。您擅长发现别人可能忽略的细微之处。",
+      "conditions": [
+        { "dimension": "detailSensitivity", "operator": "gte", "value": 3.5 }
+      ],
+      "tags": ["细节导向", "精确", "质量把控"],
+      "summary": "您的注意力特点以细节敏感度为主导，擅长发现和关注细节。",
+      "highlights": [
+        "对细节有很高的敏感度",
+        "擅长发现别人忽略的细微之处",
+        "在需要精细操作的任务中表现优异",
+        "注重工作质量和准确性"
+      ],
+      "strengths": [
+        "细节观察能力强",
+        "质量意识高",
+        "能发现潜在的问题和风险",
+        "在精细工作中表现出色"
+      ],
+      "dimensionInterpretation": {
+        "sustainedAttention": "您可能需要在细节和大局间找到平衡。",
+        "switchingFlexibility": "您可能不太喜欢频繁切换任务。",
+        "detailSensitivity": "您的细节敏感度非常突出。",
+        "attentionStability": "您能长时间关注细节。",
+        "selectiveAttention": "您可能需要学习在必要时忽略次要细节。"
+      },
+      "recommendations": [
+        "选择需要精细操作和质量把控的工作",
+        "学会在适当的时候放宽对细节的要求",
+        "在团队中承担质量检查的角色"
+      ],
+      "idealWorkStyle": "需要精细操作、注重质量、允许深度专注的工作环境"
+    }
+  ]
+}

@@ -1,0 +1,390 @@
+{
+  "id": "workstyle-standard",
+  "slug": "workstyle-standard",
+  "familyId": "work-style",
+  "familyName": "工作风格测评",
+  "category": "career",
+  "description": "工作风格标准版，24道题全面评估您在自主性、协作性、结构性、探索性、执行力、工作节奏等维度上的偏好和特点。",
+  "shortDescription": "24题标准版工作风格测试",
+  "versionLevel": "standard",
+  "version": "1.0.0",
+  "estimatedMinutes": 8,
+  "questionCount": 24,
+  "difficulty": "easy",
+  "tags": ["工作风格", "职业发展", "工作偏好", "自我认知"],
+  "disclaimer": "本测评为职业发展参考，结果反映的是您在工作风格上的偏好特点，没有好坏之分。",
+  "dimensions": [
+    {
+      "id": "autonomy",
+      "name": "自主性",
+      "description": "您喜欢独立工作还是团队协作"
+    },
+    {
+      "id": "collaboration",
+      "name": "协作性",
+      "description": "您在团队工作中的参与程度"
+    },
+    {
+      "id": "structure",
+      "name": "结构性",
+      "description": "您喜欢清晰规则还是灵活变通"
+    },
+    {
+      "id": "exploration",
+      "name": "探索性",
+      "description": "您喜欢稳定熟悉还是新颖变化"
+    },
+    {
+      "id": "execution",
+      "name": "执行力",
+      "description": "您喜欢快节奏还是稳健推进"
+    },
+    {
+      "id": "pace",
+      "name": "工作节奏",
+      "description": "您偏好快节奏还是慢节奏的工作"
+    }
+  ],
+  "scoring": {
+    "type": "weighted",
+    "dimensionScores": {
+      "autonomy": { "weights": { "high": 2, "medium": 1, "low": -1 } },
+      "collaboration": { "weights": { "high": -2, "medium": -1, "low": 1 } },
+      "structure": { "weights": { "high": -2, "medium": -1, "low": 1 } },
+      "exploration": { "weights": { "high": 2, "medium": 1, "low": -1 } },
+      "execution": { "weights": { "high": 2, "medium": 1, "low": -1 } },
+      "pace": { "weights": { "fast": 2, "medium": 0, "slow": -2 } }
+    },
+    "normalize": true,
+    "minScore": -36,
+    "maxScore": 36
+  },
+  "questions": [
+    {
+      "id": "ws-std-1",
+      "text": "在工作中，您更喜欢？",
+      "type": "single-choice",
+      "dimension": "autonomy",
+      "options": [
+        { "id": "A", "text": "自己独立完成工作", "value": 2 },
+        { "id": "B", "text": "与他人协作完成", "value": 0 },
+        { "id": "C", "text": "主要在团队中工作", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-2",
+      "text": "您喜欢什么样的工作环境？",
+      "type": "single-choice",
+      "dimension": "structure",
+      "options": [
+        { "id": "A", "text": "有明确流程和规则的", "value": -2 },
+        { "id": "B", "text": "有一定灵活性", "value": 0 },
+        { "id": "C", "text": "自由开放、没有太多限制", "value": 2 }
+      ]
+    },
+    {
+      "id": "ws-std-3",
+      "text": "面对新项目时，您通常会？",
+      "type": "single-choice",
+      "dimension": "exploration",
+      "options": [
+        { "id": "A", "text": "期待尝试新方法", "value": 2 },
+        { "id": "B", "text": "看情况决定", "value": 0 },
+        { "id": "C", "text": "希望用熟悉的方式完成", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-4",
+      "text": "您的工作节奏通常是？",
+      "type": "single-choice",
+      "dimension": "execution",
+      "options": [
+        { "id": "A", "text": "快速完成、追求效率", "value": 2 },
+        { "id": "B", "text": "稳健推进、注重质量", "value": 0 },
+        { "id": "C", "text": "按部就班、稳步前进", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-5",
+      "text": "在工作中做决策时，您更依赖？",
+      "type": "single-choice",
+      "dimension": "autonomy",
+      "options": [
+        { "id": "A", "text": "自己的判断", "value": 2 },
+        { "id": "B", "text": "结合他人意见", "value": 0 },
+        { "id": "C", "text": "团队讨论决定", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-6",
+      "text": "您喜欢什么样的领导风格？",
+      "type": "single-choice",
+      "dimension": "structure",
+      "options": [
+        { "id": "A", "text": "给出明确指示", "value": -2 },
+        { "id": "B", "text": "提供方向但不过多干预", "value": 0 },
+        { "id": "C", "text": "充分授权、自主决策", "value": 2 }
+      ]
+    },
+    {
+      "id": "ws-std-7",
+      "text": "您更愿意处理什么样的任务？",
+      "type": "single-choice",
+      "dimension": "exploration",
+      "options": [
+        { "id": "A", "text": "新颖有挑战性的", "value": 2 },
+        { "id": "B", "text": "多样化的", "value": 0 },
+        { "id": "C", "text": "熟悉稳定的", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-8",
+      "text": "当需要完成大量工作时，您会？",
+      "type": "single-choice",
+      "dimension": "execution",
+      "options": [
+        { "id": "A", "text": "集中精力快速完成", "value": 2 },
+        { "id": "B", "text": "制定计划分批处理", "value": 0 },
+        { "id": "C", "text": "稳扎稳打、逐步推进", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-9",
+      "text": "您喜欢什么样的反馈方式？",
+      "type": "single-choice",
+      "dimension": "autonomy",
+      "options": [
+        { "id": "A", "text": "直接告诉我结果", "value": 2 },
+        { "id": "B", "text": "定期沟通反馈", "value": 0 },
+        { "id": "C", "text": "希望多听取我的意见", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-10",
+      "text": "您更喜欢的工作时间是？",
+      "type": "single-choice",
+      "dimension": "structure",
+      "options": [
+        { "id": "A", "text": "固定的办公时间", "value": -2 },
+        { "id": "B", "text": "核心时间固定，略有弹性", "value": 0 },
+        { "id": "C", "text": "弹性工作制", "value": 2 }
+      ]
+    },
+    {
+      "id": "ws-std-11",
+      "text": "您对工作中变化的态度是？",
+      "type": "single-choice",
+      "dimension": "exploration",
+      "options": [
+        { "id": "A", "text": "欢迎变化，觉得有趣", "value": 2 },
+        { "id": "B", "text": "接受适度的变化", "value": 0 },
+        { "id": "C", "text": "偏好稳定、不喜欢变化", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-12",
+      "text": "当项目截止日期临近时，您会？",
+      "type": "single-choice",
+      "dimension": "execution",
+      "options": [
+        { "id": "A", "text": "提前完成以确保质量", "value": 2 },
+        { "id": "B", "text": "在截止日前按时完成", "value": 0 },
+        { "id": "C", "text": "有时候会延期", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-13",
+      "text": "您更喜欢的工作节奏是？",
+      "type": "single-choice",
+      "dimension": "pace",
+      "options": [
+        { "id": "A", "text": "快节奏、多任务并行", "value": 2 },
+        { "id": "B", "text": "中等节奏、有条不紊", "value": 0 },
+        { "id": "C", "text": "慢节奏、专注单一任务", "value": -2 }
+      ]
+    },
+    {
+      "id": "ws-std-14",
+      "text": "在团队讨论中，您通常的角色是？",
+      "type": "single-choice",
+      "dimension": "collaboration",
+      "options": [
+        { "id": "A", "text": "倾听者", "value": -2 },
+        { "id": "B", "text": "参与者", "value": 0 },
+        { "id": "C", "text": "引导者", "value": 2 }
+      ]
+    },
+    {
+      "id": "ws-std-15",
+      "text": "您更喜欢什么样的项目类型？",
+      "type": "single-choice",
+      "dimension": "exploration",
+      "options": [
+        { "id": "A", "text": "全新领域、创新项目", "value": 2 },
+        { "id": "B", "text": "改进优化现有项目", "value": 0 },
+        { "id": "C", "text": "维护稳定运行的项目", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-16",
+      "text": "您如何处理工作中的不确定性？",
+      "type": "single-choice",
+      "dimension": "structure",
+      "options": [
+        { "id": "A", "text": "制定详细计划降低不确定性", "value": -2 },
+        { "id": "B", "text": "设定大致方向灵活应对", "value": 0 },
+        { "id": "C", "text": "享受不确定性带来的挑战", "value": 2 }
+      ]
+    },
+    {
+      "id": "ws-std-17",
+      "text": "您更看重工作成果的什么方面？",
+      "type": "single-choice",
+      "dimension": "execution",
+      "options": [
+        { "id": "A", "text": "速度和效率", "value": 2 },
+        { "id": "B", "text": "质量和完善度", "value": 0 },
+        { "id": "C", "text": "创新性和突破", "value": 2 }
+      ]
+    },
+    {
+      "id": "ws-std-18",
+      "text": "您喜欢在工作中设定目标的方式是？",
+      "type": "single-choice",
+      "dimension": "structure",
+      "options": [
+        { "id": "A", "text": "明确具体、可衡量的目标", "value": -2 },
+        { "id": "B", "text": "有方向但可以调整", "value": 0 },
+        { "id": "C", "text": "方向性的愿景而非具体目标", "value": 2 }
+      ]
+    },
+    {
+      "id": "ws-std-19",
+      "text": "当与同事意见不合时，您会？",
+      "type": "single-choice",
+      "dimension": "collaboration",
+      "options": [
+        { "id": "A", "text": "坚持自己的观点", "value": 2 },
+        { "id": "B", "text": "寻求共同点", "value": 0 },
+        { "id": "C", "text": "尊重对方、妥协让步", "value": -2 }
+      ]
+    },
+    {
+      "id": "ws-std-20",
+      "text": "您更喜欢的工作空间是？",
+      "type": "single-choice",
+      "dimension": "autonomy",
+      "options": [
+        { "id": "A", "text": "独立办公室或工位", "value": 2 },
+        { "id": "B", "text": "半开放的协作空间", "value": 0 },
+        { "id": "C", "text": "完全开放的共享空间", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-21",
+      "text": "您如何规划一天的工作？",
+      "type": "single-choice",
+      "dimension": "pace",
+      "options": [
+        { "id": "A", "text": "按小时精确计划", "value": -2 },
+        { "id": "B", "text": "列出主要任务灵活安排", "value": 0 },
+        { "id": "C", "text": "根据当天情况随时调整", "value": 2 }
+      ]
+    },
+    {
+      "id": "ws-std-22",
+      "text": "您对工作中断的态度是？",
+      "type": "single-choice",
+      "dimension": "pace",
+      "options": [
+        { "id": "A", "text": "不喜欢，希望专注工作", "value": -2 },
+        { "id": "B", "text": "可以接受必要的沟通", "value": 0 },
+        { "id": "C", "text": "欢迎协作和互动", "value": 2 }
+      ]
+    },
+    {
+      "id": "ws-std-23",
+      "text": "当面对困难任务时，您会？",
+      "type": "single-choice",
+      "dimension": "execution",
+      "options": [
+        { "id": "A", "text": "立即投入解决", "value": 2 },
+        { "id": "B", "text": "分析后再行动", "value": 0 },
+        { "id": "C", "text": "寻求他人帮助", "value": -1 }
+      ]
+    },
+    {
+      "id": "ws-std-24",
+      "text": "您更看重工作带来的什么？",
+      "type": "single-choice",
+      "dimension": "collaboration",
+      "options": [
+        { "id": "A", "text": "个人成就和发展", "value": 2 },
+        { "id": "B", "text": "团队成功和归属感", "value": 0 },
+        { "id": "C", "text": "稳定的职业发展", "value": -1 }
+      ]
+    }
+  ],
+  "resultProfiles": [
+    {
+      "id": "entrepreneur",
+      "name": "创业型",
+      "description": "您喜欢自主、开放、充满变化的工作环境，追求效率和新鲜感。",
+      "conditions": [
+        { "dimension": "autonomy", "operator": "gte", "value": 1 },
+        { "dimension": "exploration", "operator": "gte", "value": 1 }
+      ],
+      "tags": ["自主", "创新", "高效"],
+      "summary": "您的工作风格偏向创业型。",
+      "highlights": [
+        "喜欢独立自主的工作",
+        "乐于接受新挑战",
+        "追求效率和成果"
+      ],
+      "recommendations": [
+        "适合创业或需要独立决策的工作",
+        "适合创新型、快速变化的工作环境"
+      ]
+    },
+    {
+      "id": "collaborative-structured",
+      "name": "协作稳定型",
+      "description": "您喜欢在有规则的团队环境中工作，重视协作和稳定。",
+      "conditions": [
+        { "dimension": "autonomy", "operator": "lte", "value": 0 },
+        { "dimension": "structure", "operator": "lte", "value": 0 }
+      ],
+      "tags": ["协作", "稳定", "规范"],
+      "summary": "您的工作风格偏向协作稳定型。",
+      "highlights": [
+        "喜欢团队协作",
+        "重视工作规范和流程",
+        "偏好稳定的工作环境"
+      ],
+      "recommendations": [
+        "适合需要团队协作的企业环境",
+        "适合规范明确、流程稳定的工作"
+      ]
+    },
+    {
+      "id": "balanced",
+      "name": "平衡型",
+      "description": "您能在不同工作风格间灵活切换，适应能力强。",
+      "conditions": [
+        { "dimension": "autonomy", "operator": "between", "value": [-1, 1] },
+        { "dimension": "structure", "operator": "between", "value": [-1, 1] }
+      ],
+      "tags": ["平衡", "适应", "灵活"],
+      "summary": "您的工作风格偏向平衡型。",
+      "highlights": [
+        "能在多种环境中适应",
+        "灵活调整工作方式",
+        "平衡独立与协作"
+      ],
+      "recommendations": [
+        "适合需要多方面能力的工作",
+        "适合变化较多、需要适应能力的岗位"
+      ]
+    }
+  ]
+}

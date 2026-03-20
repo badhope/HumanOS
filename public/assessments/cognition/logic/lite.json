@@ -1,0 +1,216 @@
+{
+  "id": "logic-lite",
+  "slug": "logic-lite",
+  "familyId": "logic",
+  "familyName": "逻辑思维评估",
+  "category": "cognition",
+  "description": "快速体验版逻辑思维评估，初步测试您在模式识别、顺序推理和抽象逻辑三个认知维度上的能力。",
+  "shortDescription": "8题快速版逻辑思维测试",
+  "versionLevel": "lite",
+  "version": "1.0.0",
+  "estimatedMinutes": 5,
+  "questionCount": 8,
+  "difficulty": "medium",
+  "tags": ["逻辑", "推理", "认知", "思维", "智力"],
+  "disclaimer": "本测评为认知风格倾向评估，结果反映您在逻辑推理各维度上的相对表现，不等同于 IQ 或智力水平。",
+  "dimensions": [
+    {
+      "id": "patternRecognition",
+      "name": "模式识别",
+      "description": "识别数字、图形或语言中的规律模式"
+    },
+    {
+      "id": "sequentialReasoning",
+      "name": "顺序推理",
+      "description": "理解事件之间的因果关系和时间顺序"
+    },
+    {
+      "id": "abstractLogic",
+      "name": "抽象逻辑",
+      "description": "处理非具体概念，进行假设验证和逻辑推导"
+    }
+  ],
+  "scoring": {
+    "type": "sum",
+    "dimensionScores": {
+      "patternRecognition": { "weights": { "correct": 1 } },
+      "sequentialReasoning": { "weights": { "correct": 1 } },
+      "abstractLogic": { "weights": { "correct": 1 } }
+    },
+    "normalize": false,
+    "minScore": 0,
+    "maxScore": 8
+  },
+  "questions": [
+    {
+      "id": "logic-lite-1",
+      "text": "找规律：2, 4, 8, 16, ? 下一个数字是什么？",
+      "type": "single-choice",
+      "dimension": "patternRecognition",
+      "options": [
+        { "id": "A", "text": "24", "value": 0 },
+        { "id": "B", "text": "32", "value": 1 },
+        { "id": "C", "text": "20", "value": 0 },
+        { "id": "D", "text": "30", "value": 0 }
+      ]
+    },
+    {
+      "id": "logic-lite-2",
+      "text": "如果所有的 A 都是 B，所有的 B 都是 C，那么所有的 A 都是 C。这种说法是：",
+      "type": "single-choice",
+      "dimension": "abstractLogic",
+      "options": [
+        { "id": "A", "text": "正确", "value": 1 },
+        { "id": "B", "text": "错误", "value": 0 },
+        { "id": "C", "text": "无法确定", "value": 0 },
+        { "id": "D", "text": "需要更多信息", "value": 0 }
+      ]
+    },
+    {
+      "id": "logic-lite-3",
+      "text": "小明比小王年龄大，小王比小张年龄大。请问谁年龄最小？",
+      "type": "single-choice",
+      "dimension": "sequentialReasoning",
+      "options": [
+        { "id": "A", "text": "小明", "value": 0 },
+        { "id": "B", "text": "小王", "value": 0 },
+        { "id": "C", "text": "小张", "value": 1 },
+        { "id": "D", "text": "无法确定", "value": 0 }
+      ]
+    },
+    {
+      "id": "logic-lite-4",
+      "text": "找规律：1, 1, 2, 3, 5, 8, ? 下一个数字是什么？",
+      "type": "single-choice",
+      "dimension": "patternRecognition",
+      "options": [
+        { "id": "A", "text": "11", "value": 0 },
+        { "id": "B", "text": "13", "value": 1 },
+        { "id": "C", "text": "12", "value": 0 },
+        { "id": "D", "text": "15", "value": 0 }
+      ]
+    },
+    {
+      "id": "logic-lite-5",
+      "text": "如果今天下雨，那么地会湿。今天没有下雨，所以：",
+      "type": "single-choice",
+      "dimension": "abstractLogic",
+      "options": [
+        { "id": "A", "text": "地一定不湿", "value": 0 },
+        { "id": "B", "text": "地可能湿也可能不湿", "value": 1 },
+        { "id": "C", "text": "地一定湿", "value": 0 },
+        { "id": "D", "text": "无法确定", "value": 0 }
+      ]
+    },
+    {
+      "id": "logic-lite-6",
+      "text": "小李比小赵高，小赵比小周高，小周比小李高。已知前两个为真，第三个：",
+      "type": "single-choice",
+      "dimension": "sequentialReasoning",
+      "options": [
+        { "id": "A", "text": "一定为真", "value": 0 },
+        { "id": "B", "text": "一定为假", "value": 1 },
+        { "id": "C", "text": "可能为真也可能为假", "value": 0 },
+        { "id": "D", "text": "信息不足无法判断", "value": 0 }
+      ]
+    },
+    {
+      "id": "logic-lite-7",
+      "text": "找规律：3, 6, 11, 18, 27, ? 下一个数字是什么？",
+      "type": "single-choice",
+      "dimension": "patternRecognition",
+      "options": [
+        { "id": "A", "text": "36", "value": 0 },
+        { "id": "B", "text": "38", "value": 1 },
+        { "id": "C", "text": "35", "value": 0 },
+        { "id": "D", "text": "40", "value": 0 }
+      ]
+    },
+    {
+      "id": "logic-lite-8",
+      "text": "如果 A > B 且 B > C 且 C > D，那么下列哪个一定成立？",
+      "type": "single-choice",
+      "dimension": "abstractLogic",
+      "options": [
+        { "id": "A", "text": "A > D", "value": 1 },
+        { "id": "B", "text": "D > A", "value": 0 },
+        { "id": "C", "text": "A = D", "value": 0 },
+        { "id": "D", "text": "无法确定", "value": 0 }
+      ]
+    }
+  ],
+  "resultProfiles": [
+    {
+      "id": "excellent",
+      "name": "逻辑强者",
+      "description": "您的逻辑思维能力非常出色，在模式识别、顺序推理和抽象逻辑方面都表现优异。",
+      "conditions": [
+        { "dimension": "total", "operator": "gte", "value": 7 }
+      ],
+      "tags": ["优秀", "逻辑强", "思维敏捷"],
+      "summary": "您的逻辑推理能力评估为优秀水平。",
+      "highlights": [
+        "模式识别能力突出，能快速发现规律",
+        "因果推理清晰，能准确理解逻辑关系",
+        "抽象思维能力强，善于处理假设性情境"
+      ],
+      "strengths": [
+        "快速学习新概念和规则",
+        "擅长分析性思维",
+        "思维具有系统性和连贯性"
+      ],
+      "recommendations": [
+        "可以尝试需要深度逻辑分析的专业领域",
+        "参与策略类游戏或谜题挑战",
+        "在日常决策中信任自己的逻辑直觉"
+      ]
+    },
+    {
+      "id": "good",
+      "name": "逻辑良好",
+      "description": "您的逻辑思维能力良好，能够较好地处理分析性任务。",
+      "conditions": [
+        { "dimension": "total", "operator": "between", "value": [5, 6] }
+      ],
+      "tags": ["良好", "分析力强"],
+      "summary": "您的逻辑推理能力评估为良好水平。",
+      "highlights": [
+        "整体逻辑推理能力稳定",
+        "在熟悉的题型上表现出色",
+        "能够运用基本逻辑规则进行分析"
+      ],
+      "strengths": [
+        "具有一定的分析能力",
+        "能处理中等复杂度的逻辑任务"
+      ],
+      "recommendations": [
+        "继续练习逻辑推理题",
+        "尝试更复杂的推理情境"
+      ]
+    },
+    {
+      "id": "average",
+      "name": "逻辑中等",
+      "description": "您的逻辑思维能力处于中等水平，在某些类型的问题上可能需要更多思考。",
+      "conditions": [
+        { "dimension": "total", "operator": "lt", "value": 5 }
+      ],
+      "tags": ["中等", "可提升"],
+      "summary": "您的逻辑推理能力评估为中等水平。",
+      "highlights": [
+        "具有基本的逻辑思维基础",
+        "在简单逻辑任务上能正确判断",
+        "在复杂情境中可能需要更多信息"
+      ],
+      "strengths": [
+        "有学习的意愿和基础",
+        "愿意进行逻辑思考"
+      ],
+      "recommendations": [
+        "每天练习一道逻辑推理题",
+        "学习逻辑学基础知识",
+        "多进行策略类游戏"
+      ]
+    }
+  ]
+}

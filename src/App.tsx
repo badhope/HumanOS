@@ -14,6 +14,10 @@ const Quiz = lazy(() => import('@/pages/Quiz'));
 const Results = lazy(() => import('@/pages/Results'));
 const Profile = lazy(() => import('@/pages/Profile'));
 const Maintenance = lazy(() => import('@/pages/Maintenance'));
+const Preparing = lazy(() => import('@/pages/Preparing'));
+const Empty = lazy(() => import('@/pages/Empty'));
+const ErrorPage = lazy(() => import('@/pages/ErrorPage'));
+const Unavailable = lazy(() => import('@/pages/Unavailable'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 function App() {
@@ -114,6 +118,38 @@ function App() {
               element={
                 <PageTransition>
                   <Maintenance />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/preparing"
+              element={
+                <PageTransition>
+                  <Preparing />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/empty"
+              element={
+                <PageTransition>
+                  <Empty />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/error"
+              element={
+                <PageTransition>
+                  <ErrorPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/unavailable"
+              element={
+                <PageTransition>
+                  <Unavailable />
                 </PageTransition>
               }
             />

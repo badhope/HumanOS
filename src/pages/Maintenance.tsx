@@ -1,191 +1,70 @@
 import type { FC } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Construction, ArrowLeft, Sparkles, CheckCircle } from 'lucide-react';
-import { PageTransition } from '@/components/molecules';
-import { Button, Card } from '@/components/atoms';
-import { useSettingsStore } from '@/store/settingsStore';
+import { Construction, CheckCircle } from 'lucide-react';
+import { StatusPageTemplate } from '@/components/molecules/StatusPageTemplate';
 
 const Maintenance: FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { animationLevel, reducedMotion } = useSettingsStore();
 
   const moduleName = searchParams.get('name') || '';
   const isCompleted = searchParams.get('completed') === 'true';
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: reducedMotion || animationLevel === 'none' ? 0 : 0.15 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
-
   if (isCompleted) {
     return (
-      <PageTransition>
-        <div className="min-h-screen px-4 py-12">
-          <div className="mx-auto max-w-xl">
-            <Button
-              variant="ghost"
-              onClick={() => navigate('/categories')}
-              leftIcon={<ArrowLeft className="w-4 h-4" />}
-              className="mb-8"
-            >
-              返回分类
-            </Button>
-
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-center"
-            >
-              <motion.div variants={itemVariants}>
-                <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
-                  <CheckCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
-                </div>
-              </motion.div>
-
-              <motion.h1
-                variants={itemVariants}
-                className="mb-4 text-3xl font-bold text-gray-900 dark:text-white"
-              >
-                {moduleName ? `${moduleName} 测评完成` : '测评完成'}
-              </motion.h1>
-
-              <motion.p
-                variants={itemVariants}
-                className="mb-8 text-lg text-gray-600 dark:text-gray-400"
-              >
-                您的答案已保存，该模块的详细报告正在制作中
-              </motion.p>
-
-              <motion.div variants={itemVariants}>
-                <Card className="p-6 mb-8 text-left">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Sparkles className="w-5 h-5 text-primary-500" />
-                    <h2 className="font-semibold text-gray-900 dark:text-white">
-                      感谢您的参与
-                    </h2>
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    我们会尽快完善该模块的报告功能。敬请期待！
-                  </p>
-                  <ul className="text-sm space-y-2 text-gray-600 dark:text-gray-400">
-                    <li>• 您的测评结果已本地保存</li>
-                    <li>• 详细分析报告即将上线</li>
-                    <li>• 您可以先体验其他已开放的模块</li>
-                  </ul>
-                </Card>
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  onClick={() => navigate('/quiz/mbti-basic')}
-                  size="lg"
-                >
-                  体验 MBTI 测评
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => navigate('/categories')}
-                  size="lg"
-                >
-                  查看所有测评
-                </Button>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </PageTransition>
+      <StatusPageTemplate
+        icon={<CheckCircle className="h-10 w-10" />}
+        iconBgColor="bg-green-100 dark:bg-green-900/30"
+        iconColor="text-green-600 dark:text-green-400"
+        title={moduleName ? `${moduleName} 测评完成` : '测评完成'}
+        description="您的答案已保存，该模块的详细报告正在制作中"
+        statusType="preparing"
+        details={{
+          title: '感谢您的参与',
+          items: [
+            '您的测评结果已本地保存',
+            '详细分析报告即将上线',
+            '您可以先体验其他已开放的模块',
+          ],
+        }}
+        primaryAction={{
+          label: '体验 MBTI 测评',
+          onClick: () => navigate('/quiz/mbti-basic'),
+        }}
+        secondaryAction={{
+          label: '查看所有测评',
+          onClick: () => navigate('/categories'),
+        }}
+      />
     );
   }
 
   return (
-    <PageTransition>
-      <div className="min-h-screen px-4 py-12">
-        <div className="mx-auto max-w-xl">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/categories')}
-            leftIcon={<ArrowLeft className="w-4 h-4" />}
-            className="mb-8"
-          >
-            返回分类
-          </Button>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="text-center"
-          >
-            <motion.div variants={itemVariants}>
-              <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
-                <Construction className="h-10 w-10 text-amber-600 dark:text-amber-400" />
-              </div>
-            </motion.div>
-
-            <motion.h1
-              variants={itemVariants}
-              className="mb-4 text-3xl font-bold text-gray-900 dark:text-white"
-            >
-              {moduleName ? `${moduleName} 模块维护中` : '模块维护中'}
-            </motion.h1>
-
-            <motion.p
-              variants={itemVariants}
-              className="mb-8 text-lg text-gray-600 dark:text-gray-400"
-            >
-              该模块正在完善中，敬请期待
-            </motion.p>
-
-            <motion.div variants={itemVariants}>
-              <Card className="p-6 mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <Sparkles className="w-5 h-5 text-primary-500" />
-                  <h2 className="font-semibold text-gray-900 dark:text-white">
-                    已有完整模块
-                  </h2>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  我们推荐您先体验已完成的模块，其他模块正在陆续开放中：
-                </p>
-                <ul className="text-left space-y-2 text-gray-700 dark:text-gray-300">
-                  <li>• <strong>MBTI 职业性格测试</strong> - 完整可用</li>
-                  <li>• 16种人格类型分析</li>
-                  <li>• 四维性格倾向解读</li>
-                  <li>• 个性化建议与发展指南</li>
-                </ul>
-              </Card>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                onClick={() => navigate('/quiz/mbti-basic')}
-                size="lg"
-              >
-                立即体验 MBTI
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => navigate('/categories')}
-                size="lg"
-              >
-                返回测评分类
-              </Button>
-            </motion.div>
-          </motion.div>
-        </div>
-      </div>
-    </PageTransition>
+    <StatusPageTemplate
+      icon={<Construction className="h-10 w-10" />}
+      iconBgColor="bg-amber-100 dark:bg-amber-900/30"
+      iconColor="text-amber-600 dark:text-amber-400"
+      title={moduleName ? `${moduleName} 模块维护中` : '模块维护中'}
+      description="该模块正在完善中，敬请期待"
+      statusType="maintenance"
+      details={{
+        title: '已有完整模块',
+        items: [
+          'MBTI 职业性格测试 - 完整可用',
+          '16种人格类型分析',
+          '四维性格倾向解读',
+          '个性化建议与发展指南',
+        ],
+      }}
+      primaryAction={{
+        label: '立即体验 MBTI',
+        onClick: () => navigate('/quiz/mbti-basic'),
+      }}
+      secondaryAction={{
+        label: '返回测评分类',
+        onClick: () => navigate('/categories'),
+      }}
+    />
   );
 };
 

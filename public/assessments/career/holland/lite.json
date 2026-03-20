@@ -1,0 +1,69 @@
+{
+  "id": "holland-lite",
+  "slug": "holland-lite",
+  "familyId": "holland",
+  "familyName": "霍兰德职业兴趣测试",
+  "category": "career",
+  "description": "霍兰德职业兴趣测试简单版，快速了解您的职业兴趣倾向",
+  "shortDescription": "18题快速体验霍兰德职业兴趣测试",
+  "versionLevel": "lite",
+  "version": "1.0.0",
+  "author": "HumanOS Team",
+  "language": "zh-CN",
+  "estimatedMinutes": 6,
+  "questionCount": 18,
+  "difficulty": "medium",
+  "tags": ["职业", "兴趣", "霍兰德", "快速体验"],
+  "disclaimer": "本测评反映您在职业兴趣维度上的倾向，可作为职业规划的参考，但不决定您的职业选择。真实的职业满意度来自多因素匹配，包括能力、价值观、机会等。",
+  "dimensions": [
+    {"id": "R", "name": "现实型 (Realistic)", "description": "偏好与物体、工具、机械等具体事物打交道，喜欢动手操作和户外活动"},
+    {"id": "I", "name": "研究型 (Investigative)", "description": "偏好需要思考、分析和研究问题的活动，喜欢探索未知和解决复杂问题"},
+    {"id": "A", "name": "艺术型 (Artistic)", "description": "偏好需要创意和自我表达的活动，喜欢自由创作和艺术表现"},
+    {"id": "S", "name": "社会型 (Social)", "description": "偏好帮助和服务他人的活动，喜欢与人交流和指导他人"},
+    {"id": "E", "name": "企业型 (Enterprising)", "description": "偏好影响和领导他人的活动，喜欢说服、领导和组织管理"},
+    {"id": "C", "name": "常规型 (Conventional)", "description": "偏好规整、有序的数据和文书工作，喜欢按计划执行和精确执行"}
+  ],
+  "scoring": {
+    "type": "weighted",
+    "dimensionScores": {
+      "R": {"weights": {"high": 3, "medium": 2, "low": 1}},
+      "I": {"weights": {"high": 3, "medium": 2, "low": 1}},
+      "A": {"weights": {"high": 3, "medium": 2, "low": 1}},
+      "S": {"weights": {"high": 3, "medium": 2, "low": 1}},
+      "E": {"weights": {"high": 3, "medium": 2, "low": 1}},
+      "C": {"weights": {"high": 3, "medium": 2, "low": 1}}
+    },
+    "normalize": false,
+    "minScore": 18,
+    "maxScore": 90,
+    "hollandCodeRules": {"description": "根据各维度得分生成三字母Holland Code", "topDimensions": 3, "tieBreaker": "use raw score"}
+  },
+  "resultProfiles": [
+    {"id": "R", "name": "现实型主导", "description": "您偏好与具体事物打交道，喜欢动手操作、户外活动和技术性工作。您务实、坦诚、直率，享受运用双手和工具创造实际成果的过程。", "conditions": [{"dimension": "R", "operator": "gt", "value": 10}, {"dimension": "I", "operator": "lte", "value": 8}, {"dimension": "A", "operator": "lte", "value": 8}, {"dimension": "S", "operator": "lte", "value": 8}, {"dimension": "E", "operator": "lte", "value": 8}, {"dimension": "C", "operator": "lte", "value": 8}], "tags": ["动手操作", "技术", "务实", "独立"], "summary": "您的职业兴趣以现实型为主导，偏好需要动手操作和具体技能的工作环境。", "idealEnvironment": "户外工作环境、机械车间、工厂车间、建筑工地等", "careerSuggestions": ["机械工程师", "电气工程师", "建筑工人", "汽车维修技师", "木工", "电工"]},
+    {"id": "I", "name": "研究型主导", "description": "您偏好思考和分析问题，喜欢探索未知领域和追求知识深度。您好奇、独立、理性，享受通过研究理解事物运作原理的过程。", "conditions": [{"dimension": "I", "operator": "gt", "value": 10}, {"dimension": "R", "operator": "lte", "value": 8}, {"dimension": "A", "operator": "lte", "value": 8}, {"dimension": "S", "operator": "lte", "value": 8}, {"dimension": "E", "operator": "lte", "value": 8}, {"dimension": "C", "operator": "lte", "value": 8}], "tags": ["研究", "分析", "知识", "独立思考"], "summary": "您的职业兴趣以研究型为主导，偏好需要深度思考和分析探索的智力活动。", "idealEnvironment": "研究机构、大学、实验室、图书馆、数据分析部门等", "careerSuggestions": ["科学家", "研究员", "大学教授", "医生", "数据分析师", "软件工程师"]},
+    {"id": "A", "name": "艺术型主导", "description": "您偏好创意和自我表达，喜欢自由创作和艺术表现。您富有想象力、敏感、追求独特，享受通过各种媒介表达自己想法和情感的过程。", "conditions": [{"dimension": "A", "operator": "gt", "value": 10}, {"dimension": "R", "operator": "lte", "value": 8}, {"dimension": "I", "operator": "lte", "value": 8}, {"dimension": "S", "operator": "lte", "value": 8}, {"dimension": "E", "operator": "lte", "value": 8}, {"dimension": "C", "operator": "lte", "value": 8}], "tags": ["创意", "艺术", "想象", "自我表达"], "summary": "您的职业兴趣以艺术型为主导，偏好需要创意和自我表达的自由职业环境。", "idealEnvironment": "艺术工作室、创意公司、剧院、画廊、音乐厅等", "careerSuggestions": ["艺术家", "设计师", "摄影师", "作家", "音乐家", "导演"]},
+    {"id": "S", "name": "社会型主导", "description": "您偏好帮助和服务他人，喜欢与人交流和指导他人成长。您友好、善解人意、有同情心，享受帮助他人实现成长和改变的过程。", "conditions": [{"dimension": "S", "operator": "gt", "value": 10}, {"dimension": "R", "operator": "lte", "value": 8}, {"dimension": "I", "operator": "lte", "value": 8}, {"dimension": "A", "operator": "lte", "value": 8}, {"dimension": "E", "operator": "lte", "value": 8}, {"dimension": "C", "operator": "lte", "value": 8}], "tags": ["帮助", "社交", "关怀", "教育"], "summary": "您的职业兴趣以社会型为主导，偏好需要人际互动和服务他人的工作环境。", "idealEnvironment": "学校、医院、社会服务机构、心理咨询中心等", "careerSuggestions": ["教师", "心理咨询师", "社会工作者", "护士", "人力资源专员", "职业顾问"]},
+    {"id": "E", "name": "企业型主导", "description": "您偏好影响和领导他人，喜欢说服、管理和达成目标。您自信、外向、胆大，享受通过影响他人来实现组织和个人目标的过程。", "conditions": [{"dimension": "E", "operator": "gt", "value": 10}, {"dimension": "R", "operator": "lte", "value": 8}, {"dimension": "I", "operator": "lte", "value": 8}, {"dimension": "A", "operator": "lte", "value": 8}, {"dimension": "S", "operator": "lte", "value": 8}, {"dimension": "C", "operator": "lte", "value": 8}], "tags": ["领导力", "说服", "管理", "成就"], "summary": "您的职业兴趣以企业型为主导，偏好需要影响他人和达成目标的工作环境。", "idealEnvironment": "企业管理、创业公司、销售部门、政治机构等", "careerSuggestions": ["企业家", "企业高管", "销售经理", "律师", "政治家", "项目经理"]},
+    {"id": "C", "name": "常规型主导", "description": "您偏好有序和井井有条的工作，喜欢按照明确的规则和流程完成任务。您细心、谨慎、有责任心，享受在结构化环境中高效执行任务的过程。", "conditions": [{"dimension": "C", "operator": "gt", "value": 10}, {"dimension": "R", "operator": "lte", "value": 8}, {"dimension": "I", "operator": "lte", "value": 8}, {"dimension": "A", "operator": "lte", "value": 8}, {"dimension": "S", "operator": "lte", "value": 8}, {"dimension": "E", "operator": "lte", "value": 8}], "tags": ["秩序", "执行", "精确", "可靠"], "summary": "您的职业兴趣以常规型为主导，偏好需要精确执行的结构化工作环境。", "idealEnvironment": "办公室、会计部门、金融机构、政府机关等", "careerSuggestions": ["会计", "审计员", "银行职员", "行政助理", "图书管理员", "人力资源专员"]}
+  ],
+  "questions": [
+    {"id": "holland-lite-1", "text": "我喜欢使用工具或机器来完成实际任务", "type": "likert-5", "dimension": "R", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-2", "text": "我喜欢探索科学或学术问题", "type": "likert-5", "dimension": "I", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-3", "text": "我喜欢绘画、写作或艺术创作", "type": "likert-5", "dimension": "A", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-4", "text": "我喜欢帮助他人解决问题或提供建议", "type": "likert-5", "dimension": "S", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-5", "text": "我喜欢说服或影响他人接受我的观点", "type": "likert-5", "dimension": "E", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-6", "text": "我喜欢按照明确的规则和流程完成任务", "type": "likert-5", "dimension": "C", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-7", "text": "我喜欢户外活动，如徒步、园艺或运动", "type": "likert-5", "dimension": "R", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-8", "text": "我喜欢阅读学术性或科学性的书籍和文章", "type": "likert-5", "dimension": "I", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-9", "text": "我喜欢参加艺术活动或欣赏艺术作品", "type": "likert-5", "dimension": "A", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-10", "text": "我喜欢组织或协调活动，如聚会或项目", "type": "likert-5", "dimension": "E", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-11", "text": "我喜欢教导或培训他人", "type": "likert-5", "dimension": "S", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-12", "text": "我喜欢处理数据或文件，确保准确无误", "type": "likert-5", "dimension": "C", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-13", "text": "我喜欢修理或组装东西", "type": "likert-5", "dimension": "R", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-14", "text": "我喜欢进行实验或数据分析", "type": "likert-5", "dimension": "I", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-15", "text": "我喜欢即兴创作，不喜欢被固定形式束缚", "type": "likert-5", "dimension": "A", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-16", "text": "我喜欢倾听他人的烦恼并给予支持", "type": "likert-5", "dimension": "S", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-17", "text": "我喜欢设定目标并激励他人达成", "type": "likert-5", "dimension": "E", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]},
+    {"id": "holland-lite-18", "text": "我喜欢检查细节，确保一切准确无误", "type": "likert-5", "dimension": "C", "options": [{"id": "A", "text": "非常不同意", "value": 1}, {"id": "B", "text": "不同意", "value": 2}, {"id": "C", "text": "一般", "value": 3}, {"id": "D", "text": "同意", "value": 4}, {"id": "E", "text": "非常同意", "value": 5}]}
+  ]
+}

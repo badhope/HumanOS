@@ -1,0 +1,318 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-21",
+  "families": [
+    {
+      "familyId": "mbti",
+      "familyName": "MBTI 职业性格测试",
+      "category": "personality",
+      "description": "基于 Myers-Briggs Type Indicator 理论，帮助您了解自己在能量获取、信息获取、决策方式、生活态度四个维度上的倾向，从而识别您的性格类型。",
+      "shortDescription": "探索您的性格类型与职业匹配",
+      "icon": "Users",
+      "color": "purple",
+      "tags": ["人格", "性格", "MBTI", "职业", "自我探索"],
+      "versions": [
+        {
+          "level": "lite",
+          "name": "MBTI 简单版",
+          "description": "快速体验版，12道题，5分钟，快速了解您的性格倾向",
+          "estimatedMinutes": 5,
+          "questionCount": 12,
+          "recommended": false,
+          "status": "active"
+        },
+        {
+          "level": "standard",
+          "name": "MBTI 标准版",
+          "description": "推荐版本，32道题，约15分钟，完整覆盖四维度，结果稳定可靠",
+          "estimatedMinutes": 15,
+          "questionCount": 32,
+          "recommended": true,
+          "status": "active"
+        },
+        {
+          "level": "expert",
+          "name": "MBTI 专家版",
+          "description": "完整版本，64道题，约30分钟，增加边界题、校验题和子维度，结果最精细",
+          "estimatedMinutes": 30,
+          "questionCount": 64,
+          "recommended": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "familyId": "stress-check",
+      "familyName": "压力指数评估",
+      "category": "psychology",
+      "description": "通过评估您在压力负荷、情绪波动、恢复能力三个维度上的表现，帮助您了解当前的心理压力状态，并提供科学的调节建议。",
+      "shortDescription": "了解您的压力水平与心理状态",
+      "icon": "Brain",
+      "color": "blue",
+      "tags": ["压力", "心理健康", "情绪", "压力管理"],
+      "versions": [
+        {
+          "level": "lite",
+          "name": "压力评估 简单版",
+          "description": "快速体验版，10道题，约3分钟，初步了解您的压力状态",
+          "estimatedMinutes": 3,
+          "questionCount": 10,
+          "recommended": false,
+          "status": "active"
+        },
+        {
+          "level": "standard",
+          "name": "压力评估 标准版",
+          "description": "推荐版本，20道题，约8分钟，全面评估压力、情绪和恢复能力",
+          "estimatedMinutes": 8,
+          "questionCount": 20,
+          "recommended": true,
+          "status": "active"
+        },
+        {
+          "level": "expert",
+          "name": "压力评估 专家版",
+          "description": "完整版本，36道题，约15分钟，包含应对方式、边界检测和详细子维度分析",
+          "estimatedMinutes": 15,
+          "questionCount": 36,
+          "recommended": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "familyId": "holland",
+      "familyName": "霍兰德职业兴趣测试",
+      "category": "career",
+      "description": "基于 John Holland 的职业兴趣理论，评估您在现实型、研究型、艺术型、社会型、企业型、常规型六个维度上的倾向，帮助您找到最适合的职业方向。",
+      "shortDescription": "找到您的职业兴趣类型",
+      "icon": "Briefcase",
+      "color": "orange",
+      "tags": ["职业", "兴趣", "霍兰德", "生涯规划", "职业发展"],
+      "versions": [
+        {
+          "level": "lite",
+          "name": "霍兰德 简单版",
+          "description": "快速体验版，18道题，约6分钟，快速了解您的职业兴趣倾向",
+          "estimatedMinutes": 6,
+          "questionCount": 18,
+          "recommended": false,
+          "status": "active"
+        },
+        {
+          "level": "standard",
+          "name": "霍兰德 标准版",
+          "description": "推荐版本，36道题，约12分钟，完整评估六维度职业兴趣",
+          "estimatedMinutes": 12,
+          "questionCount": 36,
+          "recommended": true,
+          "status": "active"
+        },
+        {
+          "level": "expert",
+          "name": "霍兰德 专家版",
+          "description": "完整版本，54道题，约20分钟，增加环境偏好、方向校验和职业路径分析",
+          "estimatedMinutes": 20,
+          "questionCount": 54,
+          "recommended": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "familyId": "resilience",
+      "familyName": "心理韧性评估",
+      "category": "psychology",
+      "description": "心理韧性是指您在面对挫折、压力和困境时的恢复与适应能力。本测评帮助您了解自己在情绪恢复、适应能力、寻求支持和坚持力四个维度上的表现。",
+      "shortDescription": "了解您的心理韧性水平与恢复能力",
+      "icon": "Shield",
+      "color": "green",
+      "tags": ["心理韧性", "抗压能力", "情绪调节", "自我成长"],
+      "versions": [
+        {
+          "level": "lite",
+          "name": "心理韧性 简单版",
+          "description": "快速体验版，10道题，约3分钟，初步了解您的心理韧性水平",
+          "estimatedMinutes": 3,
+          "questionCount": 10,
+          "recommended": false,
+          "status": "active"
+        },
+        {
+          "level": "standard",
+          "name": "心理韧性 标准版",
+          "description": "推荐版本，20道题，约8分钟，全面评估四个韧性维度",
+          "estimatedMinutes": 8,
+          "questionCount": 20,
+          "recommended": true,
+          "status": "active"
+        },
+        {
+          "level": "expert",
+          "name": "心理韧性 专家版",
+          "description": "完整版本，32道题，约12分钟，包含深度子维度和个性化提升建议",
+          "estimatedMinutes": 12,
+          "questionCount": 32,
+          "recommended": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "familyId": "logic",
+      "familyName": "逻辑思维评估",
+      "category": "cognition",
+      "description": "评估您在模式识别、顺序推理、抽象逻辑三个认知维度上的能力，帮助您了解自己的思维风格与认知优势。",
+      "shortDescription": "测试您的逻辑思维与推理能力",
+      "icon": "Lightbulb",
+      "color": "yellow",
+      "tags": ["逻辑", "推理", "认知", "思维", "智力"],
+      "versions": [
+        {
+          "level": "lite",
+          "name": "逻辑思维 简单版",
+          "description": "快速体验版，8道题，约5分钟，初步测试逻辑思维能力",
+          "estimatedMinutes": 5,
+          "questionCount": 8,
+          "recommended": false,
+          "status": "active"
+        },
+        {
+          "level": "standard",
+          "name": "逻辑思维 标准版",
+          "description": "推荐版本，15道题，约10分钟，完整评估三个认知维度",
+          "estimatedMinutes": 10,
+          "questionCount": 15,
+          "recommended": true,
+          "status": "active"
+        },
+        {
+          "level": "expert",
+          "name": "逻辑思维 专家版",
+          "description": "完整版本，24道题，约18分钟，包含高难度推理和综合思维测试",
+          "estimatedMinutes": 18,
+          "questionCount": 24,
+          "recommended": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "familyId": "values",
+      "familyName": "价值观光谱",
+      "category": "ideology",
+      "description": "探索您在传统与变革、权威与自由、个人与集体、务实与理想四个价值维度上的倾向，帮助您更清晰地认识自己的内在价值取向。",
+      "shortDescription": "发现您的核心价值取向",
+      "icon": "Compass",
+      "color": "green",
+      "tags": ["价值观", "人生观", "信念", "自我认知"],
+      "versions": [
+        {
+          "level": "lite",
+          "name": "价值观 简单版",
+          "description": "快速体验版，12道题，约4分钟，初步了解您的价值倾向",
+          "estimatedMinutes": 4,
+          "questionCount": 12,
+          "recommended": false,
+          "status": "active"
+        },
+        {
+          "level": "standard",
+          "name": "价值观 标准版",
+          "description": "推荐版本，24道题，约8分钟，完整评估四个价值维度",
+          "estimatedMinutes": 8,
+          "questionCount": 24,
+          "recommended": true,
+          "status": "active"
+        },
+        {
+          "level": "expert",
+          "name": "价值观 专家版",
+          "description": "完整版本，36道题，约12分钟，包含价值冲突检测和深度解读",
+          "estimatedMinutes": 12,
+          "questionCount": 36,
+          "recommended": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "familyId": "focus",
+      "familyName": "注意力与思维风格",
+      "category": "cognition",
+      "description": "注意力与思维风格反映了您在信息处理过程中的习惯和偏好。本测评帮助您了解自己在持续注意力、切换灵活性、细节敏感度三个维度上的特点。",
+      "shortDescription": "了解您的注意力特点与思维风格",
+      "icon": "Target",
+      "color": "red",
+      "tags": ["注意力", "思维风格", "认知偏好", "自我认知"],
+      "versions": [
+        {
+          "level": "lite",
+          "name": "注意力 简单版",
+          "description": "快速体验版，10道题，约4分钟，初步了解您的注意力特点",
+          "estimatedMinutes": 4,
+          "questionCount": 10,
+          "recommended": false,
+          "status": "active"
+        },
+        {
+          "level": "standard",
+          "name": "注意力 标准版",
+          "description": "推荐版本，20道题，约8分钟，全面评估三个注意力维度",
+          "estimatedMinutes": 8,
+          "questionCount": 20,
+          "recommended": true,
+          "status": "active"
+        },
+        {
+          "level": "expert",
+          "name": "注意力 专家版",
+          "description": "完整版本，30道题，约12分钟，包含注意力边界和深度风格分析",
+          "estimatedMinutes": 12,
+          "questionCount": 30,
+          "recommended": false,
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "familyId": "work-style",
+      "familyName": "工作风格测评",
+      "category": "career",
+      "description": "工作风格测评帮助您了解自己在自主性、协作性、结构性、探索性、执行力等维度上的偏好，为职业发展和工作环境选择提供参考。",
+      "shortDescription": "发现您的工作风格特点",
+      "icon": "Briefcase",
+      "color": "purple",
+      "tags": ["工作风格", "职业发展", "工作偏好", "自我认知"],
+      "versions": [
+        {
+          "level": "lite",
+          "name": "工作风格 简单版",
+          "description": "快速体验版，12道题，约4分钟，初步了解您的工作风格偏好",
+          "estimatedMinutes": 4,
+          "questionCount": 12,
+          "recommended": false,
+          "status": "active"
+        },
+        {
+          "level": "standard",
+          "name": "工作风格 标准版",
+          "description": "推荐版本，24道题，约8分钟，全面评估工作风格六个维度",
+          "estimatedMinutes": 8,
+          "questionCount": 24,
+          "recommended": true,
+          "status": "active"
+        },
+        {
+          "level": "expert",
+          "name": "工作风格 专家版",
+          "description": "完整版本，36道题，约12分钟，包含决策风格、压力应对和深度职业发展建议",
+          "estimatedMinutes": 12,
+          "questionCount": 36,
+          "recommended": false,
+          "status": "active"
+        }
+      ]
+    }
+  ]
+}

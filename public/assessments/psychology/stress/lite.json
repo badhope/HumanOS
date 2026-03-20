@@ -1,0 +1,50 @@
+{
+  "id": "stress-lite",
+  "slug": "stress-lite",
+  "familyId": "stress-check",
+  "familyName": "压力指数评估",
+  "category": "psychology",
+  "description": "压力评估简单版，快速了解您的压力状态",
+  "shortDescription": "10题快速体验压力评估",
+  "versionLevel": "lite",
+  "version": "1.0.0",
+  "author": "HumanOS Team",
+  "language": "zh-CN",
+  "estimatedMinutes": 3,
+  "questionCount": 10,
+  "difficulty": "easy",
+  "tags": ["压力", "心理健康", "快速体验"],
+  "dimensions": [
+    {"id": "stressLoad", "name": "压力负荷", "description": "您在工作、生活等方面的压力感知程度"},
+    {"id": "emotionalStrain", "name": "情绪波动", "description": "您在焦虑、易怒等负面情绪上的表现程度"},
+    {"id": "recoveryCapacity", "name": "恢复能力", "description": "您在面对压力后的心理恢复能力"}
+  ],
+  "scoring": {
+    "type": "weighted",
+    "dimensionScores": {
+      "stressLoad": {"weights": {"high": 3, "medium": 2, "low": 1}},
+      "emotionalStrain": {"weights": {"high": 3, "medium": 2, "low": 1}},
+      "recoveryCapacity": {"weights": {"high": 1, "medium": 2, "low": 3}}
+    },
+    "normalize": true,
+    "minScore": 10,
+    "maxScore": 50
+  },
+  "resultProfiles": [
+    {"id": "optimal", "name": "压力舒适区", "description": "您目前处于良好的压力平衡状态，能够有效应对日常生活中的压力源。", "conditions": [{"dimension": "stressLoad", "operator": "lt", "value": 2.5}, {"dimension": "emotionalStrain", "operator": "lt", "value": 2.5}, {"dimension": "recoveryCapacity", "operator": "gt", "value": 3.5}], "tags": ["平衡", "健康"], "summary": "您的压力管理水平良好。"},
+    {"id": "balanced", "name": "压力平衡型", "description": "您目前处于相对平衡的压力状态，有一定的压力但可以应对。", "conditions": [{"dimension": "stressLoad", "operator": "between", "value": [2.5, 3.5]}, {"dimension": "emotionalStrain", "operator": "lt", "value": 3.5}, {"dimension": "recoveryCapacity", "operator": "between", "value": [2.5, 3.5]}], "tags": ["平衡", "可调节"], "summary": "您的压力水平处于中等可承受范围。"},
+    {"id": "high", "name": "高压状态", "description": "您目前承受较高压力，需要关注心理健康并采取积极的压力管理策略。", "conditions": [{"dimension": "stressLoad", "operator": "gt", "value": 3.5}, {"dimension": "emotionalStrain", "operator": "gt", "value": 3.5}], "tags": ["高压", "需关注"], "summary": "您的压力水平较高，建议及时调整。"}
+  ],
+  "questions": [
+    {"id": "stress-lite-1", "text": "在过去的两周里，您感到压力大的频率是？", "type": "single-choice", "dimension": "stressLoad", "options": [{"id": "A", "text": "从未", "value": 1}, {"id": "B", "text": "偶尔", "value": 2}, {"id": "C", "text": "经常", "value": 3}, {"id": "D", "text": "总是", "value": 4}]},
+    {"id": "stress-lite-2", "text": "您对目前工作/生活压力的感受是？", "type": "single-choice", "dimension": "stressLoad", "options": [{"id": "A", "text": "轻松可控", "value": 1}, {"id": "B", "text": "有些压力但能应对", "value": 2}, {"id": "C", "text": "压力较大", "value": 3}, {"id": "D", "text": "压力难以承受", "value": 4}]},
+    {"id": "stress-lite-3", "text": "在过去的两周里，您感到焦虑不安的频率是？", "type": "single-choice", "dimension": "emotionalStrain", "options": [{"id": "A", "text": "从未", "value": 1}, {"id": "B", "text": "偶尔", "value": 2}, {"id": "C", "text": "经常", "value": 3}, {"id": "D", "text": "总是", "value": 4}]},
+    {"id": "stress-lite-4", "text": "您容易因为小事而烦躁吗？", "type": "single-choice", "dimension": "emotionalStrain", "options": [{"id": "A", "text": "从不", "value": 1}, {"id": "B", "text": "偶尔", "value": 2}, {"id": "C", "text": "经常", "value": 3}, {"id": "D", "text": "总是", "value": 4}]},
+    {"id": "stress-lite-5", "text": "当您感到压力时，您通常能恢复吗？", "type": "single-choice", "dimension": "recoveryCapacity", "options": [{"id": "A", "text": "很快就能恢复", "value": 1}, {"id": "B", "text": "需要一些时间", "value": 2}, {"id": "C", "text": "需要很长时间", "value": 3}, {"id": "D", "text": "很难恢复", "value": 4}]},
+    {"id": "stress-lite-6", "text": "您的睡眠质量如何？", "type": "single-choice", "dimension": "recoveryCapacity", "options": [{"id": "A", "text": "很好，能充分休息", "value": 1}, {"id": "B", "text": "还行，偶尔失眠", "value": 2}, {"id": "C", "text": "不太好，经常失眠", "value": 3}, {"id": "D", "text": "很差，失眠严重", "value": 4}]},
+    {"id": "stress-lite-7", "text": "您有规律的放松活动吗（如运动、冥想等）？", "type": "single-choice", "dimension": "recoveryCapacity", "options": [{"id": "A", "text": "有，且坚持很好", "value": 1}, {"id": "B", "text": "有，但不太规律", "value": 2}, {"id": "C", "text": "偶尔", "value": 3}, {"id": "D", "text": "几乎没有", "value": 4}]},
+    {"id": "stress-lite-8", "text": "在过去的两周里，您感到情绪低落的频率是？", "type": "single-choice", "dimension": "emotionalStrain", "options": [{"id": "A", "text": "从未", "value": 1}, {"id": "B", "text": "偶尔", "value": 2}, {"id": "C", "text": "经常", "value": 3}, {"id": "D", "text": "总是", "value": 4}]},
+    {"id": "stress-lite-9", "text": "您对目前生活的整体满意度是？", "type": "single-choice", "dimension": "stressLoad", "options": [{"id": "A", "text": "非常满意", "value": 1}, {"id": "B", "text": "比较满意", "value": 2}, {"id": "C", "text": "不太满意", "value": 3}, {"id": "D", "text": "很不满意", "value": 4}]},
+    {"id": "stress-lite-10", "text": "您觉得压力对您的身体健康有影响吗？", "type": "single-choice", "dimension": "stressLoad", "options": [{"id": "A", "text": "没有影响", "value": 1}, {"id": "B", "text": "有一些影响", "value": 2}, {"id": "C", "text": "有较大影响", "value": 3}, {"id": "D", "text": "严重影响", "value": 4}]}
+  ]
+}
