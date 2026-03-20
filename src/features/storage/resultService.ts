@@ -1,5 +1,5 @@
 import { db, type ResultRecord } from './database';
-import type { AssessmentCategory } from '@/shared/types';
+import type { AssessmentCategory, AIReportRecord } from '@/shared/types';
 
 export async function saveResult(result: Omit<ResultRecord, 'id'>): Promise<number> {
   return await db.results.add(result as ResultRecord);
@@ -98,23 +98,4 @@ export async function updateResultAiReport(
   aiReport: AIReportRecord
 ): Promise<void> {
   await db.results.update(id, { aiAnalysis: JSON.stringify(aiReport) });
-}
-
-interface AIReportRecord {
-  report: {
-    overview: string;
-    traitReadings: string[];
-    strengths: string[];
-    blindSpots: string[];
-    practicalSuggestions: string[];
-    growthDirections: string[];
-    cautions: string[];
-  };
-  metadata: {
-    provider: string;
-    model?: string;
-    generatedAt: string;
-    assessmentSlug: string;
-    resultType: string;
-  };
 }
