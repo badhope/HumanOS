@@ -1,4 +1,5 @@
 import type { AssessmentDefinition, AssessmentFamily } from '@/shared/types';
+import { getCached, setCache } from '@/features/storage/offlineCache';
 
 interface ContentLoadResult<T> {
   success: true;
@@ -43,6 +44,8 @@ export { getBasePath, resolve };
 const assessmentCache = new Map<string, AssessmentDefinition>();
 const familyCache = new Map<string, AssessmentFamily>();
 
+const CACHE_PREFIX = 'assessment_';
+
 interface FetchOptions {
   retries?: number;
   retryDelay?: number;
@@ -80,39 +83,63 @@ async function fetchWithRetry(
   throw new Error('Max retries exceeded');
 }
 
+async function loadFromNetwork(filePath: string): Promise<AssessmentDefinition> {
+  const resolvedPath = resolve(filePath);
+  const response = await fetchWithRetry(resolvedPath);
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  const text = await response.text();
+  const data = JSON.parse(text);
+  const validation = validateAssessmentSync(data);
+  if (!validation.valid) {
+    const errorMessages = validation.errors.map(e => `${e.field}: ${e.message}`).join('; ');
+    throw new Error(`Validation failed: ${errorMessages}`);
+  }
+  await setCache(CACHE_PREFIX + filePath, data);
+  return validation.data!;
+}
+
+async function loadFromCache(filePath: string): Promise<AssessmentDefinition | null> {
+  const cached = await getCached<AssessmentDefinition>(CACHE_PREFIX + filePath);
+  if (cached) {
+    const validation = validateAssessmentSync(cached);
+    if (validation.valid) {
+      return validation.data!;
+    }
+  }
+  return null;
+}
+
 export async function loadAssessment(filePath: string): Promise<AssessmentDefinition> {
   if (assessmentCache.has(filePath)) {
     return assessmentCache.get(filePath)!;
   }
 
-  const resolvedPath = resolve(filePath);
+  let data = await loadFromCache(filePath);
+  if (data) {
+    assessmentCache.set(filePath, data);
+    return data;
+  }
 
   try {
-    const response = await fetchWithRetry(resolvedPath);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    data = await loadFromNetwork(filePath);
+  } catch (networkError) {
+    console.warn(`Network load failed for ${filePath}, trying cache as fallback...`);
+    data = await loadFromCache(filePath);
+    if (!data) {
+      if (networkError instanceof SyntaxError) {
+        throw new Error(`Failed to parse JSON from ${filePath}: ${networkError.message}`);
+      }
+      if (networkError instanceof Error && networkError.name === 'AbortError') {
+        throw new Error(`Request timeout for ${filePath}`);
+      }
+      throw networkError;
     }
-
-    const text = await response.text();
-    const data = JSON.parse(text);
-
-    const validation = validateAssessmentSync(data);
-    if (!validation.valid) {
-      const errorMessages = validation.errors.map(e => `${e.field}: ${e.message}`).join('; ');
-      throw new Error(`Validation failed: ${errorMessages}`);
-    }
-
-    assessmentCache.set(filePath, validation.data!);
-    return validation.data!;
-  } catch (error) {
-    if (error instanceof SyntaxError) {
-      throw new Error(`Failed to parse JSON from ${filePath}: ${error.message}`);
-    }
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error(`Request timeout for ${filePath}`);
-    }
-    throw error;
   }
+
+  assessmentCache.set(filePath, data);
+  return data;
 }
 
 export async function loadAssessmentSafe(filePath: string): Promise<ContentLoadResult<AssessmentDefinition> | ContentLoadError> {
