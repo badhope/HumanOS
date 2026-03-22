@@ -1,25 +1,42 @@
 # Dependencies
-node_modules/
+node_modules
+.pnp
+.pnp.js
 
-# Build output
-dist/
+# Build
+dist
+dist-ssr
+*.local
 
-# Environment files
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment
 .env
 .env.local
 .env.*.local
 
-# IDE
-.vscode/settings.json
-.idea/
+# TypeScript
+*.tsbuildinfo
 
-# OS
-.DS_Store
-Thumbs.db
+# Testing
+coverage
 
-# Logs
-*.log
-npm-debug.log*
-
-# Cache
-.cache/
+# Temporary files
+*.tmp
+*.temp

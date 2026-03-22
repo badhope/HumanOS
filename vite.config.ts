@@ -1,26 +1,33 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.VITE_BASE_URL || '/HumanOS/',
+  base: '/HumanOS/',
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': resolve(__dirname, 'src'),
+      '@components': resolve(__dirname, 'src/components'),
+      '@pages': resolve(__dirname, 'src/pages'),
+      '@hooks': resolve(__dirname, 'src/hooks'),
+      '@store': resolve(__dirname, 'src/store'),
+      '@utils': resolve(__dirname, 'src/utils'),
+      '@types': resolve(__dirname, 'src/types'),
+      '@assets': resolve(__dirname, 'src/assets'),
     },
   },
   build: {
+    outDir: 'dist',
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          animation: ['framer-motion', 'gsap'],
-          '3d': ['three', '@react-three/fiber', '@react-three/drei'],
-          charts: ['recharts', 'd3', 'chart.js'],
-          ui: ['@radix-ui/react-accordion', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+          'three': ['three', '@react-three/fiber', '@react-three/drei'],
+          'charts': ['recharts'],
+          'vendor': ['react', 'react-dom', 'react-router-dom'],
         },
       },
     },
   },
-});
+})

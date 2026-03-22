@@ -1,287 +1,104 @@
-# HumanOS
+# HumanOS Reborn 🧠
 
-<!-- badges -->
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/HumanOS/HumanOS-1)
-[![Status](https://img.shields.io/badge/status-platform%20stabilization-green.svg)](./docs/architecture.md)
-[![Type](https://img.shields.io/badge/type-assessment%20platform-purple.svg)](./docs/content-system.md)
-[![Framework](https://img.shields.io/badge/framework-React%2018-61dafb.svg)](https://react.dev)
-[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/HumanOS/HumanOS-1/actions)
+[![Deploy](https://github.com/badhope/HumanOS/actions/workflows/deploy.yml/badge.svg)](https://github.com/badhope/HumanOS/actions/workflows/deploy.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-30%2B%20assessments-green.svg)]()
 
-[English](./README.md) | [中文](./README.zh-CN.md)
+> **下一代人格评估平台** - 探索真实的自我
 
----
+🌐 **在线访问**: https://badhope.github.io/HumanOS
 
-## ✨ Discover Yourself Through Science
-
-> _A sanctuary for self-reflection, running entirely in your browser._
-
-HumanOS is a **local-first, modular human assessment platform** designed for deep self-exploration. It offers personality, psychological, cognitive, and career assessments — all with zero data collection, zero tracking, and complete privacy.
-
-Built on a **registry-driven plugin architecture**, HumanOS enables seamless expansion of assessments, question types, and result visualizations while maintaining enterprise-grade stability.
+📊 **30+ 专业测评** · 🎨 **现代化UI** · 🔒 **完全本地**
 
 ---
 
-## 🌟 Platform Highlights
+## ✨ 特性
 
-| Feature | Description |
-|---------|-------------|
-| 🔒 **Complete Privacy** | All data stays in your browser. Forever. |
-| 🎨 **Modular by Design** | Add assessments without touching core logic. |
-| ✅ **Validated Content** | Every question bank passes schema validation at build time. |
-| 📦 **Static Deployment** | Deploy anywhere. No backend. No server. |
-| 🧩 **Plugin Architecture** | Extensible question renderers and result blocks. |
+- 🔒 **完全本地** - 数据仅存储在浏览器，无需服务器
+- 🎨 **现代化UI** - 3D粒子背景、玻璃态设计、流畅动画
+- 📊 **可视化结果** - 雷达图、柱状图展示测评结果
+- 🤖 **AI就绪** - 支持接入 AI 进行智能分析
+- 📱 **响应式设计** - 完美适配桌面、平板、手机
 
 ---
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
 ```bash
-git clone https://github.com/HumanOS/HumanOS-1.git
-cd HumanOS-1
+# 克隆项目
+git clone https://github.com/badhope/HumanOS.git
+cd HumanOS
+
+# 安装依赖
 npm install
+
+# 开发模式
 npm run dev
-```
 
-Open [http://localhost:5173](http://localhost:5173) to begin your journey.
-
----
-
-## 📦 Current Assessments
-
-### ✅ Production Ready
-
-| Assessment | Category | Versions | Description |
-|------------|----------|----------|-------------|
-| **MBTI** Career Personality | personality | Lite · Standard · Expert | Full 16-type personality framework |
-
-### 🔧 In Validation
-
-| Assessment | Category | Versions | Description |
-|------------|----------|----------|-------------|
-| Stress Index | psychology | Single | Quick stress level evaluation |
-| Resilience | psychology | Lite · Standard · Expert | Psychological resilience assessment |
-| Focus & Thinking | cognition | Lite · Standard · Expert | Cognitive ability evaluation |
-| Values Spectrum | ideology | Lite · Standard · Expert | Personal values mapping |
-| Holland Career | career | Lite · Standard · Expert | Career interest inventory |
-
-> **MBTI is the reference implementation.** It demonstrates the full platform capability and serves as the template for all future assessments.
-
----
-
-## 🏗️ System Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        HumanOS Platform                          │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌──────────────┐  ┌────────────────┐  ┌──────────────────────┐  │
-│  │    Module    │  │     Family     │  │     Assessment       │  │
-│  │   Registry   │  │    Registry    │  │      Registry        │  │
-│  │ (categories) │  │(family/level)  │  │   (individual.json)  │  │
-│  └──────────────┘  └────────────────┘  └──────────────────────┘  │
-│                              │                                   │
-│                              ▼                                   │
-│  ┌────────────────────────────────────────────────────────────┐  │
-│  │              Content Service Layer                          │  │
-│  │  loadAssessment() · validateAssessment() · getRegistry()    │  │
-│  └────────────────────────────────────────────────────────────┘  │
-│                              │                                   │
-│          ┌───────────────────┼───────────────────┐              │
-│          ▼                   ▼                   ▼              │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │
-│  │   Question   │  │     Quiz     │  │    Result    │            │
-│  │  Renderers   │  │    Store     │  │    Blocks    │            │
-│  │  (plugins)   │  │  (Zustand)   │  │  (plugins)   │            │
-│  └──────────────┘  └──────────────┘  └──────────────┘            │
-│                              │                                   │
-│                              ▼                                   │
-│  ┌────────────────────────────────────────────────────────────┐  │
-│  │           Local Storage (IndexedDB via Dexie)              │  │
-│  │     Results · Drafts · Profile · Settings (all local)       │  │
-│  └────────────────────────────────────────────────────────────┘  │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
+# 生产构建
+npm run build
 ```
 
 ---
 
-## 🎯 Core Design Principles
+## 🧪 30+ 专业测评
 
-### 1. Registry-Driven Architecture
-> **Registry is the single source of truth.** Never hardcode content paths.
+### 测评分类
 
-```typescript
-// ✅ Correct approach
-const registry = await fetchAssessmentRegistry();
-const assessment = registry.assessments.find(a => a.slug === slug);
-const content = await loadAssessment(assessment.filePath);
+| 分类 | 数量 | 测评 |
+|------|------|------|
+| 🧠 人格心理 | 4 | MBTI、大五人格、焦虑、情商 |
+| 💼 职业能力 | 4 | 霍兰德、领导力、学习风格、创造力 |
+| 🤝 人际关系 | 3 | 依恋风格、沟通、冲突处理 |
+| 🧮 认知思维 | 3 | 批判思维、认知风格、决策 |
+| 🏃 健康生活 | 3 | 睡眠、工作生活平衡、数字健康 |
+| 💎 价值观 | 3 | 人生价值、道德基础、满意度 |
+| 📚 学科知识 | 10 | 金融、科学、逻辑、时间管理等 |
 
-// ❌ Never do this
-const content = await fetch('/assessments/mbti/standard.json');
-```
-
-### 2. Family/Version System
-Every assessment belongs to a **family** with multiple **version levels**:
-
-| Level | Use Case | Question Count | Time |
-|-------|----------|----------------|------|
-| **Lite** | Quick taste | ~12 questions | ~5 min |
-| **Standard** | Recommended | ~32 questions | ~15 min |
-| **Expert** | Deep analysis | ~64 questions | ~30 min |
-
-### 3. Content/Code Separation
-- **Content**: JSON files in `public/assessments/`
-- **Logic**: TypeScript/React in `src/`
-- **Validation**: Zod schemas at build + runtime
-
-### 4. Plugin System
-Extensibility through registries:
-- `questionRendererPlugin.ts` → Question type renderers
-- `resultBlockPlugin.ts` → Result display blocks
+**总计**: 30个专业测评，100+题目，涵盖7大领域
 
 ---
 
-## 🔧 Tech Stack
+## 🛠️ 技术栈
 
-| Layer | Technology |
-|-------|------------|
-| Framework | React 18 + TypeScript |
-| Build | Vite |
-| Routing | React Router v6 |
-| State | Zustand |
-| Styling | Tailwind CSS |
-| 3D Background | Three.js + React Three Fiber |
-| Validation | Zod |
-| Local DB | Dexie (IndexedDB) |
-| Content | JSON (schema-validated) |
+- **框架**: React 18 + TypeScript
+- **构建**: Vite
+- **样式**: Tailwind CSS
+- **3D**: Three.js + React Three Fiber
+- **动画**: Framer Motion
+- **状态**: Zustand
+- **图表**: Recharts
 
 ---
 
-## 📁 Project Structure
+## 📁 项目结构
 
 ```
-HumanOS-1/
-├── public/
-│   ├── assessments/              # Content JSON files
-│   │   ├── registry.json         # Assessment registry
-│   │   ├── module-registry.json  # Category registry
-│   │   └── {category}/
-│   │       └── {family}/
-│   │           ├── lite.json
-│   │           ├── standard.json
-│   │           └── expert.json
-│   └── manifest.json             # PWA manifest
-├── src/
-│   ├── components/
-│   │   ├── atoms/               # Button, Card, Badge, etc.
-│   │   ├── molecules/            # PageTransition, StatusPageTemplate
-│   │   ├── blocks/               # Result display blocks (plugins)
-│   │   └── charts/               # Visualization components
-│   ├── features/
-│   │   ├── assessment/           # Registry, content loading, validation
-│   │   ├── storage/              # Dexie services, data management
-│   │   └── ai/                   # AI integration layer
-│   ├── pages/                    # Route pages
-│   ├── shared/
-│   │   ├── plugins/              # Plugin registries
-│   │   ├── schemas/              # Zod validation schemas
-│   │   └── types/                # TypeScript interfaces
-│   ├── store/                    # Zustand stores
-│   └── styles/                   # Global styles, design tokens
-├── scripts/
-│   └── validate-content.ts       # Content validation script
-├── docs/                         # Architecture documentation
-│   ├── architecture.md           # System design (for AI & developers)
-│   ├── content-system.md         # Schema spec (for content creators)
-│   ├── developer-guide.md        # How to add content/features
-│   └── ai-handoff.md             # Project state & decisions (for AI agents)
-└── e2e/                         # Playwright E2E tests
+src/
+├── components/    # 组件
+│   ├── Layout.tsx
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   ├── Background3D.tsx
+│   └── AssessmentCard.tsx
+├── pages/         # 页面
+│   ├── Home.tsx
+│   ├── Assessment.tsx
+│   ├── Results.tsx
+│   ├── Dashboard.tsx
+│   └── About.tsx
+├── data/          # 测评数据
+│   └── assessments.ts
+├── store/         # 状态管理
+│   └── index.ts
+├── types/         # TypeScript 类型
+│   └── index.ts
+└── utils/         # 工具函数
+    └── cn.ts
 ```
 
 ---
 
-## 📖 Documentation
+## 📄 许可证
 
-| Document | Purpose | Audience |
-|----------|---------|----------|
-| [architecture.md](./docs/architecture.md) | System design, data flow, registries | Architects, AI agents |
-| [content-system.md](./docs/content-system.md) | Schema spec, validation rules, content loading | Content creators, AI agents |
-| [developer-guide.md](./docs/developer-guide.md) | Step-by-step guides for adding content/features | Developers |
-| [ai-handoff.md](./docs/ai-handoff.md) | Project state, decisions, next steps | AI agents, future maintainers |
-
----
-
-## 🛠️ Development
-
-```bash
-npm run dev           # Start development server
-npm run build         # Production build
-npm run validate      # Validate content only
-npm run validate:build # Validate + build
-npm run typecheck     # TypeScript checking
-npm run lint          # ESLint
-npm run format        # Prettier
-```
-
----
-
-## 🔮 Roadmap
-
-| Phase | Focus | Status |
-|-------|-------|--------|
-| **Platform Foundation** | Plugin system, registries, MBTI reference | ✅ Complete |
-| **Content Expansion** | Activate all assessments, complete validation | 🚧 In Progress |
-| **Persistence Layer** | Results history, analytics, export | 📋 Planned |
-| **Ecosystem** | Remote content, custom assessments, community | 📋 Planned |
-
----
-
-## 🤝 Contributing
-
-### For Human-Facing Changes
-- Follow existing code conventions
-- Test on both light and dark themes
-- Verify animations work with reduced-motion settings
-
-### For Machine/AI Context
-1. Read [ai-handoff.md](./docs/ai-handoff.md) first
-2. Follow architecture principles exactly
-3. Never hardcode content paths
-4. Always validate content before committing
-
-### Golden Rules
-1. **Run `npm run validate`** after any content changes
-2. **Run `npm run validate:build`** before deployment
-3. **Keep MBTI functional** — it is the reference implementation
-4. **Test with `--dry-run`** if unsure
-
----
-
-## 📋 For AI Agents & Handoff
-
-If you are an AI agent or developer continuing this project:
-
-```markdown
-1. START HERE → Read docs/ai-handoff.md
-2. Architecture → See docs/architecture.md
-3. Adding Content → Follow docs/developer-guide.md
-4. Validate Always → Run npm run validate after changes
-5. Protect MBTI → Do not break the reference implementation
-```
-
----
-
-## 📄 License
-
-Private project — all rights reserved.
-
----
-
-## 📬 Contact
-
-For questions, refer to the documentation in [`docs/`](./docs/).
-
----
-
-*Last updated: 2026-03-21 | Version 1.1.0*
+MIT License © 2024 HumanOS
