@@ -24,9 +24,20 @@ function App() {
 
   const handleEnter = () => {
     localStorage.setItem('human-os-visited', 'true')
-    setShowIntro(false)
-    setTimeout(() => setIntroComplete(true), 800)
+    setIntroComplete(true)
+    setTimeout(() => {
+      setShowIntro(false)
+      document.body.style.overflow = 'auto'
+    }, 800)
   }
+
+  useEffect(() => {
+    if (!showIntro && introComplete) {
+      document.body.style.overflow = 'auto'
+    } else if (showIntro) {
+      document.body.style.overflow = 'hidden'
+    }
+  }, [showIntro, introComplete])
 
   return (
     <>

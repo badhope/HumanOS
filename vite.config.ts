@@ -20,15 +20,21 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: false,
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks: {
           'three': ['three', '@react-three/fiber', '@react-three/drei'],
           'charts': ['recharts'],
           'vendor': ['react', 'react-dom', 'react-router-dom'],
+          'motion': ['framer-motion', 'gsap'],
+          'ui': ['lucide-react', 'clsx', 'tailwind-merge'],
         },
       },
     },
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
   },
 })

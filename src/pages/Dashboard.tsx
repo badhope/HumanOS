@@ -13,13 +13,14 @@ export default function Dashboard() {
   const [tempName, setTempName] = useState(user?.name || '')
 
   const handleSaveName = () => {
-    if (tempName.trim()) {
+    const trimmedName = tempName.trim()
+    if (trimmedName) {
       if (user) {
-        useStore.getState().updateUserName(tempName.trim())
+        useStore.getState().updateUserName(trimmedName)
       } else {
         useStore.getState().setUser({
           id: crypto.randomUUID(),
-          name: tempName.trim(),
+          name: trimmedName,
           assessments: [],
           createdAt: new Date(),
           updatedAt: new Date(),
