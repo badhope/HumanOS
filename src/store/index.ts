@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { UserProfile, CompletedAssessment, Answer, AssessmentResult } from '@types'
+import type { UserProfile, CompletedAssessment, Answer } from '../types'
 
 interface AppState {
   // User Profile

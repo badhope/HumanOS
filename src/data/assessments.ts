@@ -1,4 +1,4 @@
-import type { Assessment, AssessmentResult, Answer } from '@types'
+import type { Assessment, AssessmentResult, Answer } from '../types'
 
 // Helper function to calculate score from answers
 const calculateScore = (answers: Answer[]): number => {
@@ -6,9 +6,9 @@ const calculateScore = (answers: Answer[]): number => {
 }
 
 // Helper to get max possible score
-const getMaxScore = (questions: any[]): number => {
+const getMaxScore = (questions: { options: { value: number }[] }[]): number => {
   return questions.reduce((sum, q) => {
-    const maxOption = Math.max(...q.options.map((o: any) => o.value))
+    const maxOption = Math.max(...q.options.map((o) => o.value))
     return sum + maxOption
   }, 0)
 }
@@ -59,9 +59,9 @@ export const assessments: Assessment[] = [
     resultCalculator: (answers: Answer[]): AssessmentResult => {
       const traits: Record<string, number> = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 }
       answers.forEach((answer) => {
-        const question = assessments[0].questions.find((q) => q.id === answer.questionId)
-        const option = question?.options.find((o) => o.id === answer.selectedOptions[0])
-        if (option?.trait) traits[option.trait] += option.value
+        if (answer.trait && answer.value) {
+          traits[answer.trait] += answer.value
+        }
       })
       
       const type = `${traits.E >= traits.I ? 'E' : 'I'}${traits.S >= traits.N ? 'S' : 'N'}${traits.T >= traits.F ? 'T' : 'F'}${traits.J >= traits.P ? 'J' : 'P'}`
@@ -141,10 +141,9 @@ export const assessments: Assessment[] = [
     resultCalculator: (answers: Answer[]): AssessmentResult => {
       const traits: Record<string, number> = { O: 0, C: 0, E: 0, A: 0, N: 0 }
       answers.forEach((answer) => {
-        const option = assessments[1].questions
-          .find((q) => q.id === answer.questionId)
-          ?.options.find((o) => o.id === answer.selectedOptions[0])
-        if (option?.trait) traits[option.trait] += option.value
+        if (answer.trait && answer.value) {
+          traits[answer.trait] += answer.value
+        }
       })
       
       const traitNames: Record<string, string> = { O: '开放性', C: '尽责性', E: '外向性', A: '宜人性', N: '神经质' }
@@ -298,10 +297,9 @@ export const assessments: Assessment[] = [
       }
       
       answers.forEach((answer) => {
-        const option = assessments[4].questions
-          .find((q) => q.id === answer.questionId)
-          ?.options.find((o) => o.id === answer.selectedOptions[0])
-        if (option?.trait && option.value > 0) traits[option.trait] += option.value
+        if (answer.trait && answer.value && answer.value > 0) {
+          traits[answer.trait] += answer.value
+        }
       })
       
       const sorted = Object.entries(traits).sort((a, b) => b[1] - a[1])
@@ -407,10 +405,9 @@ export const assessments: Assessment[] = [
       const names: Record<string, string> = { V: '视觉型', A: '听觉型', R: '阅读型', K: '动觉型' }
       
       answers.forEach((answer) => {
-        const option = assessments[6].questions
-          .find((q) => q.id === answer.questionId)
-          ?.options.find((o) => o.id === answer.selectedOptions[0])
-        if (option?.trait) traits[option.trait] += option.value
+        if (answer.trait && answer.value) {
+          traits[answer.trait] += answer.value
+        }
       })
       
       const dominant = Object.entries(traits).sort((a, b) => b[1] - a[1])[0][0]
