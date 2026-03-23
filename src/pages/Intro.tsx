@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, ChevronDown } from 'lucide-react'
+import { Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
 
 interface IntroPageProps {
   onEnter: () => void
-  isExiting?: boolean
 }
 
-export default function IntroPage({ onEnter, isExiting = false }: IntroPageProps) {
+export default function IntroPage({ onEnter }: IntroPageProps) {
   const [showContent, setShowContent] = useState(false)
   const [currentText, setCurrentText] = useState(0)
   const [displayedText, setDisplayedText] = useState('')
@@ -28,7 +27,7 @@ export default function IntroPage({ onEnter, isExiting = false }: IntroPageProps
   }, [])
 
   useEffect(() => {
-    if (!showContent || isExiting) return
+    if (!showContent) return
 
     const text = titles[currentText]
     let timeout: ReturnType<typeof setTimeout>
@@ -49,7 +48,7 @@ export default function IntroPage({ onEnter, isExiting = false }: IntroPageProps
     }
 
     return () => clearTimeout(timeout)
-  }, [displayedText, isDeleting, showContent, currentText, isExiting])
+  }, [displayedText, isDeleting, showContent, currentText])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -109,15 +108,20 @@ export default function IntroPage({ onEnter, isExiting = false }: IntroPageProps
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0f172a] flex flex-col items-center justify-center overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.1 }}
+      transition={{ duration: 0.8, ease: 'easeInOut' }}
+      className="fixed inset-0 z-50 bg-[#0f172a] flex flex-col items-center justify-center overflow-hidden"
+    >
       <canvas ref={canvasRef} className="absolute inset-0" />
 
       <AnimatePresence>
-        {showContent && !isExiting && (
+        {showContent && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative z-10 text-center px-4"
           >
@@ -127,7 +131,7 @@ export default function IntroPage({ onEnter, isExiting = false }: IntroPageProps
               transition={{ duration: 1, delay: 0.3, type: 'spring' }}
               className="mb-8"
             >
-              <div className="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-violet-500 via-pink-500 to-orange-500 p-1">
+              <div className="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-violet-500 via-pink-500 to-orange-500 p-1 animate-pulse-glow">
                 <div className="w-full h-full rounded-3xl bg-[#0f172a] flex items-center justify-center">
                   <Sparkles className="w-12 h-12 text-gradient" />
                 </div>
@@ -154,11 +158,10 @@ export default function IntroPage({ onEnter, isExiting = false }: IntroPageProps
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.5 }}
-              whileHover={{ scale: isExiting ? 1 : 1.05 }}
-              whileTap={{ scale: isExiting ? 1 : 0.95 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={onEnter}
-              disabled={isExiting}
-              className="group relative px-10 py-4 rounded-2xl overflow-hidden disabled:opacity-50"
+              className="group relative px-10 py-4 rounded-2xl overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500 bg-[length:200%_100%] animate-shimmer" />
               <div className="absolute inset-0 bg-gradient-to-r from-violet-600 via-pink-600 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -172,7 +175,7 @@ export default function IntroPage({ onEnter, isExiting = false }: IntroPageProps
       </AnimatePresence>
 
       <AnimatePresence>
-        {showContent && !isExiting && (
+        {showContent && (
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -191,12 +194,12 @@ export default function IntroPage({ onEnter, isExiting = false }: IntroPageProps
         )}
       </AnimatePresence>
 
-      <div
+      <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
           background: 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(15, 23, 42, 0.3) 100%)',
         }}
       />
-    </div>
+    </motion.div>
   )
 }
