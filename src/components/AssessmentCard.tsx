@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Clock, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
-import type { Assessment } from '@types'
+import type { Assessment } from '../types'
 import { cn } from '@utils/cn'
 
 interface AssessmentCardProps {

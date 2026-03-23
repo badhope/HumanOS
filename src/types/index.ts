@@ -28,6 +28,7 @@ export interface Answer {
   questionId: string
   selectedOptions: string[]
   value?: number
+  trait?: string
 }
 
 export interface AssessmentResult {
