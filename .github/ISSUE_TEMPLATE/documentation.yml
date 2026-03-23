@@ -1,0 +1,38 @@
+name: Documentation Update
+description: Improve project documentation
+title: '[DOCS] '
+labels: ['documentation']
+assignees: []
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear description of the documentation change
+      placeholder: Describe what documentation you've added or updated...
+    validations:
+      required: true
+
+  - type: textarea
+    id: files
+    attributes:
+      label: Files Changed
+      description: List the documentation files changed
+      placeholder: |
+        - README.md
+        - CONTRIBUTING.md
+        - src/pages/Home.tsx (comments)
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reason for Change
+      description: Why is this documentation change necessary?
+      placeholder: Explain why this change is needed...
+
+  - type: textarea
+    id: preview
+    attributes:
+      label: Documentation Preview
+      description: If applicable, show how the docs will look
+      placeholder: Paste markdown or screenshot here
