@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
 
@@ -15,11 +15,11 @@ export default function IntroPage({ onEnter }: IntroPageProps) {
   const animationRef = useRef<number>()
   const particlesRef = useRef<Array<{ x: number; y: number; vx: number; vy: number; size: number; color: string; alpha: number }>>([])
 
-  const titles = [
+  const titles = useMemo(() => [
     '探索真实的自我',
     '发现你的无限可能',
     '开启自我认知之旅',
-  ]
+  ], [])
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 300)
@@ -48,7 +48,7 @@ export default function IntroPage({ onEnter }: IntroPageProps) {
     }
 
     return () => clearTimeout(timeout)
-  }, [displayedText, isDeleting, showContent, currentText])
+  }, [displayedText, isDeleting, showContent, currentText, titles])
 
   useEffect(() => {
     const canvas = canvasRef.current

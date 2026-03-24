@@ -265,7 +265,7 @@ export default function Assessment() {
   }
 
   const handleSubmit = async () => {
-    let finalAnswers = [...answers]
+    const finalAnswers = [...answers]
 
     if (selectedOption && question) {
       const currentAnswer = createAnswer(question.id, selectedOption, question)
