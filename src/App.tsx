@@ -16,15 +16,18 @@ function App() {
   const location = useLocation()
   const [appState, setAppState] = useState<'intro' | 'splash' | 'ready'>('intro')
   const [isFirstVisit, setIsFirstVisit] = useState<boolean | null>(null)
+  const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
     const hasVisited = localStorage.getItem('human-os-visited')
     if (hasVisited) {
       setIsFirstVisit(false)
-      setAppState('ready')
+      setAppState('splash')
     } else {
       setIsFirstVisit(true)
+      setAppState('intro')
     }
+    setIsInitialized(true)
   }, [])
 
   useEffect(() => {
@@ -37,6 +40,7 @@ function App() {
 
   const handleIntroComplete = useCallback(() => {
     localStorage.setItem('human-os-visited', 'true')
+    setIsFirstVisit(false)
     setAppState('splash')
   }, [])
 
@@ -44,13 +48,7 @@ function App() {
     setAppState('ready')
   }, [])
 
-  const skipToIntro = useCallback(() => {
-    if (isFirstVisit === false) {
-      setAppState('ready')
-    }
-  }, [isFirstVisit])
-
-  if (isFirstVisit === null) {
+  if (!isInitialized || isFirstVisit === null) {
     return (
       <div className="fixed inset-0 bg-slate-950 flex items-center justify-center">
         <motion.div
@@ -72,7 +70,7 @@ function App() {
   return (
     <>
       <AnimatePresence mode="wait">
-        {appState === 'intro' && isFirstVisit && (
+        {appState === 'intro' && (
           <motion.div
             key="intro"
             initial={{ opacity: 1 }}
