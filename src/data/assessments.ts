@@ -1322,6 +1322,504 @@ export const assessments: Assessment[] = [
       }
     },
   },
+
+  // ============ 新增测试类型 (with card effects) ============
+  {
+    id: 'personality-disorder',
+    title: '人格障碍筛查',
+    description: '简单筛查常见人格障碍倾向，帮助了解自身性格特征。',
+    category: '人格心理',
+    difficulty: 'expert',
+    duration: 10,
+    cardStyle: 'glow',
+    questions: [
+      { id: 'pd-1', text: '我经常担心被他人忽视或拒绝', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+      { id: 'pd-2', text: '我对批评非常敏感，容易感到被冒犯', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+      { id: 'pd-3', text: '我倾向于过度依赖他人的认可和建议', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score >= 12 ? '需专业评估' : score >= 9 ? '需自我关注' : '无明显倾向'
+      
+      return {
+        type: level,
+        title: `人格倾向: ${level}`,
+        description: '此筛查仅供自我了解，非专业诊断',
+        traits: [{ name: '依赖倾向', score, maxScore: 15, description: '' }],
+        details: {
+          strengths: score < 9 ? ['性格独立'] : [],
+          weaknesses: score >= 9 ? ['建议自我反思'] : [],
+          careers: [],
+          relationships: '了解自己有助于人格成长',
+        },
+        scores: { total: score },
+      }
+    },
+  },
+  {
+    id: 'social-anxiety',
+    title: '社交焦虑自评',
+    description: '评估你在社交情境中的焦虑程度和回避行为。',
+    category: '人格心理',
+    difficulty: 'standard',
+    duration: 6,
+    cardStyle: 'flip',
+    questions: [
+      { id: 'sa-1', text: '在社交聚会中，我担心自己看起来很傻', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+      { id: 'sa-2', text: '我避免成为关注的焦点', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+      { id: 'sa-3', text: '与陌生人交谈让我感到紧张', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score <= 6 ? '社交自信' : score <= 10 ? '轻度焦虑' : '中度焦虑'
+      
+      return {
+        type: level,
+        title: `社交焦虑: ${level}`,
+        description: '社交焦虑会影响日常生活和职业发展',
+        traits: [{ name: '焦虑指数', score, maxScore: 15, description: '' }],
+        details: {
+          strengths: score <= 6 ? ['社交自信'] : [],
+          weaknesses: score > 10 ? ['建议寻求专业帮助'] : [],
+          careers: [],
+          relationships: '认知行为疗法可有效改善社交焦虑',
+        },
+        scores: { total: score },
+      }
+    },
+  },
+  {
+    id: 'perfectionism',
+    title: '完美主义量表',
+    description: '评估你的完美主义倾向程度和类型。',
+    category: '人格心理',
+    difficulty: 'standard',
+    duration: 7,
+    cardStyle: 'glow',
+    questions: [
+      { id: 'pm-1', text: '我对自己的工作标准非常高', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+      { id: 'pm-2', text: '如果做不到完美，我宁愿不开始', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+      { id: 'pm-3', text: '我经常因为追求完美而延迟完成任务', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score >= 12 ? '适应不良型' : score >= 9 ? '适应性' : '适度追求'
+      
+      return {
+        type: level,
+        title: `完美主义: ${level}`,
+        description: '适度的完美主义可以促进成功',
+        traits: [{ name: '完美程度', score, maxScore: 15, description: '' }],
+        details: {
+          strengths: score <= 10 ? ['追求卓越但不失平衡'] : [],
+          weaknesses: score > 12 ? ['可能导致拖延和焦虑'] : [],
+          careers: ['外科医生', '工程师', '设计师'],
+          relationships: '学会接受"足够好"能减轻压力',
+        },
+        scores: { total: score },
+      }
+    },
+  },
+  {
+    id: 'career-aptitude',
+    title: '职业能力倾向',
+    description: '发现你的职业能力优势和专业特长领域。',
+    category: '职业能力',
+    difficulty: 'standard',
+    duration: 8,
+    cardStyle: 'flip',
+    questions: [
+      { id: 'cap-1', text: '我擅长用工具解决具体问题', type: 'single', options: [
+        { id: 'r', text: '非常同意', value: 2, trait: 'R' }, { id: 'no', text: '不同意', value: 0, trait: 'R' },
+      ]},
+      { id: 'cap-2', text: '我喜欢分析数据和寻找规律', type: 'single', options: [
+        { id: 'i', text: '非常同意', value: 2, trait: 'I' }, { id: 'no', text: '不同意', value: 0, trait: 'I' },
+      ]},
+      { id: 'cap-3', text: '我善于表达和创作', type: 'single', options: [
+        { id: 'a', text: '非常同意', value: 2, trait: 'A' }, { id: 'no', text: '不同意', value: 0, trait: 'A' },
+      ]},
+      { id: 'cap-4', text: '我喜欢帮助和教导他人', type: 'single', options: [
+        { id: 's', text: '非常同意', value: 2, trait: 'S' }, { id: 'no', text: '不同意', value: 0, trait: 'S' },
+      ]},
+      { id: 'cap-5', text: '我善于影响和说服他人', type: 'single', options: [
+        { id: 'e', text: '非常同意', value: 2, trait: 'E' }, { id: 'no', text: '不同意', value: 0, trait: 'E' },
+      ]},
+      { id: 'cap-6', text: '我注重细节和准确性', type: 'single', options: [
+        { id: 'c', text: '非常同意', value: 2, trait: 'C' }, { id: 'no', text: '不同意', value: 0, trait: 'C' },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const traits: Record<string, number> = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 }
+      answers.forEach((a) => {
+        if (a.trait && a.value) traits[a.trait] += a.value
+      })
+      
+      const sorted = Object.entries(traits).sort((a, b) => b[1] - a[1])
+      const top = sorted.slice(0, 2).map(([k]) => k).join('')
+      const careers: Record<string, string[]> = {
+        'RI': ['工程师', '机械师'], 'IA': ['研究员', '设计师'], 'AS': ['艺术家', '教师'],
+        'SE': ['销售', '管理'], 'EC': ['企业家', '律师'], 'CI': ['分析师', '会计'],
+      }
+      
+      return {
+        type: top,
+        title: `职业倾向: ${top}`,
+        description: '你的优势能力组合',
+        traits: sorted.slice(0, 3).map(([k, v]) => ({ name: k, score: v, maxScore: 2, description: '' })),
+        details: {
+          strengths: ['了解自己的优势'],
+          weaknesses: ['需要持续发展和应用'],
+          careers: careers[top] || ['综合发展'],
+          relationships: '发挥优势选择适合的职业道路',
+        },
+        scores: traits,
+      }
+    },
+  },
+  {
+    id: 'workplace-stress',
+    title: '职场压力源分析',
+    description: '识别你的主要职场压力来源和应对方式。',
+    category: '职业能力',
+    difficulty: 'lite',
+    duration: 5,
+    cardStyle: 'glow',
+    questions: [
+      { id: 'ws-1', text: '工作量过大是主要压力源', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+      { id: 'ws-2', text: '与上司或同事的关系让我感到压力', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score <= 4 ? '压力可控' : score <= 7 ? '轻度压力' : '需要关注'
+      
+      return {
+        type: level,
+        title: `职场压力: ${level}`,
+        description: '识别压力源有助于有效应对',
+        traits: [{ name: '压力指数', score, maxScore: 10, description: '' }],
+        details: {
+          strengths: score <= 4 ? ['压力管理良好'] : [],
+          weaknesses: score > 7 ? ['建议制定压力缓解策略'] : [],
+          careers: [],
+          relationships: '工作压力会影响身心健康',
+        },
+        scores: { total: score },
+      }
+    },
+  },
+  {
+    id: 'love-language',
+    title: '爱的五种语言',
+    description: '发现你表达和接受爱意的主要方式。',
+    category: '人际关系',
+    difficulty: 'lite',
+    duration: 6,
+    cardStyle: 'flip',
+    questions: [
+      { id: 'll-1', text: '我最喜欢收到精心准备的礼物', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+      { id: 'll-2', text: '我重视高质量的陪伴时间', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+      { id: 'll-3', text: '听到肯定的话语让我感到被爱', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const gifts = answers[0]?.value || 0
+      const time = answers[1]?.value || 0
+      const words = answers[2]?.value || 0
+      
+      const languages = [
+        { name: '礼物', score: gifts }, { name: '陪伴', score: time }, { name: '肯定', score: words },
+      ].sort((a, b) => b.score - a.score)
+      
+      return {
+        type: languages[0].name,
+        title: `爱的语言: ${languages[0].name}`,
+        description: '了解彼此的爱语有助于关系和谐',
+        traits: languages.map((l) => ({ name: l.name, score: l.score, maxScore: 5, description: '' })),
+        details: {
+          strengths: ['了解自己的情感需求'],
+          weaknesses: [],
+          careers: [],
+          relationships: '用对方喜欢的爱语表达爱意效果更好',
+        },
+        scores: { gifts, time, words },
+      }
+    },
+  },
+  {
+    id: 'empathy-quotient',
+    title: '共情能力测试',
+    description: '评估你的共情能力和换位思考水平。',
+    category: '人际关系',
+    difficulty: 'standard',
+    duration: 6,
+    cardStyle: 'glow',
+    questions: [
+      { id: 'eqt-1', text: '我能轻易察觉他人的情绪变化', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+      { id: 'eqt-2', text: '看到他人痛苦，我会感同身受', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+      { id: 'eqt-3', text: '在争论中，我能理解对方的立场', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score >= 12 ? '高共情' : score >= 9 ? '中等共情' : '低共情'
+      
+      return {
+        type: level,
+        title: `共情能力: ${level}`,
+        description: '共情能力是建立良好人际关系的基础',
+        traits: [{ name: '共情指数', score, maxScore: 15, description: '' }],
+        details: {
+          strengths: score >= 9 ? ['人际关系佳', '善于理解他人'] : [],
+          weaknesses: score < 9 ? ['可练习换位思考'] : [],
+          careers: ['心理咨询师', '护士', '教师', 'HR'],
+          relationships: '高共情有助于建立深度连接',
+        },
+        scores: { total: score },
+      }
+    },
+  },
+  {
+    id: 'creativity-test',
+    title: '创造力潜能评估',
+    description: '评估你的发散思维和创意生成能力。',
+    category: '认知思维',
+    difficulty: 'expert',
+    duration: 8,
+    cardStyle: 'flip',
+    questions: [
+      { id: 'ct-1', text: '我经常想出解决问题的独特方法', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+      { id: 'ct-2', text: '我喜欢尝试新的做事方式', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+      { id: 'ct-3', text: '我享受头脑风暴和自由联想', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score >= 12 ? '高创造力' : score >= 9 ? '中等创造力' : '实用型思维'
+      
+      return {
+        type: level,
+        title: `创造力: ${level}`,
+        description: '创造力可以通过练习和环境培养',
+        traits: [{ name: '创意指数', score, maxScore: 15, description: '' }],
+        details: {
+          strengths: score >= 9 ? ['创新思维', '善于突破常规'] : ['务实可靠'],
+          weaknesses: score < 9 ? ['可多进行发散性思维练习'] : [],
+          careers: ['设计师', '艺术家', '创业者', '科学家'],
+          relationships: '创造力让生活更加丰富有趣',
+        },
+        scores: { total: score },
+      }
+    },
+  },
+  {
+    id: 'attention-test',
+    title: '注意力广度评估',
+    description: '评估你的专注力持续时间和抗干扰能力。',
+    category: '认知思维',
+    difficulty: 'standard',
+    duration: 5,
+    cardStyle: 'glow',
+    questions: [
+      { id: 'atn-1', text: '我能长时间专注于一件事而不分心', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+      { id: 'atn-2', text: '在嘈杂环境中我仍能集中注意力', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score >= 8 ? '专注力强' : score >= 6 ? '专注力中等' : '专注力待提升'
+      
+      return {
+        type: level,
+        title: `注意力: ${level}`,
+        description: '专注力可以通过练习改善',
+        traits: [{ name: '专注指数', score, maxScore: 10, description: '' }],
+        details: {
+          strengths: score >= 8 ? ['学习效率高'] : [],
+          weaknesses: score < 6 ? ['建议进行专注力训练'] : [],
+          careers: ['研究员', '程序员', '学生'],
+          relationships: '专注力影响工作学习效率',
+        },
+        scores: { total: score },
+      }
+    },
+  },
+  {
+    id: 'self-esteem',
+    title: '自尊水平评估',
+    description: '评估你的自我价值感和自信程度。',
+    category: '价值观',
+    difficulty: 'lite',
+    duration: 5,
+    cardStyle: 'flip',
+    questions: [
+      { id: 'se-1', text: '我对自己的评价是积极的', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+      { id: 'se-2', text: '我相信自己有能力实现目标', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+      { id: 'se-3', text: '我不会因他人的评价而否定自己', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1 }, { id: '2', text: '不同意', value: 2 }, { id: '3', text: '中立', value: 3 },
+        { id: '4', text: '同意', value: 4 }, { id: '5', text: '非常同意', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score >= 12 ? '高自尊' : score >= 9 ? '中等自尊' : '低自尊'
+      
+      return {
+        type: level,
+        title: `自尊水平: ${level}`,
+        description: '健康的自尊是心理健康的基础',
+        traits: [{ name: '自尊指数', score, maxScore: 15, description: '' }],
+        details: {
+          strengths: score >= 9 ? ['自信', '情绪稳定'] : [],
+          weaknesses: score < 9 ? ['建议建立积极的自我认知'] : [],
+          careers: [],
+          relationships: '自尊影响人际关系和人生选择',
+        },
+        scores: { total: score },
+      }
+    },
+  },
+  {
+    id: 'habit-formation',
+    title: '习惯养成能力',
+    description: '评估你建立和维持习惯的能力。',
+    category: '健康生活',
+    difficulty: 'standard',
+    duration: 6,
+    cardStyle: 'glow',
+    questions: [
+      { id: 'hf-1', text: '我能坚持每天做某件事超过21天', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+      { id: 'hf-2', text: '当我设立新习惯时，我通常能实现它', type: 'single', options: [
+        { id: '1', text: '从不', value: 1 }, { id: '2', text: '很少', value: 2 }, { id: '3', text: '有时', value: 3 },
+        { id: '4', text: '经常', value: 4 }, { id: '5', text: '总是', value: 5 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score >= 8 ? '习惯力强' : score >= 6 ? '习惯力中等' : '需培养'
+      
+      return {
+        type: level,
+        title: `习惯能力: ${level}`,
+        description: '好习惯是个人成长的基石',
+        traits: [{ name: '习惯指数', score, maxScore: 10, description: '' }],
+        details: {
+          strengths: score >= 8 ? ['自律性强', '目标达成率高'] : [],
+          weaknesses: score < 6 ? ['建议从小目标开始培养'] : [],
+          careers: [],
+          relationships: '好习惯让生活更有秩序',
+        },
+        scores: { total: score },
+      }
+    },
+  },
+  {
+    id: 'investment-risk',
+    title: '投资风险偏好',
+    description: '评估你的风险承受能力和投资偏好。',
+    category: '学科知识',
+    difficulty: 'standard',
+    duration: 6,
+    cardStyle: 'flip',
+    questions: [
+      { id: 'ir-1', text: '面对高风险高回报的投资机会，我会：', type: 'single', options: [
+        { id: 'a', text: '积极参与', value: 3 }, { id: 'b', text: '少量尝试', value: 2 },
+        { id: 'c', text: '谨慎考虑', value: 1 }, { id: 'd', text: '完全回避', value: 0 },
+      ]},
+      { id: 'ir-2', text: '我的投资组合中股票占比：', type: 'single', options: [
+        { id: 'a', text: '超过70%', value: 3 }, { id: 'b', text: '40-70%', value: 2 },
+        { id: 'c', text: '10-40%', value: 1 }, { id: 'd', text: '少于10%', value: 0 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const score = calculateScore(answers)
+      const level = score >= 5 ? '激进型' : score >= 3 ? '平衡型' : '保守型'
+      
+      return {
+        type: level,
+        title: `风险偏好: ${level}`,
+        description: '了解自己的风险偏好有助于合理配置资产',
+        traits: [{ name: '风险承受', score, maxScore: 6, description: '' }],
+        details: {
+          strengths: score >= 3 ? ['投资积极'] : ['稳健理财'],
+          weaknesses: score >= 5 ? ['需注意风险控制'] : [],
+          careers: ['投资者', '交易员', '企业家'],
+          relationships: '理财观念影响家庭财务规划',
+        },
+        scores: { total: score },
+      }
+    },
+  },
 ]
 
 export const getAssessmentById = (id: string): Assessment | undefined => {
