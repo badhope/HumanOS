@@ -1,38 +1,67 @@
-name: Documentation Update
-description: Improve project documentation
-title: '[DOCS] '
-labels: ['documentation']
+---
+name: Documentation
+description: Report issues or suggest improvements for documentation
+title: '[Docs]: '
+labels: ['documentation', 'needs-triage']
 assignees: []
 body:
-  - type: textarea
-    id: description
+  - type: markdown
     attributes:
-      label: Description
-      description: A clear description of the documentation change
-      placeholder: Describe what documentation you've added or updated...
+      value: |
+        Thanks for helping improve our documentation! Please fill out the sections below.
+        
+  - type: dropdown
+    id: type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation issue is this?
+      options:
+        - Missing Documentation
+        - Incorrect/Outdated Information
+        - Typo/Grammar Error
+        - Unclear Explanation
+        - Broken Link
+        - Suggestion for Improvement
+        - Translation Request
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Documentation Location
+      description: Where is the documentation issue located?
+      placeholder: 'e.g., README.md, CONTRIBUTING.md, API docs, etc.'
     validations:
       required: true
 
   - type: textarea
-    id: files
+    id: current
     attributes:
-      label: Files Changed
-      description: List the documentation files changed
-      placeholder: |
-        - README.md
-        - CONTRIBUTING.md
-        - src/pages/Home.tsx (comments)
+      label: Current Documentation
+      description: What does the current documentation say? (if applicable)
+      placeholder: 'Copy and paste the current text here...'
 
   - type: textarea
-    id: reason
+    id: suggested
     attributes:
-      label: Reason for Change
-      description: Why is this documentation change necessary?
-      placeholder: Explain why this change is needed...
+      label: Suggested Improvement
+      description: What should the documentation say instead?
+      placeholder: 'Describe your suggested changes...'
+    validations:
+      required: true
 
   - type: textarea
-    id: preview
+    id: additional
     attributes:
-      label: Documentation Preview
-      description: If applicable, show how the docs will look
-      placeholder: Paste markdown or screenshot here
+      label: Additional Context
+      description: Add any other context about the documentation issue here
+      placeholder: 'Any other information that might be helpful...'
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow this project's [Code of Conduct](../CODE_OF_CONDUCT.md)
+          required: true
