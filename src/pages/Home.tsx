@@ -1,17 +1,34 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useRef, useEffect } from 'react'
+import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Sparkles, Shield, Zap, Brain, Search } from 'lucide-react'
+import { ArrowRight, Sparkles, Shield, Zap, Brain, Search, ChevronDown } from 'lucide-react'
 import AssessmentCard3D from '@components/AssessmentCard3D'
 import TypingEffect, { ShimmerText } from '@components/TypingEffect'
-import PageTransition from '@components/PageTransition'
-import { staggerContainer, fadeInUp } from '@components/animationVariants'
+import { GlowCard, RippleButton, FadeInSection, AnimatedNumber } from '@components/animations'
+import {
+  staggerContainer,
+  staggerItem,
+  fadeInUp,
+  floatVariants,
+  logoVariants,
+} from '@utils/animation-config'
 import { assessments, getAllCategories } from '@data/assessments'
 import { cn } from '@utils/cn'
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string>('全部')
   const [searchQuery, setSearchQuery] = useState('')
+  const heroRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(heroRef, { once: true })
+
+  const { scrollYProgress } = useScroll()
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -100])
+  const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95])
+
+  const springY = useSpring(y, { stiffness: 100, damping: 30 })
+  const springOpacity = useSpring(opacity, { stiffness: 100, damping: 30 })
+  const springScale = useSpring(scale, { stiffness: 100, damping: 30 })
 
   const categories = ['全部', ...getAllCategories()]
 
@@ -23,253 +40,353 @@ export default function Home() {
   })
 
   return (
-    <PageTransition>
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        animate="visible"
-        className="pt-24 pb-12"
+    <div className="relative">
+      <motion.section
+        ref={heroRef}
+        style={{ y: springY, opacity: springOpacity, scale: springScale }}
+        className="pt-32 pb-20 min-h-[90vh] flex flex-col items-center justify-center relative overflow-hidden"
       >
-        <motion.section
-          variants={fadeInUp}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20"
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            className="absolute top-20 left-10 w-64 h-64 rounded-full bg-violet-500/10 blur-3xl"
+            animate={{
+              x: [0, 50, 0],
+              y: [0, 30, 0],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-pink-500/10 blur-3xl"
+            animate={{
+              x: [0, -30, 0],
+              y: [0, -50, 0],
+              scale: [1.2, 1, 1.2],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-violet-500/5 to-pink-500/5 blur-3xl"
+            animate={{
+              rotate: 360,
+            }}
+            transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+          />
+        </div>
+
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate={isInView ? 'enter' : 'initial'}
+          className="relative z-10 text-center max-w-5xl mx-auto px-4"
         >
-          <motion.div variants={fadeInUp} className="mb-6">
-            <motion.span
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-white/80"
+          <motion.div
+            variants={staggerItem}
+            className="mb-8"
+          >
+            <motion.div
+              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass"
+              whileHover={{ scale: 1.05 }}
             >
               <motion.div
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
               >
-                <Sparkles className="w-4 h-4 text-violet-400" />
+                <Sparkles className="w-5 h-5 text-violet-400" />
               </motion.div>
-              <ShimmerText text="全新升级 v2.0 · 30+ 专业测评" className="text-white/80" duration={3000} />
-            </motion.span>
+              <ShimmerText
+                text="全新升级 v2.0 · 30+ 专业测评"
+                shimmerColor="rgba(139, 92, 246, 0.8)"
+                className="text-white/90 font-medium"
+              />
+            </motion.div>
           </motion.div>
 
           <motion.h1
-            variants={fadeInUp}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 min-h-[120px] flex items-center justify-center"
+            variants={staggerItem}
+            className="text-5xl sm:text-6xl lg:text-8xl font-bold mb-8 leading-tight"
           >
-            <span className="text-white">探索</span>
             <motion.span
-              className="text-gradient mx-2"
-              animate={{
-                textShadow: [
-                  '0 0 20px rgba(139, 92, 246, 0.5)',
-                  '0 0 40px rgba(236, 72, 153, 0.8)',
-                  '0 0 20px rgba(139, 92, 246, 0.5)',
-                ],
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
+              className="inline-block text-white"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
             >
-              <TypingEffect text="真实的" speed={150} />
+              探索
             </motion.span>
-            <br />
-            <span className="text-white">自我</span>
+            <motion.span
+              className="inline-block text-gradient mx-3"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.5, type: 'spring' }}
+              style={{
+                textShadow: '0 0 40px rgba(139, 92, 246, 0.5)',
+              }}
+            >
+              真实的
+            </motion.span>
+            <motion.span
+              className="inline-block text-white"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+            >
+              自我
+            </motion.span>
           </motion.h1>
 
           <motion.p
-            variants={fadeInUp}
-            className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10"
+            variants={staggerItem}
+            className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto mb-12 leading-relaxed"
           >
             <TypingEffect
               text="通过科学的心理测评，深入了解你的人格特质、认知风格和价值观。涵盖人格心理、职业能力、人际关系、认知思维、健康生活、价值观、学科知识7大领域。"
-              speed={30}
-              pauseDuration={1000}
+              speed={25}
+              pauseDuration={500}
             />
           </motion.p>
 
           <motion.div
-            variants={fadeInUp}
+            variants={staggerItem}
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <RippleButton
+              variant="primary"
+              size="lg"
+              onClick={() => window.location.href = '/assessment/mbti-standard'}
+              className="min-w-[160px]"
             >
-              <Link
-                to="/assessment/mbti-standard"
-                className="group relative px-8 py-4 rounded-2xl overflow-hidden inline-block"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-pink-500" />
-                <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-violet-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <span className="relative flex items-center gap-2 text-white font-semibold">
-                  开始测评
-                  <motion.div
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    <ArrowRight className="w-5 h-5" />
-                  </motion.div>
-                </span>
-              </Link>
-            </motion.div>
+              <span className="flex items-center gap-2">
+                开始测评
+                <motion.span
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <ArrowRight className="w-5 h-5" />
+                </motion.span>
+              </span>
+            </RippleButton>
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link
-                to="/dashboard"
-                className="px-8 py-4 rounded-2xl glass text-white/80 font-semibold hover:text-white hover:bg-white/10 transition-all inline-block"
-              >
-                查看结果
-              </Link>
-            </motion.div>
+            <RippleButton
+              variant="secondary"
+              size="lg"
+              onClick={() => window.location.href = '/dashboard'}
+              className="min-w-[160px]"
+            >
+              查看结果
+            </RippleButton>
           </motion.div>
-        </motion.section>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20"
-        >
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="mt-16 flex justify-center gap-8"
+            variants={staggerItem}
           >
             {[
-              {
-                icon: Shield,
-                title: '隐私保护',
-                description: '所有数据仅存储在本地，不上传任何服务器，完全保护隐私',
-                color: 'from-green-500/20 to-emerald-500/20',
-              },
-              {
-                icon: Zap,
-                title: '即时反馈',
-                description: '完成测评后立即获得详细的结果分析和可视化报告',
-                color: 'from-yellow-500/20 to-orange-500/20',
-              },
-              {
-                icon: Brain,
-                title: '科学方法',
-                description: '基于心理学研究的标准化测评工具，涵盖7大知识领域',
-                color: 'from-violet-500/20 to-pink-500/20',
-              },
-            ].map((feature, index) => (
+              { value: 30, suffix: '+', label: '专业测评' },
+              { value: 7, suffix: '', label: '知识领域' },
+              { value: 100, suffix: '%', label: '隐私保护' },
+            ].map((stat, index) => (
               <motion.div
-                key={feature.title}
+                key={stat.label}
+                className="text-center"
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -5, transition: { duration: 0.3 } }}
-                className="glass rounded-2xl p-6 border border-white/10"
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 + index * 0.1 }}
               >
-                <motion.div
-                  className={cn(
-                    'w-12 h-12 rounded-xl bg-gradient-to-r flex items-center justify-center mb-4',
-                    feature.color
-                  )}
-                  whileHover={{ rotate: [0, -10, 10, 0] }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <feature.icon className="w-6 h-6 text-white" />
-                </motion.div>
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-white/60 text-sm">{feature.description}</p>
+                <div className="text-3xl font-bold text-gradient">
+                  <AnimatedNumber
+                    value={stat.value}
+                    duration={2}
+                    delay={1.2 + index * 0.1}
+                    suffix={stat.suffix}
+                  />
+                </div>
+                <div className="text-sm text-white/50 mt-1">{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
-        </motion.section>
+        </motion.div>
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
         >
           <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="text-white/40"
+          >
+            <ChevronDown className="w-8 h-8" />
+          </motion.div>
+        </motion.div>
+      </motion.section>
+
+      <FadeInSection className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              icon: Shield,
+              title: '隐私保护',
+              description: '所有数据仅存储在本地，不上传任何服务器，完全保护隐私',
+              gradient: 'from-emerald-500 to-teal-500',
+              bgGradient: 'from-emerald-500/20 to-teal-500/20',
+            },
+            {
+              icon: Zap,
+              title: '即时反馈',
+              description: '完成测评后立即获得详细的结果分析和可视化报告',
+              gradient: 'from-orange-500 to-amber-500',
+              bgGradient: 'from-orange-500/20 to-amber-500/20',
+            },
+            {
+              icon: Brain,
+              title: '科学方法',
+              description: '基于心理学研究的标准化测评工具，涵盖7大知识领域',
+              gradient: 'from-violet-500 to-pink-500',
+              bgGradient: 'from-violet-500/20 to-pink-500/20',
+            },
+          ].map((feature, index) => (
+            <GlowCard
+              key={feature.title}
+              className="glass rounded-2xl p-6 border border-white/10"
+              glowColor={`rgba(${feature.gradient.includes('emerald') ? '16, 185, 129' : feature.gradient.includes('orange') ? '249, 115, 22' : '139, 92, 246'}, 0.4)`}
+              enableTilt={true}
+            >
+              <motion.div
+                className={cn(
+                  'w-14 h-14 rounded-xl bg-gradient-to-r flex items-center justify-center mb-4',
+                  feature.bgGradient
+                )}
+                whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <feature.icon className="w-7 h-7 text-white" />
+              </motion.div>
+              <h3 className="text-xl font-semibold text-white mb-2">
+                {feature.title}
+              </h3>
+              <p className="text-white/60">{feature.description}</p>
+            </GlowCard>
+          ))}
+        </div>
+      </FadeInSection>
+
+      <FadeInSection className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20" delay={0.2}>
+        <div className="text-center mb-10">
+          <motion.h2
+            className="text-3xl sm:text-4xl font-bold text-white mb-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-10"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              <ShimmerText text="可用测评" shimmerColor="rgba(139, 92, 246, 0.5)" />
-            </h2>
-            <p className="text-white/60 mb-6">
-              共 {assessments.length} 个专业测评，选择适合你的开始探索
-            </p>
+            <ShimmerText text="可用测评" shimmerColor="rgba(139, 92, 246, 0.5)" />
+          </motion.h2>
+          <motion.p
+            className="text-white/60 mb-6"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+          >
+            共 <AnimatedNumber value={assessments.length} duration={1} delay={0.2} /> 个专业测评，选择适合你的开始探索
+          </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="relative mb-6"
-            >
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
-              <input
-                type="text"
-                placeholder="搜索测评..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-xl glass bg-white/5 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
-              />
-            </motion.div>
-
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category, index) => (
-                <motion.button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={cn(
-                    'px-4 py-2 rounded-full text-sm font-medium transition-all',
-                    selectedCategory === category
-                      ? 'bg-gradient-to-r from-violet-500 to-pink-500 text-white'
-                      : 'glass text-white/60 hover:text-white hover:bg-white/10'
-                  )}
-                >
-                  {category}
-                  {category !== '全部' && (
-                    <span className="ml-2 text-white/50">
-                      ({assessments.filter(a => a.category === category).length})
-                    </span>
-                  )}
-                </motion.button>
-              ))}
-            </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="relative max-w-md mx-auto mb-6"
+          >
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+            <motion.input
+              type="text"
+              placeholder="搜索测评..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 rounded-xl glass bg-white/5 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+              whileFocus={{ scale: 1.02 }}
+            />
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredAssessments.map((assessment, index) => (
+          <motion.div
+            className="flex flex-wrap justify-center gap-2"
+            initial="initial"
+            whileInView="enter"
+            viewport={{ once: true }}
+            variants={{
+              enter: {
+                transition: { staggerChildren: 0.05 },
+              },
+            }}
+          >
+            {categories.map((category) => (
+              <motion.button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                variants={{
+                  initial: { opacity: 0, scale: 0.8 },
+                  enter: { opacity: 1, scale: 1 },
+                }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className={cn(
+                  'px-5 py-2.5 rounded-full text-sm font-medium transition-all',
+                  selectedCategory === category
+                    ? 'bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg shadow-violet-500/25'
+                    : 'glass text-white/60 hover:text-white hover:bg-white/10'
+                )}
+              >
+                {category}
+                {category !== '全部' && (
+                  <span className="ml-2 text-white/50">
+                    ({assessments.filter(a => a.category === category).length})
+                  </span>
+                )}
+              </motion.button>
+            ))}
+          </motion.div>
+        </div>
+
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          initial="initial"
+          whileInView="enter"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={{
+            enter: {
+              transition: { staggerChildren: 0.1 },
+            },
+          }}
+        >
+          {filteredAssessments.map((assessment, index) => (
+            <motion.div
+              key={assessment.id}
+              variants={{
+                initial: { opacity: 0, y: 30 },
+                enter: { opacity: 1, y: 0 },
+              }}
+            >
               <AssessmentCard3D
-                key={assessment.id}
                 assessment={assessment}
                 index={index}
               />
-            ))}
-          </div>
-
-          {filteredAssessments.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-12"
-            >
-              <p className="text-white/60">没有找到匹配的测评</p>
             </motion.div>
-          )}
-        </motion.section>
-      </motion.div>
-    </PageTransition>
+          ))}
+        </motion.div>
+
+        {filteredAssessments.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-12"
+          >
+            <p className="text-white/60">没有找到匹配的测评</p>
+          </motion.div>
+        )}
+      </FadeInSection>
+    </div>
   )
 }

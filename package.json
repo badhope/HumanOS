@@ -1,15 +1,62 @@
 {
   "name": "human-os-reborn",
   "version": "2.0.0",
-  "description": "HumanOS Reborn - 下一代人格评估平台",
+  "description": "HumanOS Reborn - Next Generation Personality Assessment Platform | 下一代人格评估平台",
+  "author": {
+    "name": "HumanOS Team",
+    "email": "contact@humanos.dev",
+    "url": "https://github.com/badhope"
+  },
+  "license": "CC-BY-NC-4.0",
   "type": "module",
+  "private": false,
+  "homepage": "https://github.com/badhope/HumanOS#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badhope/HumanOS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/badhope/HumanOS/issues"
+  },
+  "keywords": [
+    "personality-assessment",
+    "psychology",
+    "mbti",
+    "big-five",
+    "enneagram",
+    "self-discovery",
+    "mental-health",
+    "career-assessment",
+    "react",
+    "typescript",
+    "vite",
+    "tailwindcss",
+    "framer-motion",
+    "threejs",
+    "web-app",
+    "progressive-web-app",
+    "open-source",
+    "privacy-first",
+    "local-storage",
+    "人格测评",
+    "心理测试",
+    "自我探索"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
+    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\"",
+    "clean": "rm -rf dist node_modules/.vite",
+    "prepare": "husky install || true"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -42,10 +89,33 @@
     "eslint": "^8.53.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
     "postcss": "^8.4.32",
     "prettier": "^3.1.0",
     "tailwindcss": "^3.3.6",
     "typescript": "^5.2.2",
     "vite": "^5.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,json,md}": [
+      "prettier --write"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

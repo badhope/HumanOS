@@ -1,22 +1,33 @@
+---
 name: Bug Report
-description: Report a bug to help us improve
-title: '[BUG] '
-labels: ['bug', 'needs triage']
+description: Report a bug to help us improve HumanOS
+title: '[Bug]: '
+labels: ['bug', 'needs-triage']
 assignees: []
 body:
   - type: markdown
     attributes:
       value: |
-        ## 🐛 Bug Report
-
-        Thanks for taking the time to report a bug! Please fill out the form below to help us understand and fix the issue.
+        Thanks for taking the time to fill out this bug report! Please fill out the sections below to help us fix the issue.
+        
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      options:
+        - label: I have searched for existing issues that match this bug
+          required: true
+        - label: I am using the latest version of HumanOS
+          required: true
+        - label: I have read the [Contributing Guide](../CONTRIBUTING.md)
+          required: false
 
   - type: textarea
     id: description
     attributes:
       label: Bug Description
       description: A clear and concise description of what the bug is
-      placeholder: Describe the bug here...
+      placeholder: 'When I click on...'
     validations:
       required: true
 
@@ -37,8 +48,8 @@ body:
     id: expected
     attributes:
       label: Expected Behavior
-      description: What you expected to happen
-      placeholder: Expected behavior...
+      description: A clear and concise description of what you expected to happen
+      placeholder: 'I expected that...'
     validations:
       required: true
 
@@ -46,17 +57,37 @@ body:
     id: actual
     attributes:
       label: Actual Behavior
-      description: What actually happened
-      placeholder: Actual behavior...
+      description: A clear and concise description of what actually happened
+      placeholder: 'Instead, what happened was...'
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem
+      placeholder: 'Drag and drop screenshots here'
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - Low - Minor inconvenience
+        - Medium - Affects functionality
+        - High - Major feature broken
+        - Critical - App is unusable
     validations:
       required: true
 
   - type: input
     id: browser
     attributes:
-      label: Browser and Version
-      description: Which browser did you use?
-      placeholder: "e.g., Chrome 120.0, Firefox 121.0"
+      label: Browser
+      description: What browser are you using?
+      placeholder: 'Chrome 120.0.0'
     validations:
       required: true
 
@@ -65,28 +96,21 @@ body:
     attributes:
       label: Operating System
       description: What operating system are you using?
-      placeholder: "e.g., Windows 11, macOS 14.2, iOS 17"
+      placeholder: 'Windows 11, macOS 14, Ubuntu 22.04'
+    validations:
+      required: true
 
   - type: textarea
-    id: screenshots
-    attributes:
-      label: Screenshots
-      description: If applicable, add screenshots to help explain the bug
-      placeholder: Drag and drop or paste image here
-
-  - type: textarea
-    id: context
+    id: additional
     attributes:
       label: Additional Context
       description: Add any other context about the problem here
-      placeholder: Additional context...
+      placeholder: 'Any other information that might be helpful...'
 
-  - type: textarea
-    id: reproduce
+  - type: checkboxes
+    id: terms
     attributes:
-      label: Reproducibility
-      description: How consistently can you reproduce this bug?
-      placeholder: |
-        - Always
-        - Sometimes
-        - Only with specific conditions
+      label: Code of Conduct
+      options:
+        - label: I agree to follow this project's [Code of Conduct](../CODE_OF_CONDUCT.md)
+          required: true

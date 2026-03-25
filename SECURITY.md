@@ -2,76 +2,118 @@
 
 ## Supported Versions
 
+We release patches for security vulnerabilities. Currently supported versions:
+
 | Version | Supported          |
 | ------- | ------------------ |
-| 2.x.x   | ✅ Currently Active |
-| 1.x.x   | ⚠️ Security fixes only |
+| 2.0.x   | :white_check_mark: |
+| 1.5.x   | :white_check_mark: |
+| 1.0.x   | :x:                |
+| < 1.0   | :x:                |
 
 ## Reporting a Vulnerability
 
-We take security vulnerabilities seriously. If you discover a security issue, please report it responsibly.
+We take the security of HumanOS seriously. If you have discovered a security vulnerability, we appreciate your help in disclosing it to us in a responsible manner.
 
 ### How to Report
 
-1. **Do NOT** create a public GitHub issue for security vulnerabilities
-2. Email us at: `security@humandos.io` (or use GitHub Security Advisories)
-3. Include the following information:
-   - Type of issue (e.g., XSS, CSRF, data leakage)
-   - Full paths of source file(s) related to the vulnerability
-   - Location of the affected source code (tag/branch/commit)
-   - Step-by-step instructions to reproduce the issue
-   - Proof-of-concept or exploit code (if possible)
-   - Impact assessment of the vulnerability
+**Please do not report security vulnerabilities through public GitHub issues.**
 
-### What to Expect
+Instead, please report them via:
 
-- **Acknowledgment**: Within 48 hours
-- **Initial Assessment**: Within 7 days
-- **Resolution Timeline**: Depending on severity
-  - Critical: 7 days
-  - High: 14 days
-  - Medium: 30 days
-  - Low: Next release
+1. **GitHub Security Advisory** (Preferred)
+   - Go to the [Security Advisories](https://github.com/badhope/HumanOS/security/advisories) page
+   - Click "Report a vulnerability"
+   - Fill out the form with details about the vulnerability
 
-## Security Best Practices (For Users)
+2. **Email**
+   - Send an email to: security@humanos.dev
+   - Include "SECURITY" in the subject line
+   - Provide a detailed description of the vulnerability
 
-### Data Storage
+### What to Include
 
-- All assessment data is stored locally in your browser's LocalStorage
-- No personal data is transmitted to external servers
-- Clear browser data to reset all stored information
+Please include the following information in your report:
 
-### Browser Extensions
+- **Description**: A clear description of the vulnerability
+- **Impact**: What kind of vulnerability is it? (e.g., XSS, CSRF, data breach)
+- **Steps to Reproduce**: Detailed steps to reproduce the issue
+- **Proof of Concept**: If possible, provide a proof of concept
+- **Suggested Fix**: If you have suggestions for fixing the issue
+- **Your Contact Info**: How we can reach you for follow-up questions
 
-- Some browser extensions may interfere with functionality
-- Disable extensions if you experience unexpected behavior
+### Response Timeline
 
-### Public Computers
+We are committed to responding promptly to security reports:
 
-- Avoid using HumanOS on public or shared computers
-- Clear browser data after use on public devices
+| Stage | Timeline |
+|-------|----------|
+| Initial Response | Within 48 hours |
+| Vulnerability Confirmation | Within 7 days |
+| Fix Development | Depends on severity |
+| Patch Release | Within 30 days (for critical issues) |
 
-## Security Features
+### Disclosure Policy
 
-### Implemented Protections
+We follow the principle of **Coordinated Vulnerability Disclosure**:
 
-- ✅ Input sanitization for all user inputs
-- ✅ Content Security Policy headers
-- ✅ XSS prevention through React's built-in protections
-- ✅ CSRF tokens for state-changing operations
-- ✅ Secure random ID generation (crypto.randomUUID)
-- ✅ HTTPS enforcement in production
+1. We will acknowledge receipt of your report within 48 hours
+2. We will confirm the vulnerability and determine its severity
+3. We will develop and test a fix
+4. We will release a patch and publish a security advisory
+5. We will credit you in the advisory (unless you prefer to remain anonymous)
 
-### Known Limitations
+### Security Best Practices
 
-- ⚠️ LocalStorage data is accessible to browser extensions
-- ⚠️ Data persists until explicitly cleared
-- ⚠️ No encryption of stored data (by design for transparency)
+When using HumanOS, we recommend:
 
-## Updates
+- **Keep Updated**: Always use the latest version
+- **Local Data**: Remember that all data is stored locally in your browser
+- **Private Browsing**: Use private/incognito mode for sensitive assessments
+- **Clear Data**: Clear browser data if using a shared computer
+- **Report Issues**: Report any suspicious behavior immediately
 
-Security updates will be released as patch versions. Major security changes will be documented in CHANGELOG.md.
+### Security Features
+
+HumanOS implements several security measures:
+
+- **No Server Communication**: All data stays in your browser
+- **No Tracking**: Zero analytics or tracking code
+- **No Cookies**: We don't use cookies for tracking
+- **Open Source**: Code is fully auditable
+- **Content Security Policy**: Strict CSP headers (when deployed)
+- **HTTPS Only**: Encrypted connections required (when deployed)
+
+### Known Security Considerations
+
+1. **Local Storage**: Data is stored in browser's localStorage, which is accessible to:
+   - The user
+   - Browser extensions
+   - Anyone with physical access to the device
+
+2. **Browser Security**: We rely on browser security features. Using an outdated browser may expose vulnerabilities.
+
+3. **Shared Devices**: If using on a shared device, remember to clear your data after use.
+
+## Security Updates
+
+Security updates will be announced through:
+
+- [GitHub Security Advisories](https://github.com/badhope/HumanOS/security/advisories)
+- [GitHub Releases](https://github.com/badhope/HumanOS/releases)
+- [CHANGELOG.md](./CHANGELOG.md)
+
+## Contact
+
+For any security-related questions or concerns:
+
+- **Security Email**: security@humanos.dev
+- **GitHub Security**: [Security Advisories](https://github.com/badhope/HumanOS/security/advisories)
 
 ---
 
-Thank you for helping keep HumanOS and its users safe!
+<div align="center">
+
+**Thank you for helping keep HumanOS secure!**
+
+</div>
