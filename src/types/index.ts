@@ -7,6 +7,7 @@ export interface Assessment {
   duration: number
   questions: Question[]
   resultCalculator: (answers: Answer[]) => AssessmentResult
+  cardStyle?: 'default' | 'flip' | 'glow'
 }
 
 export interface Question {
