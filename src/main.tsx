@@ -1,13 +1,30 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter, BrowserRouter } from 'react-router-dom'
 import App from './App'
+import ErrorBoundary from './components/ErrorBoundary'
 import './index.css'
+
+// 检测运行环境，选择适合的路由模式
+const getRouterMode = () => {
+  const isGitHubPages = window.location.hostname.includes('github.io')
+  const isProduction = import.meta.env.PROD
+  
+  // GitHub Pages 使用 HashRouter，其他环境使用 BrowserRouter
+  if (isGitHubPages || (isProduction && !import.meta.env.VITE_USE_BROWSER_ROUTER)) {
+    return HashRouter
+  }
+  return BrowserRouter
+}
+
+const Router = getRouterMode()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <Router>
+        <App />
+      </Router>
+    </ErrorBoundary>
   </React.StrictMode>,
 )
