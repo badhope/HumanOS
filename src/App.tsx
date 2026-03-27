@@ -1,3 +1,8 @@
+/**
+ * HumanOS - App 主组件
+ * 重构：确保首次访问和再次访问都能正确显示首页
+ */
+
 import { useState, useEffect, useCallback } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -9,46 +14,45 @@ import Dashboard from '@pages/Dashboard'
 import About from '@pages/About'
 import NotFound from '@pages/NotFound'
 import Intro from '@pages/Intro'
-import { SplashScreen } from '@components/animations'
+import SplashScreen from '@components/animations/SplashScreen'
 import { pageVariants } from '@utils/animation-config'
 
 function App() {
   const location = useLocation()
-  const [appState, setAppState] = useState<'intro' | 'splash' | 'ready'>('intro')
+   // appState: 'loading' = 加载中, 'intro' = 首次引导页, 'splash' = 启动动画, 'ready' = 主页就绪
+  const [appState, setAppState] = useState<'loading' | 'intro' | 'splash' | 'ready'>('loading')
   const [isFirstVisit, setIsFirstVisit] = useState<boolean | null>(null)
-  const [isInitialized, setIsInitialized] = useState(false)
 
+  // 初始化：检查是否首次访问
   useEffect(() => {
     const hasVisited = localStorage.getItem('human-os-visited')
     if (hasVisited) {
+      // 曾经访问过，直接进入 Splash 动画
       setIsFirstVisit(false)
       setAppState('splash')
     } else {
+      // 首次访问，显示引导页
       setIsFirstVisit(true)
       setAppState('intro')
     }
-    setIsInitialized(true)
   }, [])
 
-  useEffect(() => {
-    if (appState === 'intro' || appState === 'splash') {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
-  }, [appState])
-
+  // 处理引导页完成
   const handleIntroComplete = useCallback(() => {
+    // 标记为已访问
     localStorage.setItem('human-os-visited', 'true')
     setIsFirstVisit(false)
+    // 进入启动动画
     setAppState('splash')
   }, [])
 
+  // 处理启动动画完成
   const handleSplashComplete = useCallback(() => {
     setAppState('ready')
   }, [])
 
-  if (!isInitialized || isFirstVisit === null) {
+  // 加载中状态
+  if (appState === 'loading' || isFirstVisit === null) {
     return (
       <div className="fixed inset-0 bg-slate-950 flex items-center justify-center">
         <motion.div
@@ -67,65 +71,47 @@ function App() {
     )
   }
 
+  // 首次访问：显示引导页
+  if (appState === 'intro') {
+    return (
+      <Intro onEnter={handleIntroComplete} />
+    )
+  }
+
+  // 启动动画阶段
+  if (appState === 'splash') {
+    return (
+      <SplashScreen
+        onComplete={handleSplashComplete}
+        minDuration={3000}
+      />
+    )
+  }
+
+  // 主页就绪：显示完整应用
   return (
-    <>
+    <Layout>
       <AnimatePresence mode="wait">
-        {appState === 'intro' && (
-          <motion.div
-            key="intro"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[100]"
-          >
-            <Intro onEnter={handleIntroComplete} />
-          </motion.div>
-        )}
+        <motion.div
+          key={location.pathname}
+          variants={pageVariants}
+          initial="initial"
+          animate="enter"
+          exit="exit"
+          className="min-h-screen"
+        >
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/assessment/:id" element={<Assessment />} />
+            <Route path="/results/:id" element={<Results />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/about" element={<About />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </motion.div>
       </AnimatePresence>
-
-      <AnimatePresence>
-        {appState === 'splash' && (
-          <SplashScreen
-            key="splash"
-            onComplete={handleSplashComplete}
-            minDuration={4000}
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence mode="wait">
-        {appState === 'ready' && (
-          <motion.div
-            key="main"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Layout>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={location.pathname}
-                  variants={pageVariants}
-                  initial="initial"
-                  animate="enter"
-                  exit="exit"
-                >
-                  <Routes location={location}>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/assessment/:id" element={<Assessment />} />
-                    <Route path="/results/:id" element={<Results />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </motion.div>
-              </AnimatePresence>
-            </Layout>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    </Layout>
   )
 }
 
