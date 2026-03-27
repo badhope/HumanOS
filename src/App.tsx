@@ -1,9 +1,10 @@
 /**
- * HumanOS - 直接进入首页，带简单淡入动画
+ * HumanOS - 完整版
+ * 包含所有页面和完整功能
  */
 
 import { Routes, Route } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Layout from '@components/Layout'
 import Home from '@pages/Home'
 import Assessment from '@pages/Assessment'
@@ -14,26 +15,22 @@ import NotFound from '@pages/NotFound'
 
 export default function App() {
   return (
-    <AnimatePresence mode="wait">
+    <Layout>
       <motion.div
-        key="main"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.3 }}
       >
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/assessment/:id" element={<Assessment />} />
-            <Route path="/results/:id" element={<Results />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/assessment/:id" element={<Assessment />} />
+          <Route path="/results/:id" element={<Results />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </motion.div>
-    </AnimatePresence>
+    </Layout>
   )
 }
