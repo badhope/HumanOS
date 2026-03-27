@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ArrowRight, Sparkles, Shield, Zap, Brain, Search, ChevronDown } from 'lucide-react'
 import AssessmentCard3D from '@components/AssessmentCard3D'
 import TypingEffect, { ShimmerText } from '@components/TypingEffect'
@@ -16,6 +16,7 @@ import { assessments, getAllCategories } from '@data/assessments'
 import { cn } from '@utils/cn'
 
 export default function Home() {
+  const navigate = useNavigate()
   const [selectedCategory, setSelectedCategory] = useState<string>('全部')
   const [searchQuery, setSearchQuery] = useState('')
   const heroRef = useRef<HTMLDivElement>(null)
@@ -153,7 +154,7 @@ export default function Home() {
             <RippleButton
               variant="primary"
               size="lg"
-              onClick={() => window.location.href = '/assessment/mbti-standard'}
+              onClick={() => navigate('/assessment/mbti-standard')}
               className="min-w-[160px]"
             >
               <span className="flex items-center gap-2">
@@ -170,7 +171,7 @@ export default function Home() {
             <RippleButton
               variant="secondary"
               size="lg"
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => navigate('/dashboard')}
               className="min-w-[160px]"
             >
               查看结果
