@@ -2,7 +2,6 @@
  * HumanOS - 直接进入首页，带简单淡入动画
  */
 
-import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Layout from '@components/Layout'
@@ -14,13 +13,6 @@ import About from '@pages/About'
 import NotFound from '@pages/NotFound'
 
 export default function App() {
-  const [isLoaded, setIsLoaded] = useState(false)
-
-  useEffect(() => {
-    // 页面加载后显示
-    setIsLoaded(true)
-  }, [])
-
   return (
     <AnimatePresence mode="wait">
       <motion.div
