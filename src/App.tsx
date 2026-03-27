@@ -1,11 +1,10 @@
 /**
- * HumanOS - App 主组件
- * 重构：确保首次访问和再次访问都能正确显示首页
+ * HumanOS - 最小化版本
+ * 先确保首页正常显示，再逐步添加引导动画
  */
 
-import { useState, useEffect, useCallback } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Layout from '@components/Layout'
 import Home from '@pages/Home'
 import Assessment from '@pages/Assessment'
@@ -13,106 +12,80 @@ import Results from '@pages/Results'
 import Dashboard from '@pages/Dashboard'
 import About from '@pages/About'
 import NotFound from '@pages/NotFound'
-import Intro from '@pages/Intro'
-import SplashScreen from '@components/animations/SplashScreen'
-import { pageVariants } from '@utils/animation-config'
 
-function App() {
-  const location = useLocation()
-   // appState: 'loading' = 加载中, 'intro' = 首次引导页, 'splash' = 启动动画, 'ready' = 主页就绪
-  const [appState, setAppState] = useState<'loading' | 'intro' | 'splash' | 'ready'>('loading')
-  const [isFirstVisit, setIsFirstVisit] = useState<boolean | null>(null)
+// 简单的启动屏组件
+function SimpleSplash({ onComplete }: { onComplete: () => void }) {
+  const [progress, setProgress] = useState(0)
 
-  // 初始化：检查是否首次访问
+  useEffect(() => {
+    // 2秒后自动进入首页
+    const timer = setTimeout(() => {
+      onComplete()
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [onComplete])
+
+  return (
+    <div className="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center z-[100]">
+      <div className="text-center">
+        {/* Logo 动画 */}
+        <div className="w-20 h-20 mx-auto mb-8 rounded-2xl bg-gradient-to-br from-violet-500 via-pink-500 to-orange-500 animate-pulse" />
+        
+        {/* 文字 */}
+        <h1 className="text-3xl font-bold text-gradient mb-4">HumanOS</h1>
+        <p className="text-white/50 text-sm">正在加载...</p>
+      </div>
+    </div>
+  )
+}
+
+export default function App() {
+  const [isLoading, setIsLoading] = useState(true)
+  const [showSplash, setShowSplash] = useState(true)
+
+  // 检查是否首次访问
   useEffect(() => {
     const hasVisited = localStorage.getItem('human-os-visited')
     if (hasVisited) {
-      // 曾经访问过，直接进入 Splash 动画
-      setIsFirstVisit(false)
-      setAppState('splash')
+      // 曾访问过，直接进入
+      setShowSplash(false)
     } else {
-      // 首次访问，显示引导页
-      setIsFirstVisit(true)
-      setAppState('intro')
+      // 首次访问，标记已访问
+      localStorage.setItem('human-os-visited', 'true')
     }
   }, [])
 
-  // 处理引导页完成
-  const handleIntroComplete = useCallback(() => {
-    // 标记为已访问
-    localStorage.setItem('human-os-visited', 'true')
-    setIsFirstVisit(false)
-    // 进入启动动画
-    setAppState('splash')
-  }, [])
+  // 处理启动屏完成
+  const handleSplashComplete = () => {
+    setShowSplash(false)
+  }
 
-  // 处理启动动画完成
-  const handleSplashComplete = useCallback(() => {
-    setAppState('ready')
-  }, [])
-
-  // 加载中状态
-  if (appState === 'loading' || isFirstVisit === null) {
+  // 加载中
+  if (isLoading) {
     return (
       <div className="fixed inset-0 bg-slate-950 flex items-center justify-center">
-        <motion.div
-          className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-pink-500"
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-pink-500 animate-pulse" />
       </div>
     )
   }
 
-  // 首次访问：显示引导页
-  if (appState === 'intro') {
-    return (
-      <Intro onEnter={handleIntroComplete} />
-    )
+  // 启动屏阶段
+  if (showSplash) {
+    return <SimpleSplash onComplete={handleSplashComplete} />
   }
 
-  // 启动动画阶段
-  if (appState === 'splash') {
-    return (
-      <SplashScreen
-        onComplete={handleSplashComplete}
-        minDuration={3000}
-      />
-    )
-  }
-
-  // 主页就绪：显示完整应用
+  // 正常显示应用
   return (
     <Layout>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={location.pathname}
-          variants={pageVariants}
-          initial="initial"
-          animate="enter"
-          exit="exit"
-          className="min-h-screen"
-        >
-          <Routes location={location}>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/assessment/:id" element={<Assessment />} />
-            <Route path="/results/:id" element={<Results />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </motion.div>
-      </AnimatePresence>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/assessment/:id" element={<Assessment />} />
+        <Route path="/results/:id" element={<Results />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </Layout>
   )
 }
-
-export default App
