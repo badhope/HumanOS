@@ -57,9 +57,10 @@ export interface UserProfile {
   id: string
   name: string
   avatar?: string
+  bio?: string
   assessments: CompletedAssessment[]
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Date | number
+  updatedAt?: Date
 }
 
 export interface CompletedAssessment {
