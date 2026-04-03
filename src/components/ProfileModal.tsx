@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Camera, User, Sparkles } from 'lucide-react'
-import { useUserStore, createDefaultProfile, UserProfile } from '@store/userStore'
+import { useUserStore, createDefaultProfile } from '@store/userStore'
+import type { UserProfile } from '../types'
 
 interface ProfileModalProps {
   isOpen: boolean

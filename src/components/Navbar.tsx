@@ -6,7 +6,7 @@ import { cn } from '@utils/cn'
 
 const navItems = [
   { label: '首页', path: '/', icon: Brain },
-  { label: '测评', path: '/assessment/mbti-lite', icon: BarChart3 },
+  { label: '测评', path: '/', icon: BarChart3 },
   { label: '仪表盘', path: '/dashboard', icon: User },
   { label: '关于', path: '/about', icon: Info },
 ]

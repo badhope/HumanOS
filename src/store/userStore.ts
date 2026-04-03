@@ -1,13 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-
-export interface UserProfile {
-  id: string
-  name: string
-  avatar: string
-  bio: string
-  createdAt: number
-}
+import type { UserProfile } from '../types'
 
 export interface AssessmentRecord {
   assessmentId: string
@@ -209,4 +202,5 @@ export const createDefaultProfile = (): UserProfile => ({
   avatar: '',
   bio: '这个人很懒，什么都没写',
   createdAt: Date.now(),
+  assessments: [],
 })

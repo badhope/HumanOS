@@ -78,25 +78,43 @@
 | Feature | Description | Status |
 |---------|-------------|--------|
 | 🔒 **Privacy First** | Local storage, zero tracking, open source | ✅ |
-| 🧠 **Professional Assessments** | 30+ tests covering personality, career, relationships | ✅ |
+| 🧠 **Professional Assessments** | 15+ comprehensive tests with 10-40 questions each | ✅ |
 | 🎨 **Modern UI** | Glassmorphism design with smooth animations | ✅ |
 | ⚡ **High Performance** | Vite build, code splitting, PWA support | ✅ |
 | 🌐 **Responsive** | Perfect on desktop and mobile | ✅ |
 | 🎭 **3D Effects** | Three.js powered visual experiences | ✅ |
+| 📊 **Personalized Analysis** | Detailed, theme-specific result feedback | ✅ |
+| 🔄 **Diverse Questions** | Unique, non-repetitive options for each test | ✅ |
 
 ---
 
-## 🎯 Assessment Categories
+## 🆕 Latest Update (v2.1.0)
 
-| Category | Tests | Content |
-|----------|-------|---------|
-| 🧠 **Personality** | 8+ | MBTI, Big Five, Enneagram, etc. |
-| 💼 **Career** | 5+ | Career aptitude, leadership, team roles |
-| 💑 **Relationships** | 4+ | Communication style, attachment, social skills |
-| 🎓 **Cognitive** | 5+ | Thinking style, decision making, creativity |
-| 💪 **Health** | 4+ | Stress level, sleep quality, emotional management |
-| 💎 **Values** | 3+ | Value orientation, life meaning |
-| 📚 **Knowledge** | 5+ | Multi-domain knowledge assessments |
+### Major Improvements
+
+#### 📚 Enhanced Question Banks
+- **MBTI Assessment**: Expanded to **40 questions** with optimized options
+- **Big Five (OCEAN)**: Comprehensive **20-question** personality profile
+- **Career Assessments**: Holland Code + Leadership Style tests
+- **Relationship Tests**: Attachment Style + Communication Style
+- **Cognitive Evaluations**: Learning Style + Critical Thinking
+- **Health & Wellness**: Stress Management + Creativity Potential
+
+#### 🔧 Quality Fixes
+- ✅ Eliminated repetitive questions and options across all assessments
+- ✅ Fixed display issues for previously broken question banks
+- ✅ Added detailed, personalized result analysis for every test
+- ✅ Ensured theme-specific feedback (no more mixed/confused analysis)
+- ✅ Improved score calculation algorithms for accuracy
+
+#### 🎯 New Assessment Categories
+| Category | Tests | Questions/Test | Key Features |
+|----------|-------|----------------|--------------|
+| 🧠 **Personality** | MBTI, Big Five, Anxiety, EQ | 20-40 | Trait analysis, career suggestions |
+| 💼 **Career** | Holland Code, Leadership | 12-15 | RIASEC model, leadership profiles |
+| 💑 **Relationships** | Attachment, Communication | 8-10 | Adult attachment theory, comm styles |
+| 🎓 **Cognitive** | Learning Style, Critical Thinking | 5-8 | VARK model, bias detection |
+| 💪 **Wellness** | Stress Management, Creativity | 5-8 | Coping strategies, innovation tips |
 
 ---
 
