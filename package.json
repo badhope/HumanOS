@@ -56,7 +56,14 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\"",
     "clean": "rm -rf dist node_modules/.vite",
-    "prepare": "husky install || true"
+    "prepare": "husky install || true",
+    "init": "node scripts/init.js",
+    "template:graduation": "node scripts/init.js --type=graduation",
+    "template:enterprise": "node scripts/init.js --type=enterprise",
+    "template:personal": "node scripts/init.js --type=personal",
+    "create:assessment": "node scripts/create-assessment.js",
+    "docs:serve": "npx serve docs",
+    "analyze": "npx vite-bundle-visualizer"
   },
   "dependencies": {
     "react": "^18.2.0",

@@ -18,6 +18,9 @@
   <a href="https://reactjs.org/">
     <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react" alt="React">
   </a>
+  <a href="./TEMPLATE_GUIDE.md">
+    <img src="https://img.shields.io/badge/Template-Available-brightgreen?style=for-the-badge" alt="Template">
+  </a>
 </p>
 
 <p align="center">
@@ -115,6 +118,30 @@
 | 💑 **Relationships** | Attachment, Communication | 8-10 | Adult attachment theory, comm styles |
 | 🎓 **Cognitive** | Learning Style, Critical Thinking | 5-8 | VARK model, bias detection |
 | 💪 **Wellness** | Stress Management, Creativity | 5-8 | Coping strategies, innovation tips |
+
+---
+
+## 🎨 Use as Template
+
+**HumanOS** can be used as a project template for:
+
+- 🎓 **Graduation Projects** - Complete thesis support, defense materials
+- 🏢 **Enterprise Applications** - Internal assessments, talent management
+- 👤 **Personal Projects** - Learning, prototyping, portfolio
+
+### Quick Template Setup
+
+```bash
+# Initialize with interactive prompts
+npm run init
+
+# Or use preset templates
+npm run template:graduation  # For graduation projects
+npm run template:enterprise  # For enterprise apps
+npm run template:personal    # For personal projects
+```
+
+📖 **See [Template Guide](./TEMPLATE_GUIDE.md) for detailed instructions**
 
 ---
 
