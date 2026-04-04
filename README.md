@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/badhope/HumanOS">
-    <img src="https://img.shields.io/badge/Version-v2.0.0-61dafb?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/Version-v2.2.1-61dafb?style=for-the-badge" alt="Version">
   </a>
   <a href="https://creativecommons.org/licenses/by-nc/4.0/">
     <img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue?style=for-the-badge" alt="License">
@@ -99,7 +99,33 @@ HumanOS serves as a **demonstration platform** for:
 
 ---
 
-## 🆕 Latest Update (v2.2.0)
+## 🆕 Latest Update (v2.2.1)
+
+### 🐛 Bug Fixes & Accessibility
+
+#### Navigation & Interaction
+- ✅ Fixed Navbar "测评" navigation path error
+- ✅ Fixed Assessment back button not navigating properly
+- ✅ Fixed Dashboard "View All Achievements" button missing functionality
+- ✅ Improved Results share button with Web Share API support
+
+#### Content Consistency
+- ✅ Updated Home page content to reflect frontend framework showcase positioning
+- ✅ Corrected version display to v2.2.1
+
+#### ♿ Accessibility Improvements
+- ✅ Added `type="button"` to all interactive buttons
+- ✅ Added `aria-label` to search input
+- ✅ Added `aria-label` and `aria-pressed` to category filter buttons
+- ✅ Added `aria-label` to delete buttons
+
+#### 🔧 Code Refactoring
+- ✅ Refactored AssessmentCard3D component - reduced 60 lines of duplicate code
+- ✅ Optimized bundle size: Home component 16.56KB → 14.94KB (-9.8%)
+
+---
+
+## Previous Update (v2.2.0)
 
 ### Major Improvements
 
@@ -470,7 +496,7 @@ For partnership inquiries: [partnerships@humanos.dev](mailto:partnerships@humano
 
 <!-- MARKDOWN BADGES -->
 
-[version-shield]: https://img.shields.io/badge/Version-v2.0.0-61dafb?style=for-the-badge
+[version-shield]: https://img.shields.io/badge/Version-v2.2.1-61dafb?style=for-the-badge
 [license-shield]: https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue?style=for-the-badge
 [typescript-shield]: https://img.shields.io/badge/TypeScript-5.2-blue?style=for-the-badge
 [react-shield]: https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react
