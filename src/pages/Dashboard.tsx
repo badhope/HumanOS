@@ -12,8 +12,7 @@ import {
   Trophy,
   Sparkles,
 } from 'lucide-react'
-import { useStore } from '@store'
-import { useUserStore } from '@store/userStore'
+import { useAppStore } from '@store'
 import { assessments } from '@data/assessments'
 import { cn } from '@utils/cn'
 import PersonalityRadar from '@components/PersonalityRadar'
@@ -33,12 +32,24 @@ import {
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const { completedAssessments, deleteAssessment } = useStore()
-  const { profile, achievements, favorites, records, getStats } = useUserStore()
+  const { completedAssessments, deleteAssessment, records, achievements, favorites, user: profile } = useAppStore()
 
   const [showProfile, setShowProfile] = useState(false)
 
-  const stats = getStats()
+  const stats = useAppStore((state) => {
+    const records = state.records
+    const points = records.length * 10
+    const level = Math.floor(points / 100) + 1
+    return {
+      totalAssessments: records.length,
+      totalTime: records.length * 5,
+      favoriteCategory: '心理测评',
+      personalityTags: ['内向', '理性', '好奇'],
+      level,
+      points,
+      streak: 0,
+    }
+  })
 
   const radarData = [
     { label: '外向性', value: 72, max: 100 },

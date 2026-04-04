@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { 
-  Sparkles, 
-  ArrowRight, 
-  Code2, 
+import {
+  Sparkles,
+  ArrowRight,
+  Code2,
   Palette,
   Zap,
   BookOpen,
@@ -20,11 +20,38 @@ import {
   Rocket,
   Shield,
   Globe,
-  Smartphone
+  Smartphone,
+  LayoutGrid,
+  Filter
 } from 'lucide-react'
 import { useTemplateStore } from '../store/templateStore'
+import { templates, type TemplateId } from '../config/templates'
 import QuizShowcase from '../components/QuizShowcase'
 import Navbar from '../components/Navbar'
+
+// 模板分类
+type TemplateCategory = 'all' | 'business' | 'personal' | 'tool' | 'commerce'
+
+const templateCategories: { id: TemplateCategory; name: string; icon: typeof LayoutGrid }[] = [
+  { id: 'all', name: '全部', icon: LayoutGrid },
+  { id: 'business', name: '商业网站', icon: Layers },
+  { id: 'personal', name: '个人主页', icon: Users },
+  { id: 'tool', name: '工具面板', icon: BarChart3 },
+  { id: 'commerce', name: '电商平台', icon: Zap },
+]
+
+// 模板分类映射
+const templateCategoryMap: Record<string, TemplateCategory[]> = {
+  corporate: ['business'],
+  blog: ['personal'],
+  portfolio: ['personal'],
+  quiz: ['tool'],
+  landing: ['business'],
+  dashboard: ['tool'],
+  ecommerce: ['commerce'],
+  education: ['business', 'tool'],
+  social: ['personal', 'tool'],
+}
 
 const features = [
   {
@@ -54,42 +81,14 @@ const features = [
 ]
 
 const stats = [
-  { value: '6+', label: '模板类型', icon: Layers },
+  { value: '9+', label: '模板类型', icon: Layers },
   { value: '8+', label: '核心技术', icon: Code2 },
   { value: '35+', label: '教程章节', icon: BookOpen },
   { value: '1000+', label: '用户使用', icon: Users }
 ]
 
-const useCases = [
-  {
-    title: '企业官网',
-    description: '专业商务风格，适合企业品牌展示',
-    image: '🏢',
-    features: ['Hero区域', '服务展示', '团队介绍', '客户案例'],
-    template: 'corporate'
-  },
-  {
-    title: '个人博客',
-    description: '简约优雅设计，内容创作者首选',
-    image: '📝',
-    features: ['文章列表', '分类标签', '搜索功能', '评论系统'],
-    template: 'blog'
-  },
-  {
-    title: '作品集展示',
-    description: '创意设计师的完美选择',
-    image: '🎨',
-    features: ['项目画廊', '技能图表', '时间线', '联系表单'],
-    template: 'portfolio'
-  },
-  {
-    title: '答题测评平台',
-    description: '交互式答题体验，数据可视化分析',
-    image: '🎯',
-    features: ['动态表单', '进度追踪', '结果可视化', '3D效果'],
-    template: 'quiz'
-  }
-]
+// 映射到配置文件的模板
+const allTemplates = templates.filter(t => t.enabled)
 
 const techStack = [
   { name: 'React 18', category: '框架' },
@@ -101,11 +100,19 @@ const techStack = [
 ]
 
 function ShowcaseHome() {
-  const [activeUseCase, setActiveUseCase] = useState(0)
+  const [activeCategory, setActiveCategory] = useState<TemplateCategory>('all')
   const { setTemplate } = useTemplateStore()
 
+  // 过滤模板
+  const filteredTemplates = activeCategory === 'all'
+    ? allTemplates
+    : allTemplates.filter(t => {
+        const categories = templateCategoryMap[t.id] || []
+        return categories.includes(activeCategory)
+      })
+
   const handleTryTemplate = (templateId: string) => {
-    setTemplate(templateId as any)
+    setTemplate(templateId as TemplateId)
   }
 
   return (
@@ -310,81 +317,101 @@ function ShowcaseHome() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              应用场景
+              模板画廊
             </h2>
             <p className="text-xl text-white/60 max-w-3xl mx-auto">
               多种预设模板，满足不同业务需求。点击即可预览效果。
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              {useCases.map((useCase, index) => (
-                <motion.button
-                  key={useCase.title}
-                  onClick={() => setActiveUseCase(index)}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ x: 8 }}
-                  className={`w-full flex items-center gap-4 p-6 rounded-2xl border transition-all text-left ${
-                    activeUseCase === index
-                      ? 'bg-gradient-to-r from-violet-500/20 to-pink-500/20 border-violet-500/50'
-                      : 'bg-white/5 border-white/10 hover:border-white/20'
-                  }`}
-                  type="button"
-                >
-                  <div className={`text-4xl ${activeUseCase === index ? 'scale-110' : ''} transition-transform`}>
-                    {useCase.image}
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-lg font-semibold text-white mb-1">{useCase.title}</h4>
-                    <p className="text-sm text-white/60">{useCase.description}</p>
-                  </div>
-                  <ChevronRight className={`w-5 h-5 ${activeUseCase === index ? 'text-violet-400' : 'text-white/40'} transition-colors`} />
-                </motion.button>
-              ))}
-            </div>
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeUseCase}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 border border-white/10"
+          {/* 分类筛选 */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {templateCategories.map((category) => (
+              <motion.button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all ${
+                  activeCategory === category.id
+                    ? 'bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg shadow-violet-500/25'
+                    : 'bg-white/10 text-white/80 hover:bg-white/20'
+                }`}
+                type="button"
               >
-                <div className="text-8xl text-center mb-6">
-                  {useCases[activeUseCase].image}
-                </div>
-                <h3 className="text-2xl font-bold text-white text-center mb-4">
-                  {useCases[activeUseCase].title}
-                </h3>
-                <p className="text-white/60 text-center mb-8">
-                  {useCases[activeUseCase].description}
-                </p>
+                <category.icon className="w-4 h-4" />
+                {category.name}
+              </motion.button>
+            ))}
+          </div>
 
-                <div className="grid grid-cols-2 gap-3 mb-8">
-                  {useCases[activeUseCase].features.map((feature) => (
-                    <div key={feature} className="flex items-center gap-2 text-sm text-white/80">
-                      <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
-                      {feature}
-                    </div>
-                  ))}
-                </div>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleTryTemplate(useCases[activeUseCase].template)}
-                  className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold shadow-lg shadow-violet-500/25"
-                  type="button"
+          {/* 模板画廊 */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredTemplates.map((template, index) => (
+              <motion.div
+                key={template.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group relative bg-white/5 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 hover:border-white/30 transition-all cursor-pointer"
+                onClick={() => handleTryTemplate(template.id)}
+              >
+                {/* 模板预览区域 */}
+                <div
+                  className="h-48 flex items-center justify-center text-7xl relative"
+                  style={{
+                    background: `linear-gradient(135deg, ${template.theme.primaryColor}20, ${template.theme.accentColor}20)`
+                  }}
                 >
-                  <Play className="w-5 h-5" />
-                  预览此模板
-                </motion.button>
+                  <span className="text-6xl">{template.icon}</span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center">
+                    <span className="text-xs text-white/70 bg-black/30 px-2 py-1 rounded-full">
+                      {template.pages.length} 页面
+                    </span>
+                  </div>
+                </div>
+
+                {/* 模板信息 */}
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xl font-bold text-white group-hover:text-violet-400 transition-colors">
+                      {template.name}
+                    </h3>
+                    <span className="text-sm text-white/60">{template.nameEn}</span>
+                  </div>
+
+                  <p className="text-white/60 text-sm mb-4 line-clamp-2">
+                    {template.description}
+                  </p>
+
+                  {/* 特性标签 */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {template.features.slice(0, 3).map((feature) => (
+                      <span
+                        key={feature}
+                        className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/70"
+                      >
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* 预览按钮 */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-medium shadow-lg shadow-violet-500/25 group-hover:shadow-violet-500/40 transition-all flex items-center justify-center gap-2"
+                    type="button"
+                  >
+                    <Play className="w-4 h-4" />
+                    预览模板
+                  </motion.button>
+                </div>
               </motion.div>
-            </AnimatePresence>
+            ))}
           </div>
         </div>
       </section>

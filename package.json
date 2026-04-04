@@ -1,6 +1,6 @@
 {
   "name": "human-os-reborn",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "HumanOS - Professional Frontend Framework Showcase Platform | 专业前端框架展示平台",
   "author": {
     "name": "HumanOS Team",
@@ -10,7 +10,7 @@
   "license": "CC-BY-NC-4.0",
   "type": "module",
   "private": false,
-  "homepage": "https://github.com/badhope/HumanOS#readme",
+  "homepage": "https://aiskill.qzz.io",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/badhope/HumanOS.git"

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Camera, User, Sparkles } from 'lucide-react'
-import { useUserStore, createDefaultProfile } from '@store/userStore'
+import { useAppStore, createDefaultProfile } from '../store'
 import type { UserProfile } from '../types'
 
 interface ProfileModalProps {
@@ -10,7 +10,7 @@ interface ProfileModalProps {
 }
 
 export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
-  const { profile, setProfile, updateProfile } = useUserStore()
+  const { user: profile, setUser: setProfile, updateUserProfile: updateProfile } = useAppStore()
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState<UserProfile | null>(profile)
 

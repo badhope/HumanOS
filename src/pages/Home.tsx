@@ -93,7 +93,7 @@ export default function Home() {
                 <Sparkles className="w-5 h-5 text-violet-400" />
               </motion.div>
               <ShimmerText
-                text="v2.2.0 · 专业前端框架展示平台"
+                text="v2.3.0 · 前端展示模板库"
                 shimmerColor="rgba(139, 92, 246, 0.8)"
                 className="text-white/90 font-medium"
               />

@@ -16,6 +16,11 @@ const TutorialPage = lazy(() => import('./pages/TutorialPage'))
 const CorporateHome = lazy(() => import('./templates/corporate/CorporateHome'))
 const BlogHome = lazy(() => import('./templates/blog/BlogHome'))
 const PortfolioHome = lazy(() => import('./templates/portfolio/PortfolioHome'))
+const LandingHome = lazy(() => import('./templates/landing/LandingHome'))
+const DashboardHome = lazy(() => import('./templates/dashboard/DashboardHome'))
+const EcommerceHome = lazy(() => import('./templates/ecommerce/EcommerceHome'))
+const EducationHome = lazy(() => import('./templates/education/EducationHome'))
+const SocialHome = lazy(() => import('./templates/social/SocialHome'))
 
 function TemplateRouter() {
   const { currentTemplate } = useTemplateStore()
@@ -66,13 +71,55 @@ function TemplateRouter() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       )
-    
+
     case 'landing':
-    case 'dashboard':
-    default:
       return (
         <Routes>
-          <Route path="/" element={<ShowcaseHome />} />
+          <Route path="/" element={<LandingHome />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      )
+
+    case 'dashboard':
+      return (
+        <Routes>
+          <Route path="/" element={<DashboardHome />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      )
+
+    case 'ecommerce':
+      return (
+        <Routes>
+          <Route path="/" element={<EcommerceHome />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      )
+
+    case 'education':
+      return (
+        <Routes>
+          <Route path="/" element={<EducationHome />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      )
+
+    case 'social':
+      return (
+        <Routes>
+          <Route path="/" element={<SocialHome />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/tutorial" element={<TutorialPage />} />

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
 import { getAssessmentById } from '@data/assessments'
-import { useStore } from '@store'
+import { useAppStore } from '../store'
 import type { Answer, Question } from '../types'
 import { cn } from '@utils/cn'
 
@@ -17,7 +17,7 @@ export default function Assessment() {
   const [questions, setQuestions] = useState<Question[]>([])
 
   const assessment = id ? getAssessmentById(id) : undefined
-  const { addCompletedAssessment } = useStore()
+  const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment)
 
   useEffect(() => {
     if (!assessment) {

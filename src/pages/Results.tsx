@@ -3,13 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Share2, RotateCcw, Download, Award, TrendingUp, Users, Lightbulb } from 'lucide-react'
 import confetti from 'canvas-confetti'
-import { useStore } from '@store'
+import { useAppStore } from '../store'
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts'
 
 export default function Results() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { completedAssessments } = useStore()
+  const completedAssessments = useAppStore((state) => state.completedAssessments)
 
   const latestResult = completedAssessments.find(
     (a) => a.assessmentId === id

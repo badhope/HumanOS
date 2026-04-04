@@ -1,4 +1,4 @@
-export type TemplateId = 'quiz' | 'corporate' | 'blog' | 'portfolio' | 'landing' | 'dashboard'
+export type TemplateId = 'quiz' | 'corporate' | 'blog' | 'portfolio' | 'landing' | 'dashboard' | 'ecommerce' | 'education' | 'social'
 
 export interface TemplateConfig {
   id: TemplateId
@@ -104,6 +104,51 @@ export const templates: TemplateConfig[] = [
       primaryColor: '#6366F1',
       accentColor: '#14B8A6',
       mode: 'light'
+    },
+    enabled: true
+  },
+  {
+    id: 'ecommerce',
+    name: '电商网站',
+    nameEn: 'E-commerce',
+    description: '现代化电商网站模板，展示商品、购物车、支付流程',
+    icon: '🛒',
+    features: ['商品展示', '购物车', '优惠券', '用户中心', '订单管理'],
+    pages: ['首页', '商品', '详情', '购物车', '订单', '用户'],
+    theme: {
+      primaryColor: '#EF4444',
+      accentColor: '#F97316',
+      mode: 'light'
+    },
+    enabled: true
+  },
+  {
+    id: 'education',
+    name: '教育平台',
+    nameEn: 'Education Platform',
+    description: '在线教育平台模板，支持课程、直播、作业和社区',
+    icon: '🎓',
+    features: ['课程展示', '视频播放', '作业系统', '社区讨论', '进度追踪'],
+    pages: ['首页', '课程', '学习', '社区', '作业', '个人'],
+    theme: {
+      primaryColor: '#0EA5E9',
+      accentColor: '#8B5CF6',
+      mode: 'light'
+    },
+    enabled: true
+  },
+  {
+    id: 'social',
+    name: '社交媒体',
+    nameEn: 'Social Media',
+    description: '社交媒体平台模板，支持动态发布、点赞、评论和消息',
+    icon: '💬',
+    features: ['动态信息流', '个人主页', '消息聊天', '关注系统', '内容分享'],
+    pages: ['首页', '动态', '消息', '通知', '个人', '搜索'],
+    theme: {
+      primaryColor: '#06B6D4',
+      accentColor: '#F472B6',
+      mode: 'auto'
     },
     enabled: true
   }
