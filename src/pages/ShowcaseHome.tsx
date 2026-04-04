@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import { useTemplateStore } from '../store/templateStore'
 import QuizShowcase from '../components/QuizShowcase'
+import Navbar from '../components/Navbar'
 
 const features = [
   {
@@ -109,6 +110,7 @@ function ShowcaseHome() {
 
   return (
     <div className="min-h-screen bg-slate-950">
+      <Navbar />
       <section className="relative min-h-screen flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-violet-900/20 to-slate-900" />
         
