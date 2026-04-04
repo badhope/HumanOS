@@ -106,7 +106,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
     )
   }
 
-  const renderFlipCardFront = () => (
+  const renderCardContent = () => (
     <div className="relative z-10">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -249,7 +249,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
               <div className={cn(!isFlipped ? 'block' : 'hidden')}>
-                {renderFlipCardFront()}
+                {renderCardContent()}
               </div>
               <div className={cn(isFlipped ? 'block' : 'hidden')} style={{ transform: 'rotateY(180deg)' }}>
                 {renderFlipCardBack()}
@@ -285,67 +285,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
           <div className={getCardClasses()}>
             {renderGlowEffect()}
 
-            <div className="relative z-10">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80">
-                    {assessment.category}
-                  </span>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-violet-500/20 to-pink-500/20 text-white">
-                    {difficultyLabels[assessment.difficulty]}
-                  </span>
-                </div>
-                <motion.div
-                  animate={{ rotate: isHovered ? 360 : 0 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <Sparkles className={cn(
-                    'w-5 h-5 transition-colors',
-                    isHovered ? 'text-violet-400' : 'text-white/40'
-                  )} />
-                </motion.div>
-              </div>
-
-              <motion.h3
-                className="text-xl font-bold text-white mb-2"
-                style={{ transform: 'translateZ(30px)' }}
-                animate={isHovered ? { scale: 1.02 } : { scale: 1 }}
-              >
-                {assessment.title}
-              </motion.h3>
-
-              <p className="text-white/60 text-sm mb-6 line-clamp-2">
-                {assessment.description}
-              </p>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <motion.div
-                    className="flex items-center gap-1 text-white/50"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <Clock className="w-4 h-4" />
-                    <span className="text-sm">{assessment.duration} 分钟</span>
-                  </motion.div>
-                  <motion.div
-                    className="flex items-center gap-1 text-white/50"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <BarChart3 className="w-4 h-4" />
-                    <span className="text-sm">{assessment.questions.length} 题</span>
-                  </motion.div>
-                </div>
-
-                <motion.div
-                  className="flex items-center gap-1 text-violet-400"
-                  animate={{ x: isHovered ? 5 : 0 }}
-                  transition={{ type: 'spring', stiffness: 400 }}
-                >
-                  <span className="text-sm font-medium">开始</span>
-                  <ChevronRight className="w-4 h-4" />
-                </motion.div>
-              </div>
-            </div>
+            {renderCardContent()}
           </div>
         </Link>
       </motion.div>

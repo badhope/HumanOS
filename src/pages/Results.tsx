@@ -90,6 +90,7 @@ export default function Results() {
           <button
             onClick={() => navigate('/dashboard')}
             className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-4"
+            type="button"
           >
             <ArrowLeft className="w-4 h-4" />
             返回仪表盘
@@ -110,19 +111,33 @@ export default function Results() {
               <button
                 onClick={() => navigate(`/assessment/${id}`)}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/80 hover:text-white hover:bg-white/10 transition-all"
+                type="button"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span className="hidden sm:inline">重新测试</span>
               </button>
               <button 
-                onClick={() => alert('分享功能开发中...')}
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: `我的${result.title}测评结果`,
+                      text: `我在HumanOS完成了${result.title}测评，结果是：${result.type}`,
+                      url: window.location.href
+                    }).catch(() => {})
+                  } else {
+                    navigator.clipboard.writeText(window.location.href)
+                    alert('链接已复制到剪贴板！')
+                  }
+                }}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/80 hover:text-white hover:bg-white/10 transition-all"
+                type="button"
               >
                 <Share2 className="w-4 h-4" />
               </button>
               <button 
                 onClick={() => window.print()}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/80 hover:text-white hover:bg-white/10 transition-all"
+                type="button"
               >
                 <Download className="w-4 h-4" />
               </button>

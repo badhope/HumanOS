@@ -93,7 +93,7 @@ export default function Home() {
                 <Sparkles className="w-5 h-5 text-violet-400" />
               </motion.div>
               <ShimmerText
-                text="全新升级 v2.0 · 30+ 专业测评"
+                text="v2.2.0 · 专业前端框架展示平台"
                 shimmerColor="rgba(139, 92, 246, 0.8)"
                 className="text-white/90 font-medium"
               />
@@ -306,6 +306,7 @@ export default function Home() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl glass bg-white/5 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-violet-500/50"
               whileFocus={{ scale: 1.02 }}
+              aria-label="搜索测评"
             />
           </motion.div>
 
@@ -336,6 +337,9 @@ export default function Home() {
                     ? 'bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg shadow-violet-500/25'
                     : 'glass text-white/60 hover:text-white hover:bg-white/10'
                 )}
+                aria-label={`筛选${category}类别`}
+                aria-pressed={selectedCategory === category}
+                type="button"
               >
                 {category}
                 {category !== '全部' && (

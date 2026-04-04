@@ -155,10 +155,7 @@ export default function Assessment() {
   }
 
   const handleBackToModes = () => {
-    setQuestions([])
-    setCurrentQuestion(0)
-    setAnswers([])
-    setSelectedOption(null)
+    navigate('/')
   }
 
   const isLastQuestion = questions.length > 0 && currentQuestion === questions.length - 1
@@ -175,6 +172,7 @@ export default function Assessment() {
           <button
             onClick={handleBackToModes}
             className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-4"
+            type="button"
           >
             <ArrowLeft className="w-4 h-4" />
             返回模式选择
@@ -236,6 +234,7 @@ export default function Assessment() {
                         ? 'border-violet-500 bg-violet-500/20'
                         : 'border-white/10 hover:border-white/30 bg-white/5'
                     )}
+                    type="button"
                   >
                     <div className="flex items-center gap-3">
                       <div
@@ -269,6 +268,7 @@ export default function Assessment() {
                 ? 'text-white/30 cursor-not-allowed'
                 : 'text-white hover:bg-white/10'
             )}
+            type="button"
           >
             <ArrowLeft className="w-4 h-4" />
             上一题
@@ -279,6 +279,7 @@ export default function Assessment() {
               onClick={handleSubmit}
               disabled={isSubmitting || !canProceed}
               className="flex items-center gap-2 px-8 py-3 rounded-xl font-medium bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+              type="button"
             >
               {isSubmitting ? (
                 <>
@@ -302,6 +303,7 @@ export default function Assessment() {
                   ? 'text-white hover:bg-white/10'
                   : 'text-white/30 cursor-not-allowed'
               )}
+              type="button"
             >
               下一题
               <ArrowRight className="w-4 h-4" />

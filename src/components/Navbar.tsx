@@ -6,7 +6,7 @@ import { cn } from '@utils/cn'
 
 const navItems = [
   { label: '首页', path: '/', icon: Brain },
-  { label: '测评', path: '/', icon: BarChart3 },
+  { label: '测评', path: '/#assessments', icon: BarChart3 },
   { label: '仪表盘', path: '/dashboard', icon: User },
   { label: '关于', path: '/about', icon: Info },
 ]
@@ -68,6 +68,7 @@ export default function Navbar() {
               className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
               aria-label={isOpen ? '关闭菜单' : '打开菜单'}
               aria-expanded={isOpen}
+              type="button"
             >
               {isOpen ? (
                 <X className="w-6 h-6 text-white" aria-hidden="true" />

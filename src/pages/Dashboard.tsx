@@ -224,6 +224,7 @@ export default function Dashboard() {
               <RippleButton
                 variant="ghost"
                 className="w-full mt-4 py-2 text-sm"
+                onClick={() => alert('成就系统开发中，敬请期待！')}
               >
                 查看全部成就
               </RippleButton>
@@ -429,6 +430,8 @@ export default function Dashboard() {
                             deleteAssessment(assessment.assessmentId, assessment.completedAt)
                           }
                           className="p-2 rounded-xl text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                          aria-label="删除此测评记录"
+                          type="button"
                         >
                           <Trash2 className="w-5 h-5" />
                         </motion.button>
