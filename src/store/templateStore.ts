@@ -13,8 +13,8 @@ interface TemplateState {
 export const useTemplateStore = create<TemplateState>()(
   persist(
     (set, get) => ({
-      currentTemplate: 'landing',
-      templateConfig: getTemplate('landing')!,
+      currentTemplate: 'quiz',
+      templateConfig: getTemplate('quiz')!,
       
       setTemplate: (id: TemplateId) => {
         const config = getTemplate(id)
