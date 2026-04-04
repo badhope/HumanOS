@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback } from 'react'
-import { motion, useSpring, useTransform } from 'framer-motion'
+import { motion, useSpring } from 'framer-motion'
 import { ReactNode } from 'react'
 
 interface Card3DProps {
@@ -18,7 +18,6 @@ export function Card3D({
   enabled = true,
 }: Card3DProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [isHovered, setIsHovered] = useState(false)
 
   const rotateX = useSpring(0, { stiffness: 300, damping: 30 })
   const rotateY = useSpring(0, { stiffness: 300, damping: 30 })
@@ -45,12 +44,10 @@ export function Card3D({
 
   const handleMouseEnter = useCallback(() => {
     if (!enabled) return
-    setIsHovered(true)
     scale.set(scaleFactor)
   }, [enabled, scaleFactor, scale])
 
   const handleMouseLeave = useCallback(() => {
-    setIsHovered(false)
     rotateX.set(0)
     rotateY.set(0)
     scale.set(1)
@@ -93,7 +90,6 @@ export function MagneticButton({
   onClick,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [isHovered, setIsHovered] = useState(false)
 
   const x = useSpring(0, { stiffness: 200, damping: 20 })
   const y = useSpring(0, { stiffness: 200, damping: 20 })
@@ -113,7 +109,6 @@ export function MagneticButton({
   )
 
   const handleMouseLeave = useCallback(() => {
-    setIsHovered(false)
     x.set(0)
     y.set(0)
   }, [x, y])
@@ -123,7 +118,6 @@ export function MagneticButton({
       ref={ref}
       style={{ x, y }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
       className={className}

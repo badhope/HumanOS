@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { motion, useSpring, useTransform } from 'framer-motion'
+import { motion, useSpring } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Clock, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
 import type { Assessment } from '../types'

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
+import { Sparkles, ChevronDown } from 'lucide-react'
 
 interface IntroPageProps {
   onEnter: () => void

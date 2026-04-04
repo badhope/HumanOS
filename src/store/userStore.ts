@@ -155,8 +155,6 @@ export const useUserStore = create<UserState>()(
         const categoryCount: Record<string, number> = {}
         categories.forEach(c => { categoryCount[c] = (categoryCount[c] || 0) + 1 })
 
-        const maxCategory = Object.entries(categoryCount).sort((a, b) => b[1] - a[1])[0]
-
         set((state) => ({
           profile: state.profile ? {
             ...state.profile,
@@ -180,7 +178,7 @@ export const useUserStore = create<UserState>()(
         }
       },
 
-      addPoints: (points) => set((state) => {
+      addPoints: (_points) => set((state) => {
         if (!state.profile) return state
         return state
       }),

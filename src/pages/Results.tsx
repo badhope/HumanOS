@@ -5,7 +5,6 @@ import { ArrowLeft, Share2, RotateCcw, Download, Award, TrendingUp, Users, Light
 import confetti from 'canvas-confetti'
 import { useStore } from '@store'
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts'
-import { cn } from '@utils/cn'
 
 export default function Results() {
   const { id } = useParams<{ id: string }>()
@@ -235,7 +234,7 @@ export default function Results() {
                       itemStyle={{ color: '#8b5cf6' }}
                     />
                     <Bar dataKey="score" radius={[0, 4, 4, 0]}>
-                      {barData.map((entry, index) => (
+                      {barData.map((_, index) => (
                         <Cell 
                           key={`cell-${index}`} 
                           fill={`hsl(${260 + index * 20}, 70%, 60%)`}

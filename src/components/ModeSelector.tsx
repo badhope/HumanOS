@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Zap, Shield, Crown, Lock } from 'lucide-react'
+import { Zap, Shield, Crown } from 'lucide-react'
 import { cn } from '../utils/cn'
 
 interface ModeSelectorProps {

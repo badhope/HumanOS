@@ -66,11 +66,13 @@ export default function Navbar() {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
+              aria-label={isOpen ? '关闭菜单' : '打开菜单'}
+              aria-expanded={isOpen}
             >
               {isOpen ? (
-                <X className="w-6 h-6 text-white" />
+                <X className="w-6 h-6 text-white" aria-hidden="true" />
               ) : (
-                <Menu className="w-6 h-6 text-white" />
+                <Menu className="w-6 h-6 text-white" aria-hidden="true" />
               )}
             </button>
           </div>

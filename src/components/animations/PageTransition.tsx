@@ -5,7 +5,6 @@ import {
   slideVariants,
   flipVariants,
   zoomVariants,
-  defaultTransition,
 } from '@utils/animation-config'
 
 type TransitionType = 'fade' | 'slideLeft' | 'slideRight' | 'slideUp' | 'slideDown' | 'flip' | 'zoom'

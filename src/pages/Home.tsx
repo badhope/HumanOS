@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Sparkles, Shield, Zap, Brain, Search, ChevronDown } from 'lucide-react'
 import AssessmentCard3D from '@components/AssessmentCard3D'
 import TypingEffect, { ShimmerText } from '@components/TypingEffect'
@@ -8,9 +8,6 @@ import { GlowCard, RippleButton, FadeInSection, AnimatedNumber } from '@componen
 import {
   staggerContainer,
   staggerItem,
-  fadeInUp,
-  floatVariants,
-  logoVariants,
 } from '@utils/animation-config'
 import { assessments, getAllCategories } from '@data/assessments'
 import { cn } from '@utils/cn'
@@ -248,7 +245,7 @@ export default function Home() {
               gradient: 'from-violet-500 to-pink-500',
               bgGradient: 'from-violet-500/20 to-pink-500/20',
             },
-          ].map((feature, index) => (
+          ].map((feature) => (
             <GlowCard
               key={feature.title}
               className="glass rounded-2xl p-6 border border-white/10"

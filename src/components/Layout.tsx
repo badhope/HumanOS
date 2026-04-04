@@ -1,4 +1,4 @@
-import { ReactNode, ComponentType } from 'react'
+import { ReactNode } from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import Background3D from './Background3D'

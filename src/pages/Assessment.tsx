@@ -63,33 +63,6 @@ export default function Assessment() {
     setSelectedOption(optionId)
   }
 
-  const handleConfirmAnswer = () => {
-    if (!selectedOption || !question) return
-
-    const newAnswer = createAnswer(question.id, selectedOption, question)
-
-    setAnswers(prevAnswers => {
-      const existingIndex = prevAnswers.findIndex(
-        (a) => a.questionId === question.id
-      )
-
-      if (existingIndex >= 0) {
-        const newAnswers = [...prevAnswers]
-        newAnswers[existingIndex] = newAnswer
-        return newAnswers
-      } else {
-        return [...prevAnswers, newAnswer]
-      }
-    })
-
-    if (currentQuestion < questions.length - 1) {
-      setTimeout(() => {
-        setCurrentQuestion(prev => prev + 1)
-        setSelectedOption(null)
-      }, 400)
-    }
-  }
-
   const handleSubmit = async () => {
     const finalAnswers = [...answers]
 

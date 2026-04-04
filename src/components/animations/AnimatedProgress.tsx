@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
-import { progressVariants } from '@utils/animation-config'
 
 interface AnimatedProgressProps {
   value: number

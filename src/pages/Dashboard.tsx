@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import {
   Calendar,
@@ -33,7 +33,7 @@ import {
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const { completedAssessments, deleteAssessment, user } = useStore()
+  const { completedAssessments, deleteAssessment } = useStore()
   const { profile, achievements, favorites, records, getStats } = useUserStore()
 
   const [showProfile, setShowProfile] = useState(false)

@@ -128,6 +128,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                     onChange={(e) => setEditData({ ...editData!, name: e.target.value })}
                     className="w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white mb-2 focus:outline-none focus:border-violet-500"
                     placeholder="你的昵称"
+                    aria-label="昵称"
                   />
                 ) : (
                   <h3 className="text-xl font-bold text-white mb-1">{profile.name}</h3>
