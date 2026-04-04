@@ -5,21 +5,21 @@ export default function About() {
   const features = [
     {
       icon: Shield,
-      title: '本地优先',
+      title: '现代化架构',
       description:
-        '所有数据存储在你的浏览器中，无需注册账号，无需联网即可使用。你的数据只属于你。',
+        '采用React 18 + TypeScript + Vite技术栈，构建高性能、可维护的企业级应用。',
     },
     {
       icon: Lock,
-      title: '隐私保护',
+      title: '设计系统',
       description:
-        '我们不上传任何个人数据到服务器。测评结果仅在本地生成和存储，完全保护你的隐私。',
+        '完整的UI组件库和设计规范，支持主题定制和响应式布局。',
     },
     {
       icon: Sparkles,
-      title: '科学方法',
+      title: '开发体验',
       description:
-        '测评内容基于心理学研究和标准化工具，确保结果的科学性和可靠性。',
+        '热重载、类型检查、代码格式化等完善的开发工具链，提升开发效率。',
     },
   ]
 
@@ -36,8 +36,8 @@ export default function About() {
             关于 HumanOS
           </h1>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            HumanOS 是一个本地优先的人格评估平台，帮助用户深入了解自己，
-            探索人格特质、认知风格和核心价值观。
+            HumanOS是一个专业的前端框架展示平台，演示现代Web开发的最佳实践，
+            为企业客户和开发者提供参考实现。
           </p>
         </motion.div>
 
@@ -107,7 +107,7 @@ export default function About() {
           <Github className="w-12 h-12 text-white/40 mx-auto mb-4" />
           <h2 className="text-2xl font-semibold text-white mb-4">开源项目</h2>
           <p className="text-white/60 mb-6 max-w-xl mx-auto">
-            HumanOS 是一个开源项目，欢迎贡献代码、提交 Issue 或提出改进建议。
+            HumanOS是一个开源的前端框架展示项目，欢迎企业客户和开发者参考使用。
           </p>
           <a
             href="https://github.com/badhope/HumanOS"

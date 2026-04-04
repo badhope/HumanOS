@@ -110,7 +110,7 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              探索
+              专业
             </motion.span>
             <motion.span
               className="inline-block text-gradient mx-3"
@@ -121,7 +121,7 @@ export default function Home() {
                 textShadow: '0 0 40px rgba(139, 92, 246, 0.5)',
               }}
             >
-              真实的
+              前端框架
             </motion.span>
             <motion.span
               className="inline-block text-white"
@@ -129,7 +129,7 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
             >
-              自我
+              展示平台
             </motion.span>
           </motion.h1>
 
@@ -138,7 +138,7 @@ export default function Home() {
             className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto mb-12 leading-relaxed"
           >
             <TypingEffect
-              text="通过科学的心理测评，深入了解你的人格特质、认知风格和价值观。涵盖人格心理、职业能力、人际关系、认知思维、健康生活、价值观、学科知识7大领域。"
+              text="展示现代Web开发的最佳实践，包含完整的UI组件库、设计系统、动画效果和性能优化方案。为企业客户提供生产级的前端架构参考。"
               speed={25}
               pauseDuration={500}
             />
@@ -180,9 +180,9 @@ export default function Home() {
             variants={staggerItem}
           >
             {[
-              { value: 30, suffix: '+', label: '专业测评' },
-              { value: 7, suffix: '', label: '知识领域' },
-              { value: 100, suffix: '%', label: '隐私保护' },
+              { value: 50, suffix: '+', label: 'UI组件' },
+              { value: 15, suffix: '+', label: '页面模板' },
+              { value: 100, suffix: '%', label: 'TypeScript' },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -226,22 +226,22 @@ export default function Home() {
           {[
             {
               icon: Shield,
-              title: '隐私保护',
-              description: '所有数据仅存储在本地，不上传任何服务器，完全保护隐私',
+              title: '现代化架构',
+              description: 'React 18 + TypeScript + Vite，构建高性能企业级应用',
               gradient: 'from-emerald-500 to-teal-500',
               bgGradient: 'from-emerald-500/20 to-teal-500/20',
             },
             {
               icon: Zap,
-              title: '即时反馈',
-              description: '完成测评后立即获得详细的结果分析和可视化报告',
+              title: '设计系统',
+              description: '完整的UI组件库，支持主题定制和响应式布局',
               gradient: 'from-orange-500 to-amber-500',
               bgGradient: 'from-orange-500/20 to-amber-500/20',
             },
             {
               icon: Brain,
-              title: '科学方法',
-              description: '基于心理学研究的标准化测评工具，涵盖7大知识领域',
+              title: '开发体验',
+              description: '热重载、类型检查、代码格式化，提升开发效率',
               gradient: 'from-violet-500 to-pink-500',
               bgGradient: 'from-violet-500/20 to-pink-500/20',
             },

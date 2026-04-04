@@ -12,7 +12,7 @@ export default function Footer() {
             <div className="flex items-center gap-2">
               <span className="text-lg font-bold text-gradient">HumanOS</span>
               <span className="text-white/40">|</span>
-              <span className="text-sm text-white/60">探索真实的自我</span>
+              <span className="text-sm text-white/60">专业前端框架展示平台</span>
             </div>
 
             {/* Links */}
