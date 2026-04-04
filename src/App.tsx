@@ -11,6 +11,7 @@ const Results = lazy(() => import('./pages/Results'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const About = lazy(() => import('./pages/About'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const TutorialPage = lazy(() => import('./pages/TutorialPage'))
 
 const CorporateHome = lazy(() => import('./templates/corporate/CorporateHome'))
 const BlogHome = lazy(() => import('./templates/blog/BlogHome'))
@@ -28,6 +29,7 @@ function TemplateRouter() {
           <Route path="/results/:id" element={<Results />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       )
@@ -38,6 +40,7 @@ function TemplateRouter() {
           <Route path="/" element={<CorporateHome />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       )
@@ -48,6 +51,7 @@ function TemplateRouter() {
           <Route path="/" element={<BlogHome />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       )
@@ -58,6 +62,7 @@ function TemplateRouter() {
           <Route path="/" element={<PortfolioHome />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       )
@@ -70,6 +75,7 @@ function TemplateRouter() {
           <Route path="/" element={<ShowcaseHome />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
+          <Route path="/tutorial" element={<TutorialPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       )

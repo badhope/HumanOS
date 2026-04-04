@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Sparkles, Layout, Home, Info, BarChart3 } from 'lucide-react'
+import { Menu, X, Sparkles, Layout, Home, Info, BarChart3, BookOpen } from 'lucide-react'
 import { useTemplateStore } from '../../store/templateStore'
 import { TemplateSelector } from './TemplateSelector'
 import { cn } from '../../utils/cn'
@@ -15,6 +15,7 @@ export function SharedNavbar() {
   const navItems = [
     { label: '首页', path: '/', icon: Home },
     { label: '模板', path: '#templates', icon: Layout, onClick: () => setShowTemplateSelector(true) },
+    { label: '教程', path: '/tutorial', icon: BookOpen },
     { label: '仪表盘', path: '/dashboard', icon: BarChart3 },
     { label: '关于', path: '/about', icon: Info },
   ]
