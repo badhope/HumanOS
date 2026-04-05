@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/badhope/HumanOS">
-    <img src="https://img.shields.io/badge/Version-v2.2.1-61dafb?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/Version-v2.3.0-61dafb?style=for-the-badge" alt="Version">
   </a>
   <a href="https://creativecommons.org/licenses/by-nc/4.0/">
     <img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue?style=for-the-badge" alt="License">
@@ -20,6 +20,9 @@
   </a>
   <a href="./TEMPLATE_GUIDE.md">
     <img src="https://img.shields.io/badge/Template-Available-brightgreen?style=for-the-badge" alt="Template">
+  </a>
+  <a href="https://humanos.dpdns.org/">
+    <img src="https://img.shields.io/badge/Demo-Live-success?style=for-the-badge" alt="Demo">
   </a>
 </p>
 
@@ -99,7 +102,46 @@ HumanOS serves as a **demonstration platform** for:
 
 ---
 
-## 🆕 Latest Update (v2.2.1)
+## 🆕 Latest Update (v2.3.0)
+
+### 🎉 Major Features
+
+#### 📊 Three-Tier Assessment System
+- ✅ **基础版 (Basic)** - 10+ questions, quick assessment
+- ✅ **进阶版 (Advanced)** - 50% of professional questions, balanced depth
+- ✅ **专业版 (Professional)** - Complete question bank, comprehensive analysis
+
+#### 🌐 Custom Domain Support
+- ✅ Configured custom domain: `humanos.dpdns.org`
+- ✅ Updated all meta tags and structured data
+- ✅ Enhanced SEO with custom domain
+
+#### 📦 Deployment Package
+- ✅ Created standalone deployment package (`HumanOS-web-deploy`)
+- ✅ Ready-to-deploy static files
+- ✅ Comprehensive deployment documentation
+
+#### 🎯 Enhanced Question Banks
+
+| Assessment | Basic | Advanced | Professional |
+|------------|-------|----------|--------------|
+| **MBTI** | 18 Q | 47 Q | 93 Q |
+| **Big Five** | 10 Q | 25 Q | 50 Q |
+| **EQ** | 10 Q | 25 Q | 50 Q |
+| **Holland** | 10 Q | 25 Q | 50 Q |
+| **Attachment** | 10 Q | 25 Q | 50 Q |
+| **SAS** | 10 Q | 25 Q | 50 Q |
+| **Political Ideology** | 12 Q | 29 Q | 60 Q |
+
+### 🔧 Technical Improvements
+- ✅ Optimized build configuration for production
+- ✅ Enhanced GitHub Actions deployment workflow
+- ✅ Improved code splitting and lazy loading
+- ✅ Updated dependencies to latest versions
+
+---
+
+## Previous Update (v2.2.1)
 
 ### 🐛 Bug Fixes & Accessibility
 
@@ -228,6 +270,21 @@ npm run build
 # Preview build
 npm run preview
 ```
+
+### Deployment
+
+```bash
+# Deploy to GitHub Pages (automatic via GitHub Actions)
+git push origin main
+
+# Or use the deployment package
+# Upload HumanOS-web-deploy folder to any web server
+```
+
+### Live Demo
+
+- **Custom Domain**: [https://humanos.dpdns.org/](https://humanos.dpdns.org/)
+- **GitHub Pages**: [https://badhope.github.io/HumanOS/](https://badhope.github.io/HumanOS/)
 
 ### Code Quality
 
