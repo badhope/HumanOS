@@ -41,7 +41,7 @@ export default function Assessment() {
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false)
   const [isTimeout, setIsTimeout] = useState(false)
   
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isInitializedRef = useRef(false)
 
   const mode = searchParams.get('mode') || 'normal'
