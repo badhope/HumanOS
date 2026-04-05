@@ -2,7 +2,7 @@
 <!-- Professional Frontend Framework Showcase Platform -->
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=50&duration=4000&pause=1000&color=61DAFB&background=0F0F23&center=true&vCenter=true&multiline=true&width=900&height=100&lines=HumanOS%20~%20Frontend%20Framework%20Showcase" alt="HumanOS">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=50&duration=4000&pause=1000&color=61DAFB&background=0F0F23&center=true&vCenter=true&multiline=true&width=900&height=100&lines=HumanOS%20~%20Professional%20Assessment%20Platform" alt="HumanOS">
 </p>
 
 <p align="center">
@@ -53,7 +53,7 @@
 ║      ╚████╔╝ ╚██████╔╝██████╔╝███████╗██║ ╚████║╚██████╔╝██║██║ ╚████║    ║
 ║       ╚═══╝   ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝╚═╝  ╚═══╝    ║
 ║                                                                                ║
-║                🎭  Professional Frontend Framework Showcase  🎭                              ║
+║                🎭  Professional Assessment Platform  🎭                              ║
 ║                                                                                ║
 ╚══════════════════════════════════════════════════════════════════════════════════════╝
 ```
@@ -64,26 +64,26 @@
 
 ## 🎯 What is HumanOS?
 
-**HumanOS** is a professional frontend framework showcase platform that demonstrates modern web development capabilities through a fully-featured personality assessment application.
+**HumanOS** is a professional online assessment platform that provides comprehensive psychological, personality, career, and cognitive evaluations.
 
-> *"Experience the power of modern frontend technologies in action."*
+> *"Discover yourself through scientific assessments."*
 
 ### 🎯 Project Positioning
 
-HumanOS serves as a **demonstration platform** for:
-- 🏢 **Enterprise Clients** - Showcase of production-ready frontend architecture
-- 👨‍💻 **Developers** - Reference implementation of modern React best practices
-- 🎓 **Educational Institutions** - Teaching tool for advanced frontend development
-- 🚀 **Framework Evaluation** - Real-world example for technology assessment
+HumanOS serves as a **professional assessment platform** for:
+- 👤 **Individuals** - Self-discovery and personal development
+- 🏢 **Organizations** - Talent assessment and team building
+- 🎓 **Educational Institutions** - Student guidance and career planning
+- 🏥 **Healthcare** - Psychological screening and mental health support
 
 ### Key Philosophy
 
 | Principle | Description |
 |-----------|-------------|
-| 🏗️ **Architecture Excellence** | Production-grade code structure and patterns |
-| 🎨 **UI/UX Showcase** | Modern design systems and interaction patterns |
-| ⚡ **Performance First** | Optimized for speed and user experience |
-| 🔧 **Developer Experience** | Clean code, comprehensive documentation |
+| 🧠 **Scientific Basis** | All assessments based on validated psychological theories |
+| 📊 **Comprehensive Analysis** | Multi-dimensional evaluation with detailed insights |
+| 🎯 **Three-Tier System** | Basic, Advanced, and Professional versions for all needs |
+| 🔒 **Privacy First** | All data stored locally, complete privacy protection |
 
 ---
 
@@ -91,14 +91,16 @@ HumanOS serves as a **demonstration platform** for:
 
 | Feature | Description | Status |
 |---------|-------------|--------|
-| 🏗️ **Modern Architecture** | React 18 + TypeScript + Vite stack | ✅ |
-| 🎨 **Design System** | Comprehensive UI components and patterns | ✅ |
-| ⚡ **High Performance** | Lazy loading, code splitting, optimized builds | ✅ |
-| 🌐 **Responsive Design** | Perfect on desktop, tablet, and mobile | ✅ |
-| 🎭 **3D Visual Effects** | Three.js powered immersive experiences | ✅ |
-| 📊 **Data Visualization** | Recharts integration for analytics | ✅ |
-| 🔧 **Developer Tools** | Hot reload, TypeScript, ESLint, Prettier | ✅ |
-| 📚 **Documentation** | Comprehensive guides and API docs | ✅ |
+| 🧠 **Personality Assessments** | MBTI, Big Five, Enneagram, and more | ✅ |
+| 💼 **Career Evaluations** | Holland Code, Leadership Style, Career Values | ✅ |
+| 💑 **Relationship Tests** | Attachment Style, Communication Style | ✅ |
+| 🎓 **Cognitive Assessments** | Learning Style, Critical Thinking, IQ Tests | ✅ |
+| 💪 **Mental Health** | Anxiety, Depression, EQ, Stress Management | ✅ |
+| 📊 **Three-Tier System** | Basic (10+ Q), Advanced (50%), Professional (100%) | ✅ |
+| 🎨 **Modern UI** | Beautiful, responsive, and accessible design | ✅ |
+| 📱 **Cross-Platform** | Works on desktop, tablet, and mobile | ✅ |
+| 🔒 **Privacy Protected** | All data stored locally, no server upload | ✅ |
+| 📈 **Detailed Reports** | Visual charts, personalized analysis, and recommendations | ✅ |
 
 ---
 
@@ -206,27 +208,25 @@ HumanOS serves as a **demonstration platform** for:
 
 ---
 
-## 🎨 Use as Template
+## 🎨 Use Cases
 
-**HumanOS** can be used as a project template for:
+**HumanOS** can be used for:
 
-- 🎓 **Graduation Projects** - Complete thesis support, defense materials
-- 🏢 **Enterprise Applications** - Internal assessments, talent management
-- 👤 **Personal Projects** - Learning, prototyping, portfolio
+- 👤 **Personal Development** - Self-discovery, career planning, relationship improvement
+- 🏢 **Organizations** - Talent assessment, team building, employee development
+- 🎓 **Education** - Student guidance, career counseling, learning style assessment
+- 🏥 **Healthcare** - Psychological screening, mental health support, patient assessment
+- 🔬 **Research** - Data collection, psychological studies, behavioral analysis
 
-### Quick Template Setup
+### Quick Start
 
-```bash
-# Initialize with interactive prompts
-npm run init
+1. **Choose Assessment** - Browse categories and select a test
+2. **Select Version** - Basic, Advanced, or Professional
+3. **Complete Questions** - Answer honestly for accurate results
+4. **View Results** - Get detailed analysis and recommendations
+5. **Save & Share** - Export or share your results
 
-# Or use preset templates
-npm run template:graduation  # For graduation projects
-npm run template:enterprise  # For enterprise apps
-npm run template:personal    # For personal projects
-```
-
-📖 **See [Template Guide](./TEMPLATE_GUIDE.md) for detailed instructions**
+📖 **See [User Guide](./USER_GUIDE.md) for detailed instructions**
 
 ---
 
@@ -400,20 +400,23 @@ HumanOS/
 │                           Assessment Flow                                      │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  1️⃣  Select Assessment                                                        │
-│      └─► Browse categories, select test                                        │
+│  1️⃣  Choose Assessment                                                        │
+│      └─► Browse 6+ categories, 20+ assessments                                 │
 │                                                                              │
-│  2️⃣  Complete Questions                                                       │
-│      └─► Answer questions, track progress                                       │
+│  2️⃣  Select Version                                                           │
+│      └─► Basic (10+ Q), Advanced (50%), Professional (100%)                   │
 │                                                                              │
-│  3️⃣  Calculate Results                                                        │
-│      └─► Score calculation, dimension analysis                                  │
+│  3️⃣  Complete Questions                                                       │
+│      └─► Answer honestly, track progress                                       │
 │                                                                              │
-│  4️⃣  Generate Report                                                          │
-│      └─► Visual charts, detailed analysis                                      │
+│  4️⃣  Calculate Results                                                        │
+│      └─► Scientific algorithms, multi-dimensional analysis                     │
 │                                                                              │
-│  5️⃣  Save & Share                                                            │
-│      └─► Local storage, export options                                         │
+│  5️⃣  View Report                                                              │
+│      └─► Visual charts, detailed insights, recommendations                     │
+│                                                                              │
+│  6️⃣  Save & Share                                                             │
+│      └─► Local storage, export PDF, share results                              │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -459,19 +462,19 @@ See [LICENSE](LICENSE) for details.
 
 ## 🙏 Acknowledgments
 
-### Inspiration
-- Psychological assessment theory and practice
-- Modern frontend technology community
+### Scientific Foundation
+- Psychological assessment theories and validated instruments
+- Research in personality psychology and behavioral science
 
 ### Open Source Projects
-- [React](https://reactjs.org/)
-- [Vite](https://vitejs.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [Three.js](https://threejs.org/)
+- [React](https://reactjs.org/) - UI framework
+- [Vite](https://vitejs.dev/) - Build tool
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Framer Motion](https://www.framer.com/motion/) - Animations
+- [Recharts](https://recharts.org/) - Data visualization
 
 ### Special Thanks
-Thanks to all contributors!
+Thanks to all contributors and the psychological assessment community!
 
 ---
 
@@ -479,46 +482,47 @@ Thanks to all contributors!
 
 ### Platform Expansion
 
-HumanOS is evolving into a comprehensive **frontend framework ecosystem**:
+HumanOS is evolving into a comprehensive **assessment ecosystem**:
 
-#### 📱 Upcoming Software Products
+#### 📱 Upcoming Features
 
-| Product | Description | Status |
+| Feature | Description | Status |
 |---------|-------------|--------|
-| 🎨 **HumanOS Designer** | Visual design tool for UI components | 🔬 Planning |
-| 📊 **HumanOS Analytics** | Real-time analytics dashboard | 🔬 Planning |
-| 🤖 **HumanOS AI Assistant** | AI-powered development assistant | 🔬 Planning |
-| 📱 **HumanOS Mobile** | React Native mobile application | 🔬 Planning |
-| 🔌 **HumanOS Plugins** | Plugin system for extensibility | 🔬 Planning |
+| 🌍 **Multi-language Support** | i18n for global users | 🔬 Planning |
+| 📊 **Advanced Analytics** | AI-powered insights and trends | 🔬 Planning |
+| 🤝 **Team Assessments** | Group evaluation and comparison | 🔬 Planning |
+| 📱 **Mobile App** | Native iOS and Android apps | 🔬 Planning |
+| 🔗 **API Access** | RESTful API for integration | 🔬 Planning |
+| 🏆 **Certification System** | Verified assessment certificates | 🔬 Planning |
 
-#### 🌐 Platform Development
+#### 🎯 Assessment Expansion
 
-| Feature | Description | Timeline |
-|---------|-------------|----------|
-| **Multi-language Support** | i18n for global users | Q2 2026 |
-| **Cloud Sync** | Cross-device data synchronization | Q3 2026 |
-| **API Platform** | RESTful API for third-party integration | Q3 2026 |
-| **Enterprise Edition** | Advanced features for organizations | Q4 2026 |
-| **Marketplace** | Community-driven component marketplace | Q1 2027 |
+| Category | New Tests | Timeline |
+|----------|-----------|----------|
+| **Personality** | DISC, StrengthsFinder, VIA Character | Q2 2026 |
+| **Career** | Skills Assessment, Job Fit, Work Values | Q2 2026 |
+| **Cognitive** | Memory Tests, Attention Span, Problem Solving | Q3 2026 |
+| **Health** | Sleep Quality, Burnout Risk, Resilience | Q3 2026 |
+| **Education** | Study Skills, Academic Motivation, Test Anxiety | Q4 2026 |
 
 #### 🔧 Technical Improvements
 
-- **Micro-frontend Architecture** - Modular application structure
-- **Server Components** - React Server Components support
-- **Edge Computing** - CDN-edge deployment optimization
-- **AI Integration** - Machine learning powered features
-- **Blockchain** - Decentralized identity verification
+- **AI Integration** - Personalized recommendations and insights
+- **Cloud Sync** - Cross-device data synchronization
+- **Offline Mode** - Complete assessments without internet
+- **Export Options** - PDF reports, data export, integration APIs
+- **Accessibility** - Enhanced support for users with disabilities
 
 ### 🤝 Partnership Opportunities
 
 We're actively seeking partnerships with:
 
-- 🏢 **Enterprise Clients** - Custom development and licensing
+- 🏢 **Organizations** - Custom assessment solutions
 - 🎓 **Educational Institutions** - Curriculum integration
-- 🏭 **Technology Companies** - Strategic partnerships
-- 🌍 **Open Source Communities** - Collaborative development
+- 🏥 **Healthcare Providers** - Clinical assessment tools
+- 🔬 **Research Institutions** - Collaborative studies
 
-For partnership inquiries: [partnerships@humanos.dev](mailto:partnerships@humanos.dev)
+For partnership inquiries: [contact@humanos.dev](mailto:contact@humanos.dev)
 
 ---
 
