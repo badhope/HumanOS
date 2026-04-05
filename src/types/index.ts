@@ -8,6 +8,94 @@ export interface Assessment {
   questions: Question[]
   resultCalculator: (answers: Answer[]) => AssessmentResult
   cardStyle?: 'default' | 'flip' | 'glow'
+  professionalQuestions?: ProfessionalQuestionSet
+  professionalCalculator?: (answers: Answer[], mode: string) => ProfessionalAssessmentResult
+}
+
+export interface ProfessionalQuestionSet {
+  normal: ProfessionalQuestion[]
+  advanced: ProfessionalQuestion[]
+  professional: ProfessionalQuestion[]
+}
+
+export interface ProfessionalQuestion {
+  id: string
+  text: string
+  type: 'single' | 'multiple' | 'scale' | 'ranking'
+  options: ProfessionalOption[]
+  category?: string
+  subscale?: string
+  reverseScored?: boolean
+  normGroup?: string
+}
+
+export interface ProfessionalOption {
+  id: string
+  text: string
+  value: number
+  trait?: string
+  dimension?: string
+}
+
+export interface ProfessionalAssessmentResult extends AssessmentResult {
+  mode: 'normal' | 'advanced' | 'professional'
+  standardScore?: number
+  percentileRank?: number
+  confidenceInterval?: {
+    lower: number
+    upper: number
+    level: number
+  }
+  reliability?: {
+    cronbachAlpha: number
+    testRetest?: number
+  }
+  validity?: {
+    constructValidity: number
+    criterionValidity: number
+  }
+  normComparison?: {
+    population: string
+    mean: number
+    sd: number
+    percentile: number
+  }
+  clinicalInterpretation?: string
+  diagnosticIndicators?: string[]
+  interventionRecommendations?: string[]
+  references?: string[]
+  subscaleScores?: Record<string, SubscaleScore>
+  profileAnalysis?: Record<string, any>
+  riskAssessment?: RiskAssessment
+  tertiaryType?: {
+    code: string
+    title: string
+    description: string
+  }
+}
+
+export interface SubscaleScore {
+  rawScore: number
+  maxScore: number
+  standardScore: number
+  percentile: number
+  level: 'very_low' | 'low' | 'average' | 'high' | 'very_high'
+  interpretation: string
+}
+
+export interface ProfileDimension {
+  score: number
+  percentile: number
+  level: string
+  description: string
+  clinicalSignificance?: string
+}
+
+export interface RiskAssessment {
+  level: 'minimal' | 'low' | 'moderate' | 'high' | 'severe'
+  indicators: string[]
+  recommendations: string[]
+  requiresFollowUp: boolean
 }
 
 export interface Question {
@@ -30,20 +118,106 @@ export interface Answer {
   selectedOptions: string[]
   value?: number
   trait?: string
+  dimension?: string
+  subscale?: string
+  isCorrect?: boolean
 }
 
 export interface AssessmentResult {
   type: string
   title: string
   description: string
-  traits: TraitScore[]
-  details: {
-    strengths: string[]
-    weaknesses: string[]
-    careers: string[]
-    relationships: string
+  score: number
+  accuracy: number
+  dimensions: Dimension[]
+  strengths: string[]
+  weaknesses: string[]
+  careers: string[]
+  suggestions?: string[]
+  
+  cognitiveFunctions?: {
+    dominant: string
+    auxiliary: string
+    tertiary: string
+    inferior: string
   }
-  scores: Record<string, number>
+  
+  relationships?: string
+  learning?: string
+  
+  profileAnalysis?: {
+    openness?: DimensionDetail
+    conscientiousness?: DimensionDetail
+    extraversion?: DimensionDetail
+    agreeableness?: DimensionDetail
+    neuroticism?: DimensionDetail
+  }
+  
+  cognitiveProfile?: {
+    logical: string
+    spatial: string
+    verbal: string
+    memory: string
+  }
+  
+  iqRange?: string
+  percentile?: string
+  
+  eqDimensions?: {
+    selfAwareness: string
+    selfManagement: string
+    socialAwareness: string
+    relationshipManagement: string
+  }
+  
+  eqRange?: string
+  improvementAreas?: string[]
+  
+  hollandCode?: string
+  primaryType?: {
+    code: string
+    title: string
+    description: string
+  }
+  secondaryType?: {
+    code: string
+    title: string
+    description: string
+  }
+  workEnvironment?: string
+  workStyle?: string
+  
+  traits?: TraitScore[]
+  details?: {
+    strengths?: string[]
+    weaknesses?: string[]
+    careers?: string[]
+    relationships?: string
+    [key: string]: unknown
+  }
+  scores?: Record<string, number>
+}
+
+export interface Dimension {
+  name: string
+  score: number
+  maxScore?: number
+  description: string
+  clarity?: number
+  tScore?: number
+  level?: string
+  percentile?: number
+  confidenceInterval?: {
+    lower: number
+    upper: number
+    level: number
+  }
+}
+
+export interface DimensionDetail {
+  score: number
+  level: string
+  description: string
 }
 
 export interface TraitScore {
@@ -68,6 +242,7 @@ export interface CompletedAssessment {
   completedAt: Date
   result: AssessmentResult
   answers: Answer[]
+  mode?: string
 }
 
 export interface NavItem {

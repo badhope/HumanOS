@@ -102,6 +102,7 @@ interface FadeInSectionProps {
   className?: string
   delay?: number
   direction?: 'up' | 'down' | 'left' | 'right'
+  id?: string
 }
 
 export function FadeInSection({
@@ -109,6 +110,7 @@ export function FadeInSection({
   className = '',
   delay = 0,
   direction = 'up',
+  id,
 }: FadeInSectionProps) {
   const directionOffset = {
     up: { y: 40 },
@@ -119,6 +121,7 @@ export function FadeInSection({
 
   return (
     <motion.div
+      id={id}
       initial={{
         opacity: 0,
         ...directionOffset[direction],

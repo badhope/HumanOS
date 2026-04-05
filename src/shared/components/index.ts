@@ -1,7 +1,0 @@
-export { TemplateSelector } from './TemplateSelector'
-export { SharedNavbar } from './SharedNavbar'
-export { SharedFooter } from './SharedFooter'
-export { CodeBlock } from './CodeBlock'
-export { TechStackShowcase } from './TechStackShowcase'
-export { AnimationShowcase } from './AnimationShowcase'
-export { FeatureAreaExplanation } from './FeatureAreaExplanation'

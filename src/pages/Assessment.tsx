@@ -1,38 +1,172 @@
-import { useState, useEffect, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, Home } from 'lucide-react'
 import { getAssessmentById } from '@data/assessments'
 import { useAppStore } from '../store'
-import type { Answer, Question } from '../types'
+import type { Answer, Question, ProfessionalQuestion } from '../types'
 import { cn } from '@utils/cn'
+import AnswerSheet from '@components/AnswerSheet'
+import { calculateProfessionalResult } from '@utils/professionalCalculators'
+import {
+  mbtiProfessionalQuestions,
+  bigFiveProfessionalQuestions,
+  sasProfessionalQuestions,
+  eqProfessionalQuestions,
+  hollandProfessionalQuestions,
+  ecrProfessionalQuestions,
+  mlqProfessionalQuestions,
+  kolbProfessionalQuestions,
+  pssProfessionalQuestions,
+  watsonGlaserQuestions,
+  iqProfessionalQuestions,
+  politicalIdeologyQuestions,
+  sdsProfessionalQuestions,
+} from '@data/professional'
+
+const QUESTION_TIME_LIMIT = 30
 
 export default function Assessment() {
   const { id } = useParams<{ id: string }>()
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Answer[]>([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [questions, setQuestions] = useState<Question[]>([])
+  const [showAnswerSheet, setShowAnswerSheet] = useState(false)
+  const [timeLeft, setTimeLeft] = useState(QUESTION_TIME_LIMIT)
+  const [showExitConfirm, setShowExitConfirm] = useState(false)
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false)
+  const [isTimeout, setIsTimeout] = useState(false)
+  
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const isInitializedRef = useRef(false)
 
-  const assessment = id ? getAssessmentById(id) : undefined
+  const mode = searchParams.get('mode') || 'normal'
+  const assessment = useMemo(() => id ? getAssessmentById(id) : undefined, [id])
   const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment)
+
+  const getProfessionalQuestions = useCallback((assessmentId: string): ProfessionalQuestion[] => {
+    const questionSets: Record<string, ProfessionalQuestion[]> = {
+      'mbti-standard': mbtiProfessionalQuestions.professional,
+      'mbti': mbtiProfessionalQuestions.professional,
+      'big-five': bigFiveProfessionalQuestions.professional,
+      'bigfive': bigFiveProfessionalQuestions.professional,
+      'anxiety-scale': sasProfessionalQuestions.professional,
+      'anxiety': sasProfessionalQuestions.professional,
+      'emotional-intelligence': eqProfessionalQuestions.professional,
+      'eq-test': eqProfessionalQuestions.professional,
+      'holland-career': hollandProfessionalQuestions.professional,
+      'holland': hollandProfessionalQuestions.professional,
+      'attachment-style': ecrProfessionalQuestions.professional,
+      'attachment': ecrProfessionalQuestions.professional,
+      'leadership-style': mlqProfessionalQuestions.professional,
+      'leadership': mlqProfessionalQuestions.professional,
+      'learning-style': kolbProfessionalQuestions.professional,
+      'critical-thinking': watsonGlaserQuestions.professional,
+      'stress-management': pssProfessionalQuestions.professional,
+      'iq-test': iqProfessionalQuestions.professional,
+      'iq': iqProfessionalQuestions.professional,
+      'political-ideology': politicalIdeologyQuestions.professional,
+      'political': politicalIdeologyQuestions.professional,
+      'sds-depression': sdsProfessionalQuestions.professional,
+      'sds': sdsProfessionalQuestions.professional,
+    }
+    return questionSets[assessmentId] || []
+  }, [])
+
+  const convertProfessionalToQuestion = useCallback((pq: ProfessionalQuestion): Question => {
+    return {
+      id: pq.id,
+      text: pq.text,
+      type: pq.type === 'ranking' ? 'single' : pq.type,
+      options: pq.options.map(opt => ({
+        id: opt.id,
+        text: opt.text,
+        value: opt.value,
+        trait: opt.trait,
+      })),
+    }
+  }, [])
 
   useEffect(() => {
     if (!assessment) {
       navigate('/')
+      return
     }
-  }, [assessment, navigate])
+
+    if (isInitializedRef.current) return
+    isInitializedRef.current = true
+
+    let selectedQuestions: Question[] = []
+
+    if (mode === 'professional') {
+      const professionalQuestions = getProfessionalQuestions(assessment.id)
+      if (professionalQuestions.length > 0) {
+        selectedQuestions = professionalQuestions.map(convertProfessionalToQuestion)
+      } else {
+        selectedQuestions = assessment.questions
+      }
+    } else {
+      let questionCount = assessment.questions.length
+      if (mode === 'normal') {
+        questionCount = Math.ceil(assessment.questions.length * 0.5)
+      } else if (mode === 'advanced') {
+        questionCount = Math.ceil(assessment.questions.length * 0.75)
+      }
+      selectedQuestions = assessment.questions.slice(0, questionCount)
+    }
+
+    const uniqueQuestions = selectedQuestions.filter((q, index, self) => 
+      index === self.findIndex(t => t.id === q.id)
+    )
+    
+    setQuestions(uniqueQuestions)
+    setCurrentQuestion(0)
+    setAnswers([])
+    setSelectedOption(null)
+    setTimeLeft(QUESTION_TIME_LIMIT)
+  }, [assessment, mode, navigate, getProfessionalQuestions, convertProfessionalToQuestion])
 
   useEffect(() => {
-    if (assessment) {
-      setQuestions(assessment.questions)
-      setCurrentQuestion(0)
-      setAnswers([])
+    if (questions.length === 0 || isTimeout) return
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+    }
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          if (timerRef.current) {
+            clearInterval(timerRef.current)
+          }
+          setIsTimeout(true)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+      }
+    }
+  }, [currentQuestion, questions.length, isTimeout])
+
+  useEffect(() => {
+    if (questions.length === 0) return
+    
+    const current = answers.find(a => a.questionId === questions[currentQuestion]?.id)
+    if (current) {
+      setSelectedOption(current.selectedOptions[0] || null)
+    } else {
       setSelectedOption(null)
     }
-  }, [assessment])
+  }, [answers, questions, currentQuestion])
 
   const createAnswer = useCallback((questionId: string, optionId: string, question: Question): Answer => {
     const selectedOpt = question.options.find((o) => o.id === optionId)
@@ -44,153 +178,141 @@ export default function Assessment() {
     }
   }, [])
 
-  const getCurrentAnswer = useCallback(() => {
-    if (!questions.length) return null
-    return answers.find(a => a.questionId === questions[currentQuestion]?.id)
-  }, [answers, questions, currentQuestion])
-
-  useEffect(() => {
-    const currentAnswer = getCurrentAnswer()
-    setSelectedOption(currentAnswer?.selectedOptions[0] || null)
-  }, [currentQuestion, getCurrentAnswer])
-
-  if (!assessment) return null
-
-  const question = questions[currentQuestion]
-  const progress = questions.length > 0 ? ((currentQuestion + 1) / questions.length) * 100 : 0
-
-  const handleOptionSelect = (optionId: string) => {
+  const handleOptionSelect = useCallback((optionId: string) => {
     setSelectedOption(optionId)
-  }
-
-  const handleSubmit = async () => {
-    const finalAnswers = [...answers]
-
-    if (selectedOption && question) {
-      const currentAnswer = createAnswer(question.id, selectedOption, question)
-
-      const existingIndex = finalAnswers.findIndex(a => a.questionId === question.id)
-      if (existingIndex >= 0) {
-        finalAnswers[existingIndex] = currentAnswer
-      } else {
-        finalAnswers.push(currentAnswer)
-      }
-    }
-
-    const completeAnswers = questions.map((q) => {
-      const existing = finalAnswers.find((a) => a.questionId === q.id)
-      if (existing) return existing
-      const firstOption = q.options[0]
-      return {
-        questionId: q.id,
-        selectedOptions: [firstOption.id],
-        value: firstOption.value,
-        trait: firstOption.trait,
-      }
+    
+    setAnswers(prev => {
+      const question = questions[currentQuestion]
+      if (!question) return prev
+      
+      const newAnswer = createAnswer(question.id, optionId, question)
+      const filtered = prev.filter(a => a.questionId !== question.id)
+      return [...filtered, newAnswer]
     })
+    
+    setTimeLeft(QUESTION_TIME_LIMIT)
+  }, [questions, currentQuestion, createAnswer])
 
-    setIsSubmitting(true)
-
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-
-    const result = assessment.resultCalculator(completeAnswers)
-
-    addCompletedAssessment({
-      assessmentId: assessment.id,
-      completedAt: new Date(),
-      result,
-      answers: completeAnswers,
-    })
-
-    navigate(`/results/${assessment.id}`)
-  }
-
-  const handleNext = () => {
-    if (selectedOption && question) {
-      const newAnswer = createAnswer(question.id, selectedOption, question)
-
-      setAnswers(prevAnswers => {
-        const existingIndex = prevAnswers.findIndex(
-          (a) => a.questionId === question.id
-        )
-
-        if (existingIndex >= 0) {
-          const newAnswers = [...prevAnswers]
-          newAnswers[existingIndex] = newAnswer
-          return newAnswers
-        } else {
-          return [...prevAnswers, newAnswer]
-        }
-      })
-    }
-
+  const handleNext = useCallback(() => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(prev => prev + 1)
-      setSelectedOption(null)
+      setTimeLeft(QUESTION_TIME_LIMIT)
     }
-  }
+  }, [currentQuestion, questions.length])
 
-  const handlePrev = () => {
-    if (selectedOption && question) {
-      const newAnswer = createAnswer(question.id, selectedOption, question)
-
-      setAnswers(prevAnswers => {
-        const existingIndex = prevAnswers.findIndex(
-          (a) => a.questionId === question.id
-        )
-
-        if (existingIndex >= 0) {
-          const newAnswers = [...prevAnswers]
-          newAnswers[existingIndex] = newAnswer
-          return newAnswers
-        } else {
-          return [...prevAnswers, newAnswer]
-        }
-      })
-    }
-
+  const handlePrevious = useCallback(() => {
     if (currentQuestion > 0) {
       setCurrentQuestion(prev => prev - 1)
+      setTimeLeft(QUESTION_TIME_LIMIT)
     }
-  }
+  }, [currentQuestion])
 
-  const handleBackToModes = () => {
+  const handleQuestionSelect = useCallback((index: number) => {
+    if (index >= 0 && index < questions.length) {
+      setCurrentQuestion(index)
+      setTimeLeft(QUESTION_TIME_LIMIT)
+      setShowAnswerSheet(false)
+    }
+  }, [questions.length])
+
+  const submitAssessment = useCallback(() => {
+    if (!assessment) return
+
+    let result
+    if (mode === 'professional') {
+      result = calculateProfessionalResult(assessment.id, answers, mode)
+    } else {
+      result = assessment.resultCalculator(answers)
+    }
+    
+    addCompletedAssessment({
+      assessmentId: assessment.id,
+      answers,
+      result,
+      completedAt: new Date(),
+      mode,
+    })
+
+    navigate(`/loading/${assessment.id}`)
+  }, [assessment, answers, addCompletedAssessment, mode, navigate])
+
+  const handleSubmit = useCallback(() => {
+    if (answers.length < questions.length) {
+      setShowSubmitConfirm(true)
+      return
+    }
+    submitAssessment()
+  }, [answers.length, questions.length, submitAssessment])
+
+  const handleExit = useCallback(() => {
+    setShowExitConfirm(true)
+  }, [])
+
+  const confirmExit = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+    }
+    navigate('/assessments')
+  }, [navigate])
+
+  const goHome = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+    }
     navigate('/')
+  }, [navigate])
+
+  const progress = useMemo(() => ((currentQuestion + 1) / questions.length) * 100, [currentQuestion, questions.length])
+  const answeredCount = answers.length
+  const allAnswered = answeredCount === questions.length
+  const currentQ = questions[currentQuestion]
+
+  const optionVariants = useMemo(() => ({
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.05, duration: 0.2 }
+    })
+  }), [])
+
+  if (!assessment || questions.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-white">加载中...</div>
+      </div>
+    )
   }
 
-  const isLastQuestion = questions.length > 0 && currentQuestion === questions.length - 1
-  const canProceed = selectedOption !== null || getCurrentAnswer() !== undefined
+  if (!currentQ) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-white">题目加载失败</div>
+      </div>
+    )
+  }
 
   return (
-    <div className="pt-24 pb-12 min-h-screen">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 flex flex-col">
+      <div className="flex items-center justify-between p-4 sm:p-6">
+        <motion.button
+          onClick={handleExit}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/60 hover:text-white hover:bg-white/10 transition-all"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          type="button"
         >
-          <button
-            onClick={handleBackToModes}
-            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-4"
-            type="button"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            返回模式选择
-          </button>
+          <X className="w-5 h-5" />
+          <span className="hidden sm:inline">退出</span>
+        </motion.button>
 
-          <h1 className="text-3xl font-bold text-white mb-2">
-            {assessment.title}
-          </h1>
-          <p className="text-white/60">
-            {assessment.description}
-          </p>
-        </motion.div>
-
-        <div className="mb-8">
-          <div className="flex items-center justify-between text-sm text-white/60 mb-2">
-            <span>进度</span>
-            <span>
-              {currentQuestion + 1} / {questions.length}
+        <div className="flex-1 max-w-md mx-4">
+          <div className="flex items-center justify-between text-sm mb-2">
+            <span className="text-white/60">
+              题目 {currentQuestion + 1} / {questions.length}
+            </span>
+            <span className="text-white/60">
+              已答 {answeredCount} / {questions.length}
             </span>
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -203,114 +325,261 @@ export default function Assessment() {
           </div>
         </div>
 
+        <motion.button
+          onClick={() => setShowAnswerSheet(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/60 hover:text-white hover:bg-white/10 transition-all"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          type="button"
+        >
+          <Grid3x3 className="w-5 h-5" />
+          <span className="hidden sm:inline">答题卡</span>
+        </motion.button>
+      </div>
+
+      <div className="flex justify-center mb-4">
+        <motion.div
+          className={cn(
+            'flex items-center gap-2 px-4 py-2 rounded-full',
+            timeLeft <= 10 ? 'bg-red-500/20 text-red-400' : 'glass text-white/60'
+          )}
+          animate={timeLeft <= 10 ? { scale: [1, 1.05, 1] } : {}}
+          transition={{ duration: 0.5, repeat: timeLeft <= 10 ? Infinity : 0 }}
+        >
+          <Clock className="w-4 h-4" />
+          <span className="font-mono font-semibold">{timeLeft}s</span>
+        </motion.div>
+      </div>
+
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 pb-4">
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${assessment.id}-${currentQuestion}`}
-            initial={{ opacity: 0, x: 20 }}
+            key={currentQuestion}
+            initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="glass rounded-2xl p-8 mb-8"
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.2 }}
+            className="w-full max-w-3xl"
           >
-            <h2 className="text-xl font-semibold text-white mb-6">
-              {currentQuestion + 1}. {question?.text}
-            </h2>
+            <div className="glass rounded-3xl p-6 sm:p-10">
+              <motion.h2
+                className="text-xl sm:text-2xl font-semibold text-white mb-8 text-center leading-relaxed"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {currentQ.text}
+              </motion.h2>
 
-            <div className="space-y-3">
-              {question?.options.map((option, index) => {
-                const isSelected = selectedOption === option.id
-
-                return (
+              <div className="space-y-3">
+                {currentQ.options.map((option, index) => (
                   <motion.button
                     key={option.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
                     onClick={() => handleOptionSelect(option.id)}
                     className={cn(
-                      'w-full text-left p-4 rounded-xl transition-all duration-300',
-                      'border-2',
-                      isSelected
-                        ? 'border-violet-500 bg-violet-500/20'
-                        : 'border-white/10 hover:border-white/30 bg-white/5'
+                      'w-full p-4 sm:p-5 rounded-xl text-left transition-all flex items-start gap-4',
+                      selectedOption === option.id
+                        ? 'bg-gradient-to-r from-violet-500/30 to-pink-500/30 border-2 border-violet-500 text-white'
+                        : 'glass text-white/80 hover:bg-white/10 border-2 border-transparent'
                     )}
+                    variants={optionVariants}
+                    initial="hidden"
+                    animate="visible"
+                    custom={index}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
                     type="button"
                   >
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={cn(
-                          'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors',
-                          isSelected
-                            ? 'border-violet-500 bg-violet-500'
-                            : 'border-white/30'
-                        )}
-                      >
-                        {isSelected && (
-                          <Check className="w-3 h-3 text-white" />
-                        )}
-                      </div>
-                      <span className="text-white">{option.text}</span>
+                    <div className={cn(
+                      'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-semibold',
+                      selectedOption === option.id
+                        ? 'bg-violet-500 text-white'
+                        : 'bg-white/10 text-white/60'
+                    )}>
+                      {String.fromCharCode(65 + index)}
                     </div>
+                    <span className="flex-1 pt-1">{option.text}</span>
                   </motion.button>
-                )
-              })}
+                ))}
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>
+      </div>
 
-        <div className="flex items-center justify-between">
-          <button
-            onClick={handlePrev}
-            disabled={currentQuestion === 0}
+      <div className="flex items-center justify-between p-4 sm:p-6">
+        <motion.button
+          onClick={handlePrevious}
+          disabled={currentQuestion === 0}
+          className={cn(
+            'flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all',
+            currentQuestion === 0
+              ? 'glass text-white/30 cursor-not-allowed'
+              : 'glass text-white hover:bg-white/10'
+          )}
+          whileHover={currentQuestion === 0 ? {} : { scale: 1.05 }}
+          whileTap={currentQuestion === 0 ? {} : { scale: 0.95 }}
+          type="button"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          上一题
+        </motion.button>
+
+        {currentQuestion === questions.length - 1 ? (
+          <motion.button
+            onClick={handleSubmit}
             className={cn(
-              'flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all',
-              currentQuestion === 0
-                ? 'text-white/30 cursor-not-allowed'
-                : 'text-white hover:bg-white/10'
+              'flex items-center gap-2 px-8 py-3 rounded-xl font-semibold transition-all',
+              allAnswered
+                ? 'bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg shadow-violet-500/25'
+                : 'glass text-white/60'
             )}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             type="button"
           >
-            <ArrowLeft className="w-4 h-4" />
-            上一题
-          </button>
-
-          {isLastQuestion ? (
-            <button
-              onClick={handleSubmit}
-              disabled={isSubmitting || !canProceed}
-              className="flex items-center gap-2 px-8 py-3 rounded-xl font-medium bg-gradient-to-r from-violet-500 to-pink-500 text-white hover:opacity-90 transition-opacity disabled:opacity-50"
-              type="button"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  计算中...
-                </>
-              ) : (
-                <>
-                  查看结果
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              disabled={!canProceed}
-              className={cn(
-                'flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all',
-                canProceed
-                  ? 'text-white hover:bg-white/10'
-                  : 'text-white/30 cursor-not-allowed'
-              )}
-              type="button"
-            >
-              下一题
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+            提交测评
+          </motion.button>
+        ) : (
+          <motion.button
+            onClick={handleNext}
+            className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold shadow-lg shadow-violet-500/25 transition-all"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="button"
+          >
+            下一题
+            <ArrowRight className="w-5 h-5" />
+          </motion.button>
+        )}
       </div>
+
+      <AnswerSheet
+        isOpen={showAnswerSheet}
+        onClose={() => setShowAnswerSheet(false)}
+        questions={questions}
+        answers={answers}
+        currentQuestion={currentQuestion}
+        onQuestionSelect={handleQuestionSelect}
+      />
+
+      <AnimatePresence>
+        {showExitConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="glass rounded-3xl p-8 max-w-md w-full text-center"
+            >
+              <AlertTriangle className="w-16 h-16 text-amber-400 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-white mb-2">确定要退出吗？</h3>
+              <p className="text-white/60 mb-6">退出后当前答题进度将不会保存</p>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => setShowExitConfirm(false)}
+                  className="w-full px-6 py-3 rounded-xl glass text-white hover:bg-white/10 transition-colors"
+                  type="button"
+                >
+                  继续答题
+                </button>
+                <div className="flex gap-3">
+                  <button
+                    onClick={goHome}
+                    className="flex-1 px-6 py-3 rounded-xl glass text-white hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+                    type="button"
+                  >
+                    <Home className="w-4 h-4" />
+                    返回主页
+                  </button>
+                  <button
+                    onClick={confirmExit}
+                    className="flex-1 px-6 py-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors"
+                    type="button"
+                  >
+                    返回列表
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showSubmitConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="glass rounded-3xl p-8 max-w-md w-full text-center"
+            >
+              <AlertTriangle className="w-16 h-16 text-amber-400 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-white mb-2">还有题目未完成</h3>
+              <p className="text-white/60 mb-2">
+                您还有 <span className="text-violet-400 font-semibold">{questions.length - answeredCount}</span> 道题目未作答
+              </p>
+              <p className="text-white/40 text-sm mb-6">请完成所有题目后再提交</p>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setShowSubmitConfirm(false)}
+                  className="flex-1 px-6 py-3 rounded-xl glass text-white hover:bg-white/10 transition-colors"
+                  type="button"
+                >
+                  继续答题
+                </button>
+                <button
+                  onClick={submitAssessment}
+                  className="flex-1 px-6 py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+                  type="button"
+                >
+                  强制提交
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isTimeout && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[400] flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="glass rounded-3xl p-8 max-w-md w-full text-center"
+            >
+              <Clock className="w-16 h-16 text-red-400 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-white mb-2">答题超时</h3>
+              <p className="text-white/60 mb-6">很抱歉，您未在规定时间内完成答题</p>
+              <button
+                onClick={() => navigate('/assessments')}
+                className="w-full px-6 py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+                type="button"
+              >
+                返回测评列表
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

@@ -67,6 +67,7 @@ interface AppStore {
   completedAssessments: CompletedAssessment[]
   addCompletedAssessment: (assessment: CompletedAssessment) => void
   deleteAssessment: (assessmentId: string, completedAt: Date) => void
+  clearAllAssessments: () => void
 
   // Assessment Records (from useUserStore)
   records: AssessmentRecord[]
@@ -145,6 +146,10 @@ export const useAppStore = create<AppStore>()(
           (a) => !(a.assessmentId === assessmentId && a.completedAt === completedAt)
         ),
       })),
+      clearAllAssessments: () => set({
+        completedAssessments: [],
+        records: [],
+      }),
 
       // Records
       records: [],

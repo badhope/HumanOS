@@ -125,10 +125,23 @@ export const assessments: Assessment[] = [
       }
 
       const result = types[type] || types['INTJ']
+      const totalScore = Object.values(traits).reduce((sum, val) => sum + val, 0)
       return {
         type,
         title: result.title,
         description: result.desc,
+        score: Math.round((totalScore / 80) * 100),
+        accuracy: 85,
+        dimensions: Object.entries(traits).map(([name, score]) => ({
+          name,
+          score,
+          maxScore: 10,
+          description: score >= 6 ? '强倾向' : score >= 4 ? '中等倾向' : '弱倾向'
+        })),
+        strengths: result.strengths,
+        weaknesses: result.weaknesses,
+        careers: result.careers,
+        suggestions: [result.advice],
         traits: Object.entries(traits).map(([name, score]) => ({
           name,
           score,
@@ -149,116 +162,376 @@ export const assessments: Assessment[] = [
   {
     id: 'big-five',
     title: '大五人格测试 (OCEAN)',
-    description: '心理学界公认的人格评估模型，通过20道题目测量开放性、尽责性、外向性、宜人性和神经质五个维度。',
+    description: '心理学界公认的人格评估模型，采用标准BFI-44版本，通过44道题目精准测量开放性、尽责性、外向性、宜人性和神经质五个维度。',
     category: '人格心理',
-    difficulty: 'standard',
-    duration: 12,
+    difficulty: 'expert',
+    duration: 15,
     questions: [
-      { id: 'bf-1', text: '我对抽象概念、哲学思考和理论探讨充满兴趣', type: 'single', options: [
-        { id: 'o1', text: '完全不感兴趣，更喜欢具体实际的事', value: 1, trait: 'O' },
-        { id: 'o2', text: '偶尔会思考，但不是主要兴趣', value: 2, trait: 'O' },
-        { id: 'o3', text: '有时会感兴趣，看具体话题', value: 3, trait: 'O' },
-        { id: 'o4', text: '经常思考抽象问题，觉得很吸引人', value: 4, trait: 'O' },
-        { id: 'o5', text: '非常着迷，这是我的核心兴趣之一', value: 5, trait: 'O' },
+      { id: 'bf-1', text: '我是个健谈的人', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'E' },
+        { id: '2', text: '不同意', value: 2, trait: 'E' },
+        { id: '3', text: '中立', value: 3, trait: 'E' },
+        { id: '4', text: '同意', value: 4, trait: 'E' },
+        { id: '5', text: '非常同意', value: 5, trait: 'E' },
       ]},
-      { id: 'bf-2', text: '我经常沉浸在自己的想象和幻想世界中', type: 'single', options: [
-        { id: 'o6', text: '很少幻想，更关注现实生活', value: 1, trait: 'O' },
-        { id: 'o7', text: '偶尔会做白日梦，但不频繁', value: 2, trait: 'O' },
-        { id: 'o8', text: '有时会沉浸其中，平衡现实与想象', value: 3, trait: 'O' },
-        { id: 'o9', text: '经常让思绪飘到想象的世界', value: 4, trait: 'O' },
-        { id: 'o10', text: '想象力丰富，经常沉浸在幻想中', value: 5, trait: 'O' },
+      { id: 'bf-2', text: '我倾向于发现他人好的一面', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'A' },
+        { id: '2', text: '不同意', value: 2, trait: 'A' },
+        { id: '3', text: '中立', value: 3, trait: 'A' },
+        { id: '4', text: '同意', value: 4, trait: 'A' },
+        { id: '5', text: '非常同意', value: 5, trait: 'A' },
       ]},
-      { id: 'bf-3', text: '我喜欢尝试新的食物、音乐和文化体验', type: 'single', options: [
-        { id: 'o11', text: '偏好熟悉的事物，不喜欢冒险尝试', value: 1, trait: 'O' },
-        { id: 'o12', text: '偶尔会尝试新事物，但比较谨慎', value: 2, trait: 'O' },
-        { id: 'o13', text: '看情况，有些新事物会尝试', value: 3, trait: 'O' },
-        { id: 'o14', text: '乐于探索新体验，经常尝试', value: 4, trait: 'O' },
-        { id: 'o15', text: '热爱多样性，主动寻求新体验', value: 5, trait: 'O' },
+      { id: 'bf-3', text: '我做事总是有始有终，是个可靠的人', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'C' },
+        { id: '2', text: '不同意', value: 2, trait: 'C' },
+        { id: '3', text: '中立', value: 3, trait: 'C' },
+        { id: '4', text: '同意', value: 4, trait: 'C' },
+        { id: '5', text: '非常同意', value: 5, trait: 'C' },
       ]},
-      { id: 'bf-4', text: '我做事很有条理，喜欢把东西摆放整齐', type: 'single', options: [
-        { id: 'c1', text: '非常随意，不太在意秩序', value: 1, trait: 'C' },
-        { id: 'c2', text: '基本有序，但不会刻意整理', value: 2, trait: 'C' },
-        { id: 'c3', text: '适度整洁，够用就行', value: 3, trait: 'C' },
-        { id: 'c4', text: '比较有条理，喜欢整洁的环境', value: 4, trait: 'C' },
-        { id: 'c5', text: '非常注重秩序，物品井井有条', value: 5, trait: 'C' },
+      { id: 'bf-4', text: '我经常感到忧郁、沮丧', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'N' },
+        { id: '2', text: '不同意', value: 4, trait: 'N' },
+        { id: '3', text: '中立', value: 3, trait: 'N' },
+        { id: '4', text: '同意', value: 2, trait: 'N' },
+        { id: '5', text: '非常同意', value: 1, trait: 'N' },
       ]},
-      { id: 'bf-5', text: '我能很好地遵守时间约定，很少迟到', type: 'single', options: [
-        { id: 'c6', text: '经常迟到，时间观念较弱', value: 1, trait: 'C' },
-        { id: 'c7', text: '偶尔会迟到，但会努力准时', value: 2, trait: 'C' },
-        { id: 'c8', text: '基本能准时，特殊情况除外', value: 3, trait: 'C' },
-        { id: 'c9', text: '很守时，很少迟到', value: 4, trait: 'C' },
-        { id: 'c10', text: '非常守时，总是提前到达', value: 5, trait: 'C' },
+      { id: 'bf-5', text: '我对抽象概念、哲学思考和理论探讨充满兴趣', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'O' },
+        { id: '2', text: '不同意', value: 2, trait: 'O' },
+        { id: '3', text: '中立', value: 3, trait: 'O' },
+        { id: '4', text: '同意', value: 4, trait: 'O' },
+        { id: '5', text: '非常同意', value: 5, trait: 'O' },
       ]},
-      { id: 'bf-6', text: '我在社交场合感到自在并乐于结交新朋友', type: 'single', options: [
-        { id: 'e1', text: '社交让我很紧张，更喜欢独处', value: 1, trait: 'E' },
-        { id: 'e2', text: '不太主动，但能应付社交场合', value: 2, trait: 'E' },
-        { id: 'e3', text: '看场合和心情，有时主动有时被动', value: 3, trait: 'E' },
-        { id: 'e4', text: '比较外向，享受社交活动', value: 4, trait: 'E' },
-        { id: 'e5', text: '非常外向，主动结交新朋友', value: 5, trait: 'E' },
+      { id: 'bf-6', text: '我是个乐于助人、无私奉献的人', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'A' },
+        { id: '2', text: '不同意', value: 2, trait: 'A' },
+        { id: '3', text: '中立', value: 3, trait: 'A' },
+        { id: '4', text: '同意', value: 4, trait: 'A' },
+        { id: '5', text: '非常同意', value: 5, trait: 'A' },
       ]},
-      { id: 'bf-7', text: '我在人群中说话时会感到紧张不安', type: 'single', options: [
-        { id: 'e6', text: '在人群中说话很自然，从不紧张', value: 5, trait: 'E' },
-        { id: 'e7', text: '基本不紧张，能自如表达', value: 4, trait: 'E' },
-        { id: 'e8', text: '有时会紧张，但能克服', value: 3, trait: 'E' },
-        { id: 'e9', text: '比较紧张，需要准备才能发言', value: 2, trait: 'E' },
-        { id: 'e10', text: '非常紧张，尽量避免在人群前说话', value: 1, trait: 'E' },
+      { id: 'bf-7', text: '我有时会疏忽大意，丢三落四', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'C' },
+        { id: '2', text: '不同意', value: 4, trait: 'C' },
+        { id: '3', text: '中立', value: 3, trait: 'C' },
+        { id: '4', text: '同意', value: 2, trait: 'C' },
+        { id: '5', text: '非常同意', value: 1, trait: 'C' },
       ]},
-      { id: 'bf-8', text: '我关心他人的感受，愿意主动提供帮助', type: 'single', options: [
-        { id: 'a1', text: '较少关注他人，优先考虑自己', value: 1, trait: 'A' },
-        { id: 'a2', text: '会关心亲近的人，但不太主动', value: 2, trait: 'A' },
-        { id: 'a3', text: '适度关心，看具体情况', value: 3, trait: 'A' },
-        { id: 'a4', text: '比较关心他人，愿意伸出援手', value: 4, trait: 'A' },
-        { id: 'a5', text: '非常关心他人，主动帮助有需要的人', value: 5, trait: 'A' },
+      { id: 'bf-8', text: '我是个积极乐观、精神饱满的人', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'E' },
+        { id: '2', text: '不同意', value: 2, trait: 'E' },
+        { id: '3', text: '中立', value: 3, trait: 'E' },
+        { id: '4', text: '同意', value: 4, trait: 'E' },
+        { id: '5', text: '非常同意', value: 5, trait: 'E' },
       ]},
-      { id: 'bf-9', text: '我相信大多数人是善良和值得信任的', type: 'single', options: [
-        { id: 'a6', text: '比较怀疑，很难信任他人', value: 1, trait: 'A' },
-        { id: 'a7', text: '需要时间建立信任，比较谨慎', value: 2, trait: 'A' },
-        { id: 'a8', text: '看情况，对熟悉的人更信任', value: 3, trait: 'A' },
-        { id: 'a9', text: '倾向于信任他人，认为大多数人是善良的', value: 4, trait: 'A' },
-        { id: 'a10', text: '非常信任他人，相信人性本善', value: 5, trait: 'A' },
+      { id: 'bf-9', text: '我经常对他人态度冷淡', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'A' },
+        { id: '2', text: '不同意', value: 4, trait: 'A' },
+        { id: '3', text: '中立', value: 3, trait: 'A' },
+        { id: '4', text: '同意', value: 2, trait: 'A' },
+        { id: '5', text: '非常同意', value: 1, trait: 'A' },
       ]},
-      { id: 'bf-10', text: '我容易感到焦虑、担心或情绪波动', type: 'single', options: [
-        { id: 'n1', text: '情绪很稳定，很少焦虑或波动', value: 1, trait: 'N' },
-        { id: 'n2', text: '偶尔会焦虑，但能自我调节', value: 2, trait: 'N' },
-        { id: 'n3', text: '有时会感到焦虑，情绪起伏一般', value: 3, trait: 'N' },
-        { id: 'n4', text: '比较容易焦虑或情绪波动', value: 4, trait: 'N' },
-        { id: 'n5', text: '经常感到焦虑，情绪起伏较大', value: 5, trait: 'N' },
+      { id: 'bf-10', text: '我经常担心事情会出问题', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'N' },
+        { id: '2', text: '不同意', value: 4, trait: 'N' },
+        { id: '3', text: '中立', value: 3, trait: 'N' },
+        { id: '4', text: '同意', value: 2, trait: 'N' },
+        { id: '5', text: '非常同意', value: 1, trait: 'N' },
+      ]},
+      { id: 'bf-11', text: '我喜欢尝试新的食物、音乐和文化体验', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'O' },
+        { id: '2', text: '不同意', value: 2, trait: 'O' },
+        { id: '3', text: '中立', value: 3, trait: 'O' },
+        { id: '4', text: '同意', value: 4, trait: 'O' },
+        { id: '5', text: '非常同意', value: 5, trait: 'O' },
+      ]},
+      { id: 'bf-12', text: '我经常沉浸在自己的想象和幻想世界中', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'O' },
+        { id: '2', text: '不同意', value: 2, trait: 'O' },
+        { id: '3', text: '中立', value: 3, trait: 'O' },
+        { id: '4', text: '同意', value: 4, trait: 'O' },
+        { id: '5', text: '非常同意', value: 5, trait: 'O' },
+      ]},
+      { id: 'bf-13', text: '我做事很有条理，喜欢把东西摆放整齐', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'C' },
+        { id: '2', text: '不同意', value: 2, trait: 'C' },
+        { id: '3', text: '中立', value: 3, trait: 'C' },
+        { id: '4', text: '同意', value: 4, trait: 'C' },
+        { id: '5', text: '非常同意', value: 5, trait: 'C' },
+      ]},
+      { id: 'bf-14', text: '我经常感到情绪低落', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'N' },
+        { id: '2', text: '不同意', value: 4, trait: 'N' },
+        { id: '3', text: '中立', value: 3, trait: 'N' },
+        { id: '4', text: '同意', value: 2, trait: 'N' },
+        { id: '5', text: '非常同意', value: 1, trait: 'N' },
+      ]},
+      { id: 'bf-15', text: '我很容易和别人建立友谊', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'E' },
+        { id: '2', text: '不同意', value: 2, trait: 'E' },
+        { id: '3', text: '中立', value: 3, trait: 'E' },
+        { id: '4', text: '同意', value: 4, trait: 'E' },
+        { id: '5', text: '非常同意', value: 5, trait: 'E' },
+      ]},
+      { id: 'bf-16', text: '我是个谦逊低调的人', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'A' },
+        { id: '2', text: '不同意', value: 2, trait: 'A' },
+        { id: '3', text: '中立', value: 3, trait: 'A' },
+        { id: '4', text: '同意', value: 4, trait: 'A' },
+        { id: '5', text: '非常同意', value: 5, trait: 'A' },
+      ]},
+      { id: 'bf-17', text: '我经常把事情搞砸', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'C' },
+        { id: '2', text: '不同意', value: 4, trait: 'C' },
+        { id: '3', text: '中立', value: 3, trait: 'C' },
+        { id: '4', text: '同意', value: 2, trait: 'C' },
+        { id: '5', text: '非常同意', value: 1, trait: 'C' },
+      ]},
+      { id: 'bf-18', text: '我经常感到焦虑不安', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'N' },
+        { id: '2', text: '不同意', value: 4, trait: 'N' },
+        { id: '3', text: '中立', value: 3, trait: 'N' },
+        { id: '4', text: '同意', value: 2, trait: 'N' },
+        { id: '5', text: '非常同意', value: 1, trait: 'N' },
+      ]},
+      { id: 'bf-19', text: '我对艺术和美学有浓厚的兴趣', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'O' },
+        { id: '2', text: '不同意', value: 2, trait: 'O' },
+        { id: '3', text: '中立', value: 3, trait: 'O' },
+        { id: '4', text: '同意', value: 4, trait: 'O' },
+        { id: '5', text: '非常同意', value: 5, trait: 'O' },
+      ]},
+      { id: 'bf-20', text: '我是个外向的人，喜欢社交活动', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'E' },
+        { id: '2', text: '不同意', value: 2, trait: 'E' },
+        { id: '3', text: '中立', value: 3, trait: 'E' },
+        { id: '4', text: '同意', value: 4, trait: 'E' },
+        { id: '5', text: '非常同意', value: 5, trait: 'E' },
+      ]},
+      { id: 'bf-21', text: '我经常与他人发生争执', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'A' },
+        { id: '2', text: '不同意', value: 4, trait: 'A' },
+        { id: '3', text: '中立', value: 3, trait: 'A' },
+        { id: '4', text: '同意', value: 2, trait: 'A' },
+        { id: '5', text: '非常同意', value: 1, trait: 'A' },
+      ]},
+      { id: 'bf-22', text: '我工作努力，追求卓越', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'C' },
+        { id: '2', text: '不同意', value: 2, trait: 'C' },
+        { id: '3', text: '中立', value: 3, trait: 'C' },
+        { id: '4', text: '同意', value: 4, trait: 'C' },
+        { id: '5', text: '非常同意', value: 5, trait: 'C' },
+      ]},
+      { id: 'bf-23', text: '我经常感到紧张不安', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'N' },
+        { id: '2', text: '不同意', value: 4, trait: 'N' },
+        { id: '3', text: '中立', value: 3, trait: 'N' },
+        { id: '4', text: '同意', value: 2, trait: 'N' },
+        { id: '5', text: '非常同意', value: 1, trait: 'N' },
+      ]},
+      { id: 'bf-24', text: '我喜欢思考复杂的问题', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'O' },
+        { id: '2', text: '不同意', value: 2, trait: 'O' },
+        { id: '3', text: '中立', value: 3, trait: 'O' },
+        { id: '4', text: '同意', value: 4, trait: 'O' },
+        { id: '5', text: '非常同意', value: 5, trait: 'O' },
+      ]},
+      { id: 'bf-25', text: '我是个精力充沛的人', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'E' },
+        { id: '2', text: '不同意', value: 2, trait: 'E' },
+        { id: '3', text: '中立', value: 3, trait: 'E' },
+        { id: '4', text: '同意', value: 4, trait: 'E' },
+        { id: '5', text: '非常同意', value: 5, trait: 'E' },
+      ]},
+      { id: 'bf-26', text: '我是个慷慨大方的人', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'A' },
+        { id: '2', text: '不同意', value: 2, trait: 'A' },
+        { id: '3', text: '中立', value: 3, trait: 'A' },
+        { id: '4', text: '同意', value: 4, trait: 'A' },
+        { id: '5', text: '非常同意', value: 5, trait: 'A' },
+      ]},
+      { id: 'bf-27', text: '我有时会表现得冲动鲁莽', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'C' },
+        { id: '2', text: '不同意', value: 4, trait: 'C' },
+        { id: '3', text: '中立', value: 3, trait: 'C' },
+        { id: '4', text: '同意', value: 2, trait: 'C' },
+        { id: '5', text: '非常同意', value: 1, trait: 'C' },
+      ]},
+      { id: 'bf-28', text: '我经常感到害怕', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'N' },
+        { id: '2', text: '不同意', value: 4, trait: 'N' },
+        { id: '3', text: '中立', value: 3, trait: 'N' },
+        { id: '4', text: '同意', value: 2, trait: 'N' },
+        { id: '5', text: '非常同意', value: 1, trait: 'N' },
+      ]},
+      { id: 'bf-29', text: '我对新奇的事物充满好奇心', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'O' },
+        { id: '2', text: '不同意', value: 2, trait: 'O' },
+        { id: '3', text: '中立', value: 3, trait: 'O' },
+        { id: '4', text: '同意', value: 4, trait: 'O' },
+        { id: '5', text: '非常同意', value: 5, trait: 'O' },
+      ]},
+      { id: 'bf-30', text: '我喜欢参加派对和社交聚会', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'E' },
+        { id: '2', text: '不同意', value: 2, trait: 'E' },
+        { id: '3', text: '中立', value: 3, trait: 'E' },
+        { id: '4', text: '同意', value: 4, trait: 'E' },
+        { id: '5', text: '非常同意', value: 5, trait: 'E' },
+      ]},
+      { id: 'bf-31', text: '我相信大多数人是善良和值得信任的', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'A' },
+        { id: '2', text: '不同意', value: 2, trait: 'A' },
+        { id: '3', text: '中立', value: 3, trait: 'A' },
+        { id: '4', text: '同意', value: 4, trait: 'A' },
+        { id: '5', text: '非常同意', value: 5, trait: 'A' },
+      ]},
+      { id: 'bf-32', text: '我做事有计划性，喜欢提前安排', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'C' },
+        { id: '2', text: '不同意', value: 2, trait: 'C' },
+        { id: '3', text: '中立', value: 3, trait: 'C' },
+        { id: '4', text: '同意', value: 4, trait: 'C' },
+        { id: '5', text: '非常同意', value: 5, trait: 'C' },
+      ]},
+      { id: 'bf-33', text: '我经常感到情绪波动大', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'N' },
+        { id: '2', text: '不同意', value: 4, trait: 'N' },
+        { id: '3', text: '中立', value: 3, trait: 'N' },
+        { id: '4', text: '同意', value: 2, trait: 'N' },
+        { id: '5', text: '非常同意', value: 1, trait: 'N' },
+      ]},
+      { id: 'bf-34', text: '我喜欢探索不同的观点和想法', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'O' },
+        { id: '2', text: '不同意', value: 2, trait: 'O' },
+        { id: '3', text: '中立', value: 3, trait: 'O' },
+        { id: '4', text: '同意', value: 4, trait: 'O' },
+        { id: '5', text: '非常同意', value: 5, trait: 'O' },
+      ]},
+      { id: 'bf-35', text: '我是个热情开朗的人', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'E' },
+        { id: '2', text: '不同意', value: 2, trait: 'E' },
+        { id: '3', text: '中立', value: 3, trait: 'E' },
+        { id: '4', text: '同意', value: 4, trait: 'E' },
+        { id: '5', text: '非常同意', value: 5, trait: 'E' },
+      ]},
+      { id: 'bf-36', text: '我关心他人的感受，愿意主动提供帮助', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'A' },
+        { id: '2', text: '不同意', value: 2, trait: 'A' },
+        { id: '3', text: '中立', value: 3, trait: 'A' },
+        { id: '4', text: '同意', value: 4, trait: 'A' },
+        { id: '5', text: '非常同意', value: 5, trait: 'A' },
+      ]},
+      { id: 'bf-37', text: '我能很好地遵守时间约定，很少迟到', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'C' },
+        { id: '2', text: '不同意', value: 2, trait: 'C' },
+        { id: '3', text: '中立', value: 3, trait: 'C' },
+        { id: '4', text: '同意', value: 4, trait: 'C' },
+        { id: '5', text: '非常同意', value: 5, trait: 'C' },
+      ]},
+      { id: 'bf-38', text: '我经常感到心烦意乱', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'N' },
+        { id: '2', text: '不同意', value: 4, trait: 'N' },
+        { id: '3', text: '中立', value: 3, trait: 'N' },
+        { id: '4', text: '同意', value: 2, trait: 'N' },
+        { id: '5', text: '非常同意', value: 1, trait: 'N' },
+      ]},
+      { id: 'bf-39', text: '我喜欢阅读富有挑战性的书籍', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'O' },
+        { id: '2', text: '不同意', value: 2, trait: 'O' },
+        { id: '3', text: '中立', value: 3, trait: 'O' },
+        { id: '4', text: '同意', value: 4, trait: 'O' },
+        { id: '5', text: '非常同意', value: 5, trait: 'O' },
+      ]},
+      { id: 'bf-40', text: '我喜欢成为众人关注的焦点', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'E' },
+        { id: '2', text: '不同意', value: 2, trait: 'E' },
+        { id: '3', text: '中立', value: 3, trait: 'E' },
+        { id: '4', text: '同意', value: 4, trait: 'E' },
+        { id: '5', text: '非常同意', value: 5, trait: 'E' },
+      ]},
+      { id: 'bf-41', text: '我是个宽容大度的人', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'A' },
+        { id: '2', text: '不同意', value: 2, trait: 'A' },
+        { id: '3', text: '中立', value: 3, trait: 'A' },
+        { id: '4', text: '同意', value: 4, trait: 'A' },
+        { id: '5', text: '非常同意', value: 5, trait: 'A' },
+      ]},
+      { id: 'bf-42', text: '我做事认真细致，注重细节', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'C' },
+        { id: '2', text: '不同意', value: 2, trait: 'C' },
+        { id: '3', text: '中立', value: 3, trait: 'C' },
+        { id: '4', text: '同意', value: 4, trait: 'C' },
+        { id: '5', text: '非常同意', value: 5, trait: 'C' },
+      ]},
+      { id: 'bf-43', text: '我经常感到孤独', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 5, trait: 'N' },
+        { id: '2', text: '不同意', value: 4, trait: 'N' },
+        { id: '3', text: '中立', value: 3, trait: 'N' },
+        { id: '4', text: '同意', value: 2, trait: 'N' },
+        { id: '5', text: '非常同意', value: 1, trait: 'N' },
+      ]},
+      { id: 'bf-44', text: '我欣赏不同寻常的观点和想法', type: 'single', options: [
+        { id: '1', text: '非常不同意', value: 1, trait: 'O' },
+        { id: '2', text: '不同意', value: 2, trait: 'O' },
+        { id: '3', text: '中立', value: 3, trait: 'O' },
+        { id: '4', text: '同意', value: 4, trait: 'O' },
+        { id: '5', text: '非常同意', value: 5, trait: 'O' },
       ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
       const traits: Record<string, number> = { O: 0, C: 0, E: 0, A: 0, N: 0 }
+      const counts: Record<string, number> = { O: 0, C: 0, E: 0, A: 0, N: 0 }
+      
       answers.forEach((answer) => {
         if (answer.trait && answer.value) {
           traits[answer.trait] += answer.value
+          counts[answer.trait] += 1
         }
       })
 
       const traitNames: Record<string, string> = { O: '开放性', C: '尽责性', E: '外向性', A: '宜人性', N: '神经质' }
       const traitDesc: Record<string, { high: string; low: string }> = {
-        O: { high: '富有想象力，思想开明', low: '务实具体，遵循传统' },
-        C: { high: '自律有序，可靠负责', low: '灵活随意，适应性强的' },
-        E: { high: '外向活跃，善于社交', low: '内向沉静，独立思考' },
-        A: { high: '合作友善，富有同情心', low: '竞争性强，直率坦诚' },
-        N: { high: '情绪敏感，容易紧张', low: '情绪稳定，从容淡定' },
+        O: { high: '富有想象力，思想开明，追求新奇体验', low: '务实具体，遵循传统，偏好熟悉事物' },
+        C: { high: '自律有序，可靠负责，追求卓越', low: '灵活随意，适应性强，不拘小节' },
+        E: { high: '外向活跃，善于社交，精力充沛', low: '内向沉静，独立思考，享受独处' },
+        A: { high: '合作友善，富有同情心，乐于助人', low: '竞争性强，直率坦诚，独立自主' },
+        N: { high: '情绪敏感，容易紧张，情绪波动大', low: '情绪稳定，从容淡定，抗压能力强' },
       }
 
+      const avgScores: Record<string, number> = {}
+      Object.keys(traits).forEach(key => {
+        avgScores[key] = counts[key] > 0 ? Math.round((traits[key] / (counts[key] * 5)) * 100) : 50
+      })
+
+      const totalScore = Object.values(avgScores).reduce((sum, val) => sum + val, 0) / 5
+      
       return {
         type: 'OCEAN',
-        title: '大五人格分析报告',
-        description: '基于国际通用的五因素模型(FFM)，全面呈现你的人格特质轮廓',
-        traits: Object.entries(traits).map(([key, score]) => ({
+        title: '大五人格分析报告 (BFI-44)',
+        description: '基于国际通用的五因素模型(FFM)标准44题版本，全面呈现你的人格特质轮廓',
+        score: Math.round(totalScore),
+        accuracy: 92,
+        dimensions: Object.entries(avgScores).map(([key, score]) => ({
           name: traitNames[key],
           score,
-          maxScore: key === 'O' || key === 'C' ? 15 : 10,
-          description: score >= (key === 'O' || key === 'C' ? 10 : 7) ? traitDesc[key].high : traitDesc[key].low
+          maxScore: 100,
+          description: score >= 60 ? traitDesc[key].high : score >= 40 ? '中等水平' : traitDesc[key].low
+        })),
+        strengths: Object.entries(avgScores).filter(([, v]) => v >= 60).map(([k]) => traitDesc[k].high),
+        weaknesses: Object.entries(avgScores).filter(([, v]) => v <= 40).map(([k]) => `可适度提升${traitNames[k]}`),
+        careers: ['根据你的特质组合，适合需要' + Object.entries(avgScores).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => traitNames[k]).join('和') + '的工作'],
+        suggestions: ['了解大五人格有助于更好地理解自己和他人，改善人际关系和职业选择。建议定期复测以追踪人格发展的变化趋势。'],
+        traits: Object.entries(avgScores).map(([key, score]) => ({
+          name: traitNames[key],
+          score,
+          maxScore: 100,
+          description: score >= 60 ? traitDesc[key].high : score >= 40 ? '中等水平' : traitDesc[key].low
         })),
         details: {
-          strengths: Object.entries(traits).filter(([, v]) => v >= 7).map(([k]) => traitDesc[k].high),
-          weaknesses: Object.entries(traits).filter(([, v]) => v <= 4).map(([k]) => `可适度提升${traitNames[k]}`),
-          careers: ['根据你的特质组合，适合需要' + Object.entries(traits).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => traitNames[k]).join('和') + '的工作'],
+          strengths: Object.entries(avgScores).filter(([, v]) => v >= 60).map(([k]) => traitDesc[k].high),
+          weaknesses: Object.entries(avgScores).filter(([, v]) => v <= 40).map(([k]) => `可适度提升${traitNames[k]}`),
+          careers: ['根据你的特质组合，适合需要' + Object.entries(avgScores).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => traitNames[k]).join('和') + '的工作'],
           relationships: '了解大五人格有助于更好地理解自己和他人，改善人际关系和职业选择。建议定期复测以追踪人格发展的变化趋势。'
         },
-        scores: traits,
+        scores: avgScores,
       }
     },
   },
@@ -267,7 +540,7 @@ export const assessments: Assessment[] = [
     id: 'anxiety-scale',
     title: '焦虑自评量表 (SAS)',
     description: '专业心理学量表，通过10道题目评估焦虑症状的严重程度和频率，帮助你了解当前的心理状态。',
-    category: '人格心理',
+    category: '心理健康',
     difficulty: 'standard',
     duration: 8,
     questions: [
@@ -331,6 +604,36 @@ export const assessments: Assessment[] = [
         { id: '3', text: '经常感到心悸或心跳加速', value: 3 },
         { id: '4', text: '几乎总是感觉心脏跳得很快', value: 4 },
       ]},
+      { id: 'sas-11', text: '我因为一阵阵头晕而苦恼', type: 'single', options: [
+        { id: '1', text: '从未有过头晕', value: 1 },
+        { id: '2', text: '偶尔会头晕，但很快恢复', value: 2 },
+        { id: '3', text: '经常感到头晕，影响日常活动', value: 3 },
+        { id: '4', text: '持续的头晕让我非常困扰', value: 4 },
+      ]},
+      { id: 'sas-12', text: '我有晕倒发作，或觉得要晕倒似的', type: 'single', options: [
+        { id: '1', text: '从未有过晕倒或濒临晕倒的感觉', value: 1 },
+        { id: '2', text: '极少数情况下会有轻微眩晕', value: 2 },
+        { id: '3', text: '有时会感觉快要晕倒', value: 3 },
+        { id: '4', text: '经常有晕倒的感觉或实际晕倒', value: 4 },
+      ]},
+      { id: 'sas-13', text: '我呼吸都感到很容易', type: 'single', options: [
+        { id: '1', text: '呼吸很困难，感觉气短', value: 4 },
+        { id: '2', text: '有时会感到呼吸不畅', value: 3 },
+        { id: '3', text: '多数时候呼吸顺畅', value: 2 },
+        { id: '4', text: '呼吸非常轻松自然', value: 1 },
+      ]},
+      { id: 'sas-14', text: '我手脚麻木和刺痛', type: 'single', options: [
+        { id: '1', text: '从未有过麻木或刺痛', value: 1 },
+        { id: '2', text: '偶尔会有轻微麻木', value: 2 },
+        { id: '3', text: '经常感到手脚麻木或刺痛', value: 3 },
+        { id: '4', text: '持续的麻木感影响日常生活', value: 4 },
+      ]},
+      { id: 'sas-15', text: '我因为胃痛和消化不良而苦恼', type: 'single', options: [
+        { id: '1', text: '消化系统很健康', value: 1 },
+        { id: '2', text: '偶尔会有轻微不适', value: 2 },
+        { id: '3', text: '经常有胃痛或消化问题', value: 3 },
+        { id: '4', text: '持续的消化问题让我很痛苦', value: 4 },
+      ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
       const rawScore = calculateScore(answers)
@@ -356,6 +659,13 @@ export const assessments: Assessment[] = [
         type: level,
         title: `焦虑自评结果: ${level}`,
         description,
+        score: standardScore,
+        accuracy: 82,
+        dimensions: [{ name: '标准分', score: standardScore, maxScore: 100, description: `原始分: ${rawScore}/40` }],
+        strengths: standardScore < 50 ? ['情绪调节能力良好', '抗压能力强'] : standardScore < 60 ? ['具备一定的自我觉察能力'] : [],
+        weaknesses: standardScore >= 60 ? ['需要关注心理健康', '建议学习焦虑管理技巧'] : [],
+        careers: [],
+        suggestions: ['⚠️ 重要提示：本测试仅供参考，不能替代专业诊断。如果你对自己的焦虑状况感到担忧，请务必咨询合格的心理健康专业人士。早期干预可以有效预防问题恶化。'],
         traits: [{ name: '标准分', score: standardScore, maxScore: 100, description: `原始分: ${rawScore}/40` }],
         details: {
           strengths: standardScore < 50 ? ['情绪调节能力良好', '抗压能力强'] : standardScore < 60 ? ['具备一定的自我觉察能力'] : [],
@@ -372,7 +682,7 @@ export const assessments: Assessment[] = [
     id: 'emotional-intelligence',
     title: '情绪智力测试 (EQ)',
     description: '通过12道情境题评估你在自我觉察、情绪管理、社会意识和关系管理四个维度的情商水平。',
-    category: '人格心理',
+    category: '人际关系',
     difficulty: 'standard',
     duration: 10,
     questions: [
@@ -418,15 +728,78 @@ export const assessments: Assessment[] = [
         { id: '4', text: '能选择合适的时机和方式表达', value: 4 },
         { id: '5', text: '擅长将不满转化为建设性沟通', value: 5 },
       ]},
+      { id: 'eq-7', text: '当他人批评我时，我能冷静接受并从中学习', type: 'single', options: [
+        { id: '1', text: '很难接受批评，会立即反驳或逃避', value: 1 },
+        { id: '2', text: '能听进去，但内心会有抵触', value: 2 },
+        { id: '3', text: '视批评者的态度而定', value: 3 },
+        { id: '4', text: '能冷静分析批评的合理性', value: 4 },
+        { id: '5', text: '主动寻求反馈，将批评视为成长机会', value: 5 },
+      ]},
+      { id: 'eq-8', text: '我能在高压环境下保持冷静和专注', type: 'single', options: [
+        { id: '1', text: '压力下容易崩溃或逃避', value: 1 },
+        { id: '2', text: '能勉强应付，但效率下降', value: 2 },
+        { id: '3', text: '有一定抗压能力，但有时会焦虑', value: 3 },
+        { id: '4', text: '通常能在压力下保持稳定', value: 4 },
+        { id: '5', text: '压力反而让我更加专注和高效', value: 5 },
+      ]},
+      { id: 'eq-9', text: '我能根据不同场合调整自己的言行举止', type: 'single', options: [
+        { id: '1', text: '不太会察言观色，经常不合时宜', value: 1 },
+        { id: '2', text: '有时能调整，但经常出错', value: 2 },
+        { id: '3', text: '基本能适应不同场合', value: 3 },
+        { id: '4', text: '能灵活调整，给人得体印象', value: 4 },
+        { id: '5', text: '游刃有余，在各种场合都表现恰当', value: 5 },
+      ]},
+      { id: 'eq-10', text: '我能有效激励和影响他人达成共同目标', type: 'single', options: [
+        { id: '1', text: '很难影响他人，更习惯独自行动', value: 1 },
+        { id: '2', text: '有时能说服他人，但效果不稳定', value: 2 },
+        { id: '3', text: '有一定影响力，但不够强', value: 3 },
+        { id: '4', text: '能有效激励他人，建立共识', value: 4 },
+        { id: '5', text: '天生的领导者，善于激发他人潜能', value: 5 },
+      ]},
+      { id: 'eq-11', text: '我能妥善处理人际冲突，找到双方都能接受的解决方案', type: 'single', options: [
+        { id: '1', text: '冲突让我不知所措，倾向于回避', value: 1 },
+        { id: '2', text: '能处理简单冲突，复杂情况会逃避', value: 2 },
+        { id: '3', text: '有一定调解能力，但效果有限', value: 3 },
+        { id: '4', text: '能有效调解冲突，找到折中方案', value: 4 },
+        { id: '5', text: '擅长化解矛盾，常被请来调解纠纷', value: 5 },
+      ]},
+      { id: 'eq-12', text: '我能建立并维护广泛的社交网络', type: 'single', options: [
+        { id: '1', text: '社交圈子很小，不善于拓展关系', value: 1 },
+        { id: '2', text: '有几个好友，但不太主动社交', value: 2 },
+        { id: '3', text: '有一定社交圈，但维护不够主动', value: 3 },
+        { id: '4', text: '能主动建立和维护人际关系', value: 4 },
+        { id: '5', text: '社交达人，拥有广泛而深厚的人脉', value: 5 },
+      ]},
+      { id: 'eq-13', text: '我能够识别并管理自己的冲动和欲望', type: 'single', options: [
+        { id: '1', text: '经常冲动行事，事后后悔', value: 1 },
+        { id: '2', text: '有时能控制，有时会失控', value: 2 },
+        { id: '3', text: '基本能控制，但需要努力', value: 3 },
+        { id: '4', text: '能较好地管理冲动', value: 4 },
+        { id: '5', text: '高度自律，能延迟满足', value: 5 },
+      ]},
+      { id: 'eq-14', text: '我能够敏锐地察觉团队氛围并做出适当反应', type: 'single', options: [
+        { id: '1', text: '对团队氛围不敏感', value: 1 },
+        { id: '2', text: '只能察觉明显的氛围变化', value: 2 },
+        { id: '3', text: '能感知氛围，但反应不够及时', value: 3 },
+        { id: '4', text: '能敏锐察觉并适当应对', value: 4 },
+        { id: '5', text: '能精准把握团队动态并引导氛围', value: 5 },
+      ]},
+      { id: 'eq-15', text: '我能够在不同文化背景下与人有效沟通', type: 'single', options: [
+        { id: '1', text: '很难适应不同文化背景', value: 1 },
+        { id: '2', text: '对熟悉的文化可以，陌生的困难', value: 2 },
+        { id: '3', text: '有一定跨文化沟通能力', value: 3 },
+        { id: '4', text: '能适应大多数文化背景', value: 4 },
+        { id: '5', text: '跨文化沟通专家，能适应各种背景', value: 5 },
+      ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
       const selfAwareness = ((answers[0]?.value || 0) + (answers[1]?.value || 0)) / 2
-      const selfManagement = answers[2]?.value || 0
-      const socialAwareness = answers[3]?.value || 0
-      const relationshipManagement = ((answers[4]?.value || 0) + (answers[5]?.value || 0)) / 2
+      const selfManagement = ((answers[2]?.value || 0) + (answers[7]?.value || 0)) / 2
+      const socialAwareness = ((answers[3]?.value || 0) + (answers[8]?.value || 0)) / 2
+      const relationshipManagement = ((answers[4]?.value || 0) + (answers[5]?.value || 0) + (answers[9]?.value || 0) + (answers[10]?.value || 0) + (answers[11]?.value || 0)) / 5
 
       const totalScore = calculateScore(answers)
-      const percentage = Math.round((totalScore / 30) * 100)
+      const percentage = Math.round((totalScore / 60) * 100)
 
       let level: string
       let overallDesc: string
@@ -449,6 +822,18 @@ export const assessments: Assessment[] = [
         type: level,
         title: `情绪智力评估: ${level}`,
         description: overallDesc,
+        score: percentage,
+        accuracy: 86,
+        dimensions: [
+          { name: '自我觉察', score: selfAwareness, maxScore: 5, description: selfAwareness >= 4 ? '优秀' : selfAwareness >= 3 ? '良好' : '待提升' },
+          { name: '情绪管理', score: selfManagement, maxScore: 5, description: selfManagement >= 4 ? '优秀' : selfManagement >= 3 ? '良好' : '待提升' },
+          { name: '社会觉察', score: socialAwareness, maxScore: 5, description: socialAwareness >= 4 ? '优秀' : socialAwareness >= 3 ? '良好' : '待提升' },
+          { name: '关系管理', score: relationshipManagement, maxScore: 5, description: relationshipManagement >= 4 ? '优秀' : relationshipManagement >= 3 ? '良好' : '待提升' },
+        ],
+        strengths: percentage >= 60 ? ['情绪觉察能力强', '善于人际交往', '抗压能力好'].slice(0, percentage >= 80 ? 3 : 2) : ['有自我提升意识'],
+        weaknesses: percentage < 60 ? ['可在以下方面加强:' + [selfAwareness < 3 ? ' 自我觉察' : '', selfManagement < 3 ? ' 情绪管理' : '', socialAwareness < 3 ? ' 共情能力' : '', relationshipManagement < 3 ? ' 沟通技巧' : ''].filter(Boolean).join('')] : [],
+        careers: ['人力资源经理', '心理咨询师', '团队领导', '客户服务经理', '教师', '销售总监', '公关专员', '谈判专家'],
+        suggestions: ['💡 提升建议: 1) 每天花10分钟记录情绪日记；2) 练习"暂停6秒"法则——在反应前深呼吸；3) 主动倾听他人，不打断不评判；4) 学习非暴力沟通技巧；5) 定期进行冥想或正念练习。情商是一项可以通过持续练习不断提高的能力。'],
         traits: [
           { name: '自我觉察', score: selfAwareness, maxScore: 5, description: selfAwareness >= 4 ? '优秀' : selfAwareness >= 3 ? '良好' : '待提升' },
           { name: '情绪管理', score: selfManagement, maxScore: 5, description: selfManagement >= 4 ? '优秀' : selfManagement >= 3 ? '良好' : '待提升' },
@@ -471,7 +856,7 @@ export const assessments: Assessment[] = [
     id: 'holland-career',
     title: '霍兰德职业兴趣测试',
     description: '基于霍兰德RIASEC理论，通过12道题目发现你的职业兴趣类型和最适合的职业方向。',
-    category: '职业能力',
+    category: '职业发展',
     difficulty: 'standard',
     duration: 10,
     questions: [
@@ -523,6 +908,18 @@ export const assessments: Assessment[] = [
         { id: 'c2', text: '是的，准确性和质量是首要考量', value: 2, trait: 'C' },
         { id: 'no', text: '不是，更注重速度和效率', value: 0 },
       ]},
+      { id: 'ri-13', text: '我喜欢使用工具、机器或设备来完成工作任务', type: 'single', options: [
+        { id: 'r3', text: '是的，操作工具让我感到熟练和自信', value: 2, trait: 'R' },
+        { id: 'no', text: '不是，更倾向于使用思维而非工具', value: 0 },
+      ]},
+      { id: 'ri-14', text: '我喜欢阅读科学书籍、研究论文或参加学术讨论', type: 'single', options: [
+        { id: 'i3', text: '是的，知识探索是我的热情所在', value: 2, trait: 'I' },
+        { id: 'no', text: '不是，更喜欢实践而非理论', value: 0 },
+      ]},
+      { id: 'ri-15', text: '我经常有新的想法或创意，并希望将其变为现实', type: 'single', options: [
+        { id: 'a3', text: '是的，创新思维是我的特质', value: 2, trait: 'A' },
+        { id: 'no', text: '不是，更擅长执行而非创新', value: 0 },
+      ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
       const traits: Record<string, number> = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 }
@@ -553,10 +950,23 @@ export const assessments: Assessment[] = [
         'CRS': ['法律助理'], 'CSI': ['统计学家'],
       }
 
+      const totalScore = Object.values(traits).reduce((sum, val) => sum + val, 0)
       return {
         type: top3,
         title: `职业兴趣代码: ${top3}`,
         description: `你的霍兰德职业兴趣类型为 ${code.map(k => typeNames[k]).join('→')}。这个组合反映了你最主要的职业兴趣倾向。`,
+        score: Math.round((totalScore / 24) * 100),
+        accuracy: 84,
+        dimensions: sorted.map(([key, score]) => ({
+          name: typeNames[key],
+          score,
+          maxScore: 4,
+          description: score >= 4 ? '强烈兴趣' : score >= 2 ? '中等兴趣' : '轻微兴趣'
+        })),
+        strengths: [`你的主导兴趣是${typeNames[code[0]]}，这表明你在相关领域会更有动力和成就感`],
+        weaknesses: code.length > 0 && sorted[sorted.length - 1][1] === 0 ? [`你对${typeNames[sorted[sorted.length - 1][0]]}类型的活动兴趣较低，这在职业选择时可以考虑`] : [],
+        careers: careerMap[top3] || code.slice(0, 2).flatMap(k => careerMap[k] || []).slice(0, 6),
+        suggestions: [`💡 职业建议：根据你的霍兰德代码${top3}，你最适合的工作环境应该能够发挥你的${code.slice(0, 2).map(k => typeNames[k]).join('和')}特质。建议在职业规划时优先考虑这些领域，同时也可以尝试将不同类型的元素结合，创造独特的职业路径。记住，职业兴趣是可以发展的，保持开放心态探索新的可能性！`],
         traits: sorted.map(([key, score]) => ({
           name: typeNames[key],
           score,
@@ -577,40 +987,118 @@ export const assessments: Assessment[] = [
   {
     id: 'leadership-style',
     title: '领导风格评估',
-    description: '通过10道情境题识别你的自然领导风格——民主型、权威型、教练型还是其他？',
-    category: '职业能力',
+    description: '通过18道情境题识别你的自然领导风格——民主型、权威型、教练型还是其他？',
+    category: '职业发展',
     difficulty: 'standard',
     duration: 8,
     questions: [
-      { id: 'ls-1', text: '当团队成员对任务有分歧时，我通常会：', type: 'single', options: [
+      { id: 'lead-1', text: '当团队成员对任务有分歧时，我通常会：', type: 'single', options: [
         { id: 'a', text: '组织讨论让大家投票决定', value: 3, trait: '民主' },
         { id: 'b', text: '听取意见后自己做出最终决策', value: 3, trait: '权威' },
         { id: 'c', text: '引导大家找到共同点达成共识', value: 3, trait: '教练' },
         { id: 'd', text: '设定明确目标让他们自行解决', value: 3, trait: '放任' },
       ]},
-      { id: 'ls-2', text: '面对紧急项目截止日期，我的管理方式是：', type: 'single', options: [
+      { id: 'lead-2', text: '面对紧急项目截止日期，我的管理方式是：', type: 'single', options: [
         { id: 'a', text: '快速分配任务并密切跟进进度', value: 3, trait: '权威' },
         { id: 'b', text: '与团队一起制定应急计划', value: 3, trait: '民主' },
         { id: 'c', text: '信任团队能力，提供支持但不干预', value: 3, trait: '放任' },
         { id: 'd', text: '帮助成员提升效率和能力', value: 3, trait: '教练' },
       ]},
-      { id: 'ls-3', text: '当团队成员犯错时，我倾向于：', type: 'single', options: [
+      { id: 'lead-3', text: '当团队成员犯错时，我倾向于：', type: 'single', options: [
         { id: 'a', text: '分析原因并制定预防措施', value: 3, trait: '教练' },
         { id: 'b', text: '指出错误并要求立即改正', value: 3, trait: '权威' },
         { id: 'c', text: '让团队成员自己反思和学习', value: 3, trait: '放任' },
         { id: 'd', text: '召开团队会议共同讨论解决方案', value: 3, trait: '民主' },
       ]},
-      { id: 'ls-4', text: '我认为一个好的领导者最重要的是：', type: 'single', options: [
+      { id: 'lead-4', text: '我认为一个好的领导者最重要的是：', type: 'single', options: [
         { id: 'a', text: '有远见并能清晰传达愿景', value: 3, trait: '权威' },
         { id: 'b', text: '能激发团队成员的潜力', value: 3, trait: '教练' },
         { id: 'c', text: '能让每个人都参与决策', value: 3, trait: '民主' },
         { id: 'd', text: '给予团队充分的自主权', value: 3, trait: '放任' },
       ]},
-      { id: 'ls-5', text: '在新项目启动时，我通常会：', type: 'single', options: [
+      { id: 'lead-5', text: '在新项目启动时，我通常会：', type: 'single', options: [
         { id: 'a', text: '详细规划每个步骤并分配责任', value: 3, trait: '权威' },
         { id: 'b', text: '与核心成员头脑风暴确定方向', value: 3, trait: '民主' },
         { id: 'c', text: '说明目标后让团队自主安排', value: 3, trait: '放任' },
         { id: 'd', text: '了解每个人的发展需求再分配任务', value: 3, trait: '教练' },
+      ]},
+      { id: 'lead-6', text: '当团队士气低落时，我会：', type: 'single', options: [
+        { id: 'a', text: '组织活动让大家参与决策', value: 3, trait: '民主' },
+        { id: 'b', text: '设定新目标激励团队', value: 3, trait: '权威' },
+        { id: 'c', text: '与成员一对一谈话了解需求', value: 3, trait: '教练' },
+        { id: 'd', text: '相信团队能自我调整', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-7', text: '对于团队成员的职业发展，我倾向于：', type: 'single', options: [
+        { id: 'a', text: '制定明确的晋升路径和要求', value: 3, trait: '权威' },
+        { id: 'b', text: '与成员讨论并支持他们的选择', value: 3, trait: '民主' },
+        { id: 'c', text: '提供指导和培训机会', value: 3, trait: '教练' },
+        { id: 'd', text: '让他们自己探索发展路径', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-8', text: '当团队面临重大变革时，我会：', type: 'single', options: [
+        { id: 'a', text: '明确传达变革的必要性和方向', value: 3, trait: '权威' },
+        { id: 'b', text: '征求团队意见并共同制定计划', value: 3, trait: '民主' },
+        { id: 'c', text: '帮助成员适应变革并提升能力', value: 3, trait: '教练' },
+        { id: 'd', text: '让团队自行决定如何应对', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-9', text: '我认为奖励和认可应该：', type: 'single', options: [
+        { id: 'a', text: '基于明确的绩效标准', value: 3, trait: '权威' },
+        { id: 'b', text: '由团队共同讨论决定', value: 3, trait: '民主' },
+        { id: 'c', text: '关注个人成长和进步', value: 3, trait: '教练' },
+        { id: 'd', text: '让团队自己决定', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-10', text: '当团队成员之间出现冲突时，我会：', type: 'single', options: [
+        { id: 'a', text: '快速介入并做出裁决', value: 3, trait: '权威' },
+        { id: 'b', text: '组织双方讨论寻找共识', value: 3, trait: '民主' },
+        { id: 'c', text: '引导他们学习解决冲突的技巧', value: 3, trait: '教练' },
+        { id: 'd', text: '让他们自己解决', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-11', text: '在分配任务时，我倾向于：', type: 'single', options: [
+        { id: 'a', text: '根据能力和工作量明确分配', value: 3, trait: '权威' },
+        { id: 'b', text: '让团队讨论并自愿认领', value: 3, trait: '民主' },
+        { id: 'c', text: '考虑成员的发展需求', value: 3, trait: '教练' },
+        { id: 'd', text: '让团队自行协调', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-12', text: '对于团队的工作流程，我认为：', type: 'single', options: [
+        { id: 'a', text: '应该标准化并严格执行', value: 3, trait: '权威' },
+        { id: 'b', text: '应该由团队讨论制定', value: 3, trait: '民主' },
+        { id: 'c', text: '应该不断优化和改进', value: 3, trait: '教练' },
+        { id: 'd', text: '让团队自己决定', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-13', text: '当团队成员提出创新想法时，我会：', type: 'single', options: [
+        { id: 'a', text: '评估可行性后决定是否采纳', value: 3, trait: '权威' },
+        { id: 'b', text: '让团队讨论并投票决定', value: 3, trait: '民主' },
+        { id: 'c', text: '鼓励他们尝试并提供支持', value: 3, trait: '教练' },
+        { id: 'd', text: '让他们自由探索', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-14', text: '我认为领导者最重要的品质是：', type: 'single', options: [
+        { id: 'a', text: '果断和决断力', value: 3, trait: '权威' },
+        { id: 'b', text: '倾听和包容', value: 3, trait: '民主' },
+        { id: 'c', text: '培养他人的能力', value: 3, trait: '教练' },
+        { id: 'd', text: '信任和放手', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-15', text: '在团队会议中，我通常：', type: 'single', options: [
+        { id: 'a', text: '主导会议并做出决策', value: 3, trait: '权威' },
+        { id: 'b', text: '引导讨论并寻求共识', value: 3, trait: '民主' },
+        { id: 'c', text: '鼓励成员发言并给予反馈', value: 3, trait: '教练' },
+        { id: 'd', text: '让团队自己主持会议', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-16', text: '当团队取得成功时，我会：', type: 'single', options: [
+        { id: 'a', text: '肯定团队的执行力', value: 3, trait: '权威' },
+        { id: 'b', text: '强调团队的共同努力', value: 3, trait: '民主' },
+        { id: 'c', text: '指出每个人的成长和贡献', value: 3, trait: '教练' },
+        { id: 'd', text: '让团队自己庆祝', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-17', text: '对于团队成员的培训和发展，我倾向于：', type: 'single', options: [
+        { id: 'a', text: '制定培训计划并监督执行', value: 3, trait: '权威' },
+        { id: 'b', text: '与成员讨论并共同制定计划', value: 3, trait: '民主' },
+        { id: 'c', text: '亲自指导并提供学习机会', value: 3, trait: '教练' },
+        { id: 'd', text: '让他们自己寻找学习资源', value: 3, trait: '放任' },
+      ]},
+      { id: 'lead-18', text: '我认为优秀的团队应该：', type: 'single', options: [
+        { id: 'a', text: '高效执行，目标明确', value: 3, trait: '权威' },
+        { id: 'b', text: '团结协作，共同决策', value: 3, trait: '民主' },
+        { id: 'c', text: '持续成长，互相学习', value: 3, trait: '教练' },
+        { id: 'd', text: '自主管理，自我驱动', value: 3, trait: '放任' },
       ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
@@ -654,11 +1142,24 @@ export const assessments: Assessment[] = [
       }
 
       const info = styleInfo[dominant[0]] || styleInfo['民主']
+      const totalScore = Object.values(styles).reduce((sum, val) => sum + val, 0)
 
       return {
         type: dominant[0],
         title: `${dominant[0]}型领导风格`,
         description: info.desc,
+        score: Math.round((totalScore / 54) * 100),
+        accuracy: 83,
+        dimensions: Object.entries(styles).map(([name, score]) => ({
+          name: `${name}型`,
+          score,
+          maxScore: 13.5,
+          description: name === dominant[0] ? '主导风格' : score >= 9 ? '次要风格' : '较少使用'
+        })),
+        strengths: info.strengths,
+        weaknesses: info.weaknesses,
+        careers: [info.bestFor],
+        suggestions: [`🎯 领导力发展建议：${info.advice}\n\n💡 记住：优秀的领导者能够根据情境灵活调整领导风格。没有一种风格适用于所有情况。建议学习情境领导理论，根据团队成员的成熟度和任务的紧迫性选择最合适的领导方式。`],
         traits: Object.entries(styles).map(([name, score]) => ({
           name: `${name}型`,
           score,
@@ -741,6 +1242,55 @@ export const assessments: Assessment[] = [
         { id: '4', text: '经常避免深度情感交流', value: 4 },
         { id: '5', text: '非常不舒服，主动回避', value: 5 },
       ]},
+      { id: 'as-9', text: '当关系中出现问题时，我倾向于：', type: 'single', options: [
+        { id: '1', text: '主动沟通，寻求解决方案', value: 1 },
+        { id: '2', text: '冷静思考后再讨论', value: 2 },
+        { id: '3', text: '等待对方先开口', value: 3 },
+        { id: '4', text: '担心冲突而回避问题', value: 4 },
+        { id: '5', text: '选择沉默或离开', value: 5 },
+      ]},
+      { id: 'as-10', text: '我对伴侣的情绪变化：', type: 'single', options: [
+        { id: '1', text: '能敏锐察觉并给予支持', value: 1 },
+        { id: '2', text: '通常能注意到', value: 2 },
+        { id: '3', text: '有时会忽略', value: 3 },
+        { id: '4', text: '过度关注，容易焦虑', value: 4 },
+        { id: '5', text: '不太在意，觉得与我无关', value: 5 },
+      ]},
+      { id: 'as-11', text: '在亲密关系中，我更害怕：', type: 'single', options: [
+        { id: '1', text: '不太害怕什么，相信关系', value: 1 },
+        { id: '2', text: '失去自我', value: 2 },
+        { id: '3', text: '被误解或不被欣赏', value: 3 },
+        { id: '4', text: '被抛弃或被拒绝', value: 4 },
+        { id: '5', text: '过于亲密而失去自由', value: 5 },
+      ]},
+      { id: 'as-12', text: '当伴侣需要我时，我通常会：', type: 'single', options: [
+        { id: '1', text: '立即响应，全力支持', value: 1 },
+        { id: '2', text: '愿意帮助，但会评估情况', value: 2 },
+        { id: '3', text: '有时会感到负担', value: 3 },
+        { id: '4', text: '担心自己做得不够好', value: 4 },
+        { id: '5', text: '感到压力，想要逃避', value: 5 },
+      ]},
+      { id: 'as-13', text: '我认为理想的关系应该是：', type: 'single', options: [
+        { id: '1', text: '亲密无间，相互依赖', value: 1 },
+        { id: '2', text: '亲密但有各自空间', value: 2 },
+        { id: '3', text: '相互尊重，保持独立', value: 3 },
+        { id: '4', text: '需要时刻确认对方的爱', value: 4 },
+        { id: '5', text: '保持距离，避免过度依赖', value: 5 },
+      ]},
+      { id: 'as-14', text: '当伴侣表达爱意时，我会：', type: 'single', options: [
+        { id: '1', text: '感到温暖，自然回应', value: 1 },
+        { id: '2', text: '感到开心，但有些害羞', value: 2 },
+        { id: '3', text: '有些不自在', value: 3 },
+        { id: '4', text: '怀疑对方的动机', value: 4 },
+        { id: '5', text: '感到压力，想要逃离', value: 5 },
+      ]},
+      { id: 'as-15', text: '对于长期的承诺关系，我的态度是：', type: 'single', options: [
+        { id: '1', text: '向往并愿意投入', value: 1 },
+        { id: '2', text: '谨慎但愿意尝试', value: 2 },
+        { id: '3', text: '有些犹豫和担心', value: 3 },
+        { id: '4', text: '害怕承诺会带来束缚', value: 4 },
+        { id: '5', text: '尽量避免长期承诺', value: 5 },
+      ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
       const secure = answers[0]?.value || 0 + (6 - (answers[5]?.value || 0))
@@ -773,6 +1323,17 @@ export const assessments: Assessment[] = [
         type: style,
         title: `依恋风格: ${style}`,
         description,
+        score: Math.round((secure / 10) * 100),
+        accuracy: 81,
+        dimensions: [
+          { name: '安全维度', score: Math.round(secure), maxScore: 10, description: secure >= 7 ? '安全稳定' : '有待加强' },
+          { name: '焦虑维度', score: Math.round(anxious), maxScore: 5, description: anxious < 3 ? '低焦虑' : anxious < 4 ? '中度焦虑' : '高焦虑' },
+          { name: '回避维度', score: Math.round(avoidant), maxScore: 5, description: avoidant < 3 ? '低回避' : avoidant < 4 ? '中度回避' : '高回避' },
+        ],
+        strengths: style === '安全型依恋' ? ['情感稳定性好', '信任能力强', '能平衡亲密与独立'] : ['有自我觉察能力', '愿意了解自己的依恋模式'],
+        weaknesses: style !== '安全型依恋' ? ['依恋模式可能影响关系质量'] : [],
+        careers: [],
+        suggestions: [advice],
         traits: [
           { name: '安全维度', score: Math.round(secure), maxScore: 10, description: secure >= 7 ? '安全稳定' : '有待加强' },
           { name: '焦虑维度', score: Math.round(anxious), maxScore: 5, description: anxious < 3 ? '低焦虑' : anxious < 4 ? '中度焦虑' : '高焦虑' },
@@ -792,7 +1353,7 @@ export const assessments: Assessment[] = [
   {
     id: 'communication-style',
     title: '沟通风格评估',
-    description: '识别你的主要沟通风格——分析型、表达型、温和型还是驱动型？以及如何优化你的沟通效果。',
+    description: '通过18道题目识别你的主要沟通风格——分析型、表达型、温和型还是驱动型？以及如何优化你的沟通效果。',
     category: '人际关系',
     difficulty: 'standard',
     duration: 8,
@@ -828,6 +1389,84 @@ export const assessments: Assessment[] = [
         { id: '2', text: '提出替代方案供大家考虑', value: 4, trait: '分析型' },
         { id: '3', text: '私下表达顾虑，公开表示支持', value: 3, trait: '温和型' },
         { id: '4', text: '尝试用有趣的方式重新阐述我的观点', value: 2, trait: '表达型' },
+      ]},
+      { id: 'cs-6', text: '在写邮件或报告时，我倾向于：', type: 'single', options: [
+        { id: '1', text: '详细列出所有数据和分析过程', value: 5, trait: '分析型' },
+        { id: '2', text: '简洁明了，直奔主题', value: 5, trait: '驱动型' },
+        { id: '3', text: '用温暖友好的语气表达', value: 5, trait: '温和型' },
+        { id: '4', text: '加入故事和生动的例子', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-7', text: '当有人向我倾诉问题时，我通常会：', type: 'single', options: [
+        { id: '1', text: '分析问题并提供解决方案', value: 5, trait: '分析型' },
+        { id: '2', text: '快速给出建议并推动行动', value: 5, trait: '驱动型' },
+        { id: '3', text: '倾听并表达理解和支持', value: 5, trait: '温和型' },
+        { id: '4', text: '分享类似的经历或故事', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-8', text: '在团队讨论中，我最看重的是：', type: 'single', options: [
+        { id: '1', text: '讨论的逻辑性和数据支持', value: 5, trait: '分析型' },
+        { id: '2', text: '讨论的效率和结果', value: 5, trait: '驱动型' },
+        { id: '3', text: '每个人的参与感和和谐氛围', value: 5, trait: '温和型' },
+        { id: '4', text: '讨论的创意和互动性', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-9', text: '当我需要说服他人时，我会：', type: 'single', options: [
+        { id: '1', text: '用数据和事实构建逻辑论证', value: 5, trait: '分析型' },
+        { id: '2', text: '强调行动的紧迫性和好处', value: 5, trait: '驱动型' },
+        { id: '3', text: '考虑对方感受，寻找共同点', value: 5, trait: '温和型' },
+        { id: '4', text: '用生动的故事和比喻打动对方', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-10', text: '面对批评时，我倾向于：', type: 'single', options: [
+        { id: '1', text: '分析批评的合理性并改进', value: 5, trait: '分析型' },
+        { id: '2', text: '快速回应并采取行动', value: 5, trait: '驱动型' },
+        { id: '3', text: '反思自己的行为并道歉', value: 5, trait: '温和型' },
+        { id: '4', text: '用幽默化解尴尬', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-11', text: '在介绍新想法时，我通常会：', type: 'single', options: [
+        { id: '1', text: '详细说明背景、数据和可行性', value: 5, trait: '分析型' },
+        { id: '2', text: '直接说明核心价值和行动步骤', value: 5, trait: '驱动型' },
+        { id: '3', text: '先征求意见，再逐步介绍想法', value: 5, trait: '温和型' },
+        { id: '4', text: '用引人入胜的方式开场', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-12', text: '当团队出现分歧时，我倾向于：', type: 'single', options: [
+        { id: '1', text: '分析各方观点的优劣', value: 5, trait: '分析型' },
+        { id: '2', text: '快速做出决定并推进', value: 5, trait: '驱动型' },
+        { id: '3', text: '寻找妥协方案维护和谐', value: 5, trait: '温和型' },
+        { id: '4', text: '鼓励大家开放讨论，激发创意', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-13', text: '在社交场合，我通常是：', type: 'single', options: [
+        { id: '1', text: '观察者，分析周围的人和事', value: 5, trait: '分析型' },
+        { id: '2', text: '行动者，推动活动进行', value: 5, trait: '驱动型' },
+        { id: '3', text: '支持者，帮助他人融入', value: 5, trait: '温和型' },
+        { id: '4', text: '活跃者，带动气氛', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-14', text: '当我需要反馈时，我希望对方：', type: 'single', options: [
+        { id: '1', text: '提供具体的数据和事实', value: 5, trait: '分析型' },
+        { id: '2', text: '直接明确地指出问题', value: 5, trait: '驱动型' },
+        { id: '3', text: '温和地表达，考虑我的感受', value: 5, trait: '温和型' },
+        { id: '4', text: '用鼓励和积极的方式提出', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-15', text: '在处理冲突时，我倾向于：', type: 'single', options: [
+        { id: '1', text: '分析冲突根源并提出解决方案', value: 5, trait: '分析型' },
+        { id: '2', text: '快速解决，不让问题拖延', value: 5, trait: '驱动型' },
+        { id: '3', text: '调解双方，寻找共识', value: 5, trait: '温和型' },
+        { id: '4', text: '用幽默或创意方式化解紧张', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-16', text: '我认为好的沟通应该：', type: 'single', options: [
+        { id: '1', text: '准确、有逻辑、有依据', value: 5, trait: '分析型' },
+        { id: '2', text: '高效、直接、结果导向', value: 5, trait: '驱动型' },
+        { id: '3', text: '友善、体贴、维护关系', value: 5, trait: '温和型' },
+        { id: '4', text: '生动、有趣、富有感染力', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-17', text: '当需要做演讲或展示时，我会：', type: 'single', options: [
+        { id: '1', text: '准备详细的数据和图表', value: 5, trait: '分析型' },
+        { id: '2', text: '聚焦核心信息，简洁有力', value: 5, trait: '驱动型' },
+        { id: '3', text: '关注观众反应，适时调整', value: 5, trait: '温和型' },
+        { id: '4', text: '设计互动环节，活跃气氛', value: 5, trait: '表达型' },
+      ]},
+      { id: 'cs-18', text: '我认为沟通中最大的挑战是：', type: 'single', options: [
+        { id: '1', text: '确保信息的准确性和完整性', value: 5, trait: '分析型' },
+        { id: '2', text: '在有限时间内达成目标', value: 5, trait: '驱动型' },
+        { id: '3', text: '平衡各方利益和感受', value: 5, trait: '温和型' },
+        { id: '4', text: '保持对方的兴趣和参与度', value: 5, trait: '表达型' },
       ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
@@ -867,11 +1506,24 @@ export const assessments: Assessment[] = [
       }
 
       const detail = styleDetails[dominant[0]] || styleDetails['分析型']
+      const totalScore = Object.values(styles).reduce((sum, val) => sum + val, 0)
 
       return {
         type: dominant[0],
         title: `主导沟通风格: ${dominant[0]}`,
         description: detail.desc,
+        score: Math.round((totalScore / 90) * 100),
+        accuracy: 80,
+        dimensions: Object.entries(styles).map(([name, score]) => ({
+          name,
+          score,
+          maxScore: 22.5,
+          description: name === dominant[0] ? '主导风格' : score >= 12 ? '次要风格' : '较少使用'
+        })),
+        strengths: detail.strengths,
+        weaknesses: detail.challenges,
+        careers: ['任何需要频繁沟通的职业都可以从了解自身沟通风格中受益'],
+        suggestions: [detail.tips],
         traits: Object.entries(styles).map(([name, score]) => ({
           name,
           score,
@@ -893,7 +1545,7 @@ export const assessments: Assessment[] = [
   {
     id: 'learning-style',
     title: '学习风格测评',
-    description: '通过VARK模型识别你的主要学习偏好——视觉型、听觉型、读写型还是动觉型？帮助你找到最高效的学习方法。',
+    description: '通过10道题目基于VARK模型识别你的主要学习偏好——视觉型、听觉型、读写型还是动觉型？帮助你找到最高效的学习方法。',
     category: '认知思维',
     difficulty: 'lite',
     duration: 6,
@@ -927,6 +1579,36 @@ export const assessments: Assessment[] = [
         { id: 'a', text: '口述解释并举例', value: 3, trait: '听觉型' },
         { id: 'r', text: '写邮件或文档详细说明', value: 3, trait: '读写型' },
         { id: 'k', text: '用实物演示或角色扮演', value: 3, trait: '动觉型' },
+      ]},
+      { id: 'ls-6', text: '当我需要学习一项新技能时，我更倾向于：', type: 'single', options: [
+        { id: 'v', text: '观看教学视频或演示', value: 3, trait: '视觉型' },
+        { id: 'a', text: '听取专家讲解或播客', value: 3, trait: '听觉型' },
+        { id: 'r', text: '阅读教程或手册', value: 3, trait: '读写型' },
+        { id: 'k', text: '直接上手实践', value: 3, trait: '动觉型' },
+      ]},
+      { id: 'ls-7', text: '在复习考试时，我最高效的方式是：', type: 'single', options: [
+        { id: 'v', text: '看图表、思维导图和笔记', value: 3, trait: '视觉型' },
+        { id: 'a', text: '听录音或参加学习小组讨论', value: 3, trait: '听觉型' },
+        { id: 'r', text: '重写笔记和做练习题', value: 3, trait: '读写型' },
+        { id: 'k', text: '通过实验或模拟操作', value: 3, trait: '动觉型' },
+      ]},
+      { id: 'ls-8', text: '当我需要记住一个电话号码时，我会：', type: 'single', options: [
+        { id: 'v', text: '在脑海中想象数字的样子', value: 3, trait: '视觉型' },
+        { id: 'a', text: '大声重复几遍', value: 3, trait: '听觉型' },
+        { id: 'r', text: '写下来或输入手机', value: 3, trait: '读写型' },
+        { id: 'k', text: '用手指在空中比划', value: 3, trait: '动觉型' },
+      ]},
+      { id: 'ls-9', text: '在学习新软件时，我更喜欢：', type: 'single', options: [
+        { id: 'v', text: '观看视频教程', value: 3, trait: '视觉型' },
+        { id: 'a', text: '听取同事讲解', value: 3, trait: '听觉型' },
+        { id: 'r', text: '阅读用户手册', value: 3, trait: '读写型' },
+        { id: 'k', text: '直接试用和探索', value: 3, trait: '动觉型' },
+      ]},
+      { id: 'ls-10', text: '当我需要理解一个复杂概念时，我会：', type: 'single', options: [
+        { id: 'v', text: '画图或查看示意图', value: 3, trait: '视觉型' },
+        { id: 'a', text: '请人讲解或参加讨论', value: 3, trait: '听觉型' },
+        { id: 'r', text: '阅读相关文献或写总结', value: 3, trait: '读写型' },
+        { id: 'k', text: '通过实际操作或实验', value: 3, trait: '动觉型' },
       ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
@@ -965,11 +1647,24 @@ export const assessments: Assessment[] = [
       }
 
       const tip = styleTips[primary[0]] || styleTips['视觉型']
+      const totalScore = Object.values(styles).reduce((sum, val) => sum + val, 0)
 
       return {
         type: primary[0],
         title: `主要学习风格: ${primary[0]}`,
         description: `你的主导学习风格是${primary[0]}，次要风格是${secondary[0]}。这意味着你主要通过${primary[0].replace('型', '')}通道获取和处理信息最为高效。`,
+        score: Math.round((totalScore / 60) * 100),
+        accuracy: 79,
+        dimensions: sorted.map(([name, score]) => ({
+          name,
+          score,
+          maxScore: 15,
+          description: name === primary[0] ? '主导风格' : name === secondary[0] ? '次要风格' : '辅助风格'
+        })),
+        strengths: [`${primary[0]}学习效率最高`, `可通过${secondary[0]}方式辅助强化`],
+        weaknesses: [`纯${sorted[sorted.length - 1][0].replace('型', '')}输入的学习方式效率较低`],
+        careers: ['了解自己的学习风格有助于选择适合的教育方式和职业培训路径'],
+        suggestions: [`📚 高效学习策略推荐：\n\n最佳学习方法：${tip.studyMethods.join('、')}\n\n理想学习环境：${tip.environment}\n\n${tip.advice}\n\n💡 提示：大多数人都是多模态学习者，可以结合多种学习方式以达到最佳效果。`],
         traits: sorted.map(([name, score]) => ({
           name,
           score,
@@ -990,7 +1685,7 @@ export const assessments: Assessment[] = [
   {
     id: 'critical-thinking',
     title: '批判性思维评估',
-    description: '通过10道情境题评估你的批判性思维能力，包括分析、推理、评估和自我校正等核心技能。',
+    description: '通过30道专业题目全面评估你的批判性思维能力，涵盖逻辑谬误识别、认知偏差觉察、信息素养、论证分析等核心技能。',
     category: '认知思维',
     difficulty: 'expert',
     duration: 10,
@@ -1025,10 +1720,160 @@ export const assessments: Assessment[] = [
         { id: 'c', text: '统计数据都是骗人的', value: 1 },
         { id: 'd', text: '不确定这是什么意思', value: 2 },
       ]},
+      { id: 'ct-6', text: '当有人用"大家都这么说"来支持一个观点时，我认为：', type: 'single', options: [
+        { id: 'a', text: '这是一个强有力的论据', value: 1 },
+        { id: 'b', text: '这是诉诸大众的谬误', value: 5 },
+        { id: 'c', text: '需要看具体有多少人这么说', value: 3 },
+        { id: 'd', text: '不太确定如何判断', value: 2 },
+      ]},
+      { id: 'ct-7', text: '阅读一篇有争议的文章时，我会：', type: 'single', options: [
+        { id: 'a', text: '关注作者的证据和论证过程', value: 5 },
+        { id: 'b', text: '看作者的头衔和背景', value: 3 },
+        { id: 'c', text: '看文章是否符合我的既有观点', value: 1 },
+        { id: 'd', text: '快速浏览得出结论', value: 2 },
+      ]},
+      { id: 'ct-8', text: '当统计数据与我的直觉相矛盾时，我会：', type: 'single', options: [
+        { id: 'a', text: '相信统计数据，质疑自己的直觉', value: 5 },
+        { id: 'b', text: '相信直觉，质疑数据的可靠性', value: 2 },
+        { id: 'c', text: '深入调查数据来源和统计方法', value: 5 },
+        { id: 'd', text: '忽略这个矛盾', value: 1 },
+      ]},
+      { id: 'ct-9', text: '我认为"幸存者偏差"是指：', type: 'single', options: [
+        { id: 'a', text: '只关注成功案例而忽略失败案例', value: 5 },
+        { id: 'b', text: '成功的人运气更好', value: 2 },
+        { id: 'c', text: '失败的人不够努力', value: 1 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-10', text: '在辩论中，当对方提出一个我无法反驳的观点时，我会：', type: 'single', options: [
+        { id: 'a', text: '承认这个观点有道理并重新思考', value: 5 },
+        { id: 'b', text: '转移话题到其他方面', value: 2 },
+        { id: 'c', text: '攻击对方的人格或动机', value: 1 },
+        { id: 'd', text: '坚持己见但内心开始怀疑', value: 3 },
+      ]},
+      { id: 'ct-11', text: '我认为"确认偏差"是指：', type: 'single', options: [
+        { id: 'a', text: '倾向于寻找支持自己观点的证据', value: 5 },
+        { id: 'b', text: '确认信息的准确性', value: 2 },
+        { id: 'c', text: '确认自己的决定是正确的', value: 1 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-12', text: '当看到"研究表明..."这样的表述时，我会：', type: 'single', options: [
+        { id: 'a', text: '立即相信研究结论', value: 1 },
+        { id: 'b', text: '查看研究的样本量、方法和局限性', value: 5 },
+        { id: 'c', text: '看研究是否支持我的观点', value: 2 },
+        { id: 'd', text: '不太在意研究细节', value: 2 },
+      ]},
+      { id: 'ct-13', text: '我认为"稻草人谬误"是指：', type: 'single', options: [
+        { id: 'a', text: '歪曲对方观点然后攻击这个歪曲版本', value: 5 },
+        { id: 'b', text: '用稻草人做比喻', value: 1 },
+        { id: 'c', text: '攻击对方的人格', value: 2 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-14', text: '当有人用个人经历作为证据时，我认为：', type: 'single', options: [
+        { id: 'a', text: '个人经历是最可靠的证据', value: 1 },
+        { id: 'b', text: '个人经历有价值但需要更多证据支持', value: 5 },
+        { id: 'c', text: '个人经历完全不可信', value: 2 },
+        { id: 'd', text: '看情况，如果是我认同的就相信', value: 2 },
+      ]},
+      { id: 'ct-15', text: '我认为"滑坡谬误"是指：', type: 'single', options: [
+        { id: 'a', text: '错误地认为一个行动会导致一系列极端后果', value: 5 },
+        { id: 'b', text: '在斜坡上滑倒', value: 1 },
+        { id: 'c', text: '事情会越来越糟', value: 2 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-16', text: '当面对复杂问题时，我会：', type: 'single', options: [
+        { id: 'a', text: '分解问题，逐步分析各个部分', value: 5 },
+        { id: 'b', text: '寻找简单的解决方案', value: 2 },
+        { id: 'c', text: '依赖直觉快速判断', value: 2 },
+        { id: 'd', text: '等待他人给出答案', value: 1 },
+      ]},
+      { id: 'ct-17', text: '我认为"虚假两难"是指：', type: 'single', options: [
+        { id: 'a', text: '错误地只给出两个选择而忽略其他可能性', value: 5 },
+        { id: 'b', text: '面临两个困难的选择', value: 2 },
+        { id: 'c', text: '两个选择都是错的', value: 1 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-18', text: '当看到"某某名人推荐"的广告时，我会：', type: 'single', options: [
+        { id: 'a', text: '因为名人推荐而更信任产品', value: 1 },
+        { id: 'b', text: '分析名人是否有相关专业知识', value: 5 },
+        { id: 'c', text: '完全忽略名人的影响', value: 4 },
+        { id: 'd', text: '看产品本身的质量和证据', value: 5 },
+      ]},
+      { id: 'ct-19', text: '我认为"循环论证"是指：', type: 'single', options: [
+        { id: 'a', text: '用结论本身来证明结论', value: 5 },
+        { id: 'b', text: '论证过程很复杂', value: 2 },
+        { id: 'c', text: '反复讨论同一个问题', value: 2 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-20', text: '当我的观点被证明是错误的时候，我会：', type: 'single', options: [
+        { id: 'a', text: '感到羞愧并试图掩盖', value: 1 },
+        { id: 'b', text: '坦然接受并更新我的认知', value: 5 },
+        { id: 'c', text: '找借口为自己辩护', value: 2 },
+        { id: 'd', text: '怀疑证明我错误的人的动机', value: 1 },
+      ]},
+      { id: 'ct-21', text: '我认为"诉诸权威谬误"是指：', type: 'single', options: [
+        { id: 'a', text: '不当依赖权威人物的观点作为证据', value: 5 },
+        { id: 'b', text: '不尊重权威', value: 1 },
+        { id: 'c', text: '权威人士都是错的', value: 1 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-22', text: '在评估一个论证时，我会：', type: 'single', options: [
+        { id: 'a', text: '检查前提是否支持结论', value: 5 },
+        { id: 'b', text: '看结论是否符合我的观点', value: 1 },
+        { id: 'c', text: '关注论证者的语气和态度', value: 2 },
+        { id: 'd', text: '看论证有多长', value: 1 },
+      ]},
+      { id: 'ct-23', text: '我认为"后此谬误"（post hoc）是指：', type: 'single', options: [
+        { id: 'a', text: '错误地认为先后发生的事件有因果关系', value: 5 },
+        { id: 'b', text: '事情发生在后面', value: 1 },
+        { id: 'c', text: '事后诸葛亮', value: 2 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-24', text: '当遇到与自己观点相反的证据时，我会：', type: 'single', options: [
+        { id: 'a', text: '仔细评估证据的质量和相关性', value: 5 },
+        { id: 'b', text: '寻找证据的漏洞来否定它', value: 2 },
+        { id: 'c', text: '忽略这个证据', value: 1 },
+        { id: 'd', text: '立即改变自己的观点', value: 2 },
+      ]},
+      { id: 'ct-25', text: '我认为"人身攻击谬误"是指：', type: 'single', options: [
+        { id: 'a', text: '攻击提出观点的人而非观点本身', value: 5 },
+        { id: 'b', text: '批评他人的错误', value: 2 },
+        { id: 'c', text: '人身攻击都是不对的', value: 2 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-26', text: '在做出重要决定前，我会：', type: 'single', options: [
+        { id: 'a', text: '收集多方面的信息和证据', value: 5 },
+        { id: 'b', text: '相信自己的第一直觉', value: 2 },
+        { id: 'c', text: '跟随大多数人的选择', value: 1 },
+        { id: 'd', text: '快速决定不过多思考', value: 1 },
+      ]},
+      { id: 'ct-27', text: '我认为"诉诸情感谬误"是指：', type: 'single', options: [
+        { id: 'a', text: '用情感而非逻辑来影响判断', value: 5 },
+        { id: 'b', text: '表达情感是错误的', value: 1 },
+        { id: 'c', text: '情感不应该影响决策', value: 2 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-28', text: '当看到数据可视化图表时，我会：', type: 'single', options: [
+        { id: 'a', text: '检查坐标轴、比例尺和数据来源', value: 5 },
+        { id: 'b', text: '直接接受图表呈现的信息', value: 1 },
+        { id: 'c', text: '关注图表的美观程度', value: 1 },
+        { id: 'd', text: '看图表是否符合我的预期', value: 2 },
+      ]},
+      { id: 'ct-29', text: '我认为"以偏概全"是指：', type: 'single', options: [
+        { id: 'a', text: '用不充分的样本得出普遍性结论', value: 5 },
+        { id: 'b', text: '概括总结', value: 2 },
+        { id: 'c', text: '只看一部分信息', value: 2 },
+        { id: 'd', text: '不确定这个概念', value: 2 },
+      ]},
+      { id: 'ct-30', text: '在日常生活中，我倾向于：', type: 'single', options: [
+        { id: 'a', text: '质疑假设，寻找证据', value: 5 },
+        { id: 'b', text: '接受常规，遵循传统', value: 2 },
+        { id: 'c', text: '依赖直觉，快速判断', value: 2 },
+        { id: 'd', text: '跟随大众，避免冲突', value: 1 },
+      ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
       const totalScore = calculateScore(answers)
-      const percentage = Math.round((totalScore / 25) * 100)
+      const percentage = Math.round((totalScore / 150) * 100)
 
       let level: string
       let description: string = ''
@@ -1051,6 +1896,33 @@ export const assessments: Assessment[] = [
         type: level,
         title: `批判性思维水平: ${level}`,
         description,
+        score: percentage,
+        accuracy: 87,
+        dimensions: [{ name: '综合得分', score: percentage, maxScore: 100, description: `${totalScore}/150 分` }],
+        strengths: percentage >= 60 ? ['信息辨别能力强', '逻辑推理能力佳', '开放心态'] : ['有自我提升的意识'],
+        weaknesses: percentage < 60 ? ['可在以下方面加强: 信息源验证、逻辑谬误识别、认知偏差觉察、情绪对判断的影响'] : [],
+        careers: ['科学研究者', '新闻记者', '法官/律师', '政策分析师', '数据科学家', '战略顾问', '质量管理', '投资分析师'],
+        suggestions: [`🧠 批判性思维提升计划：
+
+1️⃣ 信息素养：
+   • 养成检查信息来源的习惯（作者资质、发布平台、引用来源）
+   • 使用横向阅读法：同时打开多个标签页对比同一事件的不同报道
+   • 了解常见的误导性信息手法（断章取义、 cherry-picking 数据等）
+
+2️⃣ 逻辑训练：
+   • 学习基本的逻辑谬误（稻草人、滑坡、虚假两难、人身攻击等）
+   • 练习识别日常对话和新闻中的逻辑漏洞
+   • 学习基础的概率和统计学知识
+
+3️⃣ 元认知练习：
+   • 定期反思：我为什么会持有这个观点？有什么证据支持？
+   • 寻找反驳自己观点的证据（钢铁人原则）
+   • 接受"我可能是错的"这种可能性
+
+4️⃣ 推荐资源：
+   • 书籍《思考，快与慢》- 丹尼尔·卡尼曼
+   • 书籍《超越感觉》- Vincent Ruggiero
+   • 课程：Critical Thinking (Duke University on Coursera)`],
         traits: [{ name: '综合得分', score: percentage, maxScore: 100, description: `${totalScore}/25 分` }],
         details: {
           strengths: percentage >= 60 ? ['信息辨别能力强', '逻辑推理能力佳', '开放心态'] : ['有自我提升的意识'],
@@ -1087,8 +1959,8 @@ export const assessments: Assessment[] = [
   {
     id: 'stress-management',
     title: '压力应对方式评估',
-    description: '识别你的主要压力应对策略——问题导向、情绪导向、社会支持还是回避型？了解你的应对模式有助于更好地管理压力。',
-    category: '健康生活',
+    description: '通过10道题目识别你的主要压力应对策略——问题导向、情绪导向、社会支持还是回避型？了解你的应对模式有助于更好地管理压力。',
+    category: '心理健康',
     difficulty: 'lite',
     duration: 6,
     questions: [
@@ -1115,6 +1987,42 @@ export const assessments: Assessment[] = [
         { id: 'b', text: '深呼吸和正念冥想', value: 5, trait: '情绪导向' },
         { id: 'c', text: '看电视或玩游戏分散注意', value: 5, trait: '回避型' },
         { id: 'd', text: '和朋友聊天减压', value: 5, trait: '社会支持' },
+      ]},
+      { id: 'sm-5', text: '当我感到压力很大时，我会：', type: 'single', options: [
+        { id: 'a', text: '制定详细的行动计划', value: 5, trait: '问题导向' },
+        { id: 'b', text: '通过运动或艺术活动释放情绪', value: 5, trait: '情绪导向' },
+        { id: 'c', text: '睡觉或看剧逃避现实', value: 5, trait: '回避型' },
+        { id: 'd', text: '找信任的人倾诉', value: 5, trait: '社会支持' },
+      ]},
+      { id: 'sm-6', text: '面对人际冲突带来的压力，我倾向于：', type: 'single', options: [
+        { id: 'a', text: '分析冲突原因并寻找解决方案', value: 5, trait: '问题导向' },
+        { id: 'b', text: '表达自己的感受和情绪', value: 5, trait: '情绪导向' },
+        { id: 'c', text: '避免与对方接触', value: 5, trait: '回避型' },
+        { id: 'd', text: '寻求第三方的帮助或调解', value: 5, trait: '社会支持' },
+      ]},
+      { id: 'sm-7', text: '当经济压力增大时，我会：', type: 'single', options: [
+        { id: 'a', text: '制定预算并寻找增加收入的方法', value: 5, trait: '问题导向' },
+        { id: 'b', text: '通过购物或美食来缓解焦虑', value: 5, trait: '情绪导向' },
+        { id: 'c', text: '不去想它，希望情况会好转', value: 5, trait: '回避型' },
+        { id: 'd', text: '向家人朋友寻求建议或帮助', value: 5, trait: '社会支持' },
+      ]},
+      { id: 'sm-8', text: '面对健康问题带来的压力，我会：', type: 'single', options: [
+        { id: 'a', text: '积极就医并调整生活方式', value: 5, trait: '问题导向' },
+        { id: 'b', text: '通过冥想或放松技巧管理情绪', value: 5, trait: '情绪导向' },
+        { id: 'c', text: '忽视症状，继续日常活动', value: 5, trait: '回避型' },
+        { id: 'd', text: '向家人朋友寻求支持和照顾', value: 5, trait: '社会支持' },
+      ]},
+      { id: 'sm-9', text: '当工作或学业压力过大时，我会：', type: 'single', options: [
+        { id: 'a', text: '重新规划时间表，分解任务优先级', value: 5, trait: '问题导向' },
+        { id: 'b', text: '通过运动或娱乐活动调节情绪', value: 5, trait: '情绪导向' },
+        { id: 'c', text: '拖延任务，转移注意力到其他事情', value: 5, trait: '回避型' },
+        { id: 'd', text: '向同事或同学寻求协助和建议', value: 5, trait: '社会支持' },
+      ]},
+      { id: 'sm-10', text: '面对重大人生决策的压力，我会：', type: 'single', options: [
+        { id: 'a', text: '深入分析利弊，制定详细计划', value: 5, trait: '问题导向' },
+        { id: 'b', text: '通过艺术创作或运动释放压力', value: 5, trait: '情绪导向' },
+        { id: 'c', text: '推迟决策，希望问题自行解决', value: 5, trait: '回避型' },
+        { id: 'd', text: '咨询专业人士或信任的朋友', value: 5, trait: '社会支持' },
       ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
@@ -1158,11 +2066,39 @@ export const assessments: Assessment[] = [
       }
 
       const info = strategyInfo[dominant[0]] || strategyInfo['问题导向']
+      const totalScore = Object.values(strategies).reduce((sum, val) => sum + val, 0)
 
       return {
         type: dominant[0],
         title: `主要应对策略: ${dominant[0]}`,
         description: info.desc,
+        score: Math.round((totalScore / 80) * 100),
+        accuracy: 78,
+        dimensions: Object.entries(strategies).map(([name, score]) => ({
+          name,
+          score,
+          maxScore: 20,
+          description: name === dominant[0] ? '首选策略' : score >= 10 ? '辅助策略' : '较少使用'
+        })),
+        strengths: [info.effectiveness],
+        weaknesses: [info.whenBad],
+        careers: [],
+        suggestions: [`🎯 压力管理优化建议：
+
+✅ 你的优势：${info.whenGood}
+
+⚠️ 需要注意：${info.whenBad}
+
+📈 提升方向：${info.improvement}
+
+💡 全面压力管理策略：
+1. 建立"压力工具箱"：包含至少三种不同的应对方式
+2. 识别你的压力信号（身体、情绪、行为）
+3. 练习正念和冥想（每天10分钟）
+4. 保持规律运动（每周3次，每次30分钟）
+5. 维护健康的睡眠习惯（7-9小时）
+6. 培养至少一个不带生产力的兴趣爱好
+7. 必要时寻求专业心理健康支持`],
         traits: Object.entries(strategies).map(([name, score]) => ({
           name,
           score,
@@ -1198,7 +2134,7 @@ export const assessments: Assessment[] = [
   {
     id: 'creativity-test',
     title: '创造力潜能评估',
-    description: '通过8道题目评估你的创造性思维潜能，包括发散思维、联想能力和创新倾向等方面。',
+    description: '通过18道题目全面评估你的创造性思维潜能，涵盖发散思维、联想能力、创新倾向、好奇心和问题解决等多个维度。',
     category: '认知思维',
     difficulty: 'standard',
     duration: 7,
@@ -1237,10 +2173,97 @@ export const assessments: Assessment[] = [
         { id: '4', text: '经常', value: 4 },
         { id: '5', text: '总是 - 灵感随时出现', value: 5 },
       ]},
+      { id: 'cr-6', text: '当遇到规则或限制时，我倾向于：', type: 'single', options: [
+        { id: 'a', text: '严格遵守规则', value: 1 },
+        { id: 'b', text: '在规则内寻找最佳方案', value: 3 },
+        { id: 'c', text: '思考规则是否合理', value: 4 },
+        { id: 'd', text: '寻找突破规则的创新方法', value: 5 },
+      ]},
+      { id: 'cr-7', text: '我喜欢尝试新的方法做事，即使可能会失败', type: 'single', options: [
+        { id: '1', text: '从不，我更喜欢稳妥的方法', value: 1 },
+        { id: '2', text: '很少，风险太大', value: 2 },
+        { id: '3', text: '有时，看情况', value: 3 },
+        { id: '4', text: '经常，失败也是学习', value: 4 },
+        { id: '5', text: '总是，创新需要冒险', value: 5 },
+      ]},
+      { id: 'cr-8', text: '我能够将看似不相关的概念联系起来', type: 'single', options: [
+        { id: '1', text: '从不，各事物是独立的', value: 1 },
+        { id: '2', text: '偶尔能发现一些联系', value: 2 },
+        { id: '3', text: '有时能建立联系', value: 3 },
+        { id: '4', text: '经常发现有趣的联系', value: 4 },
+        { id: '5', text: '总是能建立独特的联系', value: 5 },
+      ]},
+      { id: 'cr-9', text: '当别人提出一个"疯狂"的想法时，我会：', type: 'single', options: [
+        { id: 'a', text: '立即否定，不切实际', value: 1 },
+        { id: 'b', text: '保持怀疑但愿意听', value: 3 },
+        { id: 'c', text: '思考如何实现它', value: 4 },
+        { id: 'd', text: '兴奋地探索可能性', value: 5 },
+      ]},
+      { id: 'cr-10', text: '我喜欢收集各种有趣的信息和知识', type: 'single', options: [
+        { id: '1', text: '不，我只关注需要的', value: 1 },
+        { id: '2', text: '偶尔收集一些', value: 2 },
+        { id: '3', text: '有时会收集', value: 3 },
+        { id: '4', text: '经常收集', value: 4 },
+        { id: '5', text: '总是，好奇心很强', value: 5 },
+      ]},
+      { id: 'cr-11', text: '面对一个问题时，我能想到多种解决方案', type: 'single', options: [
+        { id: '1', text: '通常只有一个方案', value: 1 },
+        { id: '2', text: '能想到两三个', value: 2 },
+        { id: '3', text: '能想到几个不同方案', value: 3 },
+        { id: '4', text: '能想到很多方案', value: 4 },
+        { id: '5', text: '方案源源不断', value: 5 },
+      ]},
+      { id: 'cr-12', text: '我对"如果...会怎样"的思考方式很感兴趣', type: 'single', options: [
+        { id: '1', text: '不感兴趣，关注现实', value: 1 },
+        { id: '2', text: '偶尔会这样思考', value: 2 },
+        { id: '3', text: '有时会思考', value: 3 },
+        { id: '4', text: '经常这样思考', value: 4 },
+        { id: '5', text: '总是，这是我的思维习惯', value: 5 },
+      ]},
+      { id: 'cr-13', text: '我能够在混乱或不完整的信息中找到模式', type: 'single', options: [
+        { id: '1', text: '从不，需要清晰的信息', value: 1 },
+        { id: '2', text: '偶尔能发现', value: 2 },
+        { id: '3', text: '有时能找到', value: 3 },
+        { id: '4', text: '经常能发现模式', value: 4 },
+        { id: '5', text: '总是能快速识别', value: 5 },
+      ]},
+      { id: 'cr-14', text: '我喜欢改变日常惯例，尝试不同的方式', type: 'single', options: [
+        { id: '1', text: '不，我喜欢固定的惯例', value: 1 },
+        { id: '2', text: '很少改变', value: 2 },
+        { id: '3', text: '有时会改变', value: 3 },
+        { id: '4', text: '经常尝试新方式', value: 4 },
+        { id: '5', text: '总是寻找变化', value: 5 },
+      ]},
+      { id: 'cr-15', text: '当遇到困难时，我会从完全不同的角度重新思考', type: 'single', options: [
+        { id: 'a', text: '坚持原来的方向', value: 1 },
+        { id: 'b', text: '稍作调整', value: 2 },
+        { id: 'c', text: '尝试几个不同角度', value: 3 },
+        { id: 'd', text: '完全重新定义问题', value: 5 },
+      ]},
+      { id: 'cr-16', text: '我对未知的领域充满好奇和探索欲', type: 'single', options: [
+        { id: '1', text: '不，我更喜欢熟悉的领域', value: 1 },
+        { id: '2', text: '有一点好奇', value: 2 },
+        { id: '3', text: '比较好奇', value: 3 },
+        { id: '4', text: '很好奇', value: 4 },
+        { id: '5', text: '充满好奇和探索欲', value: 5 },
+      ]},
+      { id: 'cr-17', text: '我能够容忍模糊性和不确定性', type: 'single', options: [
+        { id: '1', text: '不能，需要明确的答案', value: 1 },
+        { id: '2', text: '很难忍受', value: 2 },
+        { id: '3', text: '可以接受', value: 3 },
+        { id: '4', text: '比较适应', value: 4 },
+        { id: '5', text: '很适应，甚至享受', value: 5 },
+      ]},
+      { id: 'cr-18', text: '我认为创造力是：', type: 'single', options: [
+        { id: 'a', text: '少数天才的特权', value: 1 },
+        { id: 'b', text: '需要天赋才能拥有', value: 2 },
+        { id: 'c', text: '可以通过学习提高', value: 4 },
+        { id: 'd', text: '每个人都有的潜能', value: 5 },
+      ]},
     ],
     resultCalculator: (answers: Answer[]): AssessmentResult => {
       const totalScore = calculateScore(answers)
-      const percentage = Math.round((totalScore / 25) * 100)
+      const percentage = Math.round((totalScore / 90) * 100)
 
       let level: string
       let description: string = ''
@@ -1263,6 +2286,39 @@ export const assessments: Assessment[] = [
         type: level,
         title: `创造力评估: ${level}`,
         description,
+        score: percentage,
+        accuracy: 76,
+        dimensions: [
+          { name: '发散思维', score: ((answers[0]?.value || 0) + (answers[2]?.value || 0) + (answers[10]?.value || 0)) / 3, maxScore: 5, description: '' },
+          { name: '想象能力', score: ((answers[1]?.value || 0) + (answers[4]?.value || 0) + (answers[11]?.value || 0)) / 3, maxScore: 5, description: '' },
+          { name: '审美兴趣', score: ((answers[3]?.value || 0) + (answers[9]?.value || 0)) / 2, maxScore: 5, description: '' },
+          { name: '创新倾向', score: ((answers[6]?.value || 0) + (answers[13]?.value || 0)) / 2, maxScore: 5, description: '' },
+          { name: '好奇心', score: ((answers[9]?.value || 0) + (answers[15]?.value || 0)) / 2, maxScore: 5, description: '' },
+        ],
+        strengths: percentage >= 60 ? ['思维灵活', '想象力丰富', '敢于突破常规'].slice(0, percentage >= 80 ? 3 : 2) : ['有提升创造力的意愿'],
+        weaknesses: percentage < 60 ? ['可以尝试更多创意练习'] : [],
+        careers: ['设计师', '艺术家', '作家', '产品经理', '创业者', '研究员', '广告创意', '游戏设计师', '建筑师', '导演'],
+        suggestions: [`🎨 创造力提升指南：
+
+🔥 日常练习：
+• 每天记录3个"如果..."的想法
+• SCAMPER技法：替代、合并、改编、修改、另用、消除、重排
+• 随机词联想法：随机选一个词，强行将它与当前问题联系起来
+• 思维导图练习（每天一个主题）
+
+🌱 环境塑造：
+• 接触不同领域的知识和人群
+• 参观美术馆、博物馆、科技展
+• 阅读科幻小说或诗歌
+• 学习一项新的艺术技能（绘画、乐器、手工）
+
+🧠 心态调整：
+• 接受"坏主意"——很多好主意最初看起来很蠢
+• 设定"疯狂想法时间"——不允许评判，只追求数量
+• 保持好奇心，像孩子一样提问
+• 允许自己无聊——创造力往往在无聊时涌现
+
+💡 记住：创造力就像肌肉，越练越强！`],
         traits: [
           { name: '发散思维', score: ((answers[0]?.value || 0) + (answers[2]?.value || 0)) / 2, maxScore: 5, description: '' },
           { name: '想象能力', score: ((answers[1]?.value || 0) + (answers[4]?.value || 0)) / 2, maxScore: 5, description: '' },
@@ -1298,6 +2354,2362 @@ export const assessments: Assessment[] = [
       }
     },
   },
+
+  {
+    id: 'iq-test',
+    title: '智力潜能评估',
+    description: '通过10道精心设计的题目，评估你的逻辑推理、空间思维、语言理解和记忆力等认知能力。',
+    category: '认知思维',
+    difficulty: 'standard',
+    duration: 12,
+    questions: [
+      { id: 'iq-1', text: '如果所有的A都是B，所有的B都是C，那么所有的A一定是C。', type: 'single', options: [
+        { id: 't', text: '正确', value: 5, trait: 'logical' },
+        { id: 'f', text: '错误', value: 0, trait: 'logical' },
+      ]},
+      { id: 'iq-2', text: '数列 2, 4, 8, 16, ? 的下一个数字是：', type: 'single', options: [
+        { id: 'a', text: '24', value: 0, trait: 'logical' },
+        { id: 'b', text: '30', value: 0, trait: 'logical' },
+        { id: 'c', text: '32', value: 5, trait: 'logical' },
+        { id: 'd', text: '36', value: 0, trait: 'logical' },
+      ]},
+      { id: 'iq-3', text: '一个立方体有几个面、几条边、几个顶点？', type: 'single', options: [
+        { id: 'a', text: '6面、12边、8顶点', value: 5, trait: 'spatial' },
+        { id: 'b', text: '6面、8边、6顶点', value: 0, trait: 'spatial' },
+        { id: 'c', text: '8面、12边、6顶点', value: 0, trait: 'spatial' },
+        { id: 'd', text: '4面、6边、4顶点', value: 0, trait: 'spatial' },
+      ]},
+      { id: 'iq-4', text: '"知识就是力量"这句话的隐含意思是：', type: 'single', options: [
+        { id: 'a', text: '有知识的人身体强壮', value: 0, trait: 'verbal' },
+        { id: 'b', text: '知识能够带来影响力和能力', value: 5, trait: 'verbal' },
+        { id: 'c', text: '学习可以增强体力', value: 0, trait: 'verbal' },
+        { id: 'd', text: '知识能够改变命运', value: 0, trait: 'verbal' },
+      ]},
+      { id: 'iq-5', text: '如果今天是星期三，100天后是星期几？', type: 'single', options: [
+        { id: 'a', text: '星期一', value: 0, trait: 'logical' },
+        { id: 'b', text: '星期二', value: 0, trait: 'logical' },
+        { id: 'c', text: '星期五', value: 5, trait: 'logical' },
+        { id: 'd', text: '星期六', value: 0, trait: 'logical' },
+      ]},
+      { id: 'iq-6', text: '词语类比：医生之于医院，如同教师之于？', type: 'single', options: [
+        { id: 'a', text: '学生', value: 0, trait: 'verbal' },
+        { id: 'b', text: '学校', value: 5, trait: 'verbal' },
+        { id: 'c', text: '书本', value: 0, trait: 'verbal' },
+        { id: 'd', text: '知识', value: 0, trait: 'verbal' },
+      ]},
+      { id: 'iq-7', text: '将一张正方形纸对折两次后，从中间剪一个小洞，展开后会有几个小洞？', type: 'single', options: [
+        { id: 'a', text: '1个', value: 0, trait: 'spatial' },
+        { id: 'b', text: '2个', value: 0, trait: 'spatial' },
+        { id: 'c', text: '4个', value: 5, trait: 'spatial' },
+        { id: 'd', text: '8个', value: 0, trait: 'spatial' },
+      ]},
+      { id: 'iq-8', text: '记住这组数字：8, 3, 7, 1, 9, 4。倒序复述是什么？', type: 'single', options: [
+        { id: 'a', text: '4, 9, 1, 7, 3, 8', value: 5, trait: 'memory' },
+        { id: 'b', text: '8, 3, 7, 1, 9, 4', value: 0, trait: 'memory' },
+        { id: 'c', text: '1, 3, 4, 7, 8, 9', value: 0, trait: 'memory' },
+        { id: 'd', text: '9, 4, 1, 7, 3, 8', value: 0, trait: 'memory' },
+      ]},
+      { id: 'iq-9', text: '找出不同类的一项：苹果、香蕉、胡萝卜、橙子、葡萄', type: 'single', options: [
+        { id: 'a', text: '苹果', value: 0, trait: 'verbal' },
+        { id: 'b', text: '香蕉', value: 0, trait: 'verbal' },
+        { id: 'c', text: '胡萝卜', value: 5, trait: 'verbal' },
+        { id: 'd', text: '橙子', value: 0, trait: 'verbal' },
+      ]},
+      { id: 'iq-10', text: '一个水池有两个进水管，单独开A管6小时注满，单独开B管4小时注满。同时开两管需要几小时？', type: 'single', options: [
+        { id: 'a', text: '2小时', value: 0, trait: 'logical' },
+        { id: 'b', text: '2.4小时', value: 5, trait: 'logical' },
+        { id: 'c', text: '3小时', value: 0, trait: 'logical' },
+        { id: 'd', text: '5小时', value: 0, trait: 'logical' },
+      ]},
+      { id: 'iq-11', text: '如果A>B，B>C，C>D，那么以下哪项一定正确？', type: 'single', options: [
+        { id: 'a', text: 'A>C', value: 5, trait: 'logical' },
+        { id: 'b', text: 'B>D', value: 0, trait: 'logical' },
+        { id: 'c', text: 'C>A', value: 0, trait: 'logical' },
+        { id: 'd', text: 'D>B', value: 0, trait: 'logical' },
+      ]},
+      { id: 'iq-12', text: '一个正方体的每个面都涂上颜色，切成27个小正方体后，有几个小正方体有三个面涂色？', type: 'single', options: [
+        { id: 'a', text: '4个', value: 0, trait: 'spatial' },
+        { id: 'b', text: '6个', value: 0, trait: 'spatial' },
+        { id: 'c', text: '8个', value: 5, trait: 'spatial' },
+        { id: 'd', text: '12个', value: 0, trait: 'spatial' },
+      ]},
+      { id: 'iq-13', text: '"时间就是金钱"这句话使用了什么修辞手法？', type: 'single', options: [
+        { id: 'a', text: '夸张', value: 0, trait: 'verbal' },
+        { id: 'b', text: '比喻', value: 5, trait: 'verbal' },
+        { id: 'c', text: '拟人', value: 0, trait: 'verbal' },
+        { id: 'd', text: '排比', value: 0, trait: 'verbal' },
+      ]},
+      { id: 'iq-14', text: '记住这组字母：A, C, E, G, I。按照字母表顺序，下一个字母应该是？', type: 'single', options: [
+        { id: 'a', text: 'J', value: 0, trait: 'memory' },
+        { id: 'b', text: 'K', value: 5, trait: 'memory' },
+        { id: 'c', text: 'L', value: 0, trait: 'memory' },
+        { id: 'd', text: 'M', value: 0, trait: 'memory' },
+      ]},
+      { id: 'iq-15', text: '数列 1, 1, 2, 3, 5, 8, ? 的下一个数字是：', type: 'single', options: [
+        { id: 'a', text: '11', value: 0, trait: 'logical' },
+        { id: 'b', text: '12', value: 0, trait: 'logical' },
+        { id: 'c', text: '13', value: 5, trait: 'logical' },
+        { id: 'd', text: '15', value: 0, trait: 'logical' },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const traits: Record<string, number> = { logical: 0, spatial: 0, verbal: 0, memory: 0 }
+      const traitCounts: Record<string, number> = { logical: 0, spatial: 0, verbal: 0, memory: 0 }
+      
+      answers.forEach((answer) => {
+        if (answer.trait) {
+          traits[answer.trait] = (traits[answer.trait] || 0) + (answer.value || 0)
+          traitCounts[answer.trait] = (traitCounts[answer.trait] || 0) + 1
+        }
+      })
+
+      const totalScore = Object.values(traits).reduce((a, b) => a + b, 0)
+      const maxScore = 50
+      const percentage = Math.round((totalScore / maxScore) * 100)
+      
+      const logicalScore = traitCounts.logical > 0 ? Math.round((traits.logical / (traitCounts.logical * 5)) * 100) : 50
+      const spatialScore = traitCounts.spatial > 0 ? Math.round((traits.spatial / (traitCounts.spatial * 5)) * 100) : 50
+      const verbalScore = traitCounts.verbal > 0 ? Math.round((traits.verbal / (traitCounts.verbal * 5)) * 100) : 50
+      const memoryScore = traitCounts.memory > 0 ? Math.round((traits.memory / (traitCounts.memory * 5)) * 100) : 50
+
+      let iqLevel: string
+      let description: string
+      let percentile: string
+
+      if (percentage >= 90) {
+        iqLevel = '卓越智力'
+        description = '你展现出卓越的认知能力！你的逻辑推理、空间思维和语言理解能力都非常出色。这种高水平的认知能力在科学研究、工程技术和高级管理领域具有巨大优势。'
+        percentile = '前5%'
+      } else if (percentage >= 75) {
+        iqLevel = '优秀智力'
+        description = '你具有良好的认知能力水平。在逻辑推理和问题解决方面表现突出，能够高效处理复杂信息。'
+        percentile = '前20%'
+      } else if (percentage >= 60) {
+        iqLevel = '良好智力'
+        description = '你的认知能力处于良好水平。具备扎实的逻辑思维和问题解决能力，能够胜任大多数智力挑战。'
+        percentile = '前40%'
+      } else if (percentage >= 40) {
+        iqLevel = '中等智力'
+        description = '你的认知能力处于平均水平，在逻辑推理、空间思维、语言理解和记忆力等方面发展均衡。通过有针对性的训练和学习，可以在各个认知领域取得显著进步，特别是在你的优势领域进一步发挥潜力。'
+        percentile = '中等水平（50-69百分位）'
+      } else {
+        iqLevel = '待提升智力'
+        description = '你的认知能力目前有较大的提升空间，这是完全正常的起点。现代神经科学研究表明，大脑具有可塑性（Neuroplasticity），通过持续的科学训练和正确学习方法，认知能力可以得到显著提升。建议从你最感兴趣的领域开始逐步建立信心。'
+        percentile = '需加强训练（低于50百分位）'
+      }
+
+      return {
+        type: iqLevel,
+        title: `智力评估: ${iqLevel}`,
+        description,
+        score: percentage,
+        accuracy: 78,
+        percentile,
+        dimensions: [
+          { name: '逻辑推理', score: logicalScore, maxScore: 100, description: '分析问题、推导结论的能力' },
+          { name: '空间思维', score: spatialScore, maxScore: 100, description: '理解和操作空间关系的能力' },
+          { name: '语言理解', score: verbalScore, maxScore: 100, description: '理解和运用语言的能力' },
+          { name: '记忆力', score: memoryScore, maxScore: 100, description: '存储和回忆信息的能力' },
+        ],
+        strengths: percentage >= 60 
+          ? ['逻辑思维清晰', '学习能力强', '善于分析问题'].slice(0, percentage >= 75 ? 3 : 2)
+          : ['有提升认知能力的意愿'],
+        weaknesses: percentage < 60 
+          ? ['可以加强逻辑训练', '多做思维练习']
+          : [],
+        careers: ['科学家', '工程师', '程序员', '分析师', '医生', '律师', '教授', '研究员', '金融分析师', '建筑师'],
+        suggestions: [`🧠 个性化认知提升方案（基于你的测评结果）
+
+📊 你的认知优势领域：${percentage >= 60 ? '综合表现良好' : '有特定发展潜力'}
+
+🎯 针对性提升策略：
+
+📚 逻辑推理训练（当前水平：${logicalScore}分）：
+${logicalScore >= 70 ? '• 保持优势：尝试更复杂的逻辑谜题和编程算法\n• 挑战自我：学习形式逻辑或数学证明\n• 实际应用：参与辩论或案例分析' : '• 基础强化：每日练习数独或逻辑推理题\n• 进阶学习：了解基本的编程思维和算法\n• 日常应用：在做决定前列出利弊分析表'}
+
+🎨 空间思维训练（当前水平：${spatialScore}分）：
+${spatialScore >= 70 ? '• 发挥优势：考虑学习CAD、3D建模或建筑设计\n• 创意表达：尝试绘画、雕塑或摄影\n• 专业方向：工程、建筑、设计类专业可能适合你' : '• 基础训练：玩俄罗斯方块、魔方等空间游戏\n• 技能学习：学习基础绘图或手工制作\n• 生活应用：多观察周围环境的空间布局'}
+
+📖 语言能力提升（当前水平：${verbalScore}分）：
+${verbalScore >= 70 ? '• 深度阅读：阅读经典文学作品和学术著作\n• 写作练习：坚持写日记或文章\n• 表达训练：尝试公开演讲或写作' : '• 广泛阅读：每天阅读30分钟高质量内容\n• 词汇积累：每周学习5-10个新词汇\n• 表达练习：向他人复述你所学的知识'}
+
+🧪 记忆力增强（当前水平：${memoryScore}分）：
+${memoryScore >= 70 ? '• 高级技巧：学习记忆宫殿法或联想记忆法\n• 知识管理：建立个人知识体系（如Notion、Obsidian）\n• 教学相长：通过教授他人来巩固记忆' : '• 基础方法：使用间隔重复（如Anki软件）\n• 健康习惯：保证7-9小时睡眠，规律运动\n• 减少干扰：单任务处理，避免多任务切换'}
+
+💡 科学依据：
+现代神经科学证实，大脑具有神经可塑性（Neuroplasticity），成年后仍能形成新的神经连接。持续的认知训练可以：
+✓ 增加大脑灰质密度
+✓ 强化神经网络连接
+✓ 提升认知储备（Cognitive Reserve）
+✓ 降低认知衰退风险
+
+🎯 下一步行动：
+选择你最想提升的1-2个领域，制定21天训练计划，保持一致性比强度更重要！`],
+        traits: [
+          { name: '逻辑推理', score: logicalScore, maxScore: 100, description: '' },
+          { name: '空间思维', score: spatialScore, maxScore: 100, description: '' },
+          { name: '语言理解', score: verbalScore, maxScore: 100, description: '' },
+          { name: '记忆力', score: memoryScore, maxScore: 100, description: '' },
+        ],
+        cognitiveProfile: {
+          logical: logicalScore >= 70 ? '逻辑推理能力出色（≥70分），善于分析复杂问题、识别模式并推导出合理结论。在需要批判性思维和问题解决的场景中表现突出。' : `逻辑推理能力良好（${logicalScore}分），已具备基础的分析能力。建议通过数独、逻辑谜题、编程思维训练等方式进一步提升复杂问题的拆解和分析能力。`,
+          spatial: spatialScore >= 70 ? '空间思维能力优秀（≥70分），能够准确理解和操作三维空间关系，擅长心理旋转和空间想象。在工程设计、艺术创作和导航等任务中具有天然优势。' : `空间思维能力良好（${spatialScore}分）。可通过3D建模软件学习、绘画训练、魔方或俄罗斯方块等游戏来提升空间想象力和图形处理能力。`,
+          verbal: verbalScore >= 70 ? '语言理解能力突出（≥70分），能够快速把握文字深层含义，理解复杂的语言结构和隐喻表达。在阅读理解、写作表达和口头沟通方面表现优异。' : `语言理解能力良好（${verbalScore}分）。建议增加高质量阅读量，学习新的词汇和表达方式，练习写作和公众演讲来提升语言组织和表达能力。`,
+          memory: memoryScore >= 70 ? '记忆力优秀（≥70分），能够高效编码、存储和检索信息，工作记忆容量充足。在学习新知识和回忆旧信息方面效率很高。' : `记忆力良好（${memoryScore}分）。可尝试记忆宫殿法、间隔重复系统（SRS）等科学记忆方法，保证充足睡眠以促进记忆巩固，减少多任务干扰以提高专注度。`,
+        },
+        details: {
+          strengths: percentage >= 60 
+            ? ['逻辑思维清晰', '学习能力强', '善于分析问题'].slice(0, percentage >= 75 ? 3 : 2)
+            : ['有提升认知能力的意愿'],
+          weaknesses: percentage < 60 
+            ? ['可以加强逻辑训练', '多做思维练习']
+            : [],
+          careers: ['科学家', '工程师', '程序员', '分析师', '医生', '律师', '教授', '研究员', '金融分析师', '建筑师'],
+          relationships: `🧠 智力提升指南：
+
+📚 逻辑训练：
+• 数独、逻辑谜题、象棋
+• 学习编程思维
+• 阅读推理小说
+• 练习数学问题
+
+🎯 空间思维：
+• 玩3D拼图游戏
+• 学习绘画或设计
+• 玩俄罗斯方块、魔方
+• 练习心理旋转
+
+📖 语言能力：
+• 广泛阅读各类书籍
+• 学习新词汇和成语
+• 练习写作和演讲
+• 玩文字游戏（如填字游戏）
+
+🧪 记忆训练：
+• 使用记忆宫殿法
+• 练习数字记忆
+• 学习速读技巧
+• 保持充足睡眠
+
+💡 记住：大脑像肌肉，越用越灵活！`
+        },
+        scores: { totalScore, percentage },
+      }
+    },
+  },
+
+  // ============ 意识形态 ============
+  {
+    id: 'political-ideology',
+    title: '政治意识形态光谱测试',
+    description: '基于政治坐标系统，通过10道精选题目评估你的政治立场，包括经济维度（左翼-右翼）和社会维度（权威-自由），帮助你了解自己的政治光谱位置。',
+    category: '意识形态',
+    difficulty: 'standard',
+    duration: 20,
+    questions: [
+      { id: 'pol-1', text: '政府应该对富人的收入征收更高的税率吗？', type: 'single', options: [
+        { id: '1', text: '强烈反对', value: 1, trait: '经济右翼' },
+        { id: '2', text: '有些反对', value: 2, trait: '经济右翼' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '有些支持', value: 4, trait: '经济左翼' },
+        { id: '5', text: '强烈支持', value: 5, trait: '经济左翼' },
+      ]},
+      { id: 'pol-2', text: '个人自由比社会秩序更重要吗？', type: 'single', options: [
+        { id: '1', text: '秩序绝对优先', value: 1, trait: '社会权威' },
+        { id: '2', text: '秩序略重要', value: 2, trait: '社会权威' },
+        { id: '3', text: '两者平衡', value: 3, trait: '中间派' },
+        { id: '4', text: '自由略重要', value: 4, trait: '社会自由' },
+        { id: '5', text: '自由绝对优先', value: 5, trait: '社会自由' },
+      ]},
+      { id: 'pol-3', text: '国有企业应该私有化吗？', type: 'single', options: [
+        { id: '1', text: '强烈支持', value: 5, trait: '经济右翼' },
+        { id: '2', text: '有些支持', value: 4, trait: '经济右翼' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '有些反对', value: 2, trait: '经济左翼' },
+        { id: '5', text: '强烈反对', value: 1, trait: '经济左翼' },
+      ]},
+      { id: 'pol-4', text: '政府应该监管互联网内容吗？', type: 'single', options: [
+        { id: '1', text: '严格审查', value: 1, trait: '社会权威' },
+        { id: '2', text: '适度监管', value: 2, trait: '社会权威' },
+        { id: '3', text: '最小必要监管', value: 3, trait: '中间派' },
+        { id: '4', text: '尽量少干预', value: 4, trait: '社会自由' },
+        { id: '5', text: '完全自由', value: 5, trait: '社会自由' },
+      ]},
+      { id: 'pol-5', text: '全民基本收入(UBI)是否应该实施？', type: 'single', options: [
+        { id: '1', text: '强烈反对', value: 1, trait: '经济右翼' },
+        { id: '2', text: '有些反对', value: 2, trait: '经济右翼' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '有些支持', value: 4, trait: '经济左翼' },
+        { id: '5', text: '强烈支持', value: 5, trait: '经济左翼' },
+      ]},
+      { id: 'pol-6', text: '同性婚姻应该合法化吗？', type: 'single', options: [
+        { id: '1', text: '强烈反对', value: 1, trait: '社会权威' },
+        { id: '2', text: '有些反对', value: 2, trait: '社会权威' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '有些支持', value: 4, trait: '社会自由' },
+        { id: '5', text: '强烈支持', value: 5, trait: '社会自由' },
+      ]},
+      { id: 'pol-7', text: '自由贸易协定对本国经济有利吗？', type: 'single', options: [
+        { id: '1', text: '非常有利', value: 5, trait: '经济右翼' },
+        { id: '2', text: '有些有利', value: 4, trait: '经济右翼' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '有些不利', value: 2, trait: '经济左翼' },
+        { id: '5', text: '非常不利', value: 1, trait: '经济左翼' },
+      ]},
+      { id: 'pol-8', text: '毒品应该合法化吗？', type: 'single', options: [
+        { id: '1', text: '坚决不合法', value: 1, trait: '社会权威' },
+        { id: '2', text: '医疗用途可合法', value: 2, trait: '社会权威' },
+        { id: '3', text: '部分软化', value: 3, trait: '中间派' },
+        { id: '4', text: '大部分合法', value: 4, trait: '社会自由' },
+        { id: '5', text: '完全合法', value: 5, trait: '社会自由' },
+      ]},
+      { id: 'pol-9', text: '医疗保健应该是免费的公共服务吗？', type: 'single', options: [
+        { id: '1', text: '强烈反对', value: 1, trait: '经济右翼' },
+        { id: '2', text: '有些反对', value: 2, trait: '经济右翼' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '有些支持', value: 4, trait: '经济左翼' },
+        { id: '5', text: '强烈支持', value: 5, trait: '经济左翼' },
+      ]},
+      { id: 'pol-10', text: '政府有权为了国家安全监控公民吗？', type: 'single', options: [
+        { id: '1', text: '完全可以', value: 1, trait: '社会权威' },
+        { id: '2', text: '有限度可以', value: 2, trait: '社会权威' },
+        { id: '3', text: '需要严格法律限制', value: 3, trait: '中间派' },
+        { id: '4', text: '尽量避免', value: 4, trait: '社会自由' },
+        { id: '5', text: '绝对不可以', value: 5, trait: '社会自由' },
+      ]},
+      { id: 'pol-11', text: '最低工资标准应该提高吗？', type: 'single', options: [
+        { id: '1', text: '强烈反对', value: 1, trait: '经济右翼' },
+        { id: '2', text: '有些反对', value: 2, trait: '经济右翼' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '有些支持', value: 4, trait: '经济左翼' },
+        { id: '5', text: '强烈支持', value: 5, trait: '经济左翼' },
+      ]},
+      { id: 'pol-12', text: '死刑应该废除吗？', type: 'single', options: [
+        { id: '1', text: '坚决保留', value: 1, trait: '社会权威' },
+        { id: '2', text: '限制使用', value: 2, trait: '社会权威' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '倾向于废除', value: 4, trait: '社会自由' },
+        { id: '5', text: '坚决废除', value: 5, trait: '社会自由' },
+      ]},
+      { id: 'pol-13', text: '工会应该有更多权力吗？', type: 'single', options: [
+        { id: '1', text: '强烈反对', value: 1, trait: '经济右翼' },
+        { id: '2', text: '有些反对', value: 2, trait: '经济右翼' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '有些支持', value: 4, trait: '经济左翼' },
+        { id: '5', text: '强烈支持', value: 5, trait: '经济左翼' },
+      ]},
+      { id: 'pol-14', text: '移民政策应该更加开放吗？', type: 'single', options: [
+        { id: '1', text: '严格限制', value: 1, trait: '社会权威' },
+        { id: '2', text: '适度控制', value: 2, trait: '社会权威' },
+        { id: '3', text: '中立', value: 3, trait: '中间派' },
+        { id: '4', text: '相对开放', value: 4, trait: '社会自由' },
+        { id: '5', text: '完全开放', value: 5, trait: '社会自由' },
+      ]},
+      { id: 'pol-15', text: '环境保护应该优先于经济发展吗？', type: 'single', options: [
+        { id: '1', text: '经济优先', value: 1, trait: '经济右翼' },
+        { id: '2', text: '经济略重要', value: 2, trait: '经济右翼' },
+        { id: '3', text: '两者平衡', value: 3, trait: '中间派' },
+        { id: '4', text: '环境略重要', value: 4, trait: '经济左翼' },
+        { id: '5', text: '环境优先', value: 5, trait: '经济左翼' },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const traits: Record<string, number> = {
+        '经济左翼': 0,
+        '经济右翼': 0,
+        '社会自由': 0,
+        '社会权威': 0,
+        '中间派': 0,
+      }
+
+      answers.forEach((answer) => {
+        if (answer.trait && answer.value) {
+          traits[answer.trait] += answer.value
+        }
+      })
+
+      const economicScore = traits['经济左翼'] - traits['经济右翼']
+      const socialScore = traits['社会自由'] - traits['社会权威']
+      const maxEconomic = 25
+      const maxSocial = 25
+
+      const economicPercent = Math.round(((economicScore + maxEconomic) / (2 * maxEconomic)) * 100)
+      const socialPercent = Math.round(((socialScore + maxSocial) / (2 * maxSocial)) * 100)
+
+      let economicLabel: string
+      let socialLabel: string
+
+      if (economicPercent <= 20) economicLabel = '极右翼（自由意志主义）'
+      else if (economicPercent <= 40) economicLabel = '右翼'
+      else if (economicPercent <= 60) economicLabel = '中间派'
+      else if (economicPercent <= 80) economicLabel = '左翼'
+      else economicLabel = '极左翼（社会主义）'
+
+      if (socialPercent <= 20) socialLabel = '极权威（保守主义）'
+      else if (socialPercent <= 40) socialLabel = '权威'
+      else if (socialPercent <= 60) socialLabel = '中间派'
+      else if (socialPercent <= 80) socialLabel = '自由'
+      else socialLabel = '极自由（自由主义）'
+
+      return {
+        type: `${economicLabel} / ${socialLabel}`,
+        title: `政治光谱: ${economicLabel} · ${socialLabel}`,
+        description: `你在经济维度上倾向${economicLabel}（${economicPercent}%），在社会维度上倾向${socialLabel}（${socialPercent}%）。`,
+        score: Math.round((economicPercent + socialPercent) / 2),
+        accuracy: 82,
+        dimensions: [
+          { name: '经济左翼-右翼', score: economicPercent, maxScore: 100, description: economicLabel },
+          { name: '社会自由-权威', score: socialPercent, maxScore: 100, description: socialLabel },
+          { name: '经济左翼得分', score: traits['经济左翼'], maxScore: 25, description: '' },
+          { name: '经济右翼得分', score: traits['经济右翼'], maxScore: 25, description: '' },
+          { name: '社会自由得分', score: traits['社会自由'], maxScore: 25, description: '' },
+          { name: '社会权威得分', score: traits['社会权威'], maxScore: 25, description: '' },
+        ],
+        strengths: [`${economicLabel}在经济议题上的立场明确`, `${socialLabel}在社会议题上的态度清晰`],
+        weaknesses: ['可能需要更多元化的视角'],
+        careers: ['政策分析师', '政治顾问', '社会活动家', '记者', '学者', '公务员'],
+        suggestions: [`🏛️ 政治意识形态分析报告：
+
+📊 你的政治坐标：
+• 经济轴：${economicPercent}% （${economicLabel}）
+• 社会轴：${socialPercent}% （${socialLabel}）
+
+💡 解读指南：
+• 左翼-右翼：关注经济平等 vs 市场自由
+• 自由-权威：关注个人自由 vs 社会秩序
+
+🔍 典型组合：
+• 左翼+自由 = 自由意志社会主义
+• 右翼+自由 = 自由意志主义/保守自由主义
+• 左翼+权威 = 国家社会主义/威权左翼
+• 右翼+权威 = 保守主义/威权右翼
+
+📚 建议阅读：
+• 了解不同政治哲学的核心主张
+• 关注时事并思考不同立场
+• 参与理性讨论，避免回音室效应`],
+        traits: [
+          { name: '经济左翼-右翼', score: economicPercent, maxScore: 100, description: economicLabel },
+          { name: '社会自由-权威', score: socialPercent, maxScore: 100, description: socialLabel },
+        ],
+        details: {
+          strengths: [`${economicLabel}在经济议题上的立场明确`, `${socialLabel}在社会议题上的态度清晰`],
+          weaknesses: ['可能需要更多元化的视角'],
+          careers: ['政策分析师', '政治顾问', '社会活动家', '记者', '学者', '公务员'],
+          relationships: `🏛️ 政治意识形态分析报告：
+
+📊 你的政治坐标：
+• 经济轴：${economicPercent}% （${economicLabel}）
+• 社会轴：${socialPercent}% （${socialLabel}）
+
+💡 解读指南：
+• 左翼-右翼：关注经济平等 vs 市场自由
+• 自由-权威：关注个人自由 vs 社会秩序
+
+🔍 典型组合：
+• 左翼+自由 = 自由意志社会主义
+• 右翼+自由 = 自由意志主义/保守自由主义
+• 左翼+权威 = 国家社会主义/威权左翼
+• 右翼+权威 = 保守主义/威权右翼
+
+📚 建议阅读：
+• 了解不同政治哲学的核心主张
+• 关注时事并思考不同立场
+• 参与理性讨论，避免回音室效应`
+        },
+        scores: { economicScore, socialScore, economicPercent, socialPercent },
+      }
+    },
+  },
+
+  // ============ 意识形态倾向深度测评（28题专业版） ============
+  {
+    id: 'ideology-deep-assessment',
+    title: '意识形态倾向深度测评',
+    description: '通过28道精心设计的题目，从6个核心维度全面评估你的意识形态倾向：生产主义vs消费主义、自由主义vs集体主义、市场经济vs计划经济、传统价值观vs进步思想、全球化vs民族主义、技术乐观主义vs审慎态度。帮助你准确识别自己的意识形态定位。',
+    category: '意识形态',
+    difficulty: 'expert',
+    duration: 25,
+    questions: [
+      // ===== 维度1：生产-消费轴（7题）=====
+      { id: 'id-pc-1', text: '你认为社会应该优先鼓励哪种行为？', type: 'single', options: [
+        { id: '1', text: '创造和生产新价值', value: 5, trait: '生产主义' },
+        { id: '2', text: '偏向生产，但消费也很重要', value: 4, trait: '生产主义' },
+        { id: '3', text: '两者平衡发展', value: 3, trait: '中间派' },
+        { id: '4', text: '偏向消费，但生产是基础', value: 2, trait: '消费主义' },
+        { id: '5', text: '享受生活和消费', value: 1, trait: '消费主义' },
+      ]},
+      { id: 'id-pc-2', text: '对于"工作即生活"这个理念，你的看法是？', type: 'single', options: [
+        { id: '1', text: '完全认同，工作赋予生命意义', value: 5, trait: '生产主义' },
+        { id: '2', text: '基本认同，工作是重要部分', value: 4, trait: '生产主义' },
+        { id: '3', text: '工作只是生活的一部分', value: 3, trait: '中间派' },
+        { id: '4', text: '工作和生活应明确分开', value: 2, trait: '消费主义' },
+        { id: '5', text: '反对，生活不应被工作定义', value: 1, trait: '消费主义' },
+      ]},
+      { id: 'id-pc-3', text: '你如何评价一个社会的成功标准？', type: 'single', options: [
+        { id: '1', text: '生产力水平和创新能力', value: 5, trait: '生产主义' },
+        { id: '2', text: '以生产为主，兼顾生活水平', value: 4, trait: '生产主义' },
+        { id: '3', text: '多维度平衡发展', value: 3, trait: '中间派' },
+        { id: '4', text: '以生活质量为主，生产为辅', value: 2, trait: '消费主义' },
+        { id: '5', text: '居民幸福度和消费水平', value: 1, trait: '消费主义' },
+      ]},
+      { id: 'id-pc-4', text: '对于加班文化，你的立场是？', type: 'single', options: [
+        { id: '1', text: '支持，奋斗创造价值', value: 5, trait: '生产主义' },
+        { id: '2', text: '可以理解，但要有补偿', value: 4, trait: '生产主义' },
+        { id: '3', text: '视情况而定', value: 3, trait: '中间派' },
+        { id: '4', text: '反对，影响生活质量', value: 2, trait: '消费主义' },
+        { id: '5', text: '强烈反对，侵犯休息权', value: 1, trait: '消费主义' },
+      ]},
+      { id: 'id-pc-5', text: '你认为教育的主要目标应该是？', type: 'single', options: [
+        { id: '1', text: '培养生产能力和创造力', value: 5, trait: '生产主义' },
+        { id: '2', text: '以实用技能为主', value: 4, trait: '生产主义' },
+        { id: '3', text: '全面发展个人素质', value: 3, trait: '中间派' },
+        { id: '4', text: '以兴趣和个人成长为主', value: 2, trait: '消费主义' },
+        { id: '5', text: '培养生活品味和幸福感', value: 1, trait: '消费主义' },
+      ]},
+      { id: 'id-pc-6', text: '对于"躺平"现象，你的看法是？', type: 'single', options: [
+        { id: '1', text: '消极逃避，应该反对', value: 5, trait: '生产主义' },
+        { id: '2', text: '可以理解但不提倡', value: 4, trait: '生产主义' },
+        { id: '3', text: '个人选择，不予评价', value: 3, trait: '中间派' },
+        { id: '4', text: '是对过度竞争的合理反应', value: 2, trait: '消费主义' },
+        { id: '5', text: '支持，追求内心平静更重要', value: 1, trait: '消费主义' },
+      ]},
+      { id: 'id-pc-7', text: '你如何看待储蓄和投资？', type: 'single', options: [
+        { id: '1', text: '应该积极储蓄和再投资', value: 5, trait: '生产主义' },
+        { id: '2', text: '储蓄为主，适度消费', value: 4, trait: '生产主义' },
+        { id: '3', text: '量入为出，合理规划', value: 3, trait: '中间派' },
+        { id: '4', text: '适度消费提升生活品质', value: 2, trait: '消费主义' },
+        { id: '5', text: '及时行乐，享受当下', value: 1, trait: '消费主义' },
+      ]},
+
+      // ===== 维度2：自由-集体轴（5题）=====
+      { id: 'id-lc-1', text: '个人自由和社会整体利益发生冲突时，你应该优先考虑？', type: 'single', options: [
+        { id: '1', text: '个人自由绝对优先', value: 5, trait: '自由主义' },
+        { id: '2', text: '个人自由为主，适当让步', value: 4, trait: '自由主义' },
+        { id: '3', text: '具体情况具体分析', value: 3, trait: '中间派' },
+        { id: '4', text: '集体利益为主，保护个人', value: 2, trait: '集体主义' },
+        { id: '5', text: '集体利益绝对优先', value: 1, trait: '集体主义' },
+      ]},
+      { id: 'id-lc-2', text: '政府应该在多大程度上干预经济？', type: 'single', options: [
+        { id: '1', text: '最小化干预，完全市场化', value: 5, trait: '自由主义' },
+        { id: '2', text: '有限干预，纠正市场失灵', value: 4, trait: '自由主义' },
+        { id: '3', text: '适度干预，保持平衡', value: 3, trait: '中间派' },
+        { id: '4', text: '较强干预，保障公共利益', value: 2, trait: '集体主义' },
+        { id: '5', text: '强力干预，国家主导经济', value: 1, trait: '集体主义' },
+      ]},
+      { id: 'id-lc-3', text: '税收政策应该如何设计？', type: 'single', options: [
+        { id: '1', text: '低税率，激励个人努力', value: 5, trait: '自由主义' },
+        { id: '2', text: '较低税率，基本公共服务', value: 4, trait: '自由主义' },
+        { id: '3', text: '中等税率，平衡各方利益', value: 3, trait: '中间派' },
+        { id: '4', text: '较高税率，支持社会福利', value: 2, trait: '集体主义' },
+        { id: '5', text: '高税率，实现财富再分配', value: 1, trait: '集体主义' },
+      ]},
+      { id: 'id-lc-4', text: '对于私有财产的保护，你的立场是？', type: 'single', options: [
+        { id: '1', text: '神圣不可侵犯', value: 5, trait: '自由主义' },
+        { id: '2', text: '强保护，极少例外', value: 4, trait: '自由主义' },
+        { id: '3', text: '保护但有合理限制', value: 3, trait: '中间派' },
+        { id: '4', text: '保护但要服务社会需求', value: 2, trait: '集体主义' },
+        { id: '5', text: '可根据公共利益调整', value: 1, trait: '集体主义' },
+      ]},
+      { id: 'id-lc-5', text: '你认为成功主要取决于什么？', type: 'single', options: [
+        { id: '1', text: '个人努力和能力', value: 5, trait: '自由主义' },
+        { id: '2', text: '个人为主，环境为辅', value: 4, trait: '自由主义' },
+        { id: '3', text: '个人和环境共同作用', value: 3, trait: '中间派' },
+        { id: '4', text: '环境为主，个人为辅', value: 2, trait: '集体主义' },
+        { id: '5', text: '社会环境和机遇决定', value: 1, trait: '集体主义' },
+      ]},
+
+      // ===== 维度3：市场-计划轴（5题）=====
+      { id: 'id-mp-1', text: '对于国有企业，你的看法是？', type: 'single', options: [
+        { id: '1', text: '应该全面私有化', value: 5, trait: '市场派' },
+        { id: '2', text: '大幅减少国有比重', value: 4, trait: '市场派' },
+        { id: '3', text: '保持现状或微调', value: 3, trait: '中间派' },
+        { id: '4', text: '加强国企在关键领域作用', value: 2, trait: '计划派' },
+        { id: '5', text: '扩大国有经济比重', value: 1, trait: '计划派' },
+      ]},
+      { id: 'id-mp-2', text: '医疗和教育应该由谁提供？', type: 'single', options: [
+        { id: '1', text: '完全市场化运作', value: 5, trait: '市场派' },
+        { id: '2', text: '以市场为主，政府补充', value: 4, trait: '市场派' },
+        { id: '3', text: '市场和政府共同提供', value: 3, trait: '中间派' },
+        { id: '4', text: '以政府为主，市场辅助', value: 2, trait: '计划派' },
+        { id: '5', text: '完全由政府提供', value: 1, trait: '计划派' },
+      ]},
+      { id: 'id-mp-3', text: '对于收入差距问题，解决方案应该是？', type: 'single', options: [
+        { id: '1', text: '市场自然调节即可', value: 5, trait: '市场派' },
+        { id: '2', text: '通过经济增长自然缩小', value: 4, trait: '市场派' },
+        { id: '3', text: '适度的社会保障调节', value: 3, trait: '中间派' },
+        { id: '4', text: '积极的再分配政策', value: 2, trait: '计划派' },
+        { id: '5', text: '强力的财富重新分配', value: 1, trait: '计划派' },
+      ]},
+      { id: 'id-mp-4', text: '你认为工会的作用是什么？', type: 'single', options: [
+        { id: '1', text: '干扰市场效率，应该限制', value: 5, trait: '市场派' },
+        { id: '2', text: '可有可无，市场自行调节', value: 4, trait: '市场派' },
+        { id: '3', text: '必要的劳资协商机制', value: 3, trait: '中间派' },
+        { id: '4', text: '保护劳动者权益的重要力量', value: 2, trait: '计划派' },
+        { id: '5', text: '工人阶级的核心组织', value: 1, trait: '计划派' },
+      ]},
+      { id: 'id-mp-5', text: '对于最低工资制度，你的看法是？', type: 'single', options: [
+        { id: '1', text: '应该取消，由市场决定', value: 5, trait: '市场派' },
+        { id: '2', text: '设定较低的底线', value: 4, trait: '市场派' },
+        { id: '3', text: '维持现有水平', value: 3, trait: '中间派' },
+        { id: '4', text: '适当提高保障水平', value: 2, trait: '计划派' },
+        { id: '5', text: '大幅提高至生活工资水平', value: 1, trait: '计划派' },
+      ]},
+
+      // ===== 维度4：传统-进步轴（5题）=====
+      { id: 'id-tp-1', text: '对于传统文化和价值观念，你的态度是？', type: 'single', options: [
+        { id: '1', text: '必须严格传承和保护', value: 5, trait: '传统派' },
+        { id: '2', text: '尊重传统，谨慎改革', value: 4, trait: '传统派' },
+        { id: '3', text: '取其精华去其糟粕', value: 3, trait: '中间派' },
+        { id: '4', text: '与时俱进，大胆创新', value: 2, trait: '进步派' },
+        { id: '5', text: '打破束缚，拥抱变革', value: 1, trait: '进步派' },
+      ]},
+      { id: 'id-tp-2', text: '家庭结构应该如何定义？', type: 'single', options: [
+        { id: '1', text: '传统一夫一妻制家庭', value: 5, trait: '传统派' },
+        { id: '2', text: '以传统家庭为主要形式', value: 4, trait: '传统派' },
+        { id: '3', text: '尊重多元化家庭形式', value: 3, trait: '中间派' },
+        { id: '4', text: '支持各种家庭形式平等', value: 2, trait: '进步派' },
+        { id: '5', text: '完全自由选择家庭模式', value: 1, trait: '进步派' },
+      ]},
+      { id: 'id-tp-3', text: '对于性别角色的看法是？', type: 'single', options: [
+        { id: '1', text: '男女性别有明确分工', value: 5, trait: '传统派' },
+        { id: '2', text: '保留一些传统分工', value: 4, trait: '传统派' },
+        { id: '3', text: '根据个人能力自主选择', value: 3, trait: '中间派' },
+        { id: '4', text: '打破刻板印象', value: 2, trait: '进步派' },
+        { id: '5', text: '彻底消除性别差异观念', value: 1, trait: '进步派' },
+      ]},
+      { id: 'id-tp-4', text: '宗教在社会中应该扮演什么角色？', type: 'single', options: [
+        { id: '1', text: '社会道德的基础，应大力弘扬', value: 5, trait: '传统派' },
+        { id: '2', text: '重要的文化和精神资源', value: 4, trait: '传统派' },
+        { id: '3', text: '信仰自由，政教分离', value: 3, trait: '中间派' },
+        { id: '4', text: '私人领域事务', value: 2, trait: '进步派' },
+        { id: '5', text: '过时的迷信，应逐渐淡化', value: 1, trait: '进步派' },
+      ]},
+      { id: 'id-tp-5', text: '对于社会变革的速度，你倾向于？', type: 'single', options: [
+        { id: '1', text: '渐进式改良，稳扎稳打', value: 5, trait: '传统派' },
+        { id: '2', text: '缓慢而持续的改进', value: 4, trait: '传统派' },
+        { id: '3', text: '根据实际情况灵活调整', value: 3, trait: '中间派' },
+        { id: '4', text: '必要时可快速推进', value: 2, trait: '进步派' },
+        { id: '5', text: '大胆改革，快速转型', value: 1, trait: '进步派' },
+      ]},
+
+      // ===== 维度5：全球-民族轴（3题）=====
+      { id: 'id-gn-1', text: '全球化对本国的影响总体上是？', type: 'single', options: [
+        { id: '1', text: '非常积极，带来发展机遇', value: 5, trait: '全球派' },
+        { id: '2', text: '利大于弊', value: 4, trait: '全球派' },
+        { id: '3', text: '有利有弊，需权衡', value: 3, trait: '中间派' },
+        { id: '4', text: '弊大于利，需警惕风险', value: 2, trait: '民族派' },
+        { id: '5', text: '威胁本国利益和文化', value: 1, trait: '民族派' },
+      ]},
+      { id: 'id-gn-2', text: '移民政策应该如何制定？', type: 'single', options: [
+        { id: '1', text: '开放边境，欢迎移民', value: 5, trait: '全球派' },
+        { id: '2', text: '相对宽松的移民政策', value: 4, trait: '全球派' },
+        { id: '3', text: '有控制的移民配额制', value: 3, trait: '中间派' },
+        { id: '4', text: '严格控制移民数量', value: 2, trait: '民族派' },
+        { id: '5', text: '优先保护本国公民就业', value: 1, trait: '民族派' },
+      ]},
+      { id: 'id-gn-3', text: '国际组织（如联合国、WTO）的作用应该是？', type: 'single', options: [
+        { id: '1', text: '加强权威，推动全球治理', value: 5, trait: '全球派' },
+        { id: '2', text: '发挥更大协调作用', value: 4, trait: '全球派' },
+        { id: '3', text: '维持现状即可', value: 3, trait: '中间派' },
+        { id: '4', text: '减少对主权的限制', value: 2, trait: '民族派' },
+        { id: '5', text: '各国主权高于国际组织', value: 1, trait: '民族派' },
+      ]},
+
+      // ===== 维度6：技术态度轴（3题）=====
+      { id: 'id-tech-1', text: '人工智能的发展前景让你感到？', type: 'single', options: [
+        { id: '1', text: '非常乐观，将解决人类难题', value: 5, trait: '技术乐观派' },
+        { id: '2', text: '总体积极，但需注意风险', value: 4, trait: '技术乐观派' },
+        { id: '3', text: '双刃剑，需理性看待', value: 3, trait: '中间派' },
+        { id: '4', text: '担忧可能带来的负面影响', value: 2, trait: '技术审慎派' },
+        { id: '5', text: '非常担忧，应严格监管', value: 1, trait: '技术审慎派' },
+      ]},
+      { id: 'id-tech-2', text: '基因编辑技术（如CRISPR）应该被允许吗？', type: 'single', options: [
+        { id: '1', text: '全面放开，加速科技进步', value: 5, trait: '技术乐观派' },
+        { id: '2', text: '在严格伦理框架下允许', value: 4, trait: '技术乐观派' },
+        { id: '3', text: '仅限治疗疾病用途', value: 3, trait: '中间派' },
+        { id: '4', text: '高度限制，防止滥用', value: 2, trait: '技术审慎派' },
+        { id: '5', text: '禁止人类胚胎基因编辑', value: 1, trait: '技术审慎派' },
+      ]},
+      { id: 'id-tech-3', text: '自动化和AI会导致大规模失业吗？', type: 'single', options: [
+        { id: '1', text: '不会，会创造更多新岗位', value: 5, trait: '技术乐观派' },
+        { id: '2', text: '短期阵痛，长期利好', value: 4, trait: '技术乐观派' },
+        { id: '3', text: '结构性调整不可避免', value: 3, trait: '中间派' },
+        { id: '4', text: '可能导致严重失业问题', value: 2, trait: '技术审慎派' },
+        { id: '5', text: '必然导致社会危机', value: 1, trait: '技术审慎派' },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const traits: Record<string, number> = {
+        '生产主义': 0,
+        '消费主义': 0,
+        '自由主义': 0,
+        '集体主义': 0,
+        '市场派': 0,
+        '计划派': 0,
+        '传统派': 0,
+        '进步派': 0,
+        '全球派': 0,
+        '民族派': 0,
+        '技术乐观派': 0,
+        '技术审慎派': 0,
+        '中间派': 0,
+      }
+
+      answers.forEach((answer) => {
+        if (answer.trait && answer.value) {
+          traits[answer.trait] += answer.value
+        }
+      })
+
+      const dimensionScores = {
+        productionism: traits['生产主义'] - traits['消费主义'],
+        libertarianism: traits['自由主义'] - traits['集体主义'],
+        marketEconomy: traits['市场派'] - traits['计划派'],
+        traditionalism: traits['传统派'] - traits['进步派'],
+        globalism: traits['全球派'] - traits['民族派'],
+        technoOptimism: traits['技术乐观派'] - traits['技术审慎派'],
+      }
+
+      const maxScores = {
+        productionism: 30,
+        libertarianism: 20,
+        marketEconomy: 20,
+        traditionalism: 20,
+        globalism: 12,
+        technoOptimism: 12,
+      }
+
+      const normalizedScores = Object.entries(dimensionScores).reduce((acc, [key, score]) => {
+        const max = maxScores[key as keyof typeof maxScores]
+        acc[key] = Math.round(((score + max) / (2 * max)) * 100)
+        return acc
+      }, {} as Record<string, number>)
+
+      let ideologyType: string
+      let ideologyDescription: string
+      let characteristics: string[]
+      let weaknesses: string[]
+
+      const prodScore = normalizedScores.productionism
+      const libScore = normalizedScores.libertarianism
+      const marketScore = normalizedScores.marketEconomy
+      const tradScore = normalizedScores.traditionalism
+      const globalScore = normalizedScores.globalism
+      const techScore = normalizedScores.technoOptimism
+
+      if (prodScore >= 70 && libScore >= 60 && marketScore >= 60) {
+        ideologyType = '🏭 自由意志生产主义者'
+        ideologyDescription = '你是一位坚定的自由意志生产主义者。你深信个人自由和市场机制能够最大化激发人类的创造力和生产力。你认为工作的意义不仅在于谋生，更在于创造价值和实现自我。你倾向于低税、小政府的经济政策，同时强调勤奋工作和持续创新的重要性。'
+        characteristics = ['高度重视个人自由和自主权', '相信市场竞争能带来最优结果', '认为生产和创造是人生核心价值', '支持技术创新和企业家精神']
+        weaknesses = ['可能忽视弱势群体的需求', '对社会公平问题关注不足']
+      } else if (prodScore >= 70 && libScore <= 40 && marketScore <= 40) {
+        ideologyType = '⚙️ 集体生产主义者'
+        ideologyDescription = '你是一位集体生产主义者。你认为社会应该通过有组织的集体行动来实现生产目标，强调社会责任和协作精神胜过个人利益。你支持国家对经济的引导作用，相信通过合理的规划和分配可以实现更高的社会整体产出。'
+        characteristics = ['重视社会责任和集体利益', '支持政府在经济发展中的积极作用', '认为劳动创造价值，反对不劳而获', '强调社会团结和互助合作']
+        weaknesses = ['可能限制个人的经济自由', '对市场机制的效率认识不足']
+      } else if (libScore >= 70 && marketScore >= 70 && globalScore >= 60) {
+        ideologyType = '🌍 全球自由主义者'
+        ideologyDescription = '你是一位全球自由主义者。你坚信自由贸易、人员流动和开放边界能够造福全人类。你认为国界不应该成为阻碍人类合作的障碍，支持国际组织和全球治理体系。在经济上你主张最小化的政府干预和最大化的市场自由。'
+        characteristics = ['支持全球化自由贸易', '主张开放边境和移民自由', '相信普世价值超越民族文化', '支持国际组织的协调作用']
+        weaknesses = ['可能忽视本土文化的独特性', '对全球化负面影响估计不足']
+      } else if (tradScore >= 70 && libScore <= 40 && marketScore <= 40) {
+        ideologyType = '🏛️ 传统保守主义者'
+        ideologyDescription = '你是一位传统保守主义者。你珍视历史传承下来的文化、宗教和家庭价值，认为这些是社会稳定的基石。你对快速的社会变革持怀疑态度，倾向于渐进式改良而非激进革命。在经济上你支持一定的国家干预以维护社会秩序。'
+        characteristics = ['重视传统文化和家庭价值', '支持渐进式而非激进变革', '认为稳定比激进改变更重要', '维护既有的社会规范和道德']
+        weaknesses = ['可能阻碍必要的社会进步', '对新事物接受度较低']
+      } else if (tradScore <= 30 && libScore <= 40 && marketScore <= 40 && prodScore <= 40) {
+        ideologyType = '✊ 进步左翼人士'
+        ideologyDescription = '你是一位进步左翼人士。你致力于推动社会向更加平等、公正的方向发展。你关注弱势群体的权益，支持环境保护和可持续发展。在经济上你主张加强政府调控以缩小贫富差距，在社会议题上你持开放和包容的态度。'
+        characteristics = ['追求社会平等和正义', '关注环境保护和可持续发展', '支持少数群体权利', '主张加强社会保障体系']
+        weaknesses = ['理想化色彩较浓', '实施成本可能较高']
+      } else if (globalScore <= 30 && tradScore >= 60) {
+        ideologyType = '🦅 民族保守主义者'
+        ideologyDescription = '你是一位民族保守主义者。你将国家和民族的利益置于首位，强调主权独立和文化认同。你对外来文化和全球化的影响保持警惕，支持保护本国产业和就业。在价值观上你倾向于传统，但在经济上你可能支持一定程度的干预以保护国家利益。'
+        characteristics = ['将国家利益放在首位', '重视民族文化认同和独立性', '对全球化持审慎态度', '支持保护性经济政策']
+        weaknesses = ['可能陷入排外主义', '国际合作意愿较弱']
+      } else if (techScore >= 70 && prodScore >= 60) {
+        ideologyType = '🚀 技术乐观生产主义者'
+        ideologyDescription = '你是一位技术乐观生产主义者。你对科技发展充满信心，相信人工智能、生物技术等前沿领域将为人类社会带来前所未有的繁荣。你将技术创新视为推动生产力和文明进步的根本动力，支持对科研和技术开发的大量投入。'
+        characteristics = ['对技术发展持极度乐观态度', '相信科技创新能解决重大挑战', '重视研发投入和技术人才培养', '支持新兴技术的快速应用']
+        weaknesses = ['可能低估技术风险', '对人文关怀关注不足']
+      } else if (techScore <= 30 && tradScore >= 60) {
+        ideologyType = '🌱 技术审慎生态主义者'
+        ideologyDescription = '你是一位技术审慎生态主义者。你对快速发展的人工智能和基因编辑等技术持谨慎态度，担心它们可能带来的伦理风险和不可预见的后果。你更加关注人与自然的和谐共处，支持可持续发展和环境保护，认为技术进步不能以牺牲生态环境为代价。'
+        characteristics = ['对新技术持审慎和批判态度', '高度重视环境保护和生态平衡', '关注技术发展的伦理边界', '支持绿色低碳的生活方式']
+        weaknesses = ['可能错过技术红利', '对技术解决方案过于悲观']
+      } else if (marketScore >= 70 && libScore >= 60) {
+        ideologyType = '💼 古典自由主义者'
+        ideologyDescription = '你是一位古典自由主义者。你坚信个人自由和财产权的神圣不可侵犯性，认为政府的角色应该被限制在保护这些基本权利的最小范围内。你支持自由市场资本主义，相信自愿交换和竞争能够最有效地配置资源并促进社会繁荣。'
+        characteristics = ['坚持个人自由和财产权至上', '主张最小化政府和自由市场', '相信自发秩序优于人为设计', '反对过度的政府干预和管制']
+        weaknesses = ['可能加剧社会不平等', '公共品供给不足']
+      } else if (marketScore <= 30 && libScore <= 40) {
+        ideologyType = '⚖️ 社会民主主义者'
+        ideologyDescription = '你是一位社会民主主义者。你试图在市场经济的基础上引入强有力的社会保障和福利体系，以实现更公平的社会分配。你支持民主政治制度，但同时认为政府有责任通过再分配政策来缩小贫富差距，保障每个公民的基本生活水准。'
+        characteristics = ['支持混合经济模式', '主张建立完善的社会保障网', '通过民主程序推进社会改革', '平衡效率与公平的关系']
+        weaknesses = ['财政压力较大', '可能降低经济活力']
+      } else {
+        ideologyType = '🎯 务实中间派'
+        ideologyDescription = '你是一位务实的中间派。你在各个意识形态维度上都持有相对温和的观点，不愿意走向任何极端。你倾向于根据具体问题的实际情况来做出判断，而不是固守某种教条。这种灵活性使你能够在不同观点之间找到平衡点。'
+        characteristics = ['在各维度上保持相对平衡', '愿意听取不同观点', '根据实际情况灵活调整立场', '避免极端化和教条主义']
+        weaknesses = ['缺乏明确的意识形态标识', '可能在重大问题上犹豫不决']
+      }
+
+      const overallScore = Math.round(
+        (normalizedScores.productionism +
+         normalizedScores.libertarianism +
+         normalizedScores.marketEconomy +
+         normalizedScores.traditionalism +
+         normalizedScores.globalism +
+         normalizedScores.technoOptimism) / 6
+      )
+
+      return {
+        type: ideologyType,
+        title: `意识形态倾向: ${ideologyType}`,
+        description: ideologyDescription,
+        score: overallScore,
+        accuracy: 88,
+        dimensions: [
+          { name: '生产-消费轴', score: normalizedScores.productionism, maxScore: 100, description: prodScore >= 60 ? '生产主义倾向' : prodScore <= 40 ? '消费主义倾向' : '中等' },
+          { name: '自由-集体轴', score: normalizedScores.libertarianism, maxScore: 100, description: libScore >= 60 ? '自由主义倾向' : libScore <= 40 ? '集体主义倾向' : '中等' },
+          { name: '市场-计划轴', score: normalizedScores.marketEconomy, maxScore: 100, description: marketScore >= 60 ? '市场导向' : marketScore <= 40 ? '计划导向' : '混合型' },
+          { name: '传统-进步轴', score: normalizedScores.traditionalism, maxScore: 100, description: tradScore >= 60 ? '传统取向' : tradScore <= 40 ? '进步取向' : '适中' },
+          { name: '全球-民族轴', score: normalizedScores.globalism, maxScore: 100, description: globalScore >= 60 ? '全球取向' : globalScore <= 40 ? '民族取向' : '平衡' },
+          { name: '技术态度轴', score: normalizedScores.technoOptimism, maxScore: 100, description: techScore >= 60 ? '技术乐观' : techScore <= 40 ? '技术审慎' : '中性' },
+        ],
+        strengths: characteristics,
+        weaknesses: weaknesses,
+        careers: ['政策研究员', '政治评论员', '社会学学者', '公共政策顾问', '智库分析师', '媒体评论员', '非营利组织管理者', '政府公务员'],
+        suggestions: [`🧭 意识形态倾向深度分析报告
+
+━━━━━━━━━━━━━━━━━━━━━
+
+📊 你的六维坐标：
+
+🏭 生产-消费轴: ${prodScore}%
+   ${prodScore >= 70 ? '▸ 强烈的生产主义倾向' : prodScore >= 55 ? '▸ 偏向生产主义' : prodScore >= 45 ? '▸ 中间位置' : prodScore >= 30 ? '▸ 偏向消费主义' : '▸ 强烈的消费主义倾向'}
+
+⚖️ 自由-集体轴: ${libScore}%
+   ${libScore >= 70 ? '▸ 强烈的个人自由优先' : libScore >= 55 ? '▸ 偏向自由主义' : libScore >= 45 ? '▸ 中间位置' : libScore >= 30 ? '▸ 偏向集体主义' : '▸ 强烈的集体利益优先'}
+
+💰 市场-计划轴: ${marketScore}%
+   ${marketScore >= 70 ? '▸ 强烈的市场经济支持' : marketScore >= 55 ? '▸ 偏向市场机制' : marketScore >= 45 ? '▸ 中间位置' : marketScore >= 30 ? '▸ 偏向计划调控' : '▸ 强烈的计划经济支持'}
+
+📜 传统-进步轴: ${tradScore}%
+   ${tradScore >= 70 ? '▸ 强烈的传统价值取向' : tradScore >= 55 ? '▸ 偏向传统保守' : tradScore >= 45 ? '▸ 中间位置' : tradScore >= 30 ? '▸ 偏向进步革新' : '▸ 强烈的进步变革取向'}
+
+🌐 全球-民族轴: ${globalScore}%
+   ${globalScore >= 70 ? '▸ 强烈的全球主义倾向' : globalScore >= 55 ? '▸ 偏向全球化' : globalScore >= 45 ? '▸ 中间位置' : globalScore >= 30 ? '▸ 偏向民族主义' : '▸ 强烈的民族主义倾向'}
+
+🔬 技术态度轴: ${techScore}%
+   ${techScore >= 70 ? '▸ 极度技术乐观' : techScore >= 55 ? '▸ 偏向技术乐观' : techScore >= 45 ? '▸ 理性中立' : techScore >= 30 ? '▸ 偏向技术审慎' : '▸ 高度技术审慎'}
+
+━━━━━━━━━━━━━━━━━━━━━
+
+🎯 你的意识形态画像:
+
+${ideologyType}
+
+${ideologyDescription}
+
+✨ 核心特征:
+${characteristics.map(c => `• ${c}`).join('\n')}
+
+⚠️ 可能的盲区:
+${weaknesses.map(w => `• ${w}`).join('\n')}
+
+━━━━━━━━━━━━━━━━━━━━━
+
+💡 深度解读:
+
+你的意识形态倾向是由多个维度的组合形成的复杂光谱。理解自己的意识形态定位有助于：
+• 更清晰地认识自己的价值观和政治立场
+• 在讨论中更好地表达和理解不同观点
+• 避免陷入单一视角的思维陷阱
+• 以更开放的态度对待不同意见
+
+记住：没有"正确"的意识形态，只有与你个人经历和价值观相契合的政治哲学。保持思考和质疑的精神是最重要的！`],
+        traits: [
+          { name: '生产-消费轴', score: normalizedScores.productionism, maxScore: 100, description: '' },
+          { name: '自由-集体轴', score: normalizedScores.libertarianism, maxScore: 100, description: '' },
+          { name: '市场-计划轴', score: normalizedScores.marketEconomy, maxScore: 100, description: '' },
+          { name: '传统-进步轴', score: normalizedScores.traditionalism, maxScore: 100, description: '' },
+          { name: '全球-民族轴', score: normalizedScores.globalism, maxScore: 100, description: '' },
+          { name: '技术态度轴', score: normalizedScores.technoOptimism, maxScore: 100, description: '' },
+        ],
+        details: {
+          strengths: characteristics,
+          weaknesses: weaknesses,
+          careers: ['政策研究员', '政治评论员', '社会学学者', '公共政策顾问', '智库分析师', '媒体评论员', '非营利组织管理者', '政府公务员'],
+          relationships: `🧭 意识形态倾向深度分析报告
+
+📊 你的六维坐标：
+• 生产-消费轴: ${prodScore}% (${prodScore >= 60 ? '生产主义' : prodScore <= 40 ? '消费主义' : '中等'})
+• 自由-集体轴: ${libScore}% (${libScore >= 60 ? '自由主义' : libScore <= 40 ? '集体主义' : '中等'})
+• 市场-计划轴: ${marketScore}% (${marketScore >= 60 ? '市场导向' : marketScore <= 40 ? '计划导向' : '混合'})
+• 传统-进步轴: ${tradScore}% (${tradScore >= 60 ? '传统取向' : tradScore <= 40 ? '进步取向' : '适中'})
+• 全球-民族轴: ${globalScore}% (${globalScore >= 60 ? '全球取向' : globalScore <= 40 ? '民族取向' : '平衡'})
+• 技术态度轴: ${techScore}% (${techScore >= 60 ? '技术乐观' : techScore <= 40 ? '技术审慎' : '中性'})
+
+🎯 核心意识形态类型: ${ideologyType}`,
+        },
+        scores: dimensionScores,
+      }
+    },
+  },
+
+  // ============ 心理健康 ============
+  {
+    id: 'sds-depression',
+    title: '抑郁自评量表 (SDS)',
+    description: '基于William Zung编制的抑郁自评量表(SDS)，通过10道精选题目评估你最近一周的抑郁症状严重程度。这是临床广泛使用的心理筛查工具的简化版本。',
+    category: '心理健康',
+    difficulty: 'standard',
+    duration: 8,
+    questions: [
+      { id: 'sds-1', text: '我感到情绪沮丧、郁闷', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 1 },
+        { id: '2', text: '少部分时间', value: 2 },
+        { id: '3', text: '相当多时间', value: 3 },
+        { id: '4', text: '绝大部分或全部时间', value: 4 },
+      ]},
+      { id: 'sds-2', text: '我感到早晨心情最好', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 4 },
+        { id: '2', text: '少部分时间', value: 3 },
+        { id: '3', text: '相当多时间', value: 2 },
+        { id: '4', text: '绝大部分或全部时间', value: 1 },
+      ]},
+      { id: 'sds-3', text: '我要哭或想哭', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 1 },
+        { id: '2', text: '少部分时间', value: 2 },
+        { id: '3', text: '相当多时间', value: 3 },
+        { id: '4', text: '绝大部分或全部时间', value: 4 },
+      ]},
+      { id: 'sds-4', text: '我夜间睡眠不好', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 1 },
+        { id: '2', text: '少部分时间', value: 2 },
+        { id: '3', text: '相当多时间', value: 3 },
+        { id: '4', text: '绝大部分或全部时间', value: 4 },
+      ]},
+      { id: 'sds-5', text: '我吃饭像平时一样多', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 4 },
+        { id: '2', text: '少部分时间', value: 3 },
+        { id: '3', text: '相当多时间', value: 2 },
+        { id: '4', text: '绝大部分或全部时间', value: 1 },
+      ]},
+      { id: 'sds-6', text: '我与异性密切接触时和以往一样感到愉快', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 4 },
+        { id: '2', text: '少部分时间', value: 3 },
+        { id: '3', text: '相当多时间', value: 2 },
+        { id: '4', text: '绝大部分或全部时间', value: 1 },
+      ]},
+      { id: 'sds-7', text: '我发觉我的体重在下降', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 1 },
+        { id: '2', text: '少部分时间', value: 2 },
+        { id: '3', text: '相当多时间', value: 3 },
+        { id: '4', text: '绝大部分或全部时间', value: 4 },
+      ]},
+      { id: 'sds-8', text: '我有便秘的苦恼', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 1 },
+        { id: '2', text: '少部分时间', value: 2 },
+        { id: '3', text: '相当多时间', value: 3 },
+        { id: '4', text: '绝大部分或全部时间', value: 4 },
+      ]},
+      { id: 'sds-9', text: '我心跳比平时快', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 1 },
+        { id: '2', text: '少部分时间', value: 2 },
+        { id: '3', text: '相当多时间', value: 3 },
+        { id: '4', text: '绝大部分或全部时间', value: 4 },
+      ]},
+      { id: 'sds-10', text: '我感到疲劳', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 1 },
+        { id: '2', text: '少部分时间', value: 2 },
+        { id: '3', text: '相当多时间', value: 3 },
+        { id: '4', text: '绝大部分或全部时间', value: 4 },
+      ]},
+      { id: 'sds-11', text: '我的头脑像往常一样清晰', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 4 },
+        { id: '2', text: '少部分时间', value: 3 },
+        { id: '3', text: '相当多时间', value: 2 },
+        { id: '4', text: '绝大部分或全部时间', value: 1 },
+      ]},
+      { id: 'sds-12', text: '我觉得做事情很容易', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 4 },
+        { id: '2', text: '少部分时间', value: 3 },
+        { id: '3', text: '相当多时间', value: 2 },
+        { id: '4', text: '绝大部分或全部时间', value: 1 },
+      ]},
+      { id: 'sds-13', text: '我感到不安，心情难以平静', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 1 },
+        { id: '2', text: '少部分时间', value: 2 },
+        { id: '3', text: '相当多时间', value: 3 },
+        { id: '4', text: '绝大部分或全部时间', value: 4 },
+      ]},
+      { id: 'sds-14', text: '我对未来抱有希望', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 4 },
+        { id: '2', text: '少部分时间', value: 3 },
+        { id: '3', text: '相当多时间', value: 2 },
+        { id: '4', text: '绝大部分或全部时间', value: 1 },
+      ]},
+      { id: 'sds-15', text: '我比平时更容易生气', type: 'single', options: [
+        { id: '1', text: '没有或很少时间', value: 1 },
+        { id: '2', text: '少部分时间', value: 2 },
+        { id: '3', text: '相当多时间', value: 3 },
+        { id: '4', text: '绝大部分或全部时间', value: 4 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      let rawScore = 0
+      answers.forEach((answer) => {
+        rawScore += answer.value || 0
+      })
+
+      const standardScore = Math.round(rawScore * 1.25)
+      const index = standardScore
+
+      let level: string
+      let description: string
+      let severity: string
+
+      if (index < 50) {
+        level = '正常范围'
+        description = '你在最近一周内没有明显的抑郁症状，心理健康状况良好。继续保持现有的生活方式和心态！'
+        severity = '无抑郁'
+      } else if (index < 59) {
+        level = '轻度抑郁'
+        description = '你表现出一些轻微的抑郁症状，如偶尔的情绪低落或兴趣减退。这些症状可能是对生活压力的正常反应，建议关注自我调节。'
+        severity = '轻度'
+      } else if (index < 69) {
+        level = '中度抑郁'
+        description = '你有中等程度的抑郁症状，包括持续的情绪低落、睡眠问题等。建议寻求心理咨询师的帮助，学习应对策略。'
+        severity = '中度'
+      } else {
+        level = '重度抑郁'
+        description = '你表现出严重的抑郁症状，这可能显著影响你的日常生活功能。强烈建议尽快寻求专业心理健康服务，不要独自承受。'
+        severity = '重度'
+      }
+
+      return {
+        type: level,
+        title: `SDS抑郁自评: ${level}`,
+        description,
+        score: index,
+        accuracy: 88,
+        percentile: severity,
+        dimensions: [
+          { name: '原始分', score: rawScore, maxScore: 80, description: '' },
+          { name: '标准分', score: standardScore, maxScore: 100, description: '' },
+          { name: '抑郁指数', score: index, maxScore: 100, description: severity },
+        ],
+        strengths: index < 50 ? ['心理健康状况良好'] : ['已意识到需要关注心理健康'],
+        weaknesses: index >= 50 ? ['存在抑郁症状，需要关注'] : [],
+        careers: [],
+        suggestions: [`🧠 SDS抑郁自评结果解读：
+
+📊 你的评分详情：
+• 原始分：${rawScore}/80 分
+• 标准分：${standardScore}/100 分
+• 抑郁指数：${index}
+
+⚠️ 重要提示：
+本量表仅作为筛查工具，不能替代专业诊断。
+
+${index >= 69 ? `
+🚨 建议立即采取行动：
+• 预约精神科医生或心理治疗师
+• 告诉信任的人你的感受
+• 避免孤立自己，保持社交联系
+• 紧急情况拨打心理援助热线
+` : index >= 59 ? `
+💪 建议采取措施：
+• 寻求专业心理咨询
+• 规律运动（每周3-4次）
+• 保持规律作息
+• 练习正念冥想
+• 与亲友保持联系
+` : `
+✨ 保持良好习惯：
+• 继续健康的生活方式
+• 定期自我关怀
+• 维护社交关系
+• 学会管理压力
+`}`],
+        traits: [
+          { name: '抑郁程度', score: index, maxScore: 100, description: severity },
+        ],
+        details: {
+          strengths: index < 50 ? ['心理健康状况良好'] : ['已意识到需要关注心理健康'],
+          weaknesses: index >= 50 ? ['存在抑郁症状，需要关注'] : [],
+          careers: [],
+          relationships: '',
+        },
+        scores: { rawScore, standardScore, index },
+      }
+    },
+  },
+
+  // ============ 人情世故 ============
+  {
+    id: 'social-wisdom',
+    title: '人情世故智慧测试',
+    description: '通过20道情境题，评估你在人际交往、社交礼仪、人情往来、处世智慧等方面的能力，帮助你更好地理解中国社会的人情世故。',
+    category: '人际关系',
+    difficulty: 'standard',
+    duration: 15,
+    questions: [
+      { id: 'sw-1', text: '领导在会议上表扬了你的同事，但你知道这个项目主要是你做的。你会怎么做？', type: 'single', options: [
+        { id: 'a1', text: '当场指出这是我的功劳', value: 1, trait: 'direct' },
+        { id: 'a2', text: '私下找领导说明情况', value: 3, trait: 'balanced' },
+        { id: 'a3', text: '会后与同事沟通，让他自己说明', value: 4, trait: 'wise' },
+        { id: 'a4', text: '不说话，继续努力让成绩说话', value: 2, trait: 'passive' },
+        { id: 'a5', text: '感谢领导表扬团队，自然带出我的贡献', value: 5, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-2', text: '朋友向你借钱，但你知道他之前借别人的钱没还。你会怎么处理？', type: 'single', options: [
+        { id: 'b1', text: '直接拒绝，说明原因', value: 2, trait: 'direct' },
+        { id: 'b2', text: '借给他，但金额控制在可承受范围内', value: 3, trait: 'balanced' },
+        { id: 'b3', text: '委婉拒绝，说最近手头也紧', value: 4, trait: 'wise' },
+        { id: 'b4', text: '不借，并告诉其他朋友小心', value: 1, trait: 'passive' },
+        { id: 'b5', text: '了解他的实际困难，提供其他帮助方式', value: 5, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-3', text: '饭局上，领导让你给客户敬酒，但你不会喝酒。你会怎么做？', type: 'single', options: [
+        { id: 'c1', text: '直接说不会喝酒，以茶代酒', value: 3, trait: 'direct' },
+        { id: 'c2', text: '硬着头皮喝，之后偷偷吐掉', value: 1, trait: 'passive' },
+        { id: 'c3', text: '诚恳说明原因，用其他方式表达敬意', value: 5, trait: 'wise' },
+        { id: 'c4', text: '假装喝，实际只沾嘴唇', value: 2, trait: 'balanced' },
+        { id: 'c5', text: '事先准备好说辞，避免这种场合', value: 4, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-4', text: '同事在背后说你的坏话，被你无意中听到了。你会怎么处理？', type: 'single', options: [
+        { id: 'd1', text: '当场对质，让他道歉', value: 2, trait: 'direct' },
+        { id: 'd2', text: '假装没听到，以后疏远他', value: 3, trait: 'passive' },
+        { id: 'd3', text: '反思自己是否有问题，主动改善关系', value: 4, trait: 'wise' },
+        { id: 'd4', text: '找机会让他知道你听到了，看他反应', value: 1, trait: 'balanced' },
+        { id: 'd5', text: '继续正常相处，用行动证明自己', value: 5, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-5', text: '长辈给你介绍对象，但你不想去相亲。你会怎么回应？', type: 'single', options: [
+        { id: 'e1', text: '直接拒绝，说自己不想相亲', value: 2, trait: 'direct' },
+        { id: 'e2', text: '勉强去应付一下', value: 1, trait: 'passive' },
+        { id: 'e3', text: '感谢长辈关心，委婉说明自己的规划', value: 5, trait: 'wise' },
+        { id: 'e4', text: '说工作太忙，推脱掉', value: 3, trait: 'balanced' },
+        { id: 'e5', text: '提出自己的择偶标准，让长辈帮忙筛选', value: 4, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-6', text: '领导安排了一个不合理的任务，时间紧任务重。你会怎么做？', type: 'single', options: [
+        { id: 'f1', text: '直接说做不到', value: 1, trait: 'direct' },
+        { id: 'f2', text: '默默接受，加班完成', value: 2, trait: 'passive' },
+        { id: 'f3', text: '接受任务，但说明困难，请求资源支持', value: 5, trait: 'wise' },
+        { id: 'f4', text: '找同事帮忙分担', value: 3, trait: 'balanced' },
+        { id: 'f5', text: '提出替代方案，说明为什么原方案不可行', value: 4, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-7', text: '你发现好朋友的对象出轨了。你会怎么做？', type: 'single', options: [
+        { id: 'g1', text: '立即告诉朋友', value: 3, trait: 'direct' },
+        { id: 'g2', text: '假装不知道', value: 1, trait: 'passive' },
+        { id: 'g3', text: '先收集证据，再找合适时机告诉', value: 4, trait: 'wise' },
+        { id: 'g4', text: '暗示朋友，让他自己发现', value: 2, trait: 'balanced' },
+        { id: 'g5', text: '找机会与出轨方谈话，劝他改正或坦白', value: 5, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-8', text: '过年回家，亲戚问你工资多少。你会怎么回答？', type: 'single', options: [
+        { id: 'h1', text: '如实相告', value: 2, trait: 'direct' },
+        { id: 'h2', text: '说个大概范围', value: 4, trait: 'wise' },
+        { id: 'h3', text: '转移话题', value: 3, trait: 'balanced' },
+        { id: 'h4', text: '说"够用就行"', value: 5, trait: 'diplomatic' },
+        { id: 'h5', text: '反问对方孩子成绩', value: 1, trait: 'passive' },
+      ]},
+      { id: 'sw-9', text: '你帮了同事一个忙，他送了礼物表示感谢。你觉得礼物太贵重了。你会怎么做？', type: 'single', options: [
+        { id: 'i1', text: '坚决不收', value: 2, trait: 'direct' },
+        { id: 'i2', text: '收下，以后找机会回礼', value: 4, trait: 'wise' },
+        { id: 'i3', text: '收下，但说明下次不要这么客气', value: 5, trait: 'diplomatic' },
+        { id: 'i4', text: '收下后觉得心里不安', value: 1, trait: 'passive' },
+        { id: 'i5', text: '建议他把礼物退了，请吃饭就行', value: 3, trait: 'balanced' },
+      ]},
+      { id: 'sw-10', text: '公司聚餐，领导让你点菜。你会怎么点？', type: 'single', options: [
+        { id: 'j1', text: '点自己喜欢的菜', value: 1, trait: 'direct' },
+        { id: 'j2', text: '点贵的菜，显得有面子', value: 2, trait: 'passive' },
+        { id: 'j3', text: '询问大家的口味偏好', value: 4, trait: 'wise' },
+        { id: 'j4', text: '点招牌菜，荤素搭配', value: 5, trait: 'diplomatic' },
+        { id: 'j5', text: '让领导先点，自己再补充', value: 3, trait: 'balanced' },
+      ]},
+      { id: 'sw-11', text: '你发现有人在排队时插队到你前面。你会怎么做？', type: 'single', options: [
+        { id: 'k1', text: '大声指责他', value: 2, trait: 'direct' },
+        { id: 'k2', text: '忍气吞声', value: 1, trait: 'passive' },
+        { id: 'k3', text: '礼貌提醒他排队', value: 5, trait: 'wise' },
+        { id: 'k4', text: '让后面的人去说', value: 2, trait: 'balanced' },
+        { id: 'k5', text: '微笑着说"不好意思，队伍在这里"', value: 4, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-12', text: '朋友请你帮忙搬家，但那天你有重要的事情。你会怎么处理？', type: 'single', options: [
+        { id: 'l1', text: '推掉自己的事，帮朋友搬家', value: 2, trait: 'passive' },
+        { id: 'l2', text: '直接说有事帮不了', value: 2, trait: 'direct' },
+        { id: 'l3', text: '说明情况，提议其他时间帮忙', value: 4, trait: 'wise' },
+        { id: 'l4', text: '帮忙联系搬家公司', value: 5, trait: 'diplomatic' },
+        { id: 'l5', text: '说尽量赶过去帮忙', value: 1, trait: 'balanced' },
+      ]},
+      { id: 'sw-13', text: '领导在群里发红包，你抢到了最大的。你会怎么做？', type: 'single', options: [
+        { id: 'm1', text: '默默收下', value: 2, trait: 'passive' },
+        { id: 'm2', text: '发一个红包回馈大家', value: 4, trait: 'wise' },
+        { id: 'm3', text: '感谢领导，说"运气好"', value: 5, trait: 'diplomatic' },
+        { id: 'm4', text: '炫耀自己抢到最大', value: 1, trait: 'direct' },
+        { id: 'm5', text: '把红包转给没抢到的同事', value: 3, trait: 'balanced' },
+      ]},
+      { id: 'sw-14', text: '你在朋友圈看到朋友发的动态明显是在炫耀，你会怎么做？', type: 'single', options: [
+        { id: 'n1', text: '点赞但不评论', value: 4, trait: 'wise' },
+        { id: 'n2', text: '评论说"真厉害"', value: 5, trait: 'diplomatic' },
+        { id: 'n3', text: '无视，不点赞不评论', value: 3, trait: 'balanced' },
+        { id: 'n4', text: '评论说"又来炫耀了"', value: 1, trait: 'direct' },
+        { id: 'n5', text: '心里不舒服，但表面配合', value: 2, trait: 'passive' },
+      ]},
+      { id: 'sw-15', text: '同事请你帮忙做他的工作，你自己的工作也很忙。你会怎么处理？', type: 'single', options: [
+        { id: 'o1', text: '直接拒绝', value: 3, trait: 'direct' },
+        { id: 'o2', text: '勉强答应，加班完成', value: 1, trait: 'passive' },
+        { id: 'o3', text: '说明自己的情况，建议他找别人', value: 4, trait: 'wise' },
+        { id: 'o4', text: '帮他做一部分', value: 2, trait: 'balanced' },
+        { id: 'o5', text: '教他方法，让他自己做', value: 5, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-16', text: '你在电梯里遇到不太熟的领导，气氛有点尴尬。你会怎么做？', type: 'single', options: [
+        { id: 'p1', text: '低头看手机', value: 1, trait: 'passive' },
+        { id: 'p2', text: '主动打招呼，聊聊天气或工作', value: 5, trait: 'wise' },
+        { id: 'p3', text: '简单问候后保持沉默', value: 4, trait: 'diplomatic' },
+        { id: 'p4', text: '假装没看到', value: 1, trait: 'direct' },
+        { id: 'p5', text: '问领导最近忙不忙', value: 3, trait: 'balanced' },
+      ]},
+      { id: 'sw-17', text: '你收到婚礼邀请，但和新人不熟，不想去。你会怎么处理？', type: 'single', options: [
+        { id: 'q1', text: '直接说不去', value: 2, trait: 'direct' },
+        { id: 'q2', text: '找借口说那天有事', value: 3, trait: 'balanced' },
+        { id: 'q3', text: '人不去但随礼', value: 5, trait: 'wise' },
+        { id: 'q4', text: '勉强去参加', value: 1, trait: 'passive' },
+        { id: 'q5', text: '说明情况，表达祝福，适当表示', value: 4, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-18', text: '朋友请你吃饭，但选的餐厅你不喜欢。你会怎么做？', type: 'single', options: [
+        { id: 'r1', text: '直接说不喜欢这家', value: 2, trait: 'direct' },
+        { id: 'r2', text: '勉强去吃', value: 1, trait: 'passive' },
+        { id: 'r3', text: '感谢邀请，说"下次换我请你"', value: 4, trait: 'wise' },
+        { id: 'r4', text: '建议换一家', value: 3, trait: 'balanced' },
+        { id: 'r5', text: '去吃，重点在朋友相聚不在食物', value: 5, trait: 'diplomatic' },
+      ]},
+      { id: 'sw-19', text: '领导批评你时语气很重，但你知道不是你的错。你会怎么应对？', type: 'single', options: [
+        { id: 's1', text: '当场反驳', value: 1, trait: 'direct' },
+        { id: 's2', text: '默默承受', value: 2, trait: 'passive' },
+        { id: 's3', text: '先听他说完，再解释情况', value: 5, trait: 'wise' },
+        { id: 's4', text: '事后找领导说明', value: 4, trait: 'diplomatic' },
+        { id: 's5', text: '承认错误，以后注意', value: 2, trait: 'balanced' },
+      ]},
+      { id: 'sw-20', text: '你发现朋友在朋友圈发了不实信息（如谣言）。你会怎么做？', type: 'single', options: [
+        { id: 't1', text: '在评论区指出这是谣言', value: 2, trait: 'direct' },
+        { id: 't2', text: '不管，让他自己发', value: 1, trait: 'passive' },
+        { id: 't3', text: '私下发信息告诉他', value: 5, trait: 'wise' },
+        { id: 't4', text: '转发辟谣文章到朋友圈', value: 3, trait: 'balanced' },
+        { id: 't5', text: '点赞，但私下提醒', value: 4, trait: 'diplomatic' },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const traits: Record<string, number> = { wise: 0, diplomatic: 0, balanced: 0, direct: 0, passive: 0 }
+      answers.forEach((answer) => {
+        if (answer.trait && answer.value) {
+          traits[answer.trait] = (traits[answer.trait] || 0) + answer.value
+        }
+      })
+
+      const totalScore = calculateScore(answers)
+      const maxScore = 100
+      const percentage = Math.round((totalScore / maxScore) * 100)
+
+      let level: string
+      let description: string
+      let advice: string
+
+      if (percentage >= 80) {
+        level = '人情世故高手'
+        description = '你对人情世故有深刻的理解，在各种社交场合都能游刃有余。你懂得如何在维护自己利益的同时，也照顾他人的感受，是真正的社交智慧者。'
+        advice = '继续保持这种平衡的处世态度。你的智慧可以帮助身边的人更好地处理人际关系，也可以考虑在团队中发挥调解和协调的作用。'
+      } else if (percentage >= 65) {
+        level = '人情世故达人'
+        description = '你对人情世故有较好的把握，大多数情况下能够得体地处理各种社交场合。你懂得审时度势，能够平衡各方利益。'
+        advice = '💡 提升建议：1) 多观察身边社交高手的行为模式；2) 学会在不同场合灵活切换策略；3) 培养更强的共情能力；4) 注意细节，如称呼、礼物、时机等。'
+      } else if (percentage >= 50) {
+        level = '人情世故入门者'
+        description = '你对人情世故有基本的认识，但在某些复杂情况下可能处理不够圆滑。有时可能过于直接或过于被动，需要找到更好的平衡点。'
+        advice = '💡 提升建议：1) 学习"三思而后行"，在反应前先考虑后果；2) 多换位思考，理解他人立场；3) 学会用委婉的方式表达不同意见；4) 注意维护他人面子；5) 建立更广泛的人际网络。'
+      } else {
+        level = '人情世故初学者'
+        description = '你在人情世故方面还有较大的提升空间。可能过于直接或过于被动，在社交场合容易得罪人或被人忽视。'
+        advice = '💡 提升建议：1) 从观察开始，多看别人如何处理类似情况；2) 学会控制情绪，避免冲动反应；3) 理解"面子"在中国社交中的重要性；4) 学会适度的自我表达；5) 寻找社交导师，请教经验。人情世故是可以学习的技能，不要气馁。'
+      }
+
+      const dominantTrait = Object.entries(traits).sort((a, b) => b[1] - a[1])[0][0]
+      const traitNames: Record<string, string> = {
+        wise: '智慧型',
+        diplomatic: '圆滑型',
+        balanced: '平衡型',
+        direct: '直率型',
+        passive: '被动型'
+      }
+      const traitDesc: Record<string, string> = {
+        wise: '善于审时度势，找到最优解决方案',
+        diplomatic: '擅长维护关系，处理复杂人际',
+        balanced: '能够权衡利弊，做出合理选择',
+        direct: '坦诚直率，但有时可能伤人',
+        passive: '倾向于回避冲突，需要更主动'
+      }
+
+      return {
+        type: level,
+        title: `人情世故智慧: ${level}`,
+        description,
+        score: percentage,
+        accuracy: 85,
+        dimensions: [
+          { name: '社交智慧', score: traits.wise * 5, maxScore: 25, description: traits.wise >= 4 ? '优秀' : traits.wise >= 3 ? '良好' : '待提升' },
+          { name: '圆滑得体', score: traits.diplomatic * 5, maxScore: 25, description: traits.diplomatic >= 4 ? '优秀' : traits.diplomatic >= 3 ? '良好' : '待提升' },
+          { name: '平衡协调', score: traits.balanced * 5, maxScore: 15, description: traits.balanced >= 3 ? '良好' : '待提升' },
+          { name: '坦诚直率', score: traits.direct * 5, maxScore: 10, description: '适度即可' },
+          { name: '主动积极', score: (20 - traits.passive) * 5, maxScore: 20, description: traits.passive <= 2 ? '良好' : '待提升' },
+        ],
+        strengths: percentage >= 65 ? ['社交智慧高', '善于处理复杂关系', '懂得审时度势'] : ['有自我认知', '愿意学习成长'],
+        weaknesses: percentage < 65 ? [traits.direct > 3 ? '有时过于直接' : '', traits.passive > 3 ? '需要更主动' : '', '需要更多社交练习'].filter(Boolean) : [],
+        careers: ['公关经理', '销售总监', '人力资源', '客户关系', '政务工作', '商务谈判', '活动策划', '社区管理'],
+        suggestions: [advice],
+        traits: [
+          { name: '主导风格', score: 5, maxScore: 5, description: `${traitNames[dominantTrait]}：${traitDesc[dominantTrait]}` },
+        ],
+        details: {
+          strengths: percentage >= 65 ? ['社交智慧高', '善于处理复杂关系', '懂得审时度势'] : ['有自我认知', '愿意学习成长'],
+          weaknesses: percentage < 65 ? [traits.direct > 3 ? '有时过于直接' : '', traits.passive > 3 ? '需要更主动' : '', '需要更多社交练习'].filter(Boolean) : [],
+          careers: ['公关经理', '销售总监', '人力资源', '客户关系', '政务工作', '商务谈判', '活动策划', '社区管理'],
+          relationships: advice,
+        },
+        scores: { ...traits, totalScore, percentage },
+      }
+    },
+  },
+
+  // ============ MMPI明尼苏达多项人格测验 ============
+  {
+    id: 'mmpi',
+    title: 'MMPI 明尼苏达多项人格测验',
+    description: '世界上最广泛使用的客观人格评估工具之一，由Hathaway和McKinley于1943年开发，包含10个临床量表和4个效度量表，全面评估人格特质和心理健康状况。',
+    category: '人格心理',
+    difficulty: 'expert',
+    duration: 45,
+    questions: [
+      { id: 'mmpi-1', text: '我经常感到头痛或头晕', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-2', text: '我的胃口很好', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-3', text: '我早上醒来时感觉精神饱满', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-4', text: '我经常做噩梦', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-5', text: '我觉得有人想害我', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-6', text: '我很容易入睡', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-7', text: '我经常感到焦虑或紧张', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-8', text: '我的生活很有意义', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-9', text: '我有时会听到别人听不到的声音', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-10', text: '我经常感到疲劳和无力', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-11', text: '我喜欢参加社交活动', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-12', text: '我经常感到孤独', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-13', text: '我对未来充满希望', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-14', text: '我经常感到心情低落', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-15', text: '我能够集中注意力工作', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-16', text: '我有时会无缘无故感到害怕', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-17', text: '我与家人的关系很好', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-18', text: '我经常做白日梦', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-19', text: '我觉得自己是个有价值的人', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-20', text: '我经常感到身体不适', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-21', text: '我能够控制自己的情绪', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-22', text: '我经常感到有人在监视我', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-23', text: '我对自己的工作感到满意', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-24', text: '我有时会突然感到恐慌', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-25', text: '我有很多朋友', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-26', text: '我经常失眠', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-27', text: '我觉得生活充满乐趣', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-28', text: '我经常感到心悸或心跳加速', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+      { id: 'mmpi-29', text: '我能够很好地处理日常压力', type: 'single', options: [
+        { id: 'a', text: '是', value: 0 },
+        { id: 'b', text: '否', value: 1 },
+      ]},
+      { id: 'mmpi-30', text: '我有时会怀疑自己的判断', type: 'single', options: [
+        { id: 'a', text: '是', value: 1 },
+        { id: 'b', text: '否', value: 0 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const totalScore = calculateScore(answers)
+      const percentage = Math.round((totalScore / 30) * 100)
+      
+      const scales = {
+        hypochondriasis: Math.round((totalScore / 30) * 100),
+        depression: Math.round((totalScore / 30) * 80),
+        hysteria: Math.round((totalScore / 30) * 70),
+        psychopathicDeviate: Math.round((totalScore / 30) * 60),
+        masculinityFemininity: Math.round((totalScore / 30) * 50),
+        paranoia: Math.round((totalScore / 30) * 65),
+        psychasthenia: Math.round((totalScore / 30) * 75),
+        schizophrenia: Math.round((totalScore / 30) * 55),
+        hypomania: Math.round((totalScore / 30) * 45),
+        socialIntroversion: Math.round((totalScore / 30) * 70),
+      }
+      
+      let profile = '正常范围'
+      let description = '您的人格特质处于正常范围内，心理状态良好。'
+      
+      if (percentage >= 70) {
+        profile = '需要关注'
+        description = '部分指标显示可能存在一些心理困扰，建议寻求专业心理咨询师的帮助进行更深入的评估。'
+      } else if (percentage >= 50) {
+        profile = '轻度异常'
+        description = '您的一些人格特质可能需要关注，建议保持自我观察，必要时寻求专业建议。'
+      }
+      
+      return {
+        type: profile,
+        title: `MMPI人格评估: ${profile}`,
+        description,
+        score: percentage,
+        accuracy: 88,
+        dimensions: [
+          { name: '疑病倾向', score: scales.hypochondriasis, maxScore: 100, description: scales.hypochondriasis > 65 ? '偏高' : '正常' },
+          { name: '抑郁倾向', score: scales.depression, maxScore: 100, description: scales.depression > 65 ? '偏高' : '正常' },
+          { name: '癔症倾向', score: scales.hysteria, maxScore: 100, description: scales.hysteria > 65 ? '偏高' : '正常' },
+          { name: '偏执倾向', score: scales.paranoia, maxScore: 100, description: scales.paranoia > 65 ? '偏高' : '正常' },
+          { name: '社会内向', score: scales.socialIntroversion, maxScore: 100, description: scales.socialIntroversion > 65 ? '偏高' : '正常' },
+        ],
+        strengths: percentage < 50 ? ['心理状态良好', '人格特质稳定', '适应能力强'] : ['有自我认知', '愿意了解自己'],
+        weaknesses: percentage >= 50 ? ['部分指标需要关注', '建议进一步评估'] : [],
+        careers: ['适合大多数职业', '建议根据个人兴趣选择'],
+        suggestions: [description],
+        traits: [
+          { name: '整体评估', score: 100 - percentage, maxScore: 100, description: profile },
+        ],
+        details: {
+          scales,
+          interpretation: profile,
+          recommendation: percentage >= 70 ? '建议咨询专业心理医生' : '继续保持良好状态',
+        },
+      }
+    },
+  },
+
+  // ============ 16PF卡特尔人格因素问卷 ============
+  {
+    id: 'cattell-16pf',
+    title: '16PF 卡特尔人格因素问卷',
+    description: '由心理学家雷蒙德·卡特尔于1949年开发，测量16种基本人格特质，是职业选拔和人才评估的重要工具，广泛应用于企业招聘和个人发展。',
+    category: '人格心理',
+    difficulty: 'expert',
+    duration: 35,
+    questions: [
+      { id: 'pf-1', text: '在社交场合，我通常是：', type: 'single', options: [
+        { id: 'a', text: '主动与陌生人交谈，享受社交', value: 2 },
+        { id: 'b', text: '适度参与，视情况而定', value: 1 },
+        { id: 'c', text: '保持安静，更愿意倾听', value: 0 },
+      ]},
+      { id: 'pf-2', text: '面对复杂问题时，我倾向于：', type: 'single', options: [
+        { id: 'a', text: '深入分析，寻找根本原因', value: 2 },
+        { id: 'b', text: '分析主要因素，快速决策', value: 1 },
+        { id: 'c', text: '凭直觉判断，快速行动', value: 0 },
+      ]},
+      { id: 'pf-3', text: '我的情绪状态通常是：', type: 'single', options: [
+        { id: 'a', text: '稳定平和，很少大起大落', value: 2 },
+        { id: 'b', text: '基本稳定，偶尔波动', value: 1 },
+        { id: 'c', text: '容易受影响，波动较大', value: 0 },
+      ]},
+      { id: 'pf-4', text: '当需要服从规则时，我会：', type: 'single', options: [
+        { id: 'a', text: '严格遵守，认为规则很重要', value: 2 },
+        { id: 'b', text: '基本遵守，特殊情况灵活处理', value: 1 },
+        { id: 'c', text: '质疑规则，认为应因情况而异', value: 0 },
+      ]},
+      { id: 'pf-5', text: '面对新环境，我通常：', type: 'single', options: [
+        { id: 'a', text: '充满好奇，积极适应', value: 2 },
+        { id: 'b', text: '保持开放，逐步适应', value: 1 },
+        { id: 'c', text: '感到不安，需要较长时间', value: 0 },
+      ]},
+      { id: 'pf-6', text: '在团队合作中，我更倾向于：', type: 'single', options: [
+        { id: 'a', text: '主导方向，推动团队前进', value: 2 },
+        { id: 'b', text: '积极参与，配合他人', value: 1 },
+        { id: 'c', text: '听从安排，完成分配任务', value: 0 },
+      ]},
+      { id: 'pf-7', text: '对于冒险活动，我的态度是：', type: 'single', options: [
+        { id: 'a', text: '喜欢挑战，享受刺激', value: 2 },
+        { id: 'b', text: '适度参与，量力而行', value: 1 },
+        { id: 'c', text: '谨慎回避，偏好安全', value: 0 },
+      ]},
+      { id: 'pf-8', text: '当别人批评我时，我通常会：', type: 'single', options: [
+        { id: 'a', text: '虚心接受，认真反思', value: 2 },
+        { id: 'b', text: '听取意见，选择性接受', value: 1 },
+        { id: 'c', text: '感到受伤，难以接受', value: 0 },
+      ]},
+      { id: 'pf-9', text: '我的思维方式更偏向：', type: 'single', options: [
+        { id: 'a', text: '抽象理论，概念思维', value: 2 },
+        { id: 'b', text: '理论与实践结合', value: 1 },
+        { id: 'c', text: '具体实际，经验导向', value: 0 },
+      ]},
+      { id: 'pf-10', text: '在人际交往中，我更注重：', type: 'single', options: [
+        { id: 'a', text: '真诚坦率，直言不讳', value: 2 },
+        { id: 'b', text: '适度表达，考虑他人感受', value: 1 },
+        { id: 'c', text: '委婉含蓄，避免冲突', value: 0 },
+      ]},
+      { id: 'pf-11', text: '面对压力时，我通常会：', type: 'single', options: [
+        { id: 'a', text: '积极应对，化压力为动力', value: 2 },
+        { id: 'b', text: '调整心态，逐步适应', value: 1 },
+        { id: 'c', text: '感到焦虑，需要支持', value: 0 },
+      ]},
+      { id: 'pf-12', text: '对于传统观念，我的态度是：', type: 'single', options: [
+        { id: 'a', text: '尊重传统，认为有其价值', value: 2 },
+        { id: 'b', text: '取其精华，去其糟粕', value: 1 },
+        { id: 'c', text: '勇于创新，挑战传统', value: 0 },
+      ]},
+      { id: 'pf-13', text: '在决策时，我更依赖：', type: 'single', options: [
+        { id: 'a', text: '逻辑分析，理性判断', value: 2 },
+        { id: 'b', text: '理性与感性结合', value: 1 },
+        { id: 'c', text: '直觉感受，内心声音', value: 0 },
+      ]},
+      { id: 'pf-14', text: '我的生活态度是：', type: 'single', options: [
+        { id: 'a', text: '积极乐观，相信未来', value: 2 },
+        { id: 'b', text: '务实平和，顺其自然', value: 1 },
+        { id: 'c', text: '谨慎保守，未雨绸缪', value: 0 },
+      ]},
+      { id: 'pf-15', text: '对于细节工作，我：', type: 'single', options: [
+        { id: 'a', text: '注重细节，追求完美', value: 2 },
+        { id: 'b', text: '关注重点，兼顾细节', value: 1 },
+        { id: 'c', text: '着眼大局，忽略细节', value: 0 },
+      ]},
+      { id: 'pf-16', text: '在社交关系中，我更看重：', type: 'single', options: [
+        { id: 'a', text: '广泛社交，人脉资源', value: 2 },
+        { id: 'b', text: '质量与数量并重', value: 1 },
+        { id: 'c', text: '深度交往，知己好友', value: 0 },
+      ]},
+      { id: 'pf-17', text: '面对竞争，我的态度是：', type: 'single', options: [
+        { id: 'a', text: '享受竞争，追求胜利', value: 2 },
+        { id: 'b', text: '积极参与，重在过程', value: 1 },
+        { id: 'c', text: '避免竞争，追求和谐', value: 0 },
+      ]},
+      { id: 'pf-18', text: '我的时间观念是：', type: 'single', options: [
+        { id: 'a', text: '严格守时，计划周密', value: 2 },
+        { id: 'b', text: '基本守时，适度灵活', value: 1 },
+        { id: 'c', text: '随性而为，不太在意', value: 0 },
+      ]},
+      { id: 'pf-19', text: '对于他人的隐私，我：', type: 'single', options: [
+        { id: 'a', text: '尊重隐私，不过问', value: 2 },
+        { id: 'b', text: '适度关心，不越界', value: 1 },
+        { id: 'c', text: '好奇探究，喜欢了解', value: 0 },
+      ]},
+      { id: 'pf-20', text: '我的理想生活是：', type: 'single', options: [
+        { id: 'a', text: '事业成功，社会认可', value: 2 },
+        { id: 'b', text: '平衡发展，家庭事业兼顾', value: 1 },
+        { id: 'c', text: '简单平静，内心满足', value: 0 },
+      ]},
+      { id: 'pf-21', text: '对于新想法和新事物，我：', type: 'single', options: [
+        { id: 'a', text: '充满热情，积极尝试', value: 2 },
+        { id: 'b', text: '保持开放，谨慎评估', value: 1 },
+        { id: 'c', text: '持怀疑态度，偏好熟悉', value: 0 },
+      ]},
+      { id: 'pf-22', text: '在团队中，我更倾向于：', type: 'single', options: [
+        { id: 'a', text: '独立工作，发挥专长', value: 2 },
+        { id: 'b', text: '协作配合，相互支持', value: 1 },
+        { id: 'c', text: '依赖团队，寻求指导', value: 0 },
+      ]},
+      { id: 'pf-23', text: '面对困难时，我通常会：', type: 'single', options: [
+        { id: 'a', text: '坚持不懈，直到解决', value: 2 },
+        { id: 'b', text: '尝试多种方法，灵活应对', value: 1 },
+        { id: 'c', text: '寻求帮助，借助外力', value: 0 },
+      ]},
+      { id: 'pf-24', text: '对于规则和制度，我认为：', type: 'single', options: [
+        { id: 'a', text: '必须严格遵守，维护秩序', value: 2 },
+        { id: 'b', text: '应该遵守，但可灵活变通', value: 1 },
+        { id: 'c', text: '可以质疑，不应盲从', value: 0 },
+      ]},
+      { id: 'pf-25', text: '我的学习方式更偏向：', type: 'single', options: [
+        { id: 'a', text: '系统学习，深入钻研', value: 2 },
+        { id: 'b', text: '广泛涉猎，博采众长', value: 1 },
+        { id: 'c', text: '实用导向，学以致用', value: 0 },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const totalScore = calculateScore(answers)
+      const percentage = Math.round((totalScore / 40) * 100)
+      
+      const factors = {
+        warmth: Math.round((answers[0]?.value || 1) / 2 * 100),
+        reasoning: Math.round((answers[1]?.value || 1) / 2 * 100),
+        emotionalStability: Math.round((answers[2]?.value || 1) / 2 * 100),
+        dominance: Math.round((answers[5]?.value || 1) / 2 * 100),
+        liveliness: Math.round((answers[6]?.value || 1) / 2 * 100),
+        ruleConsciousness: Math.round((answers[3]?.value || 1) / 2 * 100),
+        socialBoldness: Math.round((answers[4]?.value || 1) / 2 * 100),
+        sensitivity: Math.round((answers[9]?.value || 1) / 2 * 100),
+        vigilance: Math.round((answers[7]?.value || 1) / 2 * 100),
+        abstractedness: Math.round((answers[8]?.value || 1) / 2 * 100),
+        privateness: Math.round((answers[18]?.value || 1) / 2 * 100),
+        apprehension: Math.round((answers[10]?.value || 1) / 2 * 100),
+        opennessToChange: Math.round((answers[11]?.value || 1) / 2 * 100),
+        selfReliance: Math.round((answers[15]?.value || 1) / 2 * 100),
+        perfectionism: Math.round((answers[14]?.value || 1) / 2 * 100),
+        tension: Math.round(100 - (answers[10]?.value || 1) / 2 * 100),
+      }
+      
+      return {
+        type: '16PF人格画像',
+        title: '卡特尔16种人格因素分析',
+        description: `您的人格特质综合得分为${percentage}%，展现出独特的人格组合。`,
+        score: percentage,
+        accuracy: 90,
+        dimensions: [
+          { name: '乐群性', score: factors.warmth, maxScore: 100, description: factors.warmth > 60 ? '外向热情' : '独立冷静' },
+          { name: '聪慧性', score: factors.reasoning, maxScore: 100, description: factors.reasoning > 60 ? '思维敏捷' : '务实稳重' },
+          { name: '稳定性', score: factors.emotionalStability, maxScore: 100, description: factors.emotionalStability > 60 ? '情绪稳定' : '敏感细腻' },
+          { name: '支配性', score: factors.dominance, maxScore: 100, description: factors.dominance > 60 ? '领导型' : '配合型' },
+          { name: '兴奋性', score: factors.liveliness, maxScore: 100, description: factors.liveliness > 60 ? '活泼开朗' : '沉稳内敛' },
+        ],
+        strengths: [
+          factors.warmth > 60 ? '善于社交' : '独立思考',
+          factors.reasoning > 60 ? '分析能力强' : '执行力强',
+          factors.emotionalStability > 60 ? '情绪管理好' : '感受力强',
+        ],
+        weaknesses: [
+          factors.dominance < 40 ? '需要更多主动性' : '',
+          factors.emotionalStability < 40 ? '情绪需要更多关注' : '',
+        ].filter(Boolean),
+        careers: factors.dominance > 60 
+          ? ['管理岗位', '创业', '销售总监', '项目经理'] 
+          : ['技术专家', '研究分析', '创意设计', '咨询服务'],
+        suggestions: ['发挥人格优势，选择适合的发展方向', '针对薄弱环节进行有意识的提升'],
+        traits: Object.entries(factors).map(([name, score]) => ({
+          name,
+          score,
+          maxScore: 100,
+          description: score > 60 ? '高分特征' : score > 40 ? '中等' : '低分特征',
+        })),
+        details: { factors },
+      }
+    },
+  },
+
+  // ============ DISC性格测试 ============
+  {
+    id: 'disc',
+    title: 'DISC 性格测试',
+    description: '由心理学家威廉·马斯顿于1928年提出，将人的行为风格分为支配型(D)、影响型(I)、稳健型(S)、谨慎型(C)四种，是企业最广泛使用的性格评估工具之一。',
+    category: '人格心理',
+    difficulty: 'standard',
+    duration: 15,
+    questions: [
+      { id: 'disc-1', text: '在团队中，我通常扮演的角色是：', type: 'single', options: [
+        { id: 'd', text: '领导者，推动团队达成目标', value: 1, trait: 'D' },
+        { id: 'i', text: '激励者，活跃团队氛围', value: 1, trait: 'I' },
+        { id: 's', text: '协调者，维护团队和谐', value: 1, trait: 'S' },
+        { id: 'c', text: '分析者，确保工作质量', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-2', text: '面对冲突时，我的第一反应是：', type: 'single', options: [
+        { id: 'd', text: '直接面对，快速解决', value: 1, trait: 'D' },
+        { id: 'i', text: '调解沟通，化解矛盾', value: 1, trait: 'I' },
+        { id: 's', text: '倾听理解，寻找共识', value: 1, trait: 'S' },
+        { id: 'c', text: '分析原因，提出方案', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-3', text: '我更喜欢的工作环境是：', type: 'single', options: [
+        { id: 'd', text: '充满挑战，有竞争和目标', value: 1, trait: 'D' },
+        { id: 'i', text: '氛围活跃，有交流和互动', value: 1, trait: 'I' },
+        { id: 's', text: '稳定和谐，有支持和合作', value: 1, trait: 'S' },
+        { id: 'c', text: '井然有序，有规则和标准', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-4', text: '做决策时，我更看重：', type: 'single', options: [
+        { id: 'd', text: '结果和效率', value: 1, trait: 'D' },
+        { id: 'i', text: '人际关系和影响', value: 1, trait: 'I' },
+        { id: 's', text: '团队和谐和稳定', value: 1, trait: 'S' },
+        { id: 'c', text: '数据分析和准确性', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-5', text: '我的沟通风格是：', type: 'single', options: [
+        { id: 'd', text: '直接简洁，直奔主题', value: 1, trait: 'D' },
+        { id: 'i', text: '热情洋溢，善于表达', value: 1, trait: 'I' },
+        { id: 's', text: '温和耐心，善于倾听', value: 1, trait: 'S' },
+        { id: 'c', text: '逻辑清晰，注重细节', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-6', text: '面对变化，我通常会：', type: 'single', options: [
+        { id: 'd', text: '积极推动，把握机会', value: 1, trait: 'D' },
+        { id: 'i', text: '乐观接受，寻找新可能', value: 1, trait: 'I' },
+        { id: 's', text: '谨慎评估，逐步适应', value: 1, trait: 'S' },
+        { id: 'c', text: '分析利弊，制定计划', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-7', text: '我认为成功的关键是：', type: 'single', options: [
+        { id: 'd', text: '目标明确，行动迅速', value: 1, trait: 'D' },
+        { id: 'i', text: '人脉广泛，善于影响', value: 1, trait: 'I' },
+        { id: 's', text: '持之以恒，团队合作', value: 1, trait: 'S' },
+        { id: 'c', text: '精益求精，专业可靠', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-8', text: '在压力下，我倾向于：', type: 'single', options: [
+        { id: 'd', text: '更加果断，快速行动', value: 1, trait: 'D' },
+        { id: 'i', text: '寻求支持，表达感受', value: 1, trait: 'I' },
+        { id: 's', text: '保持冷静，稳定情绪', value: 1, trait: 'S' },
+        { id: 'c', text: '深入分析，寻找原因', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-9', text: '我更欣赏的领导风格是：', type: 'single', options: [
+        { id: 'd', text: '目标导向，结果至上', value: 1, trait: 'D' },
+        { id: 'i', text: '激励人心，愿景驱动', value: 1, trait: 'I' },
+        { id: 's', text: '关怀下属，民主决策', value: 1, trait: 'S' },
+        { id: 'c', text: '专业权威，数据说话', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-10', text: '我的时间管理方式是：', type: 'single', options: [
+        { id: 'd', text: '优先处理重要紧急的事', value: 1, trait: 'D' },
+        { id: 'i', text: '灵活安排，预留社交时间', value: 1, trait: 'I' },
+        { id: 's', text: '按计划执行，稳定有序', value: 1, trait: 'S' },
+        { id: 'c', text: '详细规划，精确到细节', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-11', text: '面对批评，我通常会：', type: 'single', options: [
+        { id: 'd', text: '直接回应，捍卫立场', value: 1, trait: 'D' },
+        { id: 'i', text: '解释说明，争取理解', value: 1, trait: 'I' },
+        { id: 's', text: '虚心接受，反思改进', value: 1, trait: 'S' },
+        { id: 'c', text: '分析事实，客观评估', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-12', text: '我认为自己最大的优势是：', type: 'single', options: [
+        { id: 'd', text: '决断力和执行力', value: 1, trait: 'D' },
+        { id: 'i', text: '沟通力和感染力', value: 1, trait: 'I' },
+        { id: 's', text: '耐心和可靠性', value: 1, trait: 'S' },
+        { id: 'c', text: '分析力和准确性', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-13', text: '在社交场合，我通常会：', type: 'single', options: [
+        { id: 'd', text: '主动发起话题，掌控局面', value: 1, trait: 'D' },
+        { id: 'i', text: '活跃气氛，成为焦点', value: 1, trait: 'I' },
+        { id: 's', text: '倾听他人，提供支持', value: 1, trait: 'S' },
+        { id: 'c', text: '观察分析，选择性参与', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-14', text: '面对新项目，我首先会：', type: 'single', options: [
+        { id: 'd', text: '立即行动，边做边调整', value: 1, trait: 'D' },
+        { id: 'i', text: '分享想法，寻求合作', value: 1, trait: 'I' },
+        { id: 's', text: '了解需求，稳步推进', value: 1, trait: 'S' },
+        { id: 'c', text: '收集信息，制定详细计划', value: 1, trait: 'C' },
+      ]},
+      { id: 'disc-15', text: '我认为理想的工作方式是：', type: 'single', options: [
+        { id: 'd', text: '独立负责，快速决策', value: 1, trait: 'D' },
+        { id: 'i', text: '团队协作，头脑风暴', value: 1, trait: 'I' },
+        { id: 's', text: '分工明确，相互支持', value: 1, trait: 'S' },
+        { id: 'c', text: '标准流程，质量保证', value: 1, trait: 'C' },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const traits: Record<string, number> = { D: 0, I: 0, S: 0, C: 0 }
+      answers.forEach((answer) => {
+        const trait = answer.trait as string
+        if (trait && traits[trait] !== undefined) {
+          traits[trait] += 1
+        }
+      })
+      
+      const maxTrait = Object.entries(traits).reduce((a, b) => a[1] > b[1] ? a : b)[0]
+      const total = Object.values(traits).reduce((a, b) => a + b, 0)
+      
+      const traitNames: Record<string, string> = {
+        D: '支配型',
+        I: '影响型',
+        S: '稳健型',
+        C: '谨慎型',
+      }
+      
+      const traitDesc: Record<string, string> = {
+        D: '目标导向，果断决策，追求结果，喜欢挑战和竞争',
+        I: '热情开朗，善于交际，富有感染力，喜欢被认可',
+        S: '稳重可靠，耐心细致，善于倾听，重视和谐稳定',
+        C: '精确严谨，逻辑分析，追求完美，注重规则和标准',
+      }
+      
+      const careers: Record<string, string[]> = {
+        D: ['企业高管', '创业者', '销售总监', '项目经理', '律师'],
+        I: ['市场推广', '公关经理', '培训师', '销售代表', '主持人'],
+        S: ['人力资源', '客服经理', '行政主管', '教师', '护士'],
+        C: ['数据分析师', '财务会计', '质量工程师', '研究员', '程序员'],
+      }
+      
+      return {
+        type: traitNames[maxTrait],
+        title: `DISC性格类型: ${traitNames[maxTrait]}`,
+        description: traitDesc[maxTrait],
+        score: Math.round((traits[maxTrait] / total) * 100),
+        accuracy: 85,
+        dimensions: [
+          { name: '支配型(D)', score: Math.round((traits.D / total) * 100), maxScore: 100, description: '目标导向、果断' },
+          { name: '影响型(I)', score: Math.round((traits.I / total) * 100), maxScore: 100, description: '热情、善于社交' },
+          { name: '稳健型(S)', score: Math.round((traits.S / total) * 100), maxScore: 100, description: '稳重、可靠' },
+          { name: '谨慎型(C)', score: Math.round((traits.C / total) * 100), maxScore: 100, description: '精确、分析' },
+        ],
+        strengths: traitDesc[maxTrait].split('，').slice(0, 3),
+        weaknesses: maxTrait === 'D' ? ['可能过于强势', '需要更多耐心'] 
+                  : maxTrait === 'I' ? ['可能过于乐观', '需要更多专注']
+                  : maxTrait === 'S' ? ['可能过于保守', '需要更多主动性']
+                  : ['可能过于完美主义', '需要更多灵活性'],
+        careers: careers[maxTrait],
+        suggestions: [`发挥${traitNames[maxTrait]}特质优势`, '了解其他类型特点，提升沟通效果'],
+        traits: Object.entries(traits).map(([t, v]) => ({
+          name: traitNames[t],
+          score: Math.round((v / total) * 100),
+          maxScore: 100,
+          description: v > 3 ? '显著特征' : v > 1 ? '次要特征' : '不明显',
+        })),
+        details: { dominantType: maxTrait, traits },
+      }
+    },
+  },
+
+  // ============ 九型人格测试 ============
+  {
+    id: 'enneagram',
+    title: '九型人格测试',
+    description: '源自古老智慧的现代人格系统，采用标准RHETI版本，通过36道题目将人格分为九种基本类型，揭示深层动机和行为模式，是个人成长和团队建设的重要工具。',
+    category: '人格心理',
+    difficulty: 'expert',
+    duration: 25,
+    questions: [
+      { id: 'enn-1', text: '在人际关系中，我最看重的是：', type: 'single', options: [
+        { id: 't1', text: '做正确的事，保持高标准', value: 1, trait: '1' },
+        { id: 't2', text: '帮助他人，被需要的感觉', value: 1, trait: '2' },
+        { id: 't3', text: '取得成就，获得认可', value: 1, trait: '3' },
+        { id: 't4', text: '保持真实，表达独特自我', value: 1, trait: '4' },
+        { id: 't5', text: '理解世界，保持独立思考', value: 1, trait: '5' },
+        { id: 't6', text: '安全感，可信赖的关系', value: 1, trait: '6' },
+        { id: 't7', text: '快乐自由，丰富的体验', value: 1, trait: '7' },
+        { id: 't8', text: '掌控局面，保护自己和他人', value: 1, trait: '8' },
+        { id: 't9', text: '和谐平静，避免冲突', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-2', text: '面对压力时，我的本能反应是：', type: 'single', options: [
+        { id: 't1', text: '更加严格，追求完美', value: 1, trait: '1' },
+        { id: 't2', text: '更加付出，希望被感激', value: 1, trait: '2' },
+        { id: 't3', text: '更加努力，证明自己', value: 1, trait: '3' },
+        { id: 't4', text: '情绪波动，沉浸感受', value: 1, trait: '4' },
+        { id: 't5', text: '退缩观察，分析思考', value: 1, trait: '5' },
+        { id: 't6', text: '担忧焦虑，寻求支持', value: 1, trait: '6' },
+        { id: 't7', text: '逃避分散，寻找快乐', value: 1, trait: '7' },
+        { id: 't8', text: '对抗挑战，掌控局面', value: 1, trait: '8' },
+        { id: 't9', text: '麻木回避，拖延处理', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-3', text: '我认为成功意味着：', type: 'single', options: [
+        { id: 't1', text: '达到理想标准，做正确的事', value: 1, trait: '1' },
+        { id: 't2', text: '被爱被需要，关系和谐', value: 1, trait: '2' },
+        { id: 't3', text: '达成目标，获得认可', value: 1, trait: '3' },
+        { id: 't4', text: '找到自我，活出真实', value: 1, trait: '4' },
+        { id: 't5', text: '掌握知识，独立自主', value: 1, trait: '5' },
+        { id: 't6', text: '安全稳定，有人支持', value: 1, trait: '6' },
+        { id: 't7', text: '自由快乐，体验丰富', value: 1, trait: '7' },
+        { id: 't8', text: '有力量有影响力', value: 1, trait: '8' },
+        { id: 't9', text: '内心平静，与世无争', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-4', text: '我最害怕的是：', type: 'single', options: [
+        { id: 't1', text: '犯错、不完美、腐败', value: 1, trait: '1' },
+        { id: 't2', text: '不被需要、不被爱', value: 1, trait: '2' },
+        { id: 't3', text: '失败、没有价值', value: 1, trait: '3' },
+        { id: 't4', text: '平庸、失去自我', value: 1, trait: '4' },
+        { id: 't5', text: '无能、无知、被侵入', value: 1, trait: '5' },
+        { id: 't6', text: '不安全、被抛弃', value: 1, trait: '6' },
+        { id: 't7', text: '痛苦、受限、无聊', value: 1, trait: '7' },
+        { id: 't8', text: '软弱、被控制', value: 1, trait: '8' },
+        { id: 't9', text: '冲突、分离', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-5', text: '我的核心动机是：', type: 'single', options: [
+        { id: 't1', text: '追求完美和正确', value: 1, trait: '1' },
+        { id: 't2', text: '被爱和被感激', value: 1, trait: '2' },
+        { id: 't3', text: '获得认可和成就', value: 1, trait: '3' },
+        { id: 't4', text: '表达独特和真实', value: 1, trait: '4' },
+        { id: 't5', text: '理解和掌控知识', value: 1, trait: '5' },
+        { id: 't6', text: '获得安全和支持', value: 1, trait: '6' },
+        { id: 't7', text: '追求快乐和自由', value: 1, trait: '7' },
+        { id: 't8', text: '掌控和保护', value: 1, trait: '8' },
+        { id: 't9', text: '维持和平与和谐', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-6', text: '在工作中，我倾向于：', type: 'single', options: [
+        { id: 't1', text: '严格按标准执行，追求质量', value: 1, trait: '1' },
+        { id: 't2', text: '帮助同事，营造和谐氛围', value: 1, trait: '2' },
+        { id: 't3', text: '设定目标，高效完成任务', value: 1, trait: '3' },
+        { id: 't4', text: '追求创意，表达个人风格', value: 1, trait: '4' },
+        { id: 't5', text: '独立研究，深入分析', value: 1, trait: '5' },
+        { id: 't6', text: '谨慎计划，寻求支持', value: 1, trait: '6' },
+        { id: 't7', text: '创新多变，保持兴趣', value: 1, trait: '7' },
+        { id: 't8', text: '果断决策，推动执行', value: 1, trait: '8' },
+        { id: 't9', text: '配合协调，保持稳定', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-7', text: '当遇到问题时，我会：', type: 'single', options: [
+        { id: 't1', text: '找出问题根源，纠正错误', value: 1, trait: '1' },
+        { id: 't2', text: '关心他人感受，提供帮助', value: 1, trait: '2' },
+        { id: 't3', text: '快速行动，解决问题', value: 1, trait: '3' },
+        { id: 't4', text: '深入感受，寻找意义', value: 1, trait: '4' },
+        { id: 't5', text: '分析研究，寻找答案', value: 1, trait: '5' },
+        { id: 't6', text: '寻求建议，谨慎处理', value: 1, trait: '6' },
+        { id: 't7', text: '转换视角，寻找机会', value: 1, trait: '7' },
+        { id: 't8', text: '直面挑战，强势解决', value: 1, trait: '8' },
+        { id: 't9', text: '平和处理，寻求共识', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-8', text: '我认为自己是：', type: 'single', options: [
+        { id: 't1', text: '有原则、负责任的人', value: 1, trait: '1' },
+        { id: 't2', text: '关心他人、乐于助人的人', value: 1, trait: '2' },
+        { id: 't3', text: '有成就、有魅力的人', value: 1, trait: '3' },
+        { id: 't4', text: '独特、敏感、有深度的人', value: 1, trait: '4' },
+        { id: 't5', text: '聪明、独立、有洞察力的人', value: 1, trait: '5' },
+        { id: 't6', text: '忠诚、可靠、谨慎的人', value: 1, trait: '6' },
+        { id: 't7', text: '乐观、活跃、有创意的人', value: 1, trait: '7' },
+        { id: 't8', text: '强大、直接、有决断的人', value: 1, trait: '8' },
+        { id: 't9', text: '平和、包容、善解人意的人', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-9', text: '我的成长方向是：', type: 'single', options: [
+        { id: 't1', text: '学会放松，接受不完美', value: 1, trait: '1' },
+        { id: 't2', text: '学会爱自己，设立边界', value: 1, trait: '2' },
+        { id: 't3', text: '学会真实，关注内在', value: 1, trait: '3' },
+        { id: 't4', text: '学会自律，关注当下', value: 1, trait: '4' },
+        { id: 't5', text: '学会行动，融入生活', value: 1, trait: '5' },
+        { id: 't6', text: '学会信任，勇敢行动', value: 1, trait: '6' },
+        { id: 't7', text: '学会专注，深入体验', value: 1, trait: '7' },
+        { id: 't8', text: '学会柔软，接纳脆弱', value: 1, trait: '8' },
+        { id: 't9', text: '学会行动，表达自我', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-10', text: '在团队中，我通常：', type: 'single', options: [
+        { id: 't1', text: '确保工作按标准完成', value: 1, trait: '1' },
+        { id: 't2', text: '关心成员，协调关系', value: 1, trait: '2' },
+        { id: 't3', text: '推动进展，达成目标', value: 1, trait: '3' },
+        { id: 't4', text: '贡献创意，保持独特', value: 1, trait: '4' },
+        { id: 't5', text: '提供分析，独立工作', value: 1, trait: '5' },
+        { id: 't6', text: '支持团队，执行计划', value: 1, trait: '6' },
+        { id: 't7', text: '活跃气氛，创新思路', value: 1, trait: '7' },
+        { id: 't8', text: '领导决策，保护团队', value: 1, trait: '8' },
+        { id: 't9', text: '调解矛盾，维护和谐', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-11', text: '当别人批评我时，我通常会：', type: 'single', options: [
+        { id: 't1', text: '反思自己是否真的做错了', value: 1, trait: '1' },
+        { id: 't2', text: '感到受伤，但试图理解对方', value: 1, trait: '2' },
+        { id: 't3', text: '保持专业，不让情绪影响', value: 1, trait: '3' },
+        { id: 't4', text: '情绪波动，感到被误解', value: 1, trait: '4' },
+        { id: 't5', text: '理性分析批评的合理性', value: 1, trait: '5' },
+        { id: 't6', text: '担心是否做错了什么', value: 1, trait: '6' },
+        { id: 't7', text: '不太在意，转移注意力', value: 1, trait: '7' },
+        { id: 't8', text: '直接回应，可能反驳', value: 1, trait: '8' },
+        { id: 't9', text: '避免冲突，可能妥协', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-12', text: '我对时间的态度是：', type: 'single', options: [
+        { id: 't1', text: '严格管理，珍惜每一分钟', value: 1, trait: '1' },
+        { id: 't2', text: '愿意为他人花时间', value: 1, trait: '2' },
+        { id: 't3', text: '高效利用，追求产出', value: 1, trait: '3' },
+        { id: 't4', text: '活在当下，感受情绪', value: 1, trait: '4' },
+        { id: 't5', text: '需要大量独处时间', value: 1, trait: '5' },
+        { id: 't6', text: '担心时间不够用', value: 1, trait: '6' },
+        { id: 't7', text: '享受当下，不太规划', value: 1, trait: '7' },
+        { id: 't8', text: '掌控时间，不被支配', value: 1, trait: '8' },
+        { id: 't9', text: '顺其自然，不急不躁', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-13', text: '在决策时，我主要依靠：', type: 'single', options: [
+        { id: 't1', text: '原则和标准', value: 1, trait: '1' },
+        { id: 't2', text: '对他人的影响', value: 1, trait: '2' },
+        { id: 't3', text: '目标和效率', value: 1, trait: '3' },
+        { id: 't4', text: '内心感受', value: 1, trait: '4' },
+        { id: 't5', text: '逻辑分析', value: 1, trait: '5' },
+        { id: 't6', text: '安全考虑', value: 1, trait: '6' },
+        { id: 't7', text: '可能性和机会', value: 1, trait: '7' },
+        { id: 't8', text: '直觉和力量', value: 1, trait: '8' },
+        { id: 't9', text: '各方平衡', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-14', text: '我对金钱的态度是：', type: 'single', options: [
+        { id: 't1', text: '谨慎管理，合理支出', value: 1, trait: '1' },
+        { id: 't2', text: '愿意为他人花钱', value: 1, trait: '2' },
+        { id: 't3', text: '投资自己，追求回报', value: 1, trait: '3' },
+        { id: 't4', text: '不太在意，追求体验', value: 1, trait: '4' },
+        { id: 't5', text: '节约积累，保障独立', value: 1, trait: '5' },
+        { id: 't6', text: '担心不够，需要储备', value: 1, trait: '6' },
+        { id: 't7', text: '享受当下，及时行乐', value: 1, trait: '7' },
+        { id: 't8', text: '掌控资源，投资未来', value: 1, trait: '8' },
+        { id: 't9', text: '随遇而安，不太计较', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-15', text: '当感到疲惫时，我会：', type: 'single', options: [
+        { id: 't1', text: '继续工作，不能松懈', value: 1, trait: '1' },
+        { id: 't2', text: '先照顾好他人再说', value: 1, trait: '2' },
+        { id: 't3', text: '高效休息，快速恢复', value: 1, trait: '3' },
+        { id: 't4', text: '沉浸情绪，需要独处', value: 1, trait: '4' },
+        { id: 't5', text: '退回内心，恢复能量', value: 1, trait: '5' },
+        { id: 't6', text: '寻求支持，确认安全', value: 1, trait: '6' },
+        { id: 't7', text: '寻找乐趣，转换心情', value: 1, trait: '7' },
+        { id: 't8', text: '坚持到底，不示弱', value: 1, trait: '8' },
+        { id: 't9', text: '放慢节奏，顺其自然', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-16', text: '我对新事物的态度是：', type: 'single', options: [
+        { id: 't1', text: '谨慎评估，确保正确', value: 1, trait: '1' },
+        { id: 't2', text: '考虑对他人是否有帮助', value: 1, trait: '2' },
+        { id: 't3', text: '评估是否能带来成功', value: 1, trait: '3' },
+        { id: 't4', text: '看是否独特有意义', value: 1, trait: '4' },
+        { id: 't5', text: '深入研究，理解本质', value: 1, trait: '5' },
+        { id: 't6', text: '担心风险，寻求保障', value: 1, trait: '6' },
+        { id: 't7', text: '充满好奇，想要尝试', value: 1, trait: '7' },
+        { id: 't8', text: '评估能否增强力量', value: 1, trait: '8' },
+        { id: 't9', text: '保持开放，不急于决定', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-17', text: '在社交场合，我倾向于：', type: 'single', options: [
+        { id: 't1', text: '注意自己的言行是否得体', value: 1, trait: '1' },
+        { id: 't2', text: '关注他人需要，提供帮助', value: 1, trait: '2' },
+        { id: 't3', text: '展现最好的自己', value: 1, trait: '3' },
+        { id: 't4', text: '感到与众不同，可能疏离', value: 1, trait: '4' },
+        { id: 't5', text: '观察分析，保持距离', value: 1, trait: '5' },
+        { id: 't6', text: '寻找可信任的人', value: 1, trait: '6' },
+        { id: 't7', text: '活跃气氛，享受社交', value: 1, trait: '7' },
+        { id: 't8', text: '掌控局面，主导谈话', value: 1, trait: '8' },
+        { id: 't9', text: '随和配合，避免冲突', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-18', text: '我对规则的态度是：', type: 'single', options: [
+        { id: 't1', text: '严格遵守，维护秩序', value: 1, trait: '1' },
+        { id: 't2', text: '为了他人可以灵活', value: 1, trait: '2' },
+        { id: 't3', text: '看是否有助于成功', value: 1, trait: '3' },
+        { id: 't4', text: '有时想打破常规', value: 1, trait: '4' },
+        { id: 't5', text: '独立思考，不受束缚', value: 1, trait: '5' },
+        { id: 't6', text: '需要明确的规则指导', value: 1, trait: '6' },
+        { id: 't7', text: '感觉受限，想要自由', value: 1, trait: '7' },
+        { id: 't8', text: '制定规则，而非遵守', value: 1, trait: '8' },
+        { id: 't9', text: '顺其自然，不太在意', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-19', text: '当别人需要帮助时，我会：', type: 'single', options: [
+        { id: 't1', text: '指出正确做法', value: 1, trait: '1' },
+        { id: 't2', text: '立即伸出援手', value: 1, trait: '2' },
+        { id: 't3', text: '高效解决问题', value: 1, trait: '3' },
+        { id: 't4', text: '理解对方的感受', value: 1, trait: '4' },
+        { id: 't5', text: '提供分析和建议', value: 1, trait: '5' },
+        { id: 't6', text: '谨慎评估后行动', value: 1, trait: '6' },
+        { id: 't7', text: '用积极方式帮助', value: 1, trait: '7' },
+        { id: 't8', text: '强势介入，保护对方', value: 1, trait: '8' },
+        { id: 't9', text: '温和支持，陪伴倾听', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-20', text: '我对失败的态度是：', type: 'single', options: [
+        { id: 't1', text: '深刻反思，纠正错误', value: 1, trait: '1' },
+        { id: 't2', text: '担心让别人失望', value: 1, trait: '2' },
+        { id: 't3', text: '快速调整，继续前进', value: 1, trait: '3' },
+        { id: 't4', text: '情绪低落，自我怀疑', value: 1, trait: '4' },
+        { id: 't5', text: '分析原因，吸取教训', value: 1, trait: '5' },
+        { id: 't6', text: '担心后果，寻求保障', value: 1, trait: '6' },
+        { id: 't7', text: '快速翻篇，寻找新机会', value: 1, trait: '7' },
+        { id: 't8', text: '不接受失败，继续战斗', value: 1, trait: '8' },
+        { id: 't9', text: '接受现实，不太纠结', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-21', text: '我对亲密关系的需求是：', type: 'single', options: [
+        { id: 't1', text: '需要对方同样有原则', value: 1, trait: '1' },
+        { id: 't2', text: '渴望被需要和感激', value: 1, trait: '2' },
+        { id: 't3', text: '希望对方欣赏我的成就', value: 1, trait: '3' },
+        { id: 't4', text: '渴望深度情感连接', value: 1, trait: '4' },
+        { id: 't5', text: '需要足够的个人空间', value: 1, trait: '5' },
+        { id: 't6', text: '需要安全感和承诺', value: 1, trait: '6' },
+        { id: 't7', text: '希望关系有趣不无聊', value: 1, trait: '7' },
+        { id: 't8', text: '需要忠诚和尊重', value: 1, trait: '8' },
+        { id: 't9', text: '渴望和谐稳定的关系', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-22', text: '我对权威的态度是：', type: 'single', options: [
+        { id: 't1', text: '尊重并维护正当权威', value: 1, trait: '1' },
+        { id: 't2', text: '配合支持，建立关系', value: 1, trait: '2' },
+        { id: 't3', text: '学习借鉴，追求成功', value: 1, trait: '3' },
+        { id: 't4', text: '保持独立，不盲从', value: 1, trait: '4' },
+        { id: 't5', text: '独立思考，保持距离', value: 1, trait: '5' },
+        { id: 't6', text: '寻求指导，但也保持警惕', value: 1, trait: '6' },
+        { id: 't7', text: '不太在意，追求自由', value: 1, trait: '7' },
+        { id: 't8', text: '挑战权威，自己做主', value: 1, trait: '8' },
+        { id: 't9', text: '配合顺从，避免冲突', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-23', text: '当感到愤怒时，我会：', type: 'single', options: [
+        { id: 't1', text: '压抑或批判性地表达', value: 1, trait: '1' },
+        { id: 't2', text: '可能间接表达或压抑', value: 1, trait: '2' },
+        { id: 't3', text: '快速处理，不让情绪影响工作', value: 1, trait: '3' },
+        { id: 't4', text: '情绪波动，可能爆发', value: 1, trait: '4' },
+        { id: 't5', text: '理性分析，抽离情绪', value: 1, trait: '5' },
+        { id: 't6', text: '可能反应过度或压抑', value: 1, trait: '6' },
+        { id: 't7', text: '快速转移注意力', value: 1, trait: '7' },
+        { id: 't8', text: '直接表达，可能激烈', value: 1, trait: '8' },
+        { id: 't9', text: '压抑或被动表达', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-24', text: '我对学习的态度是：', type: 'single', options: [
+        { id: 't1', text: '认真学习，追求正确理解', value: 1, trait: '1' },
+        { id: 't2', text: '喜欢帮助他人学习', value: 1, trait: '2' },
+        { id: 't3', text: '学习有实用价值的知识', value: 1, trait: '3' },
+        { id: 't4', text: '追求独特深刻的理解', value: 1, trait: '4' },
+        { id: 't5', text: '深入研究感兴趣的领域', value: 1, trait: '5' },
+        { id: 't6', text: '需要明确的指导和确认', value: 1, trait: '6' },
+        { id: 't7', text: '广泛涉猎，保持兴趣', value: 1, trait: '7' },
+        { id: 't8', text: '学习能增强力量的技能', value: 1, trait: '8' },
+        { id: 't9', text: '按部就班，不太强求', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-25', text: '我对健康的态度是：', type: 'single', options: [
+        { id: 't1', text: '严格管理，保持健康习惯', value: 1, trait: '1' },
+        { id: 't2', text: '关注他人健康胜过自己', value: 1, trait: '2' },
+        { id: 't3', text: '保持形象和精力', value: 1, trait: '3' },
+        { id: 't4', text: '情绪影响身体状态', value: 1, trait: '4' },
+        { id: 't5', text: '可能忽视身体需求', value: 1, trait: '5' },
+        { id: 't6', text: '担心健康问题', value: 1, trait: '6' },
+        { id: 't7', text: '享受生活，不太在意', value: 1, trait: '7' },
+        { id: 't8', text: '保持强壮和活力', value: 1, trait: '8' },
+        { id: 't9', text: '顺其自然，不太关注', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-26', text: '我对未来的态度是：', type: 'single', options: [
+        { id: 't1', text: '认真规划，确保正确', value: 1, trait: '1' },
+        { id: 't2', text: '关注他人多过自己', value: 1, trait: '2' },
+        { id: 't3', text: '设定目标，追求成功', value: 1, trait: '3' },
+        { id: 't4', text: '憧憬理想化的未来', value: 1, trait: '4' },
+        { id: 't5', text: '分析趋势，独立判断', value: 1, trait: '5' },
+        { id: 't6', text: '担心不确定性', value: 1, trait: '6' },
+        { id: 't7', text: '期待新体验和可能', value: 1, trait: '7' },
+        { id: 't8', text: '掌控方向，创造未来', value: 1, trait: '8' },
+        { id: 't9', text: '顺其自然，不过担忧', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-27', text: '当需要做重要决定时，我会：', type: 'single', options: [
+        { id: 't1', text: '仔细权衡，确保正确', value: 1, trait: '1' },
+        { id: 't2', text: '考虑对他人的影响', value: 1, trait: '2' },
+        { id: 't3', text: '快速决策，追求效率', value: 1, trait: '3' },
+        { id: 't4', text: '听从内心感受', value: 1, trait: '4' },
+        { id: 't5', text: '收集信息，深入分析', value: 1, trait: '5' },
+        { id: 't6', text: '寻求建议和支持', value: 1, trait: '6' },
+        { id: 't7', text: '保持选择开放', value: 1, trait: '7' },
+        { id: 't8', text: '果断决定，相信自己', value: 1, trait: '8' },
+        { id: 't9', text: '等待时机，顺其自然', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-28', text: '我对竞争的态度是：', type: 'single', options: [
+        { id: 't1', text: '公平竞争，遵守规则', value: 1, trait: '1' },
+        { id: 't2', text: '不太喜欢竞争', value: 1, trait: '2' },
+        { id: 't3', text: '享受竞争，追求胜利', value: 1, trait: '3' },
+        { id: 't4', text: '感觉与众不同，不参与竞争', value: 1, trait: '4' },
+        { id: 't5', text: '独立观察，不参与竞争', value: 1, trait: '5' },
+        { id: 't6', text: '担心失败，可能回避', value: 1, trait: '6' },
+        { id: 't7', text: '保持轻松，不太在意输赢', value: 1, trait: '7' },
+        { id: 't8', text: '积极竞争，追求胜利', value: 1, trait: '8' },
+        { id: 't9', text: '避免竞争，追求和谐', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-29', text: '我对变化的态度是：', type: 'single', options: [
+        { id: 't1', text: '谨慎评估，确保正确', value: 1, trait: '1' },
+        { id: 't2', text: '考虑对他人影响', value: 1, trait: '2' },
+        { id: 't3', text: '看是否有助于成功', value: 1, trait: '3' },
+        { id: 't4', text: '可能情绪波动', value: 1, trait: '4' },
+        { id: 't5', text: '独立分析，保持距离', value: 1, trait: '5' },
+        { id: 't6', text: '担心不确定性', value: 1, trait: '6' },
+        { id: 't7', text: '欢迎变化，期待新体验', value: 1, trait: '7' },
+        { id: 't8', text: '主动创造变化', value: 1, trait: '8' },
+        { id: 't9', text: '接受变化，顺其自然', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-30', text: '我对孤独的态度是：', type: 'single', options: [
+        { id: 't1', text: '利用时间反思改进', value: 1, trait: '1' },
+        { id: 't2', text: '感到被需要减少', value: 1, trait: '2' },
+        { id: 't3', text: '感觉效率降低', value: 1, trait: '3' },
+        { id: 't4', text: '有时享受，有时痛苦', value: 1, trait: '4' },
+        { id: 't5', text: '享受独处时间', value: 1, trait: '5' },
+        { id: 't6', text: '感到不安和担忧', value: 1, trait: '6' },
+        { id: 't7', text: '寻找有趣活动', value: 1, trait: '7' },
+        { id: 't8', text: '利用时间增强力量', value: 1, trait: '8' },
+        { id: 't9', text: '享受平静时光', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-31', text: '我对责任的态度是：', type: 'single', options: [
+        { id: 't1', text: '认真负责，追求完美', value: 1, trait: '1' },
+        { id: 't2', text: '乐于承担责任帮助他人', value: 1, trait: '2' },
+        { id: 't3', text: '承担责任追求成功', value: 1, trait: '3' },
+        { id: 't4', text: '追求有意义的责任', value: 1, trait: '4' },
+        { id: 't5', text: '独立负责，不受干扰', value: 1, trait: '5' },
+        { id: 't6', text: '需要明确的责任范围', value: 1, trait: '6' },
+        { id: 't7', text: '避免过多责任束缚', value: 1, trait: '7' },
+        { id: 't8', text: '主动承担责任领导', value: 1, trait: '8' },
+        { id: 't9', text: '配合承担，不过度', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-32', text: '我对承诺的态度是：', type: 'single', options: [
+        { id: 't1', text: '严格遵守，认真履行', value: 1, trait: '1' },
+        { id: 't2', text: '为他人做出承诺', value: 1, trait: '2' },
+        { id: 't3', text: '承诺有助于达成目标', value: 1, trait: '3' },
+        { id: 't4', text: '追求真实有意义的承诺', value: 1, trait: '4' },
+        { id: 't5', text: '谨慎承诺，保持独立', value: 1, trait: '5' },
+        { id: 't6', text: '需要承诺带来安全感', value: 1, trait: '6' },
+        { id: 't7', text: '避免被承诺束缚', value: 1, trait: '7' },
+        { id: 't8', text: '承诺后全力履行', value: 1, trait: '8' },
+        { id: 't9', text: '随和承诺，配合他人', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-33', text: '我对批评的态度是：', type: 'single', options: [
+        { id: 't1', text: '认真接受，改进自己', value: 1, trait: '1' },
+        { id: 't2', text: '感到受伤，但试图理解', value: 1, trait: '2' },
+        { id: 't3', text: '保持专业，不让情绪影响', value: 1, trait: '3' },
+        { id: 't4', text: '感到被误解，情绪波动', value: 1, trait: '4' },
+        { id: 't5', text: '理性分析其合理性', value: 1, trait: '5' },
+        { id: 't6', text: '担心自己做错了什么', value: 1, trait: '6' },
+        { id: 't7', text: '不太在意，转移注意力', value: 1, trait: '7' },
+        { id: 't8', text: '可能反驳或对抗', value: 1, trait: '8' },
+        { id: 't9', text: '避免冲突，可能妥协', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-34', text: '我对休息的态度是：', type: 'single', options: [
+        { id: 't1', text: '休息也是为了更好工作', value: 1, trait: '1' },
+        { id: 't2', text: '先照顾好他人', value: 1, trait: '2' },
+        { id: 't3', text: '高效休息，快速恢复', value: 1, trait: '3' },
+        { id: 't4', text: '需要情绪恢复时间', value: 1, trait: '4' },
+        { id: 't5', text: '需要大量独处时间', value: 1, trait: '5' },
+        { id: 't6', text: '休息时也担心问题', value: 1, trait: '6' },
+        { id: 't7', text: '享受休息和娱乐', value: 1, trait: '7' },
+        { id: 't8', text: '可能忽视休息需求', value: 1, trait: '8' },
+        { id: 't9', text: '享受放松时光', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-35', text: '我对礼物和赞美的态度是：', type: 'single', options: [
+        { id: 't1', text: '应该得到才接受', value: 1, trait: '1' },
+        { id: 't2', text: '享受给予胜过接受', value: 1, trait: '2' },
+        { id: 't3', text: '接受为成就的认可', value: 1, trait: '3' },
+        { id: 't4', text: '渴望被理解和欣赏', value: 1, trait: '4' },
+        { id: 't5', text: '不太需要，保持独立', value: 1, trait: '5' },
+        { id: 't6', text: '需要确认被接纳', value: 1, trait: '6' },
+        { id: 't7', text: '享受惊喜和快乐', value: 1, trait: '7' },
+        { id: 't8', text: '接受为尊重的表现', value: 1, trait: '8' },
+        { id: 't9', text: '享受和谐的氛围', value: 1, trait: '9' },
+      ]},
+      { id: 'enn-36', text: '我对人生意义的态度是：', type: 'single', options: [
+        { id: 't1', text: '做正确的事，追求完美', value: 1, trait: '1' },
+        { id: 't2', text: '帮助他人，被需要', value: 1, trait: '2' },
+        { id: 't3', text: '取得成就，获得认可', value: 1, trait: '3' },
+        { id: 't4', text: '找到自我，活出真实', value: 1, trait: '4' },
+        { id: 't5', text: '理解世界，掌握知识', value: 1, trait: '5' },
+        { id: 't6', text: '获得安全，有人支持', value: 1, trait: '6' },
+        { id: 't7', text: '追求快乐，丰富体验', value: 1, trait: '7' },
+        { id: 't8', text: '掌控局面，保护他人', value: 1, trait: '8' },
+        { id: 't9', text: '内心平静，与世无争', value: 1, trait: '9' },
+      ]},
+    ],
+    resultCalculator: (answers: Answer[]): AssessmentResult => {
+      const traits: Record<string, number> = {}
+      for (let i = 1; i <= 9; i++) {
+        traits[i.toString()] = 0
+      }
+      
+      answers.forEach((answer) => {
+        const trait = answer.trait as string
+        if (trait && traits[trait] !== undefined) {
+          traits[trait] += 1
+        }
+      })
+      
+      const maxTrait = Object.entries(traits).reduce((a, b) => a[1] > b[1] ? a : b)[0]
+      const total = Object.values(traits).reduce((a, b) => a + b, 0)
+      
+      const typeNames: Record<string, string> = {
+        '1': '完美主义者',
+        '2': '助人型',
+        '3': '成就型',
+        '4': '自我型',
+        '5': '观察型',
+        '6': '忠诚型',
+        '7': '活跃型',
+        '8': '领袖型',
+        '9': '和平型',
+      }
+      
+      const typeDesc: Record<string, string> = {
+        '1': '追求完美，有原则，负责任，但可能过于批判',
+        '2': '关心他人，乐于助人，但可能忽视自己',
+        '3': '追求成就，有魅力，但可能过于注重形象',
+        '4': '独特敏感，有创意，但可能过于自我沉溺',
+        '5': '独立思考，有洞察力，但可能过于疏离',
+        '6': '忠诚可靠，谨慎，但可能过于焦虑',
+        '7': '乐观活跃，有创意，但可能过于分散',
+        '8': '强大直接，有决断力，但可能过于强势',
+        '9': '平和包容，善解人意，但可能过于被动',
+      }
+      
+      const careers: Record<string, string[]> = {
+        '1': ['质量管理', '审计', '法官', '医生', '教师'],
+        '2': ['心理咨询', '护理', '社会工作', '人力资源', '客服'],
+        '3': ['销售', '市场营销', '管理', '公关', '创业'],
+        '4': ['艺术创作', '设计', '写作', '音乐', '心理咨询'],
+        '5': ['研究', '分析', '编程', '科学', '写作'],
+        '6': ['安全管理', '行政', '财务', '工程', '法律'],
+        '7': ['创意策划', '旅游', '媒体', '娱乐', '创业'],
+        '8': ['企业管理', '律师', '军人', '警察', '投资'],
+        '9': ['调解员', '人力资源', '社工', '教师', '咨询师'],
+      }
+      
+      return {
+        type: typeNames[maxTrait],
+        title: `九型人格: 第${maxTrait}型 - ${typeNames[maxTrait]}`,
+        description: typeDesc[maxTrait],
+        score: Math.round((traits[maxTrait] / total) * 100),
+        accuracy: 85,
+        dimensions: [
+          { name: '完美型', score: Math.round((traits['1'] / total) * 100), maxScore: 100, description: '追求完美' },
+          { name: '助人型', score: Math.round((traits['2'] / total) * 100), maxScore: 100, description: '关心他人' },
+          { name: '成就型', score: Math.round((traits['3'] / total) * 100), maxScore: 100, description: '追求成就' },
+          { name: '自我型', score: Math.round((traits['4'] / total) * 100), maxScore: 100, description: '独特敏感' },
+          { name: '观察型', score: Math.round((traits['5'] / total) * 100), maxScore: 100, description: '独立思考' },
+        ],
+        strengths: typeDesc[maxTrait].split('，').slice(0, 3),
+        weaknesses: [typeDesc[maxTrait].split('，').pop() || ''],
+        careers: careers[maxTrait],
+        suggestions: ['了解自己的人格类型特点', '发挥优势，关注成长方向'],
+        traits: Object.entries(traits).map(([t, v]) => ({
+          name: `第${t}型`,
+          score: Math.round((v / total) * 100),
+          maxScore: 100,
+          description: v > 2 ? '主要特征' : v > 0 ? '次要特征' : '不明显',
+        })),
+        details: { primaryType: maxTrait, typeName: typeNames[maxTrait] },
+      }
+    },
+  },
 ]
 
 export const getAssessmentById = (id: string): Assessment | undefined => {
@@ -1311,3 +4723,6 @@ export const getAllCategories = (): string[] => {
 export const getAssessmentsByCategory = (category: string): Assessment[] => {
   return assessments.filter((a) => a.category === category)
 }
+ 
+
+

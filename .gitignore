@@ -40,3 +40,22 @@ coverage
 # Temporary files
 *.tmp
 *.temp
+
+# Test files
+__tests__
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Deploy folders
+HumanOS-web-deploy
+
+# Documentation (optional)
+# README_EN.md
+# TEMPLATE_GUIDE.md

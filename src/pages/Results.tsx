@@ -1,19 +1,31 @@
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Share2, RotateCcw, Download, Award, TrendingUp, Users, Lightbulb } from 'lucide-react'
+import { ArrowLeft, Share2, Download, Copy, Check, QrCode, FileText, Image, Home } from 'lucide-react'
 import confetti from 'canvas-confetti'
+import { QRCodeSVG } from 'qrcode.react'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 import { useAppStore } from '../store'
-import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts'
+import { getAssessmentById } from '@data/assessments'
+import ReportTemplate from '@components/ReportTemplate'
 
 export default function Results() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const completedAssessments = useAppStore((state) => state.completedAssessments)
+  const [showShareMenu, setShowShareMenu] = useState(false)
+  const [showQRCode, setShowQRCode] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [exporting, setExporting] = useState(false)
+  const shareRef = useRef<HTMLDivElement>(null)
+  const reportRef = useRef<HTMLDivElement>(null)
 
   const latestResult = completedAssessments.find(
     (a) => a.assessmentId === id
   )
+
+  const assessment = id ? getAssessmentById(id) : undefined
 
   useEffect(() => {
     if (!latestResult) {
@@ -21,7 +33,6 @@ export default function Results() {
       return
     }
 
-    // Trigger confetti
     const duration = 3 * 1000
     const animationEnd = Date.now() + duration
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
@@ -52,343 +63,289 @@ export default function Results() {
     return () => clearInterval(interval)
   }, [latestResult, navigate])
 
-  if (!latestResult) return null
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (shareRef.current && !shareRef.current.contains(event.target as Node)) {
+        setShowShareMenu(false)
+      }
+    }
 
-  const { result, completedAt } = latestResult
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
-  // Prepare chart data - ensure valid data
-  const radarData = result.traits?.length > 0 
-    ? result.traits.map((trait) => ({
-        subject: trait.name.length > 6 ? trait.name.slice(0, 6) + '...' : trait.name,
-        A: Math.max(0, trait.score || 0),
-        fullMark: Math.max(1, trait.maxScore || 1),
-      }))
-    : []
+  const handleCopyLink = () => {
+    const url = window.location.href
+    navigator.clipboard.writeText(url)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
-  const barData = result.traits?.length > 0
-    ? result.traits.map((trait) => ({
-        name: trait.name.length > 8 ? trait.name.slice(0, 8) + '...' : trait.name,
-        score: Math.max(0, trait.score || 0),
-        max: Math.max(1, trait.maxScore || 1),
-      }))
-    : []
+  const handleExportPDF = async () => {
+    if (!reportRef.current || !assessment) return
+    
+    setExporting(true)
+    try {
+      const canvas = await html2canvas(reportRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#0f172a'
+      })
+      
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF('p', 'mm', 'a4')
+      const imgWidth = 210
+      const pageHeight = 297
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      let heightLeft = imgHeight
+      let position = 0
+      
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+      heightLeft -= pageHeight
+      
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight
+        pdf.addPage()
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+        heightLeft -= pageHeight
+      }
+      
+      pdf.save(`${assessment.title}-测评报告.pdf`)
+    } catch (error) {
+      console.error('PDF导出失败:', error)
+    } finally {
+      setExporting(false)
+    }
+  }
 
-  // Calculate overall score
-  const totalScore = result.traits?.reduce((sum, t) => sum + (t.score || 0), 0) || 0
-  const maxTotalScore = result.traits?.reduce((sum, t) => sum + Math.max(1, t.maxScore || 1), 0) || 1
-  const percentage = Math.round((totalScore / maxTotalScore) * 100)
+  const handleExportImage = async () => {
+    if (!reportRef.current || !assessment) return
+    
+    setExporting(true)
+    try {
+      const canvas = await html2canvas(reportRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#0f172a'
+      })
+      
+      const link = document.createElement('a')
+      link.download = `${assessment.title}-测评报告.png`
+      link.href = canvas.toDataURL('image/png')
+      link.click()
+    } catch (error) {
+      console.error('图片导出失败:', error)
+    } finally {
+      setExporting(false)
+    }
+  }
 
-  return (
-    <div className="pt-24 pb-12 min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
+  if (!latestResult || !assessment || !latestResult.result) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-white mb-4">未找到测评结果</h2>
           <button
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-4"
+            onClick={() => navigate('/assessments')}
+            className="px-6 py-3 rounded-xl bg-violet-500 text-white"
             type="button"
           >
-            <ArrowLeft className="w-4 h-4" />
-            返回仪表盘
+            返回测评列表
           </button>
+        </div>
+      </div>
+    )
+  }
 
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-gradient mb-2">
-                {result.title || '测评结果'}
-              </h1>
-              <p className="text-white/60">{result.description || '完成测评'}</p>
-              <p className="text-white/40 text-sm mt-1">
-                完成时间: {new Date(completedAt).toLocaleString('zh-CN')}
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => navigate(`/assessment/${id}`)}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/80 hover:text-white hover:bg-white/10 transition-all"
-                type="button"
-              >
-                <RotateCcw className="w-4 h-4" />
-                <span className="hidden sm:inline">重新测试</span>
-              </button>
-              <button 
-                onClick={() => {
-                  if (navigator.share) {
-                    navigator.share({
-                      title: `我的${result.title}测评结果`,
-                      text: `我在HumanOS完成了${result.title}测评，结果是：${result.type}`,
-                      url: window.location.href
-                    }).catch(() => {})
-                  } else {
-                    navigator.clipboard.writeText(window.location.href)
-                    alert('链接已复制到剪贴板！')
-                  }
-                }}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/80 hover:text-white hover:bg-white/10 transition-all"
-                type="button"
-              >
-                <Share2 className="w-4 h-4" />
-              </button>
-              <button 
-                onClick={() => window.print()}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/80 hover:text-white hover:bg-white/10 transition-all"
-                type="button"
-              >
-                <Download className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Result Type Badge & Score */}
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-24 pb-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="mb-8 flex flex-wrap gap-4"
+          className="flex items-center gap-4 mb-8"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
         >
-          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-violet-500/20 to-pink-500/20 border border-violet-500/30">
-            <Award className="w-5 h-5 text-violet-400" />
-            <span className="text-sm text-white/60">测评结果</span>
-            <span className="text-2xl font-bold text-gradient">
-              {result.type || '完成'}
-            </span>
-          </div>
-          
-          {percentage > 0 && (
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl glass border border-white/10">
-              <TrendingUp className="w-5 h-5 text-green-400" />
-              <span className="text-sm text-white/60">综合得分</span>
-              <span className="text-2xl font-bold text-white">{percentage}%</span>
-            </div>
-          )}
+          <motion.button
+            onClick={() => navigate('/')}
+            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+            type="button"
+          >
+            <Home className="w-5 h-5" />
+            返回主页
+          </motion.button>
+          <span className="text-white/30">|</span>
+          <motion.button
+            onClick={() => navigate('/assessments')}
+            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+            type="button"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            返回测评列表
+          </motion.button>
         </motion.div>
 
-        {/* Charts Grid - Only show if we have data */}
-        {radarData.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            {/* Radar Chart */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="glass rounded-2xl p-6"
-            >
-              <h3 className="text-lg font-semibold text-white mb-6">特质分布</h3>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-                    <PolarGrid stroke="rgba(255,255,255,0.1)" />
-                    <PolarAngleAxis
-                      dataKey="subject"
-                      tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 11 }}
-                    />
-                    <PolarRadiusAxis
-                      angle={90}
-                      domain={[0, 'dataMax']}
-                      tick={false}
-                      axisLine={false}
-                    />
-                    <Radar
-                      name="得分"
-                      dataKey="A"
-                      stroke="#8b5cf6"
-                      strokeWidth={2}
-                      fill="#8b5cf6"
-                      fillOpacity={0.3}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                        border: '1px solid rgba(139, 92, 246, 0.3)',
-                        borderRadius: '8px',
-                      }}
-                      labelStyle={{ color: 'white' }}
-                      itemStyle={{ color: '#8b5cf6' }}
-                    />
-                  </RadarChart>
-                </ResponsiveContainer>
-              </div>
-            </motion.div>
-
-            {/* Bar Chart */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="glass rounded-2xl p-6"
-            >
-              <h3 className="text-lg font-semibold text-white mb-6">详细得分</h3>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={barData}
-                    layout="vertical"
-                    margin={{ left: 20, right: 30, top: 10, bottom: 10 }}
-                  >
-                    <XAxis type="number" hide />
-                    <YAxis
-                      dataKey="name"
-                      type="category"
-                      tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 11 }}
-                      width={80}
-                    />
-                    <Tooltip
-                      cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                      contentStyle={{
-                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                        border: '1px solid rgba(139, 92, 246, 0.3)',
-                        borderRadius: '8px',
-                      }}
-                      labelStyle={{ color: 'white' }}
-                      itemStyle={{ color: '#8b5cf6' }}
-                    />
-                    <Bar dataKey="score" radius={[0, 4, 4, 0]}>
-                      {barData.map((_, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={`hsl(${260 + index * 20}, 70%, 60%)`}
-                        />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </motion.div>
-          </div>
-        )}
-
-        {/* Trait Details */}
-        {result.traits?.length > 0 && (
-          <motion.div
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <motion.h1
+            className="text-4xl md:text-5xl font-bold text-white mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mb-8 glass rounded-2xl p-6"
+            transition={{ delay: 0.2 }}
           >
-            <h3 className="text-lg font-semibold text-white mb-4">维度详解</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {result.traits.map((trait, index) => (
-                <div key={index} className="bg-white/5 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-white/80 text-sm">{trait.name}</span>
-                    <span className="text-violet-400 font-semibold">
-                      {trait.score}/{trait.maxScore}
-                    </span>
-                  </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-violet-500 to-pink-500 transition-all duration-500"
-                      style={{ width: `${((trait.score || 0) / Math.max(1, trait.maxScore || 1)) * 100}%` }}
-                    />
-                  </div>
-                  {trait.description && (
-                    <p className="text-white/50 text-xs mt-2">{trait.description}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
+            您的测评报告
+          </motion.h1>
+          <motion.p
+            className="text-white/60 text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {assessment.title} · 测评准确度 {latestResult.result.accuracy}%
+          </motion.p>
+        </motion.div>
 
-        {/* Details Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Strengths */}
-          {result.details?.strengths?.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="glass rounded-2xl p-6"
-            >
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-green-400" />
-                优势特点
-              </h3>
-              <ul className="space-y-3">
-                {result.details.strengths.map((strength, index) => (
-                  <li
-                    key={index}
-                    className="flex items-start gap-3 text-white/80"
-                  >
-                    <span className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">✓</span>
-                    {strength}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          )}
-
-          {/* Weaknesses */}
-          {result.details?.weaknesses?.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="glass rounded-2xl p-6"
-            >
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-orange-400" />
-                发展建议
-              </h3>
-              <ul className="space-y-3">
-                {result.details.weaknesses.map((weakness, index) => (
-                  <li
-                    key={index}
-                    className="flex items-start gap-3 text-white/80"
-                  >
-                    <span className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">!</span>
-                    {weakness}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          )}
+        <div ref={reportRef}>
+          <ReportTemplate result={latestResult.result} assessmentType={assessment.id} mode={(latestResult.mode as 'normal' | 'advanced' | 'professional') || 'normal'} />
         </div>
 
-        {/* Careers */}
-        {result.details?.careers?.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="mt-6 glass rounded-2xl p-6"
-          >
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Users className="w-5 h-5 text-blue-400" />
-              适合的方向
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {result.details.careers.map((career, index) => (
-                <span
-                  key={index}
-                  className="px-4 py-2 rounded-full bg-gradient-to-r from-violet-500/20 to-pink-500/20 text-violet-300 text-sm border border-violet-500/20"
-                >
-                  {career}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        )}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
+        >
+          <div className="relative" ref={shareRef}>
+            <motion.button
+              onClick={() => setShowShareMenu(!showShareMenu)}
+              className="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold hover:shadow-lg hover:shadow-violet-500/25 transition-all"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+            >
+              <Share2 className="w-5 h-5" />
+              分享报告
+            </motion.button>
 
-        {/* Relationships */}
-        {result.details?.relationships && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
-            className="mt-6 glass rounded-2xl p-6"
+            {showShareMenu && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-72 glass rounded-xl p-4 z-50"
+              >
+                <div className="space-y-2">
+                  <button
+                    onClick={handleCopyLink}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left"
+                    type="button"
+                  >
+                    {copied ? (
+                      <Check className="w-5 h-5 text-green-400" />
+                    ) : (
+                      <Copy className="w-5 h-5 text-white/60" />
+                    )}
+                    <span className="text-white">{copied ? '已复制链接' : '复制链接'}</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowQRCode(true)
+                      setShowShareMenu(false)
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left"
+                    type="button"
+                  >
+                    <QrCode className="w-5 h-5 text-white/60" />
+                    <span className="text-white">生成二维码</span>
+                  </button>
+                  <button
+                    onClick={handleExportPDF}
+                    disabled={exporting}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left disabled:opacity-50"
+                    type="button"
+                  >
+                    <FileText className="w-5 h-5 text-white/60" />
+                    <span className="text-white">{exporting ? '导出中...' : '导出PDF'}</span>
+                  </button>
+                  <button
+                    onClick={handleExportImage}
+                    disabled={exporting}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left disabled:opacity-50"
+                    type="button"
+                  >
+                    <Image className="w-5 h-5 text-white/60" />
+                    <span className="text-white">{exporting ? '导出中...' : '导出图片'}</span>
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          <motion.button
+            onClick={handleExportPDF}
+            disabled={exporting}
+            className="flex items-center gap-2 px-8 py-4 rounded-xl glass text-white font-semibold hover:bg-white/10 border border-white/20 transition-all disabled:opacity-50"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            type="button"
           >
-            <h3 className="text-lg font-semibold text-white mb-2">关系洞察</h3>
-            <p className="text-white/70">{result.details.relationships}</p>
-          </motion.div>
-        )}
+            <Download className="w-5 h-5" />
+            {exporting ? '导出中...' : '导出PDF'}
+          </motion.button>
+
+          <motion.button
+            onClick={() => navigate('/assessments')}
+            className="flex items-center gap-2 px-8 py-4 rounded-xl glass text-white font-semibold hover:bg-white/10 border border-white/20 transition-all"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            type="button"
+          >
+            继续测评
+          </motion.button>
+        </motion.div>
       </div>
+
+      {showQRCode && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setShowQRCode(false)}
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[300] flex items-center justify-center p-4"
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-slate-900 rounded-3xl p-8 max-w-sm w-full"
+          >
+            <h3 className="text-2xl font-bold text-white text-center mb-6">扫码分享</h3>
+            <div className="bg-white rounded-2xl p-6 flex items-center justify-center">
+              <QRCodeSVG
+                value={window.location.href}
+                size={200}
+                level="H"
+                includeMargin
+              />
+            </div>
+            <p className="text-white/60 text-center mt-4 text-sm">
+              扫描二维码查看测评报告
+            </p>
+            <button
+              onClick={() => setShowQRCode(false)}
+              className="w-full mt-6 px-6 py-3 rounded-xl bg-violet-500 text-white font-semibold hover:bg-violet-600 transition-colors"
+              type="button"
+            >
+              关闭
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   )
 }

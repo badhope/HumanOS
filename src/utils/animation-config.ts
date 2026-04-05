@@ -564,3 +564,409 @@ export const resultPageTiming = {
   descriptionDelay: 1,
   totalDuration: 3,
 }
+
+// ==================== 性能优化动画配置 ====================
+
+export const optimizedTransition: Transition = {
+  duration: 0.4,
+  ease: [0.16, 1, 0.3, 1],
+}
+
+export const gpuAcceleratedTransition: Transition = {
+  duration: 0.5,
+  ease: [0.16, 1, 0.3, 1],
+  type: 'tween',
+}
+
+export const smoothSpringTransition: Transition = {
+  type: 'spring',
+  stiffness: 400,
+  damping: 30,
+  mass: 0.8,
+}
+
+export const bouncySpringTransition: Transition = {
+  type: 'spring',
+  stiffness: 600,
+  damping: 15,
+  mass: 0.5,
+}
+
+export const gentleSpringTransition: Transition = {
+  type: 'spring',
+  stiffness: 200,
+  damping: 40,
+  mass: 1,
+}
+
+// 60fps优化的动画变体
+export const smoothFadeIn: Variants = {
+  initial: {
+    opacity: 0,
+    transform: 'translate3d(0, 20px, 0)',
+  },
+  enter: {
+    opacity: 1,
+    transform: 'translate3d(0, 0, 0)',
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+  exit: {
+    opacity: 0,
+    transform: 'translate3d(0, -10px, 0)',
+    transition: {
+      duration: 0.3,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+}
+
+export const smoothScaleIn: Variants = {
+  initial: {
+    opacity: 0,
+    transform: 'scale3d(0.9, 0.9, 0.9)',
+  },
+  enter: {
+    opacity: 1,
+    transform: 'scale3d(1, 1, 1)',
+    transition: {
+      duration: 0.4,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+  exit: {
+    opacity: 0,
+    transform: 'scale3d(0.95, 0.95, 0.95)',
+    transition: {
+      duration: 0.3,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+}
+
+export const smoothSlideIn: Variants = {
+  initial: {
+    opacity: 0,
+    transform: 'translate3d(30px, 0, 0)',
+  },
+  enter: {
+    opacity: 1,
+    transform: 'translate3d(0, 0, 0)',
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+  exit: {
+    opacity: 0,
+    transform: 'translate3d(-30px, 0, 0)',
+    transition: {
+      duration: 0.3,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+}
+
+// 交互增强动画
+export const interactiveHover: Variants = {
+  initial: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.02,
+    transition: {
+      type: 'spring',
+      stiffness: 400,
+      damping: 25,
+    },
+  },
+  tap: {
+    scale: 0.98,
+    transition: {
+      type: 'spring',
+      stiffness: 400,
+      damping: 25,
+    },
+  },
+}
+
+export const interactiveLift: Variants = {
+  initial: {
+    y: 0,
+    boxShadow: '0 0 0 rgba(0, 0, 0, 0)',
+  },
+  hover: {
+    y: -4,
+    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+    transition: {
+      type: 'spring',
+      stiffness: 400,
+      damping: 25,
+    },
+  },
+  tap: {
+    y: -2,
+    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.15)',
+    transition: {
+      type: 'spring',
+      stiffness: 400,
+      damping: 25,
+    },
+  },
+}
+
+export const interactiveGlow: Variants = {
+  initial: {
+    boxShadow: '0 0 0 rgba(139, 92, 246, 0)',
+  },
+  hover: {
+    boxShadow: '0 0 30px rgba(139, 92, 246, 0.3)',
+    transition: {
+      duration: 0.3,
+    },
+  },
+  tap: {
+    boxShadow: '0 0 20px rgba(139, 92, 246, 0.2)',
+    transition: {
+      duration: 0.1,
+    },
+  },
+}
+
+// 高级动画效果
+export const morphingCard: Variants = {
+  initial: {
+    borderRadius: '16px',
+    scale: 1,
+  },
+  hover: {
+    borderRadius: '24px',
+    scale: 1.02,
+    transition: {
+      duration: 0.3,
+    },
+  },
+  tap: {
+    borderRadius: '12px',
+    scale: 0.98,
+    transition: {
+      duration: 0.1,
+    },
+  },
+}
+
+export const elasticBounce: Variants = {
+  initial: {
+    scale: 0,
+  },
+  animate: {
+    scale: [0, 1.25, 0.9, 1.05, 1],
+    transition: {
+      duration: 0.8,
+      ease: [0.68, -0.55, 0.265, 1.55],
+    },
+  },
+}
+
+export const smoothRotate: Variants = {
+  initial: {
+    rotate: 0,
+  },
+  hover: {
+    rotate: [0, -5, 5, -5, 0],
+    transition: {
+      duration: 0.5,
+    },
+  },
+}
+
+export const attentionGrabber: Variants = {
+  initial: {
+    scale: 1,
+  },
+  animate: {
+    scale: [1, 1.1, 1],
+    transition: {
+      duration: 0.6,
+      repeat: Infinity,
+      repeatDelay: 2,
+    },
+  },
+}
+
+// 页面过渡动画优化
+export const pageSlideOptimized: Variants = {
+  initial: {
+    opacity: 0,
+    transform: 'translate3d(100%, 0, 0)',
+  },
+  enter: {
+    opacity: 1,
+    transform: 'translate3d(0, 0, 0)',
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1],
+      when: 'beforeChildren',
+      staggerChildren: 0.05,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transform: 'translate3d(-100%, 0, 0)',
+    transition: {
+      duration: 0.3,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+}
+
+export const pageZoomOptimized: Variants = {
+  initial: {
+    opacity: 0,
+    transform: 'scale3d(0.95, 0.95, 0.95)',
+  },
+  enter: {
+    opacity: 1,
+    transform: 'scale3d(1, 1, 1)',
+    transition: {
+      duration: 0.4,
+      ease: [0.16, 1, 0.3, 1],
+      when: 'beforeChildren',
+      staggerChildren: 0.05,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transform: 'scale3d(1.05, 1.05, 1.05)',
+    transition: {
+      duration: 0.3,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+}
+
+// 列表项动画
+export const listItemStagger: Variants = {
+  initial: {
+    opacity: 0,
+    transform: 'translate3d(20px, 0, 0)',
+  },
+  enter: {
+    opacity: 1,
+    transform: 'translate3d(0, 0, 0)',
+    transition: {
+      duration: 0.4,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+}
+
+export const listItemScale: Variants = {
+  initial: {
+    opacity: 0,
+    transform: 'scale3d(0.9, 0.9, 0.9)',
+  },
+  enter: {
+    opacity: 1,
+    transform: 'scale3d(1, 1, 1)',
+    transition: {
+      type: 'spring',
+      stiffness: 300,
+      damping: 25,
+    },
+  },
+}
+
+// 特殊效果动画
+export const glitchEffect: Variants = {
+  initial: {
+    x: 0,
+    filter: 'blur(0px)',
+  },
+  animate: {
+    x: [0, -2, 2, -1, 1, 0],
+    filter: ['blur(0px)', 'blur(1px)', 'blur(0px)'],
+    transition: {
+      duration: 0.3,
+      repeat: Infinity,
+      repeatDelay: 3,
+    },
+  },
+}
+
+export const neonPulse: Variants = {
+  initial: {
+    textShadow: '0 0 0 rgba(139, 92, 246, 0)',
+  },
+  animate: {
+    textShadow: [
+      '0 0 10px rgba(139, 92, 246, 0.5)',
+      '0 0 20px rgba(139, 92, 246, 0.8)',
+      '0 0 10px rgba(139, 92, 246, 0.5)',
+    ],
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+    },
+  },
+}
+
+export const waveEffect: Variants = {
+  initial: {
+    y: 0,
+  },
+  animate: (i: number) => ({
+    y: [0, -10, 0],
+    transition: {
+      delay: i * 0.1,
+      duration: 1,
+      repeat: Infinity,
+    },
+  }),
+}
+
+// 响应式动画配置
+export const getResponsiveTransition = (isMobile: boolean): Transition => {
+  return isMobile
+    ? { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
+    : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+}
+
+export const getReducedMotionTransition = (prefersReducedMotion: boolean): Transition => {
+  return prefersReducedMotion
+    ? { duration: 0.01 }
+    : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+}
+
+// 性能优化的动画预设
+export const performanceOptimizedPresets = {
+  fast: {
+    duration: 0.2,
+    ease: [0.16, 1, 0.3, 1],
+  },
+  normal: {
+    duration: 0.4,
+    ease: [0.16, 1, 0.3, 1],
+  },
+  slow: {
+    duration: 0.6,
+    ease: [0.16, 1, 0.3, 1],
+  },
+  spring: {
+    type: 'spring',
+    stiffness: 400,
+    damping: 30,
+  },
+  bouncy: {
+    type: 'spring',
+    stiffness: 600,
+    damping: 20,
+  },
+  gentle: {
+    type: 'spring',
+    stiffness: 200,
+    damping: 40,
+  },
+}

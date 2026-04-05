@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Sparkles, Shield, Zap, Brain, Search, ChevronDown } from 'lucide-react'
+import { ArrowRight, Sparkles, Brain, Search, ChevronDown } from 'lucide-react'
 import AssessmentCard3D from '@components/AssessmentCard3D'
 import TypingEffect, { ShimmerText } from '@components/TypingEffect'
-import { GlowCard, RippleButton, FadeInSection, AnimatedNumber } from '@components/animations'
+import { FadeInSection, AnimatedNumber } from '@components/animations'
 import {
   staggerContainer,
   staggerItem,
@@ -93,7 +93,7 @@ export default function Home() {
                 <Sparkles className="w-5 h-5 text-violet-400" />
               </motion.div>
               <ShimmerText
-                text="v2.3.0 · 前端展示模板库"
+                text="v2.3.0 · 专业测评平台"
                 shimmerColor="rgba(139, 92, 246, 0.8)"
                 className="text-white/90 font-medium"
               />
@@ -110,7 +110,7 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              专业
+              HumanOS
             </motion.span>
             <motion.span
               className="inline-block text-gradient mx-3"
@@ -121,15 +121,7 @@ export default function Home() {
                 textShadow: '0 0 40px rgba(139, 92, 246, 0.5)',
               }}
             >
-              前端框架
-            </motion.span>
-            <motion.span
-              className="inline-block text-white"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-            >
-              展示平台
+              测评平台
             </motion.span>
           </motion.h1>
 
@@ -138,7 +130,7 @@ export default function Home() {
             className="text-lg sm:text-xl text-white/60 max-w-3xl mx-auto mb-12 leading-relaxed"
           >
             <TypingEffect
-              text="展示现代Web开发的最佳实践，包含完整的UI组件库、设计系统、动画效果和性能优化方案。为企业客户提供生产级的前端架构参考。"
+              text="提供人格测评、技能评估、心理测试等多种在线测评服务，帮助你更好地了解自己，发现潜能，规划未来。"
               speed={25}
               pauseDuration={500}
             />
@@ -146,33 +138,24 @@ export default function Home() {
 
           <motion.div
             variants={staggerItem}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-col items-center justify-center"
           >
-            <RippleButton
-              variant="primary"
-              size="lg"
-              onClick={() => navigate('/assessment/mbti-standard')}
-              className="min-w-[160px]"
+            <motion.button
+              onClick={() => navigate('/assessments')}
+              className="group flex items-center gap-2 px-10 py-5 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all text-lg"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              type="button"
             >
-              <span className="flex items-center gap-2">
-                开始测评
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  <ArrowRight className="w-5 h-5" />
-                </motion.span>
-              </span>
-            </RippleButton>
-
-            <RippleButton
-              variant="secondary"
-              size="lg"
-              onClick={() => navigate('/dashboard')}
-              className="min-w-[160px]"
-            >
-              查看结果
-            </RippleButton>
+              <Brain className="w-6 h-6" />
+              开始测评
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <ArrowRight className="w-6 h-6" />
+              </motion.span>
+            </motion.button>
           </motion.div>
 
           <motion.div
@@ -180,9 +163,9 @@ export default function Home() {
             variants={staggerItem}
           >
             {[
-              { value: 50, suffix: '+', label: 'UI组件' },
-              { value: 15, suffix: '+', label: '页面模板' },
-              { value: 100, suffix: '%', label: 'TypeScript' },
+              { value: assessments.length, suffix: '+', label: '专业测评' },
+              { value: 10000, suffix: '+', label: '用户信赖' },
+              { value: 98, suffix: '%', label: '准确率' },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -221,57 +204,23 @@ export default function Home() {
         </motion.div>
       </motion.section>
 
-      <FadeInSection className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            {
-              icon: Shield,
-              title: '现代化架构',
-              description: 'React 18 + TypeScript + Vite，构建高性能企业级应用',
-              gradient: 'from-emerald-500 to-teal-500',
-              bgGradient: 'from-emerald-500/20 to-teal-500/20',
-            },
-            {
-              icon: Zap,
-              title: '设计系统',
-              description: '完整的UI组件库，支持主题定制和响应式布局',
-              gradient: 'from-orange-500 to-amber-500',
-              bgGradient: 'from-orange-500/20 to-amber-500/20',
-            },
-            {
-              icon: Brain,
-              title: '开发体验',
-              description: '热重载、类型检查、代码格式化，提升开发效率',
-              gradient: 'from-violet-500 to-pink-500',
-              bgGradient: 'from-violet-500/20 to-pink-500/20',
-            },
-          ].map((feature) => (
-            <GlowCard
-              key={feature.title}
-              className="glass rounded-2xl p-6 border border-white/10"
-              glowColor={`rgba(${feature.gradient.includes('emerald') ? '16, 185, 129' : feature.gradient.includes('orange') ? '249, 115, 22' : '139, 92, 246'}, 0.4)`}
-              enableTilt={true}
-            >
-              <motion.div
-                className={cn(
-                  'w-14 h-14 rounded-xl bg-gradient-to-r flex items-center justify-center mb-4',
-                  feature.bgGradient
-                )}
-                whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <feature.icon className="w-7 h-7 text-white" />
-              </motion.div>
-              <h3 className="text-xl font-semibold text-white mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-white/60">{feature.description}</p>
-            </GlowCard>
-          ))}
+      <section className="relative py-20 min-h-[160px] flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-violet-500/5 to-transparent" />
+        <div className="relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="glass rounded-2xl px-8 py-6 border border-white/5"
+          >
+            <p className="text-white/40 text-sm">
+              更多精彩功能正在开发中...
+            </p>
+          </motion.div>
         </div>
-      </FadeInSection>
+      </section>
 
-      <FadeInSection className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20" delay={0.2}>
+      <FadeInSection id="assessments-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20" delay={0.2}>
         <div className="text-center mb-10">
           <motion.h2
             className="text-3xl sm:text-4xl font-bold text-white mb-4"
@@ -279,7 +228,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <ShimmerText text="可用测评" shimmerColor="rgba(139, 92, 246, 0.5)" />
+            <ShimmerText text="专业测评" shimmerColor="rgba(139, 92, 246, 0.5)" />
           </motion.h2>
           <motion.p
             className="text-white/60 mb-6"
