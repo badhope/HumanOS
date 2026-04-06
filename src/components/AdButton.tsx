@@ -214,7 +214,7 @@ export default function AdButton() {
         <a href="javascript:;" className="ad-action-btn">
           点击咨询合作
         </a>
-        <p className="ad-contact-txt">微信/电话：138-0000-0000</p>
+        <p className="ad-contact-txt">微信/电话：18825407105</p>
       </div>
     </div>
   )
