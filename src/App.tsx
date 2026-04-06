@@ -5,6 +5,7 @@ import { PageSkeleton } from './components/Loading'
 import SplashScreen from './components/SplashScreen'
 import SettingsButton from './components/SettingsButton'
 import ProfileButton from './components/ProfileButton'
+import AdButton from './components/AdButton'
 import { I18nProvider } from './i18n'
 import { useAppStore } from './store'
 
@@ -53,6 +54,7 @@ export default function App() {
 
         <ProfileButton />
         <SettingsButton />
+        <AdButton />
 
         <motion.div
           initial={{ opacity: 0 }}
