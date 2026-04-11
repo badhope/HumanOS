@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/badhope/HumanOS">
-    <img src="https://img.shields.io/badge/Version-v2.3.0-61dafb?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/Version-v2.4.0-61dafb?style=for-the-badge" alt="Version">
   </a>
   <a href="https://creativecommons.org/licenses/by-nc/4.0/">
     <img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue?style=for-the-badge" alt="License">
@@ -89,18 +89,18 @@ HumanOS serves as a **professional assessment platform** for:
 
 ## ✨ Key Features
 
-| Feature | Description | Status |
-|---------|-------------|--------|
-| 🧠 **Personality Assessments** | MBTI, Big Five, Enneagram, and more | ✅ |
-| 💼 **Career Evaluations** | Holland Code, Leadership Style, Career Values | ✅ |
-| 💑 **Relationship Tests** | Attachment Style, Communication Style | ✅ |
-| 🎓 **Cognitive Assessments** | Learning Style, Critical Thinking, IQ Tests | ✅ |
-| 💪 **Mental Health** | Anxiety, Depression, EQ, Stress Management | ✅ |
-| 📊 **Three-Tier System** | Basic (10+ Q), Advanced (50%), Professional (100%) | ✅ |
-| 🎨 **Modern UI** | Beautiful, responsive, and accessible design | ✅ |
-| 📱 **Cross-Platform** | Works on desktop, tablet, and mobile | ✅ |
-| 🔒 **Privacy Protected** | All data stored locally, no server upload | ✅ |
-| 📈 **Detailed Reports** | Visual charts, personalized analysis, and recommendations | ✅ |
+| Category | Modules | Count | Description | Status |
+|----------|---------|-------|-------------|--------|
+| 🧠 **人格心理** | MBTI, 大五人格, 黑暗四人格, 依恋风格, 情商 | 5 | 基于荣格、McCrae、Paulhus等科学理论 | ✅ |
+| 🧮 **认知能力** | 瑞文标准智商测验 | 1 | 矩阵推理理论, 五大认知维度 | ✅ |
+| 🌐 **意识形态** | 政治坐标12轴专业测验 | 3 | 标准版60题 / 进阶版120题 / 专业版300题, 共计480道极致争议性深度理论题, 全维度覆盖现代意识形态谱系 | ✅ |
+| 💼 **职业规划** | 霍兰德职业兴趣测评 | 1 | 六大职业类型匹配 | ✅ |
+| 💪 **心理健康** | 焦虑自评量表SAS | 1 | 专业标准化量表 | ✅ |
+| 🏴‍☠️ **娱乐IP** | 角色匹配, 赏金测算, 知识测验 | 3 | 海贼王专属娱乐模块 | ✅ |
+| 📊 **三级测评** | 基础版, 进阶版, 专业版 | 3 | 不同深度满足各类需求 | ✅ |
+| 🎨 **用户体验** | Modern UI, 响应式设计, 本地化 | - | 极致体验与隐私保护 | ✅ |
+
+**📊 系统总览：12+ 专业测评, 600+ 专业题目, 覆盖 7 大领域**
 
 ---
 
@@ -123,17 +123,24 @@ HumanOS serves as a **professional assessment platform** for:
 - ✅ Ready-to-deploy static files
 - ✅ Comprehensive deployment documentation
 
-#### 🎯 Enhanced Question Banks
+#### 🎯 Enhanced Question Banks (v2.3.0 最新数据)
 
-| Assessment | Basic | Advanced | Professional |
-|------------|-------|----------|--------------|
-| **MBTI** | 18 Q | 47 Q | 93 Q |
-| **Big Five** | 10 Q | 25 Q | 50 Q |
-| **EQ** | 10 Q | 25 Q | 50 Q |
-| **Holland** | 10 Q | 25 Q | 50 Q |
-| **Attachment** | 10 Q | 25 Q | 50 Q |
-| **SAS** | 10 Q | 25 Q | 50 Q |
-| **Political Ideology** | 12 Q | 29 Q | 60 Q |
+| 测评类型 | 题目总数 | 预计时长 | 难度等级 | 理论基础 |
+|---------|---------|---------|---------|---------|
+| **MBTI人格测试** | 93题 | 12分钟 | 进阶版 | 荣格心理类型理论 |
+| **大五人格量表** | 120题 | 15分钟 | 进阶版 | McCrae & Costa OCEAN模型 |
+| **情商EQ测评** | 50题 | 12分钟 | 进阶版 | 戈尔曼情绪智力理论 |
+| **瑞文标准智商测验** | 60题 | 20分钟 | 进阶版 | 瑞文矩阵推理理论 |
+| **黑暗四人格DARK TRIAD** | 40题 | 15分钟 | 专业版 | Paulhus黑暗四人格 |
+| **政治坐标6轴测验** | 72题 | 18分钟 | 进阶版 | 8values & Political Compass |
+| **霍兰德职业兴趣** | 72题 | 15分钟 | 进阶版 | Holland职业六边形模型 |
+| **成人依恋量表** | 36题 | 12分钟 | 进阶版 | Bowlby依恋理论 |
+| **焦虑自评量表SAS** | 20题 | 8分钟 | 进阶版 | Zung标准化量表 |
+| **海贼王角色匹配** | 24题 | 8分钟 | 休闲级 | 娱乐IP专属 |
+| **海贼王赏金测算** | 18题 | 6分钟 | 休闲级 | 娱乐IP专属 |
+| **海贼王知识测验** | 50题 | 15分钟 | 困难级 | 骨灰粉丝挑战 |
+
+**📊 累计：12套专业测评, 655+ 题目, 总测评时长 156 分钟**
 
 ### 🔧 Technical Improvements
 - ✅ Optimized build configuration for production
