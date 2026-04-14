@@ -1,0 +1,10 @@
+name = "humanos"
+compatibility_date = "2024-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+VITE_ENV = "production"
+
+[pages]
+  build_command = "npm run build"
+  build_output_dir = "dist"

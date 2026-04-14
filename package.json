@@ -1,15 +1,28 @@
 {
-  "name": "human-os-reborn",
+  "name": "humanos",
   "version": "2.4.0",
-  "description": "HumanOS - Professional Assessment Platform | 专业测评网站集合平台",
+  "description": "HumanOS - 开源专业测评平台集合，情商、人格、价值观等多维度测评系统",
   "author": {
     "name": "HumanOS Team",
     "email": "contact@humanos.dev",
     "url": "https://github.com/badhope"
   },
+  "main": "dist/index.html",
+  "module": "dist/index.html",
+  "exports": {
+    ".": "./dist/index.html"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
   "license": "CC-BY-NC-4.0",
   "type": "module",
   "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "homepage": "https://humanos.dpdns.org",
   "repository": {
     "type": "git",
@@ -18,16 +31,30 @@
   "bugs": {
     "url": "https://github.com/badhope/HumanOS/issues"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/badhope"
+  },
   "keywords": [
+    "assessment",
     "assessment-platform",
     "personality-test",
+    "emotional-intelligence",
+    "eq-test",
+    "iq-test",
     "psychological-test",
     "skill-assessment",
     "online-quiz",
     "mbti",
+    "big-five",
+    "ocean",
+    "ideology",
+    "political-compass",
+    "parenting-assessment",
     "career-planning",
     "ability-test",
     "personality-analysis",
+    "psychological-assessment",
     "react",
     "typescript",
     "vite",
@@ -35,8 +62,10 @@
     "web-app",
     "open-source",
     "测评平台",
+    "情商测评",
     "人格测试",
     "心理测评",
+    "职业测评",
     "技能评估"
   ],
   "engines": {
@@ -54,7 +83,16 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\"",
     "clean": "rm -rf dist node_modules/.vite",
     "prepare": "husky install || true",
-    "init": "node scripts/init.js",
+    "deploy": "node deploy.mjs",
+    "deploy:all": "node deploy.mjs all",
+    "deploy:vercel": "node deploy.mjs vercel",
+    "deploy:netlify": "node deploy.mjs netlify",
+    "deploy:cloudflare": "node deploy.mjs cloudflare",
+    "deploy:surge": "node deploy.mjs surge",
+    "vercel": "vercel --prod",
+    "netlify": "netlify deploy --prod --dir=dist",
+    "cloudflare": "wrangler pages deploy dist",
+    "surge": "surge dist humanos.surge.sh",
     "template:graduation": "node scripts/init.js --type=graduation",
     "template:enterprise": "node scripts/init.js --type=enterprise",
     "template:personal": "node scripts/init.js --type=personal",

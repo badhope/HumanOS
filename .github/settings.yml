@@ -1,0 +1,28 @@
+repository:
+  name: HumanOS
+  description: 开源专业测评平台集合 - 情商、人格、价值观、政治光谱等多维度测评系统
+  homepage: https://humanos.dpdns.org
+  topics:
+    - assessment
+    - personality-test
+    - emotional-intelligence
+    - eq-test
+    - psychological-test
+    - mbti
+    - big-five
+    - ideology
+    - political-compass
+    - parenting-assessment
+    - career-planning
+    - react
+    - typescript
+    - vite
+    - tailwindcss
+    - web-app
+    - open-source
+    - chinese
+  private: false
+  has_issues: true
+  has_projects: true
+  has_wiki: true
+  has_discussions: true
