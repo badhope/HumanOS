@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-
+process.stdout.isTTY && process.stdout.setEncoding('utf8')
+process.stderr.isTTY && process.stderr.setEncoding('utf8')
 console.log('\n🌍 HumanOS 零注册收录平台大全')
 console.log('='.repeat(60))
 console.log('\n💯 这些平台 100% 不需要登录/注册！完全自动爬取GitHub')

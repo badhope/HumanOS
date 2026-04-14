@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-
+process.stdout.isTTY && process.stdout.setEncoding('utf8')
+process.stderr.isTTY && process.stderr.setEncoding('utf8')
 console.log('\n🌍 HumanOS 开源生态收录系统')
 console.log('='.repeat(50))
 
