@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+process.stdout.isTTY && process.stdout.setEncoding('utf8')
+process.stderr.isTTY && process.stderr.setEncoding('utf8')
 import { execSync } from 'child_process'
 import fs from 'fs'
 
