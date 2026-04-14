@@ -1,3 +1,20 @@
+/**
+ * ==============================================
+ * 📊 测评结果报告页面组件
+ * ==============================================
+ * 【页面功能】
+ * - 24种测评报告自动渲染
+ * - 结果导出：图片/PDF/文字
+ * - 分享功能：二维码/链接
+ * - 撒花庆祝动画
+ * 
+ * 【核心机制】
+ * - 根据测评ID自动匹配对应Report组件
+ * - html2canvas + jsPDF 导出完整PDF
+ * - QRCode实时生成分享链接
+ * - 结果存在全局Store做跨页分析
+ */
+
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'

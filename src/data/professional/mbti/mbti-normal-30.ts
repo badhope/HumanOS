@@ -1,0 +1,42 @@
+import type { Question } from '../../../types'
+
+const opts = [
+  { id: '1', text: '❌ 完全不符合我', value: 1 },
+  { id: '2', text: '⚪️ 不太符合我', value: 2 },
+  { id: '3', text: '🔵 一般符合我', value: 3 },
+  { id: '4', text: '🟢 比较符合我', value: 4 },
+  { id: '5', text: '✅ 完全符合我', value: 5 },
+]
+
+export const mbtiNormal30Questions: Question[] = [
+  { id: 'mbti30_001', text: '热闹的聚会到最后，我经常会感到莫名的烦躁', type: 'scale', options: opts, meta: { dimension: 'EI', pole: 'I', reverseScored: true, factorLoading: 0.88, discrimination: 0.85, facet: '精力恢复' } },
+  { id: 'mbti30_002', text: '看到陌生人我会主动上去搭话', type: 'scale', options: opts, meta: { dimension: 'EI', pole: 'E', reverseScored: false, factorLoading: 0.86, discrimination: 0.83, facet: '社交主动性' } },
+  { id: 'mbti30_003', text: '开会时我总是忍不住抢话', type: 'scale', options: opts, meta: { dimension: 'EI', pole: 'E', reverseScored: false, factorLoading: 0.84, discrimination: 0.81, facet: '表达倾向' } },
+  { id: 'mbti30_004', text: '打电话前我要在心里预演好几遍台词', type: 'scale', options: opts, meta: { dimension: 'EI', pole: 'I', reverseScored: true, factorLoading: 0.87, discrimination: 0.84, facet: '思考优先' } },
+  { id: 'mbti30_005', text: '宅在家里比出去浪更让我开心', type: 'scale', options: opts, meta: { dimension: 'EI', pole: 'I', reverseScored: true, factorLoading: 0.85, discrimination: 0.82, facet: '刺激寻求' } },
+  { id: 'mbti30_006', text: '朋友太多对我来说是一种负担', type: 'scale', options: opts, meta: { dimension: 'EI', pole: 'I', reverseScored: true, factorLoading: 0.86, discrimination: 0.83, facet: '深度社交' } },
+  { id: 'mbti30_007', text: '凡事讲理论的人在我看来很空谈', type: 'scale', options: opts, meta: { dimension: 'SN', pole: 'S', reverseScored: false, factorLoading: 0.88, discrimination: 0.85, facet: '现实导向' } },
+  { id: 'mbti30_008', text: '我的脑子里总在冒各种奇怪的念头', type: 'scale', options: opts, meta: { dimension: 'SN', pole: 'N', reverseScored: true, factorLoading: 0.86, discrimination: 0.83, facet: '抽象思维' } },
+  { id: 'mbti30_009', text: '亲身体验过的道理我才真的相信', type: 'scale', options: opts, meta: { dimension: 'SN', pole: 'S', reverseScored: false, factorLoading: 0.87, discrimination: 0.84, facet: '经验依赖' } },
+  { id: 'mbti30_010', text: '我经常脑补未来的各种场景', type: 'scale', options: opts, meta: { dimension: 'SN', pole: 'N', reverseScored: true, factorLoading: 0.85, discrimination: 0.82, facet: '未来导向' } },
+  { id: 'mbti30_011', text: '老办法管用就没必要搞创新', type: 'scale', options: opts, meta: { dimension: 'SN', pole: 'S', reverseScored: false, factorLoading: 0.84, discrimination: 0.81, facet: '传统偏好' } },
+  { id: 'mbti30_012', text: '我能把看似不相关的事联系到一起', type: 'scale', options: opts, meta: { dimension: 'SN', pole: 'N', reverseScored: true, factorLoading: 0.86, discrimination: 0.83, facet: '联想能力' } },
+  { id: 'mbti30_013', text: '就算伤人感情，真话也该说出来', type: 'scale', options: opts, meta: { dimension: 'TF', pole: 'T', reverseScored: false, factorLoading: 0.88, discrimination: 0.85, facet: '逻辑优先' } },
+  { id: 'mbti30_014', text: '别人哭的时候我也忍不住眼眶湿润', type: 'scale', options: opts, meta: { dimension: 'TF', pole: 'F', reverseScored: true, factorLoading: 0.87, discrimination: 0.84, facet: '情绪敏感' } },
+  { id: 'mbti30_015', text: '错就是错，卖惨也不能原谅', type: 'scale', options: opts, meta: { dimension: 'TF', pole: 'T', reverseScored: false, factorLoading: 0.85, discrimination: 0.82, facet: '直接反馈' } },
+  { id: 'mbti30_016', text: '看到小动物受伤我心里会特别难受', type: 'scale', options: opts, meta: { dimension: 'TF', pole: 'F', reverseScored: true, factorLoading: 0.86, discrimination: 0.83, facet: '共情能力' } },
+  { id: 'mbti30_017', text: '我不怕跟人争论谁对谁错', type: 'scale', options: opts, meta: { dimension: 'TF', pole: 'T', reverseScored: false, factorLoading: 0.84, discrimination: 0.81, facet: '真理导向' } },
+  { id: 'mbti30_018', text: '吵架我总是先低头求和的那个', type: 'scale', options: opts, meta: { dimension: 'TF', pole: 'F', reverseScored: true, factorLoading: 0.85, discrimination: 0.82, facet: '和谐导向' } },
+  { id: 'mbti30_019', text: '不做好计划我就心里发慌', type: 'scale', options: opts, meta: { dimension: 'JP', pole: 'J', reverseScored: false, factorLoading: 0.88, discrimination: 0.85, facet: '计划倾向' } },
+  { id: 'mbti30_020', text: '说走就走的旅行才最刺激', type: 'scale', options: opts, meta: { dimension: 'JP', pole: 'P', reverseScored: true, factorLoading: 0.86, discrimination: 0.83, facet: '灵活适应' } },
+  { id: 'mbti30_021', text: '拖到最后一刻我才效率最高', type: 'scale', options: opts, meta: { dimension: 'JP', pole: 'P', reverseScored: true, factorLoading: 0.87, discrimination: 0.84, facet: '提前完成' } },
+  { id: 'mbti30_022', text: '我一件事没做完就想开下一件', type: 'scale', options: opts, meta: { dimension: 'JP', pole: 'P', reverseScored: true, factorLoading: 0.85, discrimination: 0.82, facet: '多任务' } },
+  { id: 'mbti30_023', text: '东西乱摆我就浑身不舒服', type: 'scale', options: opts, meta: { dimension: 'JP', pole: 'J', reverseScored: false, factorLoading: 0.84, discrimination: 0.81, facet: '秩序偏好' } },
+  { id: 'mbti30_024', text: '我总在等更好的选择出现', type: 'scale', options: opts, meta: { dimension: 'JP', pole: 'P', reverseScored: true, factorLoading: 0.86, discrimination: 0.83, facet: '决策延迟' } },
+  { id: 'mbti30_025', text: '天塌下来我也能睡着觉', type: 'scale', options: opts, meta: { dimension: 'AT', pole: 'A', reverseScored: false, factorLoading: 0.86, discrimination: 0.83, facet: '情绪稳定' } },
+  { id: 'mbti30_026', text: '一件事没做好我会失眠', type: 'scale', options: opts, meta: { dimension: 'AT', pole: 'T', reverseScored: true, factorLoading: 0.87, discrimination: 0.84, facet: '自我反思' } },
+  { id: 'mbti30_027', text: '随便别人怎么说我都无所谓', type: 'scale', options: opts, meta: { dimension: 'AT', pole: 'A', reverseScored: false, factorLoading: 0.85, discrimination: 0.82, facet: '评价免疫' } },
+  { id: 'mbti30_028', text: '我受不了别人做事马马虎虎', type: 'scale', options: opts, meta: { dimension: 'AT', pole: 'T', reverseScored: true, factorLoading: 0.84, discrimination: 0.81, facet: '完美主义' } },
+  { id: 'mbti30_029', text: '搞砸了我也能很快翻篇', type: 'scale', options: opts, meta: { dimension: 'AT', pole: 'A', reverseScored: false, factorLoading: 0.85, discrimination: 0.82, facet: '失败耐受' } },
+  { id: 'mbti30_030', text: '我觉得自己哪里都不够好', type: 'scale', options: opts, meta: { dimension: 'AT', pole: 'T', reverseScored: true, factorLoading: 0.86, discrimination: 0.83, facet: '自我接纳' } },
+]

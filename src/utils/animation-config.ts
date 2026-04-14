@@ -157,6 +157,33 @@ export const cardVariants: Variants = {
   },
 }
 
+function detectIsMobile(): boolean {
+  if (typeof window === 'undefined') return false
+  return window.innerWidth < 768
+}
+
+function detectPrefersReducedMotion(): boolean {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+export const optimizedAnimationConfig = {
+  isMobile: detectIsMobile(),
+  prefersReducedMotion: detectPrefersReducedMotion(),
+  animationQuality: 'high' as 'low' | 'medium' | 'high',
+  enableHardwareAcceleration: true,
+  staggerDelay: 0.1,
+  reducedMotionDuration: 0.1,
+  baseDuration: 0.6,
+  getTransition: (options?: { delay?: number; duration?: number }) => ({
+    duration: options?.duration ?? 0.6,
+    delay: options?.delay ?? 0,
+    type: 'spring',
+    stiffness: 300,
+    damping: 25,
+  }),
+}
+
 export const staggerContainer: Variants = {
   initial: {},
   enter: {

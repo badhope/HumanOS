@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 interface TypingEffectProps {
@@ -25,6 +25,7 @@ export default function TypingEffect({
   const [displayedText, setDisplayedText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
+  const pauseTimeoutRef = useRef<number | null>(null)
 
   const handleTyping = useCallback(() => {
     if (isPaused) {
@@ -38,7 +39,8 @@ export default function TypingEffect({
         setDisplayedText(displayedText.slice(0, -1))
       } else {
         setIsDeleting(false)
-        setTimeout(() => setIsPaused(true), pauseDuration)
+        if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current)
+        pauseTimeoutRef.current = window.setTimeout(() => setIsPaused(true), pauseDuration)
       }
     } else {
       if (displayedText.length < text.length) {
@@ -54,7 +56,10 @@ export default function TypingEffect({
       handleTyping,
       isPaused ? pauseDuration : isDeleting ? deleteSpeed : speed
     )
-    return () => clearTimeout(timeout)
+    return () => {
+      clearTimeout(timeout)
+      if (pauseTimeoutRef.current) clearTimeout(pauseTimeoutRef.current)
+    }
   }, [displayedText, isDeleting, isPaused, handleTyping, speed, deleteSpeed, pauseDuration])
 
   return (

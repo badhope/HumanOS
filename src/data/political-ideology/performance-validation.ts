@@ -1,5 +1,5 @@
 import { STANDARDIZED_QUESTIONS, createQuestionSet } from './standardized-question-bank'
-import { generateModeAwareIdeologySpectrum, auditLogger } from './ideology-weighted-calculator'
+import { generateModeAwareIdeologySpectrum, auditLogger, calculateWeightedCosineSimilarity, calculateEnsembleSimilarity } from './ideology-weighted-calculator'
 import { MODE_CONFIGURATIONS, AssessmentMode } from './mode-configuration'
 import type { CalculationAuditLog } from './calculation-audit-log'
 
@@ -127,10 +127,7 @@ function compareModes() {
 }
 
 function benchmarkAlgorithms() {
-  const {
-    calculateWeightedCosineSimilarity,
-    calculateEnsembleSimilarity,
-  } = require('./ideology-weighted-calculator')
+
 
   const vecA = Array.from({ length: 5 }, () => Math.random() * 100)
   const vecB = Array.from({ length: 5 }, () => Math.random() * 100)

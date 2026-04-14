@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Clock, Target, Sparkles, Brain, Heart, Users, Briefcase, BarChart3, Shield, Palette } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
+import { ArrowLeft, ArrowRight, Clock, Target, Brain, Heart, Users, Briefcase, BarChart3, Shield, Palette, Gamepad2, Sparkles } from 'lucide-react'
+import { usePageTransition } from '@components/animations/PageTransitionController'
 import { assessments } from '@data/assessments'
 import { cn } from '@utils/cn'
 
@@ -61,17 +62,29 @@ const categoryConfig: Record<string, {
     borderColor: 'border-indigo-500/30',
     shadowColor: 'shadow-indigo-500/20',
   },
+  '娱乐趣味': {
+    gradient: 'from-fuchsia-500 to-pink-500',
+    icon: <Gamepad2 className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-fuchsia-950/40 to-pink-900/30',
+    borderColor: 'border-fuchsia-500/30',
+    shadowColor: 'shadow-fuchsia-500/20',
+  },
 }
 
 export default function AssessmentSelect() {
-  const navigate = useNavigate()
+  const { navigateWithTransition } = usePageTransition()
+  const [searchParams] = useSearchParams()
   const containerRef = useRef<HTMLDivElement>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
-  const { scrollXProgress } = useScroll({ container: containerRef })
-  const x = useTransform(scrollXProgress, [0, 1], [0, -100])
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get('category')
+    if (categoryFromUrl) {
+      setSelectedCategory(decodeURIComponent(categoryFromUrl))
+    }
+  }, [searchParams])
 
-  const categories = [...new Set(assessments.map(a => a.category))]
+  const { scrollXProgress } = useScroll({ container: containerRef })
 
   const filteredAssessments = selectedCategory
     ? assessments.filter(a => a.category === selectedCategory)
@@ -82,6 +95,13 @@ export default function AssessmentSelect() {
       const scrollAmount = direction === 'left' ? -400 : 400
       containerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' })
     }
+  }
+
+  const handleBack = () => {
+    navigateWithTransition('/categories', {
+      loadingText: '正在返回...',
+      duration: 1500,
+    })
   }
 
   return (
@@ -97,16 +117,33 @@ export default function AssessmentSelect() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8"
+          className="mb-8"
         >
-          <div>
+          <motion.button
+            onClick={handleBack}
+            className={cn(
+              'px-6 py-3 rounded-xl glass text-white font-medium mb-8',
+              'hover:bg-white/20 transition-all flex items-center gap-2'
+            )}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            type="button"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            返回分类
+          </motion.button>
+
+          <div className="text-center">
             <motion.h1
               className="text-4xl sm:text-5xl font-bold text-white mb-4"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              选择你的测评
+              {selectedCategory || '全部测评'}
             </motion.h1>
             <motion.p
               className="text-white/60 text-lg"
@@ -114,79 +151,25 @@ export default function AssessmentSelect() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              左右滑动探索所有测评，找到最适合你的那一项
+              左右滑动探索测评，点击卡片开始体验
             </motion.p>
           </div>
-
-          <motion.button
-            onClick={() => navigate('/')}
-            className={cn(
-              'px-6 py-3 rounded-xl glass text-white font-medium',
-              'hover:bg-white/20 transition-all flex items-center gap-2'
-            )}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            type="button"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            返回主页
-          </motion.button>
         </motion.div>
 
         <motion.div
-          className="flex justify-center gap-3 flex-wrap mb-8"
+          className="text-center mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <motion.button
-            onClick={() => setSelectedCategory(null)}
-            className={cn(
-              'px-5 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2',
-              !selectedCategory
-                ? 'bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg shadow-pink-500/25'
-                : 'glass text-white/60 hover:text-white hover:bg-white/10'
-            )}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            type="button"
+          <motion.p
+            className="text-white/50 text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
           >
-            <Sparkles className="w-4 h-4" />
-            全部 ({assessments.length})
-          </motion.button>
-          {categories.map((category) => {
-            const config = categoryConfig[category] || categoryConfig['人格心理']
-            const count = assessments.filter(a => a.category === category).length
-            return (
-              <motion.button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={cn(
-                  'px-5 py-2.5 rounded-full text-sm font-medium transition-all flex items-center gap-2',
-                  selectedCategory === category
-                    ? cn(`bg-gradient-to-r ${config.gradient} text-white shadow-lg ${config.shadowColor}`)
-                    : 'glass text-white/60 hover:text-white hover:bg-white/10'
-                )}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                type="button"
-              >
-                {config.icon}
-                {category}
-                <span className={cn(
-                  'px-2 py-0.5 rounded-full text-xs',
-                  selectedCategory === category
-                    ? 'bg-white/25'
-                    : 'bg-white/10'
-                )}>
-                  {count}
-                </span>
-              </motion.button>
-            )
-          })}
+            共 {filteredAssessments.length} 项测评
+          </motion.p>
         </motion.div>
 
         <div className="relative">
@@ -230,7 +213,10 @@ export default function AssessmentSelect() {
                   style={{ scrollSnapAlign: 'center' }}
                 >
                   <motion.div
-                    onClick={() => navigate(`/mode-select/${assessment.id}`)}
+                    onClick={() => navigateWithTransition(`/mode-select/${assessment.id}`, {
+                      preset: 'page',
+                      loadingText: `正在加载 ${assessment.title}...`,
+                    })}
                     className={cn(
                       'relative h-[28rem] rounded-3xl overflow-hidden cursor-pointer group border',
                       config.borderColor,

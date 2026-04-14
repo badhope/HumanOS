@@ -19,7 +19,7 @@ export default function AdButton() {
 
     const checkShow = () => {
       const t = localStorage.getItem(key)
-      if (!t || Date.now() - parseInt(t) > sevenDay) {
+      if (!t || Date.now() - parseInt(t, 10) > sevenDay) {
         wrap.style.display = 'block'
       } else {
         wrap.style.display = 'none'

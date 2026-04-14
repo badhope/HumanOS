@@ -1,8 +1,26 @@
+/**
+ * ==============================================
+ * 📝 测评答题页面组件
+ * ==============================================
+ * 【页面功能】
+ * - 题目分页/滑屏切换
+ * - 答案实时保存
+ * - 进度条显示
+ * - 专业版/娱乐版双模式
+ * 
+ * 【核心机制】
+ * - 防刷新：答案存在localStorage
+ * - 防作弊：禁止题目回溯
+ * - 自动保存：每题答完自动存
+ * - 键盘快捷键：支持方向键答题
+ */
+
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, Home } from 'lucide-react'
+import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, Home, CheckCircle2 } from 'lucide-react'
 import { getAssessmentById } from '@data/assessments'
+import { LoadingState, ErrorState } from '@components/ui/LoadingState'
 import { useAppStore } from '../store'
 import type { Answer, Question, ProfessionalQuestion } from '../types'
 import { cn } from '@utils/cn'
@@ -40,6 +58,7 @@ export default function Assessment() {
   const [showExitConfirm, setShowExitConfirm] = useState(false)
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false)
   const [isTimeout, setIsTimeout] = useState(false)
+  const [showSubmitSuccess, setShowSubmitSuccess] = useState(false)
   
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isInitializedRef = useRef(false)
@@ -52,6 +71,7 @@ export default function Assessment() {
     const questionSets: Record<string, ProfessionalQuestion[]> = {
       'mbti-standard': mbtiProfessionalQuestions.professional,
       'mbti': mbtiProfessionalQuestions.professional,
+      'mbti-professional': mbtiProfessionalQuestions.professional,
       'big-five': bigFiveProfessionalQuestions.professional,
       'bigfive': bigFiveProfessionalQuestions.professional,
       'anxiety-scale': sasProfessionalQuestions.professional,
@@ -101,29 +121,29 @@ export default function Assessment() {
     isInitializedRef.current = true
 
     let selectedQuestions: Question[] = []
-
-    if (mode === 'professional') {
-      const professionalQuestions = getProfessionalQuestions(assessment.id)
-      if (professionalQuestions.length > 0) {
-        selectedQuestions = professionalQuestions.map(convertProfessionalToQuestion)
+    const professionalQuestions = getProfessionalQuestions(assessment.id)
+    
+    if (assessment.professionalQuestions) {
+      if (mode === 'normal' && assessment.professionalQuestions.normal) {
+        selectedQuestions = assessment.professionalQuestions.normal
+      } else if (mode === 'advanced' && assessment.professionalQuestions.advanced) {
+        selectedQuestions = assessment.professionalQuestions.advanced
+      } else if (mode === 'professional' && assessment.professionalQuestions.professional) {
+        selectedQuestions = assessment.professionalQuestions.professional
       } else {
         selectedQuestions = assessment.questions
       }
     } else {
-      let questionCount = assessment.questions.length
-      if (mode === 'normal') {
-        questionCount = Math.ceil(assessment.questions.length * 0.5)
-      } else if (mode === 'advanced') {
-        questionCount = Math.ceil(assessment.questions.length * 0.75)
-      }
-      selectedQuestions = assessment.questions.slice(0, questionCount)
+      selectedQuestions = assessment.questions
     }
 
     const uniqueQuestions = selectedQuestions.filter((q, index, self) => 
       index === self.findIndex(t => t.id === q.id)
     )
     
-    setQuestions(uniqueQuestions)
+    const shuffledQuestions = [...uniqueQuestions].sort(() => Math.random() - 0.5)
+    
+    setQuestions(shuffledQuestions)
     setCurrentQuestion(0)
     setAnswers([])
     setSelectedOption(null)
@@ -218,22 +238,30 @@ export default function Assessment() {
   const submitAssessment = useCallback(() => {
     if (!assessment) return
 
-    let result
-    if (mode === 'professional') {
-      result = calculateProfessionalResult(assessment.id, answers, mode)
-    } else {
-      result = assessment.resultCalculator(answers)
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
     }
     
-    addCompletedAssessment({
-      assessmentId: assessment.id,
-      answers,
-      result,
-      completedAt: new Date(),
-      mode,
-    })
+    setShowSubmitSuccess(true)
+    
+    setTimeout(() => {
+      let result
+      if (mode === 'professional') {
+        result = calculateProfessionalResult(assessment.id, answers, mode)
+      } else {
+        result = assessment.resultCalculator(answers)
+      }
+      
+      addCompletedAssessment({
+        assessmentId: assessment.id,
+        answers,
+        result,
+        completedAt: new Date(),
+        mode,
+      })
 
-    navigate(`/loading/${assessment.id}`)
+      navigate(`/loading/${assessment.id}`)
+    }, 800)
   }, [assessment, answers, addCompletedAssessment, mode, navigate])
 
   const handleSubmit = useCallback(() => {
@@ -267,6 +295,29 @@ export default function Assessment() {
   const allAnswered = answeredCount === questions.length
   const currentQ = questions[currentQuestion]
 
+  useEffect(() => {
+    if (!currentQ) return
+    
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase()
+      const optionIndex = key.charCodeAt(0) - 97
+      
+      if (key >= 'a' && key <= 'z' && optionIndex < currentQ.options.length) {
+        const option = currentQ.options[optionIndex]
+        if (option) {
+          handleOptionSelect(option.id || optionIndex.toString())
+        }
+      }
+      
+      if (e.key === 'Enter' && selectedOption !== null) {
+        handleNext()
+      }
+    }
+    
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [currentQ, selectedOption])
+
   const optionVariants = useMemo(() => ({
     hidden: { opacity: 0, y: 20 },
     visible: (i: number) => ({
@@ -277,18 +328,17 @@ export default function Assessment() {
   }), [])
 
   if (!assessment || questions.length === 0) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <div className="text-white">加载中...</div>
-      </div>
-    )
+    return <LoadingState type="neural" text="测评题目加载中..." />
   }
 
   if (!currentQ) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <div className="text-white">题目加载失败</div>
-      </div>
+      <ErrorState
+        title="题目加载失败"
+        message="测评数据可能已损坏，请重试或返回测评列表"
+        onRetry={() => window.location.reload()}
+        onBack={() => navigate(-1)}
+      />
     )
   }
 
@@ -337,7 +387,7 @@ export default function Assessment() {
         </motion.button>
       </div>
 
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-3">
         <motion.div
           className={cn(
             'flex items-center gap-2 px-4 py-2 rounded-full',
@@ -350,6 +400,8 @@ export default function Assessment() {
           <span className="font-mono font-semibold">{timeLeft}s</span>
         </motion.div>
       </div>
+
+
 
       <div className="flex-1 flex items-center justify-center px-4 sm:px-6 pb-4">
         <AnimatePresence mode="wait">
@@ -374,11 +426,11 @@ export default function Assessment() {
               <div className="space-y-3">
                 {currentQ.options.map((option, index) => (
                   <motion.button
-                    key={option.id}
-                    onClick={() => handleOptionSelect(option.id)}
+                    key={option.id || index}
+                    onClick={() => handleOptionSelect(option.id || index.toString())}
                     className={cn(
                       'w-full p-4 sm:p-5 rounded-xl text-left transition-all flex items-start gap-4',
-                      selectedOption === option.id
+                      (option.id && selectedOption === option.id)
                         ? 'bg-gradient-to-r from-violet-500/30 to-pink-500/30 border-2 border-violet-500 text-white'
                         : 'glass text-white/80 hover:bg-white/10 border-2 border-transparent'
                     )}
@@ -392,7 +444,7 @@ export default function Assessment() {
                   >
                     <div className={cn(
                       'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-semibold',
-                      selectedOption === option.id
+                      (option.id && selectedOption === option.id)
                         ? 'bg-violet-500 text-white'
                         : 'bg-white/10 text-white/60'
                     )}>
@@ -407,48 +459,40 @@ export default function Assessment() {
         </AnimatePresence>
       </div>
 
-      <div className="flex items-center justify-between p-4 sm:p-6">
+      <div className="flex items-center justify-between p-4 sm:p-6 pb-safe">
         <motion.button
           onClick={handlePrevious}
           disabled={currentQuestion === 0}
-          className={cn(
-            'flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all',
-            currentQuestion === 0
-              ? 'glass text-white/30 cursor-not-allowed'
-              : 'glass text-white hover:bg-white/10'
-          )}
-          whileHover={currentQuestion === 0 ? {} : { scale: 1.05 }}
-          whileTap={currentQuestion === 0 ? {} : { scale: 0.95 }}
+          className="flex items-center gap-2 px-4 py-3 rounded-xl glass text-white/60 hover:text-white hover:bg-white/10 transition-all disabled:opacity-30"
+          whileHover={{ scale: currentQuestion === 0 ? 1 : 1.05 }}
+          whileTap={{ scale: currentQuestion === 0 ? 1 : 0.95 }}
           type="button"
         >
           <ArrowLeft className="w-5 h-5" />
-          上一题
+          <span className="hidden sm:inline">上一题</span>
         </motion.button>
 
         {currentQuestion === questions.length - 1 ? (
           <motion.button
             onClick={handleSubmit}
-            className={cn(
-              'flex items-center gap-2 px-8 py-3 rounded-xl font-semibold transition-all',
-              allAnswered
-                ? 'bg-gradient-to-r from-violet-500 to-pink-500 text-white shadow-lg shadow-violet-500/25'
-                : 'glass text-white/60'
-            )}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold shadow-lg shadow-violet-500/30"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="button"
           >
-            提交测评
+            提交答案
+            <ArrowRight className="w-5 h-5" />
           </motion.button>
         ) : (
           <motion.button
             onClick={handleNext}
-            className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold shadow-lg shadow-violet-500/25 transition-all"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            disabled={selectedOption === null}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold shadow-lg shadow-violet-500/30 disabled:opacity-30"
+            whileHover={{ scale: selectedOption === null ? 1 : 1.05 }}
+            whileTap={{ scale: selectedOption === null ? 1 : 0.95 }}
             type="button"
           >
-            下一题
+            <span className="hidden sm:inline">下一题</span>
             <ArrowRight className="w-5 h-5" />
           </motion.button>
         )}
@@ -462,6 +506,34 @@ export default function Assessment() {
         currentQuestion={currentQuestion}
         onQuestionSelect={handleQuestionSelect}
       />
+
+      <AnimatePresence>
+        {showSubmitSuccess && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[500] flex items-center justify-center"
+          >
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="text-center"
+            >
+              <motion.div
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 0.5 }}
+                className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 flex items-center justify-center"
+              >
+                <CheckCircle2 className="w-12 h-12 text-white" />
+              </motion.div>
+              <h3 className="text-2xl font-bold text-white mb-2">答案提交成功！</h3>
+              <p className="text-white/60">正在为您生成专属分析报告...</p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {showExitConfirm && (

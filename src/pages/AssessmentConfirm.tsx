@@ -34,6 +34,15 @@ export default function AssessmentConfirm() {
     navigate(`/assessment/${id}?mode=${mode}`)
   }
 
+  const realQuestionCount = assessment.questions?.length || 0
+  const questionCount = realQuestionCount || assessment.questionCount || 40
+  const durationMinutes = Math.max(3, Math.ceil(questionCount * 8 / 60))
+  const qualityLabel = {
+    lite: '科学',
+    standard: '专业',
+    expert: '学术',
+  }[assessment.difficulty] || '专业'
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-24 pb-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -101,17 +110,17 @@ export default function AssessmentConfirm() {
           >
             <div className="glass rounded-xl p-4">
               <Clock className="w-6 h-6 text-violet-400 mx-auto mb-2" />
-              <p className="text-white font-semibold">{assessment.duration} 分钟</p>
+              <p className="text-white font-semibold">{durationMinutes} 分钟</p>
               <p className="text-white/50 text-sm">预计时长</p>
             </div>
             <div className="glass rounded-xl p-4">
               <Target className="w-6 h-6 text-pink-400 mx-auto mb-2" />
-              <p className="text-white font-semibold">{assessment.questions.length} 题</p>
+              <p className="text-white font-semibold">{questionCount} 题</p>
               <p className="text-white/50 text-sm">题目数量</p>
             </div>
             <div className="glass rounded-xl p-4">
               <Sparkles className="w-6 h-6 text-amber-400 mx-auto mb-2" />
-              <p className="text-white font-semibold">专业</p>
+              <p className="text-white font-semibold">{qualityLabel}</p>
               <p className="text-white/50 text-sm">测评质量</p>
             </div>
           </motion.div>

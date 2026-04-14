@@ -5,23 +5,31 @@ export interface Assessment {
   category: string
   difficulty: 'lite' | 'standard' | 'expert'
   duration: number
+  quality: string
+  questionCount?: number
   questions: Question[]
-  resultCalculator: (answers: Answer[]) => AssessmentResult
+  resultCalculator: (answers: Answer[]) => Record<string, any> | AssessmentResult
+  tag?: string
   cardStyle?: 'default' | 'flip' | 'glow'
   professionalQuestions?: ProfessionalQuestionSet
-  professionalCalculator?: (answers: Answer[], mode: string) => ProfessionalAssessmentResult
+  professionalCalculator?: (answers: Answer[], mode: string) => Record<string, any> | ProfessionalAssessmentResult
 }
 
 export interface ProfessionalQuestionSet {
-  normal: ProfessionalQuestion[]
-  advanced: ProfessionalQuestion[]
+  normal?: ProfessionalQuestion[]
+  normal30?: ProfessionalQuestion[]
+  advanced?: ProfessionalQuestion[]
+  advanced60?: ProfessionalQuestion[]
   professional: ProfessionalQuestion[]
+  professional120?: ProfessionalQuestion[]
 }
 
 export interface ProfessionalQuestion {
   id: string
   text: string
-  type: 'single' | 'multiple' | 'scale' | 'ranking'
+  type: 'single' | 'multiple' | 'scale' | 'ranking' | 'scenario' | 'likert-3' | 'likert-4' | 'likert-5' | 'likert-7'
+  scenario?: string
+  dimensions?: string[]
   options: ProfessionalOption[]
   category?: string
   subscale?: string
@@ -30,7 +38,7 @@ export interface ProfessionalQuestion {
 }
 
 export interface ProfessionalOption {
-  id: string
+  id?: string
   text: string
   value: number
   trait?: string
@@ -101,13 +109,18 @@ export interface RiskAssessment {
 export interface Question {
   id: string
   text: string
-  type: 'single' | 'multiple' | 'scale'
+  type: 'single' | 'multiple' | 'scale' | 'scenario' | 'ranking' | 'likert-3' | 'likert-4' | 'likert-5' | 'likert-7'
+  scenario?: string
+  subscale?: string
+  dimension?: string
+  reverseScored?: boolean
   options: Option[]
   category?: string
+  meta?: Record<string, any>
 }
 
 export interface Option {
-  id: string
+  id?: string
   text: string
   value: number
   trait?: string
@@ -124,16 +137,22 @@ export interface Answer {
 }
 
 export interface AssessmentResult {
-  type: string
-  title: string
-  description: string
-  score: number
-  accuracy: number
-  dimensions: Dimension[]
-  strengths: string[]
-  weaknesses: string[]
-  careers: string[]
+  [key: string]: any
+  type?: string
+  typeCode?: string
+  typeName?: string
+  title?: string
+  subtitle?: string
+  summary?: string
+  description?: string
+  score?: number
+  accuracy?: number
+  dimensions?: Dimension[]
+  strengths?: string[]
+  weaknesses?: string[]
+  careers?: string[]
   suggestions?: string[]
+  meta?: Record<string, any>
   
   cognitiveFunctions?: {
     dominant: string
@@ -202,7 +221,7 @@ export interface Dimension {
   name: string
   score: number
   maxScore?: number
-  description: string
+  description?: string
   clarity?: number
   tScore?: number
   level?: string

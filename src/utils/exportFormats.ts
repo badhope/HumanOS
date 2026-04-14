@@ -307,24 +307,27 @@ export async function exportToMarkdown(
         mdContent += `${a.result.description}\n\n`
       }
 
-      if (opts.includeDetails && a.result.dimensions?.length > 0) {
+      const dimensions = a.result.dimensions || []
+      if (opts.includeDetails && dimensions.length > 0) {
         mdContent += `### ${opts.language === 'zh' ? '维度分析' : 'Dimension Analysis'}\n\n`
-        a.result.dimensions.forEach(dim => {
+        dimensions.forEach(dim => {
           const percentage = Math.round((dim.score / Number(dim.maxScore)) * 100)
           mdContent += `- **${dim.name}**: ${dim.score}/${dim.maxScore} (${percentage}%)\n`
         })
         mdContent += '\n'
       }
 
-      if (opts.includeDetails && a.result.strengths?.length > 0) {
+      const strengths = a.result.strengths || []
+      if (opts.includeDetails && strengths.length > 0) {
         mdContent += `### ✅ ${opts.language === 'zh' ? '优势' : 'Strengths'}\n\n`
-        a.result.strengths.forEach(s => mdContent += `- ${s}\n`)
+        strengths.forEach(s => mdContent += `- ${s}\n`)
         mdContent += '\n'
       }
 
-      if (opts.includeDetails && a.result.weaknesses?.length > 0) {
+      const weaknesses = a.result.weaknesses || []
+      if (opts.includeDetails && weaknesses.length > 0) {
         mdContent += `### ⚠️ ${opts.language === 'zh' ? '待提升' : 'Areas for Improvement'}\n\n`
-        a.result.weaknesses.forEach(w => mdContent += `- ${w}\n`)
+        weaknesses.forEach(w => mdContent += `- ${w}\n`)
         mdContent += '\n'
       }
     }
@@ -439,9 +442,10 @@ function generateAssessmentCard(
       card += `  <p style="margin-top: 15px; color: ${isDark ? '#d1d5db' : '#495057'};">${assessment.result.description.substring(0, 200)}...</p>\n`
     }
 
-    if (assessment.result.dimensions?.length > 0) {
+    const cardDimensions = assessment.result.dimensions || []
+    if (cardDimensions.length > 0) {
       card += `  <h4 style="margin-top: 20px; color: ${isDark ? '#9ca3af' : '#495057'};">${options.language === 'zh' ? '维度分析' : 'Dimensions'}:</h4>\n`
-      assessment.result.dimensions.slice(0, 5).forEach(dim => {
+      cardDimensions.slice(0, 5).forEach(dim => {
         const percentage = Math.round((dim.score / Number(dim.maxScore)) * 100)
         card += `  <div style="margin: 10px 0;">
           <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
@@ -455,10 +459,11 @@ function generateAssessmentCard(
       })
     }
 
-    if (assessment.result.strengths?.length > 0) {
+    const cardStrengths = assessment.result.strengths || []
+    if (cardStrengths.length > 0) {
       card += `  <h4 style="margin-top: 20px; color: #22c55e;">✅ ${options.language === 'zh' ? '优势' : 'Strengths'}:</h4>\n`
       card += `  <ul class="strengths-list">\n`
-      assessment.result.strengths.slice(0, 5).forEach(s => {
+      cardStrengths.slice(0, 5).forEach(s => {
         card += `    <li>${s}</li>\n`
       })
       card += `  </ul>\n`

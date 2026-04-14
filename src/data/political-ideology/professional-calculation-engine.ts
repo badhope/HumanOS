@@ -304,19 +304,19 @@ export class ProfessionalCalculationEngine {
   calculateNicheIdeologyMatches(
     scores: Record<string, number>,
     irtScores: IRTScores
-  ): NicheIdeologyMatch[] {
+  ): any[] {
     const userVector = Object.values(scores)
 
-    return this.NICHE_IDEOLOGIES.map(ideology => {
+    return this.NICHE_IDEOLOGIES.map((ideology: any) => {
       const ideologyVector = [
         ideology.dimensions.economic,
         ideology.dimensions.social,
         ideology.dimensions.cultural,
         ideology.dimensions.international,
         ideology.dimensions.ecological,
-        (ideology as any).epistemologicalPosition || 50,
-        (ideology as any).anthropologicalPosition || 50,
-        (ideology as any).temporalPosition || 50,
+        ideology.epistemologicalPosition || 50,
+        ideology.anthropologicalPosition || 50,
+        ideology.temporalPosition || 50,
         50,
       ]
 

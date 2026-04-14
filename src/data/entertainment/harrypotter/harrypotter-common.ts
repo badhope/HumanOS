@@ -1,0 +1,116 @@
+export const HOGWARTS_HOUSES = {
+  gryffindor: {
+    id: 'gryffindor',
+    name: '格兰芬多',
+    nameEn: 'Gryffindor',
+    founder: '戈德里克·格兰芬多',
+    colors: ['猩红色', '金色'],
+    animal: '狮子',
+    element: '火',
+    ghost: '差点没头的尼克',
+    commonRoom: '格兰芬多塔',
+    head: '米勒娃·麦格',
+    traits: ['勇敢', '胆识', '气魄', '骑士精神', '正直', '忠诚'],
+    description: '你也许属于格兰芬多，那里有埋藏在心底的勇敢，他们的胆识、气魄和侠义，使格兰芬多出类拔萃。',
+    famousMembers: ['哈利·波特', '赫敏·格兰杰', '罗恩·韦斯莱', '阿不思·邓布利多', '小天狼星·布莱克'],
+    icon: '🦁',
+    color: '#740001',
+  },
+  slytherin: {
+    id: 'slytherin',
+    name: '斯莱特林',
+    nameEn: 'Slytherin',
+    founder: '萨拉查·斯莱特林',
+    colors: ['绿色', '银色'],
+    animal: '蛇',
+    element: '水',
+    ghost: '血人巴罗',
+    commonRoom: '斯莱特林地牢',
+    head: '西弗勒斯·斯内普',
+    traits: ['野心', '智谋', '荣誉', '权力欲', '精明', '血统'],
+    description: '也许你会进斯莱特林，也许你在这里交上真诚的朋友，但那些狡诈阴险之辈却会不惜一切手段，去达到他们的目的。',
+    famousMembers: ['伏地魔', '西弗勒斯·斯内普', '德拉科·马尔福', '贝拉特里克斯·莱斯特兰奇', '梅林'],
+    icon: '🐍',
+    color: '#1A472A',
+  },
+  ravenclaw: {
+    id: 'ravenclaw',
+    name: '拉文克劳',
+    nameEn: 'Ravenclaw',
+    founder: '罗伊纳·拉文克劳',
+    colors: ['蓝色', '青铜色'],
+    animal: '鹰',
+    element: '风',
+    ghost: '格雷女士',
+    commonRoom: '拉文克劳塔',
+    head: '菲利乌斯·弗立维',
+    traits: ['智慧', '创造力', '学习', '机智', '好奇心', '独创性'],
+    description: '如果你头脑精明，或许会进智慧的老拉文克劳，那些睿智博学的人，总会在那里遇见他们的同道。',
+    famousMembers: ['卢娜·洛夫古德', '秋·张', '谢诺菲留斯·洛夫古德', '奥利凡德', '弗立维教授'],
+    icon: '🦅',
+    color: '#0E1A40',
+  },
+  hufflepuff: {
+    id: 'hufflepuff',
+    name: '赫奇帕奇',
+    nameEn: 'Hufflepuff',
+    founder: '赫尔加·赫奇帕奇',
+    colors: ['黄色', '黑色'],
+    animal: '獾',
+    element: '土',
+    ghost: '胖修士',
+    commonRoom: '赫奇帕奇地下室',
+    head: '波莫娜·斯普劳特',
+    traits: ['正直', '勤奋', '耐心', '忠诚', '友善', '公正'],
+    description: '你也许属于赫奇帕奇，那里的人正直忠诚，赫奇帕奇的学子们坚忍诚实，不畏惧艰辛的劳动。',
+    famousMembers: ['纽特·斯卡曼德', '塞德里克·迪戈里', '唐克斯', '厄尼·麦克米兰', '斯普劳特教授'],
+    icon: '🦡',
+    color: '#FFDB00',
+  },
+}
+
+export const WAND_CORES = [
+  { id: 'phoenix', name: '凤凰羽毛', description: '最稀有的杖芯，施展魔法范围最广', rarity: '传说' },
+  { id: 'dragon', name: '龙心弦', description: '最强大的杖芯，学习能力最强', rarity: '稀有' },
+  { id: 'unicorn', name: '独角兽毛', description: '最忠诚的杖芯，魔法最稳定', rarity: ' uncommon' },
+  { id: 'veela', name: '媚娃头发', description: '极具魅力，易情绪化', rarity: '稀有' },
+  { id: 'thestral', name: '夜骐尾毛', description: '神秘强大，擅长隐身和黑魔法', rarity: '传说' },
+]
+
+export const WAND_WOODS = [
+  { id: 'holly', name: '冬青木', description: '保护主人，适合需要克服急躁的人' },
+  { id: 'oak', name: '橡木', description: '强大的好运，适合值得信赖的巫师' },
+  { id: 'willow', name: '柳木', description: '治愈之力，适合内心不安的人' },
+  { id: 'hawthorn', name: '山楂木', description: '矛盾之木，适合游走于明暗之间的人' },
+  { id: 'yew', name: '紫杉木', description: '永生之力，保护所爱之人' },
+  { id: 'maple', name: '枫木', description: '旅行者之木，适合有野心的巫师' },
+  { id: 'birch', name: '桦木', description: '新生之木，适合心灵纯净的人' },
+  { id: 'ash', name: '岑木', description: '忠诚之木，绝不更换主人' },
+]
+
+export const PATRONUSES = [
+  { id: 'stag', name: '牡鹿', description: '纯洁与力量的象征', rarity: '传说' },
+  { id: 'otter', name: '水獭', description: '快乐与友谊的象征', rarity: '稀有' },
+  { id: 'jack_russell', name: '杰克罗素梗', description: '忠诚与勇敢的伙伴', rarity: '普通' },
+  { id: 'doe', name: '牝鹿', description: '永恒之爱的象征', rarity: '传说' },
+  { id: 'wolf', name: '狼', description: '保护与团结的象征', rarity: '稀有' },
+  { id: 'phoenix', name: '凤凰', description: '重生与希望的终极守护', rarity: '传说' },
+  { id: 'cat', name: '猫', description: '独立与神秘的守护者', rarity: '普通' },
+  { id: 'fox', name: '狐狸', description: '智慧与机敏的象征', rarity: '普通' },
+  { id: 'horse', name: '马', description: '自由与力量的化身', rarity: '普通' },
+  { id: 'dragon', name: '龙', description: '最强大的守护神之一', rarity: '传说' },
+]
+
+export const PETS = [
+  { id: 'owl', name: '猫头鹰', description: '投递邮件，忠诚的信使伙伴' },
+  { id: 'cat', name: '猫', description: '神秘的伙伴，喜欢独处' },
+  { id: 'toad', name: '蟾蜍', description: '传统的魔法宠物' },
+  { id: 'rat', name: '老鼠', description: '机灵的小伙伴' },
+  { id: 'snake', name: '蛇', description: '斯莱特林的最爱' },
+  { id: 'ferret', name: '雪貂', description: '活泼可爱的玩伴' },
+]
+
+export const HOUSE_DIMENSIONS = [
+  'courage', 'ambition', 'wisdom', 'loyalty',
+  'creativity', 'discipline', 'curiosity', 'honor'
+]

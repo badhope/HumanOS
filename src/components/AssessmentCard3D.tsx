@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { motion, useSpring } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { Clock, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
 import type { Assessment } from '../types'
 import { cn } from '../utils/cn'
@@ -8,9 +7,10 @@ import { cn } from '../utils/cn'
 interface AssessmentCard3DProps {
   assessment: Assessment
   index?: number
+  onSelect?: () => void
 }
 
-export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCard3DProps) {
+export default function AssessmentCard3D({ assessment, index = 0, onSelect }: AssessmentCard3DProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -63,15 +63,15 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
   }
 
   const difficultyColors = {
-    lite: 'from-green-500/20 to-emerald-500/20 border-green-500/30',
-    standard: 'from-blue-500/20 to-cyan-500/20 border-blue-500/30',
-    expert: 'from-purple-500/20 to-pink-500/20 border-purple-500/30',
+    lite: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30',
+    standard: 'from-amber-500/20 to-orange-500/20 border-amber-500/30',
+    expert: 'from-amber-500/20 to-orange-600/20 border-amber-500/30',
   }
 
   const glowColors = {
-    lite: { shadow: 'shadow-green-500/30', border: 'border-green-500/50', gradient: 'from-green-500/30' },
-    standard: { shadow: 'shadow-blue-500/30', border: 'border-blue-500/50', gradient: 'from-blue-500/30' },
-    expert: { shadow: 'shadow-purple-500/30', border: 'border-purple-500/50', gradient: 'from-purple-500/30' },
+    lite: { shadow: 'shadow-emerald-500/30', border: 'border-emerald-500/50', gradient: 'from-emerald-500/30' },
+    standard: { shadow: 'shadow-amber-500/30', border: 'border-amber-500/50', gradient: 'from-amber-500/30' },
+    expert: { shadow: 'shadow-amber-500/40', border: 'border-amber-500/60', gradient: 'from-amber-500/40' },
   }
 
   const difficultyLabels = {
@@ -89,7 +89,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
       return cn(
         base,
         'backdrop-blur-xl',
-        isHovered && `shadow-[0_0_60px_rgba(139,92,246,0.4)] ${glowColors[assessment.difficulty].border} border-opacity-60`
+        isHovered && `shadow-[0_0_60px_rgba(251,191,36,0.4)] ${glowColors[assessment.difficulty].border} border-opacity-60`
       )
     }
 
@@ -102,7 +102,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
 
     return cn(
       base,
-      isHovered && 'border-violet-500/50 shadow-[0_0_40px_rgba(139,92,246,0.2)]'
+      isHovered && 'border-amber-500/50 shadow-[0_0_40px_rgba(251,191,36,0.2)]'
     )
   }
 
@@ -113,7 +113,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80">
             {assessment.category}
           </span>
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-violet-500/20 to-pink-500/20 text-white">
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/30">
             {difficultyLabels[assessment.difficulty]}
           </span>
         </div>
@@ -123,7 +123,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
         >
           <Sparkles className={cn(
             'w-5 h-5 transition-colors',
-            isHovered ? 'text-violet-400' : 'text-white/40'
+            isHovered ? 'text-amber-400' : 'text-white/40'
           )} />
         </motion.div>
       </div>
@@ -159,11 +159,11 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
         </div>
 
         <motion.div
-          className="flex items-center gap-1 text-violet-400"
+          className="flex items-center gap-1 text-amber-400"
           animate={{ x: isHovered ? 5 : 0 }}
           transition={{ type: 'spring', stiffness: 400 }}
         >
-          <span className="text-sm font-medium">开始</span>
+          <span className="text-sm font-bold">开始</span>
           <ChevronRight className="w-4 h-4" />
         </motion.div>
       </div>
@@ -171,14 +171,14 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
   )
 
   const renderFlipCardBack = () => (
-    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-violet-900/90 to-purple-900/90 backdrop-blur-sm p-6">
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-amber-900/90 to-orange-900/90 backdrop-blur-sm p-6">
       <div className="text-center">
         <h3 className="text-xl font-bold text-white mb-4">翻转效果</h3>
         <p className="text-white/70 text-sm mb-6">
           这是一个支持翻转效果的测评卡片
         </p>
-        <div className="flex items-center justify-center gap-1 text-violet-400">
-          <span className="text-sm font-medium">查看详情</span>
+        <div className="flex items-center justify-center gap-1 text-amber-400">
+          <span className="text-sm font-bold">查看详情</span>
           <ChevronRight className="w-4 h-4" />
         </div>
       </div>
@@ -198,7 +198,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(139, 92, 246, 0.25) 0%, transparent 60%)`,
+          background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(251, 191, 36, 0.25) 0%, transparent 60%)`,
           opacity: isHovered ? 1 : 0,
           transition: 'opacity 0.3s',
         }}
@@ -213,7 +213,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
           }}
           transition={{ duration: 1.5, repeat: Infinity }}
           style={{
-            background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(168, 85, 247, 0.4) 0%, transparent 50%)`,
+            background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(251, 191, 36, 0.4) 0%, transparent 50%)`,
           }}
         />
       )}
@@ -241,7 +241,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
           }}
           className="relative"
         >
-          <Link to={`/assessment/${assessment.id}`}>
+          <div onClick={onSelect} className="cursor-pointer">
             <motion.div
               className={getCardClasses()}
               style={{ transformStyle: 'preserve-3d' }}
@@ -255,7 +255,7 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
                 {renderFlipCardBack()}
               </div>
             </motion.div>
-          </Link>
+          </div>
         </motion.div>
       </motion.div>
     )
@@ -281,13 +281,13 @@ export default function AssessmentCard3D({ assessment, index = 0 }: AssessmentCa
         }}
         className="relative"
       >
-        <Link to={`/assessment/${assessment.id}`}>
+        <div onClick={onSelect} className="cursor-pointer">
           <div className={getCardClasses()}>
             {renderGlowEffect()}
 
             {renderCardContent()}
           </div>
-        </Link>
+        </div>
       </motion.div>
     </motion.div>
   )

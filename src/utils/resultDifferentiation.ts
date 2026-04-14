@@ -30,12 +30,14 @@ export function enhanceResultDifferentiation(
 ): ProfessionalAssessmentResult {
   const finalConfig = { ...defaultDifferentiationConfig, ...config }
   const { scoreRanges, detailLevel } = finalConfig
+  const safeScore = result.score || 50
+  const safeTitle = result.title || '测评报告'
 
   const scoreRange = scoreRanges.find(
-    (range) => result.score >= range.min && result.score < range.max
+    (range) => safeScore >= range.min && safeScore < range.max
   ) || scoreRanges[2]
 
-  const enhancedDimensions = result.dimensions.map((dim) => ({
+  const enhancedDimensions = (result.dimensions || []).map((dim) => ({
     ...dim,
     description: generateDimensionDescription(dim.score, dim.maxScore, dim.name),
     maxScore: dim.maxScore || 100,
@@ -44,21 +46,21 @@ export function enhanceResultDifferentiation(
   const dimensionData = enhancedDimensions.map(d => ({ name: d.name, score: d.score, maxScore: d.maxScore }))
 
   const enhancedStrengths = generatePersonalizedStrengths(
-    result.score,
-    result.strengths,
+    safeScore,
+    result.strengths || [],
     scoreRange.intensity,
     detailLevel
   )
 
   const enhancedWeaknesses = generatePersonalizedWeaknesses(
-    result.score,
-    result.weaknesses,
+    safeScore,
+    result.weaknesses || [],
     scoreRange.intensity,
     detailLevel
   )
 
   const enhancedSuggestions = generateDetailedSuggestions(
-    result.score,
+    safeScore,
     result.suggestions || [],
     scoreRange,
     detailLevel,
@@ -66,8 +68,8 @@ export function enhanceResultDifferentiation(
   )
 
   const enhancedDescription = generateDynamicDescription(
-    result.title,
-    result.score,
+    safeTitle,
+    safeScore,
     scoreRange,
     detailLevel,
     dimensionData
@@ -331,10 +333,12 @@ export function calculateResultDifference(
   isSignificantlyDifferent: boolean
   similarityPercentage: number
 } {
-  const overallDiff = Math.abs(result1.score - result2.score)
+  const overallDiff = Math.abs((result1.score || 50) - (result2.score || 50))
 
-  const dimensionDifferences = result1.dimensions.map((dim1, index) => {
-    const dim2 = result2.dimensions[index]
+  const dims1 = result1.dimensions || []
+  const dims2 = result2.dimensions || []
+  const dimensionDifferences = dims1.map((dim1, index) => {
+    const dim2 = dims2[index] || { score: 50, name: 'Unknown' }
     const diff = Math.abs(dim1.score - dim2.score)
     return {
       name: dim1.name,

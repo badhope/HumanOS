@@ -707,7 +707,7 @@ export class AchievementAnalyzer {
       const category = DIMENSION_CATEGORIES.find(c => c.id === dimension)
       if (category && score >= 60) {
         const level = getFineScoreRange(score)
-        strengths.push(`${category.name}（${level.label}水平，超越${100 - parseInt(level.percentile.split('-')[0])}%的人群）`)
+        strengths.push(`${category.name}（${level.label}水平，超越${100 - parseInt(level.percentile.split('-')[0], 10)}%的人群）`)
       }
     }
     

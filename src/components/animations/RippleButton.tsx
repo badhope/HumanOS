@@ -10,6 +10,7 @@ interface RippleButtonProps {
   size?: 'sm' | 'md' | 'lg'
   disabled?: boolean
   loading?: boolean
+  icon?: React.ReactNode
 }
 
 interface Ripple {
@@ -38,6 +39,7 @@ export default function RippleButton({
   size = 'md',
   disabled = false,
   loading = false,
+  icon,
 }: RippleButtonProps) {
   const [ripples, setRipples] = useState<Ripple[]>([])
 
@@ -105,6 +107,7 @@ export default function RippleButton({
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
           />
         )}
+        {icon}
         {children}
       </span>
     </motion.button>
