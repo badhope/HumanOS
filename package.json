@@ -93,11 +93,8 @@
     "netlify": "netlify deploy --prod --dir=dist",
     "cloudflare": "wrangler pages deploy dist",
     "surge": "surge dist humanos.surge.sh",
-    "template:graduation": "node scripts/init.js --type=graduation",
-    "template:enterprise": "node scripts/init.js --type=enterprise",
-    "template:personal": "node scripts/init.js --type=personal",
-    "create:assessment": "node scripts/create-assessment.js",
-    "docs:serve": "npx serve docs",
+    "ecosystem": "node scripts/submit-ecosystem.js",
+    "platforms": "node scripts/auto-index-platforms.js",
     "analyze": "npx vite-bundle-visualizer"
   },
   "dependencies": {
