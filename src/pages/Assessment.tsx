@@ -316,7 +316,7 @@ export default function Assessment() {
     
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [currentQ, selectedOption])
+  }, [currentQ, selectedOption, handleNext, handleOptionSelect])
 
   const optionVariants = useMemo(() => ({
     hidden: { opacity: 0, y: 20 },

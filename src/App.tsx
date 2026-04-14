@@ -23,6 +23,11 @@ const Results = lazy(() => import('./pages/Results'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const About = lazy(() => import('./pages/About'))
 const TheoryDetail = lazy(() => import('./pages/TheoryDetail'))
+const PhilosophyHistoryPage = lazy(() => import('./pages/PhilosophyHistoryPage'))
+const PsychologyHistoryPage = lazy(() => import('./pages/PsychologyHistoryPage'))
+const IdeologyHistoryPage = lazy(() => import('./pages/IdeologyHistoryPage'))
+const IsmsPage = lazy(() => import('./pages/IsmsPage'))
+const PlatformStoryPage = lazy(() => import('./pages/PlatformStoryPage'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
@@ -82,6 +87,11 @@ export default function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/theory/:theoryId" element={<TheoryDetail />} />
+                <Route path="/history/philosophy" element={<PhilosophyHistoryPage />} />
+                <Route path="/history/psychology" element={<PsychologyHistoryPage />} />
+                <Route path="/history/ideology" element={<IdeologyHistoryPage />} />
+                <Route path="/isms" element={<IsmsPage />} />
+                <Route path="/story" element={<PlatformStoryPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
