@@ -1,6 +1,6 @@
 {
   "name": "humanos",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "HumanOS - 开源专业测评平台集合，情商、人格、价值观等多维度测评系统",
   "author": {
     "name": "HumanOS Team",
@@ -95,7 +95,9 @@
     "surge": "surge dist humanos.surge.sh",
     "ecosystem": "node scripts/submit-ecosystem.js",
     "platforms": "node scripts/auto-index-platforms.js",
-    "analyze": "npx vite-bundle-visualizer"
+    "analyze": "npx vite-bundle-visualizer",
+    "check:integrity": "node scripts/integrity-check.mjs",
+    "quality": "npm run typecheck && npm run lint && npm run check:integrity"
   },
   "dependencies": {
     "@react-three/drei": "^9.92.0",

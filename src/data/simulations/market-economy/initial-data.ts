@@ -2,6 +2,7 @@ import type { EconomyState, CountryId } from './types'
 import { getCountry } from './countries'
 import { getDefaultIndustries } from './industry-system'
 import { initializeGeopoliticalState } from './geopolitical-system'
+import POLICIES_EXPANSION from './policies-expansion'
 
 export const BASE_COMMODITIES: { [id: string]: import('./types').Commodity } = {
   grain: {
@@ -540,14 +541,14 @@ export const DEFEAT_CONDITIONS = [
   {
     id: 'sovereign_default',
     name: '主权债务违约',
-    description: '债务连续30天超过GDP的300%，国家彻底破产',
+    description: '债务连续60天超过GDP的500%，国家彻底破产',
     type: 'defeat' as const,
     conditions: [
       {
         type: 'debt' as const,
-        threshold: 300,
+        threshold: 500,
         comparison: 'above' as const,
-        consecutiveDays: 30,
+        consecutiveDays: 60,
         currentDays: 0,
       },
     ],
@@ -914,6 +915,7 @@ export function createInitialEconomyState(countryId: CountryId = 'china'): Econo
     modifiers: [],
     policies: [
       ...BASE_POLICIES,
+      ...POLICIES_EXPANSION,
       ...COUNTRY_SPECIFIC_POLICIES.filter(p => p.countries?.includes(countryId)),
     ],
     laws: [],

@@ -1,4 +1,3 @@
-import { registerScenario } from '../world-engine'
 import type { WorldScenario } from '../world-types'
 
 const CHINA_CIVILIZATION: WorldScenario = {
@@ -303,7 +302,5 @@ const CHINA_CIVILIZATION: WorldScenario = {
     },
   },
 }
-
-registerScenario(CHINA_CIVILIZATION)
 
 export { CHINA_CIVILIZATION }

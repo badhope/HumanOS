@@ -19,6 +19,9 @@ import { internetAddictionAssessment } from './assessments/internet-addiction'
 import { lifeMeaningAssessment } from './assessments/life-meaning'
 import { patriotismPurityAssessment } from './assessments/patriotism-purity'
 import { sexualExperienceAssessment } from './assessments/sexual-experience'
+import { puaResistanceAssessment } from './assessments/pua-resistance'
+import { fubaoIndexAssessment } from './assessments/fubao-index'
+import { burnoutAssessment } from './assessments/burnout-mbi'
 
 export const assessments: Assessment[] = [
   sasStandardAssessment,
@@ -41,6 +44,9 @@ export const assessments: Assessment[] = [
   lifeMeaningAssessment,
   patriotismPurityAssessment,
   sexualExperienceAssessment,
+  puaResistanceAssessment,
+  fubaoIndexAssessment,
+  burnoutAssessment,
 ]
 
 export function getAssessmentById(id: string): Assessment | undefined {

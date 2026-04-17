@@ -11,15 +11,23 @@ import type {
 
 import { recordScenarioCompletion } from './player-storage'
 
-import './scenarios/french-revolution'
-import './scenarios/modern-china-life'
-import './scenarios/china-civilization'
+import { FRENCH_REVOLUTION } from './scenarios/french-revolution'
+import { MODERN_CHINA_LIFE } from './scenarios/modern-china-life'
+import { CHINA_CIVILIZATION } from './scenarios/china-civilization'
+import { COUNTRY_SIMULATOR } from './scenarios/country-simulator'
+import { XIANXIA_WORLD } from './scenarios/xianxia-world'
 
 const WORLD_SCENARIOS: Record<string, WorldScenario> = {}
 
 export function registerScenario(scenario: WorldScenario) {
   WORLD_SCENARIOS[scenario.id] = scenario
 }
+
+registerScenario(FRENCH_REVOLUTION)
+registerScenario(MODERN_CHINA_LIFE)
+registerScenario(CHINA_CIVILIZATION)
+registerScenario(COUNTRY_SIMULATOR)
+registerScenario(XIANXIA_WORLD)
 
 export function getAllScenarios(): WorldScenario[] {
   return Object.values(WORLD_SCENARIOS)

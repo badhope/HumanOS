@@ -153,97 +153,7 @@ const PHILLIPS_CURVE_SLOPE = 0.3
 const OKUN_LAW_COEFFICIENT = 2.0
 const TFP_GROWTH_RATE = 0.0002
 
-const VICTORY_CONDITIONS = [
-  {
-    id: 'economic_hegemon',
-    name: '经济霸权',
-    description: 'GDP连续365天保持正增长，失业率低于4%，通胀率控制在3%以内',
-    check: (state: EconomyState): boolean => {
-      if (state.history.length < 365) return false
-      const recent = state.history.slice(-365)
-      const gdpGrowth = recent.every((h, i) => i === 0 || h.gdp >= recent[i - 1].gdp * 0.99)
-      return gdpGrowth && state.stats.unemployment < 4 && Math.abs(state.stats.inflation) < 3
-    },
-  },
-  {
-    id: 'fiscal_master',
-    name: '财政大师',
-    description: '无负债，国库黄金超过100万，连续100天财政盈余',
-    check: (state: EconomyState): boolean => {
-      if (state.history.length < 100) return false
-      const recent = state.history.slice(-100)
-      const continuousSurplus = recent.every(h => h.treasury >= 0)
-      return state.treasury.debt <= 0 && state.treasury.gold >= 1000000 && continuousSurplus
-    },
-  },
-  {
-    id: 'stable_paradise',
-    name: '稳定乐土',
-    description: '稳定度超过90点，民众支持度超过80%，连续730天',
-    check: (state: EconomyState): boolean => {
-      if (state.history.length < 730) return false
-      const avgApproval = state.pops.reduce((s, p) => s + p.approval * p.size, 0) / Math.max(1, state.stats.population)
-      return state.stats.stability >= 90 && avgApproval >= 80
-    },
-  },
-]
 
-const DEFEAT_CONDITIONS = [
-  {
-    id: 'sovereign_default',
-    name: '主权违约',
-    description: '国债/GDP比率超过300%，且国库枯竭',
-    icon: '💸',
-    check: (state: EconomyState): boolean => {
-      const debtToGdp = (state.treasury.debt / Math.max(1, state.stats.gdp)) * 100
-      return debtToGdp >= 300 && state.treasury.gold <= 0
-    },
-  },
-  {
-    id: 'hyperinflation',
-    name: '恶性通胀',
-    description: '通胀率连续30天超过50%，货币体系崩溃',
-    icon: '🔥',
-    check: (state: EconomyState): boolean => {
-      if (state.history.length < 30) return false
-      return state.history.slice(-30).every(h => h.inflation >= 50)
-    },
-  },
-  {
-    id: 'mass_unemployment',
-    name: '大规模失业',
-    description: '失业率连续90天超过40%，社会动荡',
-    icon: '👥',
-    check: (state: EconomyState): boolean => {
-      if (state.history.length < 90) return false
-      return state.history.slice(-90).every(h => h.unemployment >= 40)
-    },
-  },
-  {
-    id: 'regime_collapse',
-    name: '政权崩溃',
-    description: '稳定度低于10点，合法性丧失，革命爆发',
-    icon: '⚔️',
-    check: (state: EconomyState): boolean => {
-      return state.stats.stability <= 10 && state.stats.legitimacy <= 10
-    },
-  },
-  {
-    id: 'famine',
-    name: '大饥荒',
-    description: '粮食库存耗尽，人口连续下降30天',
-    icon: '💀',
-    check: (state: EconomyState): boolean => {
-      if (state.history.length < 30) return false
-      const grainStock = state.market['grain']?.stock || 0
-      const recentHistory = state.history.slice(-30)
-      const popDecline = recentHistory.every((h, i) => 
-        i === 0 || h.population <= recentHistory[i - 1].population
-      )
-      return grainStock <= 0 && popDecline
-    },
-  },
-]
 
 function safeDiv(a: number, b: number, fallback = 1): number {
   if (b === 0 || !Number.isFinite(b)) return fallback
@@ -256,42 +166,62 @@ function safeMul(a: number, b: number, fallback = 0): number {
   return Number.isFinite(result) ? result : fallback
 }
 
-function clamp(value: number, min: number, max: number): number {
+export function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, Number.isFinite(value) ? value : (min + max) / 2))
 }
 
-export function checkGameEndConditions(state: EconomyState): { status: 'running' | 'victory' | 'defeat'; condition: GameEndCondition | null } {
-  if (state.gameStatus !== 'running') return { status: state.gameStatus, condition: state.endCondition }
-
-  for (const defeat of DEFEAT_CONDITIONS) {
-    if (defeat.check(state)) {
-      return {
-        status: 'defeat',
-        condition: {
-          type: 'defeat',
-          name: defeat.name,
-          description: defeat.description,
-          icon: defeat.icon,
-        },
+export function processVictoryDefeatTick(state: EconomyState): EconomyState {
+  let newState = deepClone(state)
+  
+  if (newState.gameStatus !== 'running') return newState
+  
+  newState.defeatConditions = newState.defeatConditions.map(condition => {
+    if (condition.isTriggered) return condition
+    
+    let allMet = true
+    condition.conditions.forEach(c => {
+      const currentValue = getStatValue(newState, c.type)
+      const isMet = c.comparison === 'above' ? currentValue > c.threshold : currentValue < c.threshold
+      if (isMet) {
+        c.currentDays += 1
+      } else {
+        c.currentDays = 0
       }
+      if (c.currentDays < c.consecutiveDays) allMet = false
+    })
+    
+    if (allMet) {
+      newState.gameStatus = 'defeat'
+      newState.endCondition = { type: 'defeat', name: condition.name, description: condition.description, icon: '💀' }
+      return { ...condition, isTriggered: true }
     }
-  }
-
-  for (const victory of VICTORY_CONDITIONS) {
-    if (victory.check(state)) {
-      return {
-        status: 'victory',
-        condition: {
-          type: 'victory',
-          name: victory.name,
-          description: victory.description,
-          icon: '🏆',
-        },
+    return condition
+  })
+  
+  newState.victoryConditions = newState.victoryConditions.map(condition => {
+    if (condition.isTriggered) return condition
+    
+    let allMet = true
+    condition.conditions.forEach(c => {
+      const currentValue = getStatValue(newState, c.type)
+      const isMet = c.comparison === 'above' ? currentValue > c.threshold : currentValue < c.threshold
+      if (isMet) {
+        c.currentDays += 1
+      } else {
+        c.currentDays = 0
       }
+      if (c.currentDays < c.consecutiveDays) allMet = false
+    })
+    
+    if (allMet) {
+      newState.gameStatus = 'victory'
+      newState.endCondition = { type: 'victory', name: condition.name, description: condition.description, icon: '🏆' }
+      return { ...condition, isTriggered: true }
     }
-  }
-
-  return { status: 'running', condition: null }
+    return condition
+  })
+  
+  return newState
 }
 
 export function calculateMarketPrice(
@@ -864,9 +794,7 @@ export function executeEconomyTick(state: EconomyState): EconomyState {
     
     newState.history = [...newState.history.slice(-3650), historyPoint]
     
-    const gameEnd = checkGameEndConditions(newState)
-    newState.gameStatus = gameEnd.status
-    newState.endCondition = gameEnd.condition
+    newState = processVictoryDefeatTick(newState)
     
     newState = processIndustryTick(newState)
     

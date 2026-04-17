@@ -32,6 +32,14 @@ export default function WorldPlay() {
   const engineRef = useRef<WorldEngine | null>(null)
 
   useEffect(() => {
+    if (scenarioId === 'country-simulator') {
+      navigate('/simulation/country')
+      return
+    }
+    if (scenarioId === 'xianxia-world') {
+      navigate('/simulation/xianxia')
+      return
+    }
     if (scenarioId) {
       const worldEngine = new WorldEngine(scenarioId)
       engineRef.current = worldEngine
@@ -41,7 +49,7 @@ export default function WorldPlay() {
     return () => {
       engineRef.current = null
     }
-  }, [scenarioId])
+  }, [scenarioId, navigate])
 
   const handleNarrativeContinue = useCallback(() => {
     if (!engineRef.current || isTransitioning) return

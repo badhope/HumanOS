@@ -1,4 +1,4 @@
-export type WorldCategory = 'historical' | 'life' | 'civilization' | 'social-experiment'
+export type WorldCategory = 'historical' | 'life' | 'civilization' | 'social-experiment' | 'grand-simulation'
 
 export type DifficultyLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert'
 

@@ -191,7 +191,7 @@ export default function Home() {
               </motion.button>
 
               <motion.button
-                onClick={() => handleNavigate('/simulated-world')}
+                onClick={() => handleNavigate('/world')}
                 className="group flex items-center gap-2 px-8 py-5 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/30 text-white font-semibold hover:bg-amber-500/20 transition-all text-lg backdrop-blur-xl"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

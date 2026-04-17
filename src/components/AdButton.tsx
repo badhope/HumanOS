@@ -211,9 +211,9 @@ export default function AdButton() {
           PC/移动端全站适配<br />
           长期招商 合作共赢
         </p>
-        <a href="javascript:;" className="ad-action-btn">
+        <button type="button" className="ad-action-btn" onClick={(e) => e.preventDefault()}>
           点击咨询合作
-        </a>
+        </button>
         <p className="ad-contact-txt">微信/电话：18825407105</p>
       </div>
     </div>
