@@ -1,301 +1,263 @@
 import { useState, useMemo, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useTransitionNavigate } from '@hooks/useTransitionNavigate'
 import {
   ArrowLeft,
   Clock,
   Award,
-  Filter,
-  Sword,
-  Theater,
-  Building2,
-  FlaskConical,
-  Sparkles,
-  ChevronRight,
+  Globe,
+  Users,
+  Play,
 } from 'lucide-react'
-import { getAllScenarios, getScenariosByCategory, getPlayerStats, loadPlayerProfile } from '@data/simulation-world'
-import type { WorldScenario, DifficultyLevel, WorldCategory } from '@data/simulation-world'
 import { GlowCard } from '@components/animations'
-import '@data/simulation-world'
 
-const categoryIcons: Record<WorldCategory, React.ReactNode> = {
-  historical: <Sword className="w-4 h-4" />,
-  life: <Theater className="w-4 h-4" />,
-  civilization: <Building2 className="w-4 h-4" />,
-  'social-experiment': <FlaskConical className="w-4 h-4" />,
+const allWorlds = [
+  {
+    id: 'country-sim',
+    title: '国家治理模拟器',
+    subtitle: '掌舵一个国家的命运',
+    description: '从7个真实国家中选择，掌舵国家的命运。GDP、通胀、失业、债务...每一项政策都牵一发而动全身。完整的经济模拟系统、随机事件库、国策树系统。',
+    icon: '🏛️',
+    color: 'from-blue-500 to-indigo-500',
+    route: '/simulation/country',
+    status: '🔥 已开放',
+    difficulty: '困难',
+    duration: '60分钟+',
+    features: ['7个真实国家', '随机事件', '政策树', '完整经济系统'],
+    featured: true,
+  },
+  {
+    id: 'xianxia',
+    title: '修仙大世界',
+    subtitle: '凡人逆天证道之路',
+    description: '从炼气期开始，一步步踏上修仙之路。炼丹炼器、突破境界、渡劫飞升、建立门派。63个完整境界，完整的buff系统，随机机缘奇遇。',
+    icon: '☯️',
+    color: 'from-purple-500 to-violet-500',
+    route: '/simulation/xianxia',
+    status: '✨ 已开放',
+    difficulty: '专家',
+    duration: '45分钟+',
+    features: ['63个境界', '炼丹炼器', '渡劫系统', '宗门系统'],
+    featured: true,
+  },
+  {
+    id: 'french-revolution',
+    title: '法国大革命：1789',
+    subtitle: '自由与死亡的十字路口',
+    description: '1789年的巴黎，空气中弥漫着革命的气息。作为第三等级代表，你将如何在历史的漩涡中做出选择？',
+    icon: '⚔️',
+    color: 'from-emerald-500 to-teal-500',
+    route: '/world/play/french-revolution-1789',
+    status: '✅ 已开放',
+    difficulty: '进阶',
+    duration: '15分钟',
+    features: ['8个决策点', '5种结局', '历史剧情'],
+    featured: false,
+  },
+  {
+    id: 'modern-china-life',
+    title: '当代青年人生模拟',
+    subtitle: '一个普通人的四十年',
+    description: '出生在改革开放后的中国，你将经历高考、大学、就业、婚姻、育儿。每一个选择都通向不同的人生。',
+    icon: '🎭',
+    color: 'from-rose-500 to-pink-500',
+    route: '/world/play/modern-china-life',
+    status: '✅ 已开放',
+    difficulty: '入门',
+    duration: '10分钟',
+    features: ['人生选择', '多结局'],
+    featured: false,
+  },
+]
+
+const stats = [
+  { icon: Globe, label: '可用世界', value: '4' },
+  { icon: Clock, label: '平均时长', value: '15-60分钟' },
+  { icon: Award, label: '结局数量', value: '26+' },
+  { icon: Users, label: '决策点', value: '2000+' },
+]
+
+const difficultyColors: Record<string, string> = {
+  '入门': 'text-green-400',
+  '进阶': 'text-yellow-400',
+  '困难': 'text-orange-400',
+  '专家': 'text-red-400',
 }
 
-const categoryNames: Record<WorldCategory, string> = {
-  historical: '历史决策',
-  life: '人生模拟',
-  civilization: '文明缔造',
-  'social-experiment': '社会实验',
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
 }
 
-const difficultyColors: Record<DifficultyLevel, string> = {
-  beginner: 'from-green-500 to-emerald-500',
-  intermediate: 'from-yellow-500 to-amber-500',
-  advanced: 'from-orange-500 to-red-500',
-  expert: 'from-red-500 to-rose-500',
-}
-
-const difficultyNames: Record<DifficultyLevel, string> = {
-  beginner: '入门',
-  intermediate: '进阶',
-  advanced: '困难',
-  expert: '专家',
-}
-
-const rarityColors = {
-  common: 'text-slate-400',
-  uncommon: 'text-green-400',
-  rare: 'text-blue-400',
-  legendary: 'text-amber-400',
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
 }
 
 export default function WorldHall() {
-  const [searchParams, setSearchParams] = useSearchParams()
   const { navigate } = useTransitionNavigate()
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const stats = getPlayerStats()
-
-  const playerStats = [
-    { label: '已通关世界', value: stats.completedScenarios, icon: '🏆' },
-    { label: '解锁结局', value: stats.unlockedEndings, icon: '🎭' },
-    { label: '成就', value: stats.achievements, icon: '⭐' },
-    { label: '总游戏时长', value: `${stats.totalPlayTime}分钟`, icon: '⏱️' },
-  ]
-
-  useEffect(() => {
-    const category = searchParams.get('category')
-    if (category) {
-      setSelectedCategory(category)
-    }
-  }, [searchParams])
-
-  const scenarios = useMemo(() => {
-    if (selectedCategory === 'all') {
-      return getAllScenarios()
-    }
-    return getScenariosByCategory(selectedCategory)
-  }, [selectedCategory])
-
-  const categories = [
-    { id: 'all', name: '全部世界', icon: '🌍' },
-    { id: 'historical', name: '历史决策剧场', icon: '⚔️' },
-    { id: 'life', name: '人生模拟器', icon: '🎭' },
-    { id: 'civilization', name: '文明缔造者', icon: '🏛️' },
-    { id: 'social-experiment', name: '社会实验场', icon: '🧬' },
-  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-8"
-        >
-          <button
-            onClick={() => navigate('/world')}
-            className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-6"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            返回模拟世界入口
-          </button>
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(139,92,246,0.15),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(236,72,153,0.1),transparent_50%)]" />
 
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center">
-              <Sparkles className="w-7 h-7 text-white" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-white">世界大厅</h1>
-              <p className="text-slate-400">选择一个平行宇宙，开始你的旅程</p>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8"
-        >
-          {playerStats.map((stat, index) => (
-            <GlowCard key={index} className="p-4 text-center">
-              <div className="text-3xl mb-2">{stat.icon}</div>
-              <div className="text-2xl font-bold text-white mb-1">
-                {stat.value}
-              </div>
-              <div className="text-slate-400 text-sm">{stat.label}</div>
-            </GlowCard>
-          ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="flex items-center gap-3 mb-8 overflow-x-auto pb-2"
-        >
-          {categories.map((category) => (
-            <motion.button
-              key={category.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                setSelectedCategory(category.id)
-                setSearchParams({ category: category.id })
-              }}
-              className={`px-4 py-2.5 rounded-xl flex items-center gap-2 whitespace-nowrap transition-all ${
-                selectedCategory === category.id
-                  ? 'bg-violet-500 text-white shadow-lg shadow-violet-500/25'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-              }`}
-            >
-              <span>{category.icon}</span>
-              <span className="font-medium">{category.name}</span>
-            </motion.button>
-          ))}
-        </motion.div>
-
-        <AnimatePresence mode="popLayout">
+        <div className="relative max-w-6xl mx-auto px-6 py-8">
           <motion.div
-            layout
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="mb-8"
+          >
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-6"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              返回首页
+            </button>
+
+            <div className="text-center mb-8">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring' }}
+                className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-violet-500/20 to-pink-500/20 border border-violet-500/30 mb-6"
+              >
+                <span className="text-3xl">🌍</span>
+                <span className="text-violet-300 font-bold">平行宇宙系列</span>
+              </motion.div>
+
+              <h1 className="text-4xl font-bold text-white mb-4">
+                模拟世界大厅
+              </h1>
+              <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+                选择一个世界，开始你的旅程。
+                <br />
+                <span className="text-violet-400">你的每一个选择，都定义着真实的你。</span>
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.4 }}
+            className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12"
+          >
+            {stats.map((stat, index) => {
+              const Icon = stat.icon
+              return (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  className="text-center p-4"
+                >
+                  <GlowCard className="p-4">
+                    <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center mx-auto mb-3">
+                      <Icon className="w-6 h-6 text-violet-400" />
+                    </div>
+                    <div className="text-2xl font-bold text-white mb-1">
+                      {stat.value}
+                    </div>
+                    <div className="text-slate-500 text-sm">{stat.label}</div>
+                  </GlowCard>
+                </motion.div>
+              )
+            })}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+          >
+            <h2 className="text-2xl font-bold text-white mb-6 text-center">
+              🌟 选择你的世界
+            </h2>
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.8 }}
             className="grid md:grid-cols-2 gap-6"
           >
-            {scenarios.map((scenario, index) => (
-              <ScenarioCard
-                key={scenario.id}
-                scenario={scenario}
-                index={index}
-                onClick={() => navigate(`/world/play/${scenario.id}`)}
-              />
+            {allWorlds.map((world, index) => (
+              <motion.div
+                key={world.id}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02, y: -5 }}
+                onClick={() => navigate(world.route)}
+                className="group relative cursor-pointer"
+              >
+                <GlowCard className={`p-6 h-full ${world.featured ? 'bg-gradient-to-br from-violet-500/5 to-transparent' : ''}`}>
+                  <div
+                    className={`absolute top-4 right-4 w-20 h-20 rounded-2xl bg-gradient-to-br ${world.color} opacity-20 group-hover:opacity-30 transition-opacity`}
+                  />
+
+                  <div className="relative">
+                    <div className="flex items-start justify-between mb-4">
+                      <span className="text-5xl">{world.icon}</span>
+                      <div className="flex flex-col gap-2 items-end">
+                        <span className={`px-3 py-1 rounded-lg bg-gradient-to-r ${world.color} text-white text-sm font-medium`}>
+                          {world.status}
+                        </span>
+                        <span className={`text-sm font-medium ${difficultyColors[world.difficulty] || 'text-slate-400'}`}>
+                          {world.difficulty} · {world.duration}
+                        </span>
+                      </div>
+                    </div>
+
+                    <h3 className="text-2xl font-bold text-white mb-1">
+                      {world.title}
+                    </h3>
+                    <p className={`text-sm font-medium mb-3 bg-gradient-to-r ${world.color} bg-clip-text text-transparent`}>
+                      {world.subtitle}
+                    </p>
+                    <p className="text-slate-400 text-sm mb-4">
+                      {world.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {world.features.map((feature, i) => (
+                        <span key={i} className="px-3 py-1 rounded-lg bg-slate-700 text-slate-300 text-xs">
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2 text-violet-400 group-hover:text-violet-300 transition-colors">
+                      <Play className="w-4 h-4" />
+                      <span className="text-sm font-medium">立即开始</span>
+                    </div>
+                  </div>
+                </GlowCard>
+              </motion.div>
             ))}
           </motion.div>
-        </AnimatePresence>
 
-        {scenarios.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-16"
+            transition={{ delay: 1.5 }}
+            className="mt-16 text-center"
           >
-            <div className="text-6xl mb-4">🔮</div>
-            <h3 className="text-xl font-bold text-white mb-2">这个世界还在建造中</h3>
-            <p className="text-slate-500">更多精彩场景正在开发中，敬请期待</p>
+            <p className="text-slate-500 text-sm">
+              💡 提示：全程没有"正确答案"，只有你的选择。
+              <br />
+              就像真实的人生一样。
+            </p>
           </motion.div>
-        )}
+        </div>
       </div>
     </div>
-  )
-}
-
-function ScenarioCard({
-  scenario,
-  index,
-  onClick,
-}: {
-  scenario: WorldScenario
-  index: number
-  onClick: () => void
-}) {
-  const profile = loadPlayerProfile()
-  const unlockedEndings = profile.unlockedEndings[scenario.id]?.length || 0
-  const progress = scenario.endingCount > 0 
-    ? Math.round((unlockedEndings / scenario.endingCount) * 100) 
-    : 0
-
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ delay: index * 0.1 }}
-      whileHover={{ scale: 1.02, y: -5 }}
-      onClick={onClick}
-      className="group cursor-pointer"
-    >
-      <GlowCard className="p-6 h-full relative overflow-hidden">
-        {(scenario.featured || unlockedEndings > 0) && (
-          <div className="absolute top-4 right-4 flex gap-2">
-            {unlockedEndings > 0 && (
-              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-violet-500 to-purple-500 text-white text-xs font-bold">
-                {unlockedEndings}/{scenario.endingCount} 结局
-              </span>
-            )}
-            {scenario.featured && unlockedEndings === 0 && (
-              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold">
-                精选
-              </span>
-            )}
-            {scenario.new && (
-              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold">
-                NEW
-              </span>
-            )}
-          </div>
-        )}
-
-        <div className="flex items-start gap-4 mb-4">
-          <div className="w-14 h-14 rounded-xl bg-slate-800 flex items-center justify-center text-3xl flex-shrink-0">
-            {scenario.icon}
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              {categoryIcons[scenario.category]}
-              <span className="text-xs text-slate-500 uppercase tracking-wider">
-                {categoryNames[scenario.category]}
-              </span>
-            </div>
-            <h3 className="text-xl font-bold text-white group-hover:text-violet-400 transition-colors mb-1">
-              {scenario.title}
-            </h3>
-            <p className="text-violet-400 text-sm">{scenario.subtitle}</p>
-          </div>
-        </div>
-
-        <p className="text-slate-400 text-sm mb-6 line-clamp-2">
-          {scenario.description}
-        </p>
-
-        <div className="flex items-center gap-2 mb-4">
-          <span className={`px-2.5 py-1 rounded-lg text-xs font-medium text-white bg-gradient-to-r ${difficultyColors[scenario.difficulty]}`}>
-            {difficultyNames[scenario.difficulty]}
-          </span>
-          <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs">
-            <Clock className="w-3 h-3" />
-            {scenario.estimatedDuration} 分钟
-          </span>
-          <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs">
-            <Award className="w-3 h-3" />
-            {scenario.endingCount} 种结局
-          </span>
-        </div>
-
-        <div className="flex flex-wrap gap-2 mb-4">
-          {scenario.tags.slice(0, 4).map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-1 rounded-md bg-slate-800/50 text-slate-400 text-xs"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
-          <span className="text-sm text-slate-500">
-            📍 {scenario.setting.era} · {scenario.setting.location}
-          </span>
-          <div className="flex items-center gap-1 text-violet-400 font-medium text-sm group-hover:gap-2 transition-all">
-            进入世界
-            <ChevronRight className="w-4 h-4" />
-          </div>
-        </div>
-      </GlowCard>
-    </motion.div>
   )
 }

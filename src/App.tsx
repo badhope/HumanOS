@@ -28,6 +28,10 @@ const PsychologyHistoryPage = lazy(() => import('./pages/PsychologyHistoryPage')
 const IdeologyHistoryPage = lazy(() => import('./pages/IdeologyHistoryPage'))
 const IsmsPage = lazy(() => import('./pages/IsmsPage'))
 const PlatformStoryPage = lazy(() => import('./pages/PlatformStoryPage'))
+const WorldHall = lazy(() => import('./pages/WorldHall'))
+const WorldPlay = lazy(() => import('./pages/WorldPlay'))
+const EconomyDashboard = lazy(() => import('./components/economy/EconomyDashboard'))
+const XianxiaDashboard = lazy(() => import('./pages/XianxiaDashboard'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
@@ -80,6 +84,10 @@ export default function App() {
               <Route path="/assessments" element={<AssessmentSelect />} />
                 <Route path="/mode-select/:id" element={<ModeSelect />} />
                 <Route path="/simulated-world" element={<SimulatedWorld />} />
+                <Route path="/world" element={<WorldHall />} />
+                <Route path="/world/play/:scenarioId" element={<WorldPlay />} />
+                <Route path="/simulation/country" element={<EconomyDashboard />} />
+                <Route path="/simulation/xianxia" element={<XianxiaDashboard />} />
                 <Route path="/confirm/:id" element={<AssessmentConfirm />} />
                 <Route path="/assessment/:id" element={<Assessment />} />
                 <Route path="/loading/:id" element={<Loading />} />

@@ -27,7 +27,7 @@ export interface ProfessionalQuestionSet {
 export interface ProfessionalQuestion {
   id: string
   text: string
-  type: 'single' | 'multiple' | 'scale' | 'ranking' | 'scenario' | 'likert-3' | 'likert-4' | 'likert-5' | 'likert-7'
+  type: 'single' | 'multiple' | 'scale' | 'ranking' | 'scenario' | 'likert-3' | 'likert-4' | 'likert-5' | 'likert-6' | 'likert-6-reverse' | 'likert-7'
   scenario?: string
   dimensions?: string[]
   options: ProfessionalOption[]
@@ -109,7 +109,7 @@ export interface RiskAssessment {
 export interface Question {
   id: string
   text: string
-  type: 'single' | 'multiple' | 'scale' | 'scenario' | 'ranking' | 'likert-3' | 'likert-4' | 'likert-5' | 'likert-7'
+  type: 'single' | 'multiple' | 'scale' | 'scenario' | 'ranking' | 'likert-3' | 'likert-4' | 'likert-5' | 'likert-6' | 'likert-6-reverse' | 'likert-7'
   scenario?: string
   subscale?: string
   dimension?: string

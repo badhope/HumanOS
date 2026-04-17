@@ -1,5 +1,4 @@
 import type { WorldScenario } from '../world-types'
-import { registerScenario } from '../world-engine'
 
 const FRENCH_REVOLUTION: WorldScenario = {
   id: 'french-revolution-1789',
@@ -240,7 +239,5 @@ const FRENCH_REVOLUTION: WorldScenario = {
     },
   },
 }
-
-registerScenario(FRENCH_REVOLUTION)
 
 export { FRENCH_REVOLUTION }

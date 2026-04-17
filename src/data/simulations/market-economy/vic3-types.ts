@@ -167,12 +167,15 @@ export interface WorldEvent {
   countries?: string[]
   
   triggerConditions: {
+    minDay?: number
     minInflation?: number
     maxInflation?: number
     minUnemployment?: number
     minStability?: number
     maxStability?: number
     minTreasury?: number
+    maxTreasury?: number
+    minDebtToGdp?: number
     maxDebtToGdp?: number
     dayOfYear?: number[]
     requiredSpirit?: string
@@ -180,7 +183,7 @@ export interface WorldEvent {
   }
   
   effects: {
-    type: 'price_shock' | 'supply_shock' | 'demand_shock' | 'instability' | 'pop_approval' | 'treasury' | 'spirit' | 'inflation' | 'unemployment' | 'bureaucracy' | 'debt' | 'stability'
+    type: 'price_shock' | 'supply_shock' | 'demand_shock' | 'instability' | 'pop_approval' | 'treasury' | 'spirit' | 'inflation' | 'unemployment' | 'bureaucracy' | 'debt' | 'stability' | 'legitimacy'
     target?: string
     value: number
     duration: number

@@ -1,4 +1,3 @@
-import { registerScenario } from '../world-engine'
 import type { WorldScenario } from '../world-types'
 
 const MODERN_CHINA_LIFE: WorldScenario = {
@@ -146,4 +145,4 @@ const MODERN_CHINA_LIFE: WorldScenario = {
   }
 }
 
-registerScenario(MODERN_CHINA_LIFE)
+export { MODERN_CHINA_LIFE }

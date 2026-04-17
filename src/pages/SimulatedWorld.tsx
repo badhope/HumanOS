@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Globe, Sparkles, Construction, Clock, Play } from 'lucide-react'
 import { usePageTransition } from '@components/animations/PageTransitionController'
 import { useState } from 'react'
-import VisualNovelEngine from '@components/xianxia/VisualNovelEngine'
 import EconomyDashboard from '@components/economy/EconomyDashboard'
 
 export default function SimulatedWorld() {
@@ -18,10 +17,6 @@ export default function SimulatedWorld() {
       loadingText: '正在返回...',
       duration: 1500,
     })
-  }
-
-  if (activeWorld === 'xianxia') {
-    return <VisualNovelEngine />
   }
 
   if (activeWorld === 'economy') {

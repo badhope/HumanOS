@@ -227,8 +227,8 @@ export interface Modifier {
   duration: number
   effects: {
     market?: { [commodityId: string]: { supply?: number; demand?: number; price?: number } }
-    pops?: { income?: number; consumption?: number; approval?: number }
-    treasury?: { income?: number; expenses?: number; interestRate?: number }
+    pops?: { income?: number; consumption?: number; approval?: number; standardOfLiving?: number }
+    treasury?: { income?: number; expenses?: number; interestRate?: number; stability?: number }
     national?: { [stat in keyof NationalStats]?: number }
     production?: { efficiency?: number; input?: number; output?: number }
   }
@@ -237,7 +237,7 @@ export interface Modifier {
 export interface Policy {
   id: string
   name: string
-  category: 'economy' | 'social' | 'labor' | 'trade' | 'finance'
+  category: 'economy' | 'social' | 'labor' | 'trade' | 'finance' | 'fiscal' | 'industry' | 'reform'
   isActive: boolean
   icon?: string
   description?: string

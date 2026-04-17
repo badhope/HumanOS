@@ -1,6 +1,9 @@
 import type { WorldEvent } from './vic3-types'
+import WORLD_EVENTS_EXPANSION from './world-events-expansion'
 
 export const WORLD_EVENTS: WorldEvent[] = [
+  ...WORLD_EVENTS_EXPANSION,
+
   {
     id: 'tech_breakthrough',
     name: '重大技术突破',
