@@ -2,7 +2,7 @@ import { lazy, Suspense, useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PageSkeleton } from './components/Loading'
-import SplashScreen from './components/SplashScreen'
+import SplashScreen from './components/animations/SplashScreen'
 import SettingsButton from './components/SettingsButton'
 import ProfileButton from './components/ProfileButton'
 import AdButton from './components/AdButton'
@@ -36,16 +36,7 @@ const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true)
-  const [hasVisited, setHasVisited] = useState(false)
   const theme = useAppStore((state) => state.theme)
-
-  useEffect(() => {
-    const visited = localStorage.getItem('humanos-visited')
-    if (visited) {
-      setHasVisited(true)
-      setShowSplash(false)
-    }
-  }, [])
 
   useEffect(() => {
     const root = document.documentElement
@@ -56,7 +47,6 @@ export default function App() {
 
   const handleSplashComplete = () => {
     setShowSplash(false)
-    localStorage.setItem('humanos-visited', 'true')
   }
 
   return (
@@ -64,8 +54,8 @@ export default function App() {
       <ErrorBoundary>
         <PageTransitionController useThemeTransition={true} defaultPreset="page">
           <>
-            {showSplash && !hasVisited && (
-              <SplashScreen onComplete={handleSplashComplete} />
+            {showSplash && (
+              <SplashScreen onComplete={handleSplashComplete} minDuration={4500} />
             )}
 
             <ProfileButton />
