@@ -30,8 +30,14 @@ const IsmsPage = lazy(() => import('./pages/IsmsPage'))
 const PlatformStoryPage = lazy(() => import('./pages/PlatformStoryPage'))
 const WorldHall = lazy(() => import('./pages/WorldHall'))
 const WorldPlay = lazy(() => import('./pages/WorldPlay'))
+const ScenarioSelect = lazy(() => import('./pages/ScenarioSelect'))
+const ScenarioPlay = lazy(() => import('./pages/ScenarioPlay'))
+const OnePieceModeSelect = lazy(() => import('./pages/OnePieceModeSelect'))
 const EconomyDashboard = lazy(() => import('./components/economy/EconomyDashboard'))
 const XianxiaDashboard = lazy(() => import('./pages/XianxiaDashboard'))
+const QuestionOptimizer = lazy(() => import('./pages/QuestionOptimizer'))
+const ThemeAnalysisDemo = lazy(() => import('./pages/ThemeAnalysisDemo'))
+const ChartShowcase = lazy(() => import('./pages/ChartShowcase'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
@@ -69,12 +75,15 @@ export default function App() {
           >
             <Suspense fallback={<PageSkeleton />}>
               <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/categories" element={<CategorySelect />} />
-              <Route path="/assessments" element={<AssessmentSelect />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/categories" element={<CategorySelect />} />
+                <Route path="/assessments" element={<AssessmentSelect />} />
                 <Route path="/mode-select/:id" element={<ModeSelect />} />
+                <Route path="/mode-select/onepiece/:id" element={<OnePieceModeSelect />} />
                 <Route path="/simulated-world" element={<SimulatedWorld />} />
                 <Route path="/world" element={<WorldHall />} />
+                <Route path="/world/scenarios" element={<ScenarioSelect />} />
+                <Route path="/world/scenario/:scenarioId" element={<ScenarioPlay />} />
                 <Route path="/world/play/:scenarioId" element={<WorldPlay />} />
                 <Route path="/simulation/country" element={<EconomyDashboard />} />
                 <Route path="/simulation/xianxia" element={<XianxiaDashboard />} />
@@ -90,6 +99,9 @@ export default function App() {
                 <Route path="/history/ideology" element={<IdeologyHistoryPage />} />
                 <Route path="/isms" element={<IsmsPage />} />
                 <Route path="/story" element={<PlatformStoryPage />} />
+                <Route path="/tools/question-optimizer" element={<QuestionOptimizer />} />
+                <Route path="/demos/theme-analysis" element={<ThemeAnalysisDemo />} />
+                <Route path="/demos/charts" element={<ChartShowcase />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
