@@ -21,20 +21,34 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
-    chunkSizeWarningLimit: 600,
+    minify: 'terser',
+    chunkSizeWarningLimit: 800,
+    cssMinify: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'three': ['three', '@react-three/fiber', '@react-three/drei'],
-          'charts': ['recharts'],
-          'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'motion': ['framer-motion', 'gsap'],
-          'ui': ['lucide-react', 'clsx', 'tailwind-merge'],
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('three') || id.includes('react-three')) return 'three'
+            if (id.includes('recharts')) return 'charts'
+            if (id.includes('framer-motion') || id.includes('gsap')) return 'motion'
+            if (id.includes('lucide') || id.includes('clsx') || id.includes('tailwind')) return 'ui'
+            if (id.includes('dompurify')) return 'purify.es'
+            if (id.includes('zustand')) return 'store'
+            return 'vendor'
+          }
         },
+      },
+    },
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info'],
       },
     },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
+    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion', 'zustand'],
+    force: true,
   },
 })

@@ -55,8 +55,14 @@ __tests__
 
 # Deploy folders
 HumanOS-web-deploy
+deploy-website/
+
+# IDE
+.trae
+
+# OS
+Thumbs.db
 
 # Documentation (optional)
 # README_EN.md
 # TEMPLATE_GUIDE.md
-deploy-website/
