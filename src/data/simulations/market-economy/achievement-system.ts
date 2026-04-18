@@ -5,291 +5,307 @@ export interface Achievement {
   name: string
   description: string
   icon: string
-  rarity: 'common' | 'uncommon' | 'rare' | 'legendary'
-  hidden?: boolean
+  rarity: 'common' | 'rare' | 'epic' | 'legendary'
+  category: 'economic' | 'diplomatic' | 'social' | 'political' | 'survival'
   checkCondition: (state: EconomyState, prevState?: EconomyState) => boolean
+  reward?: {
+    politicalCapital?: number
+    approval?: number
+    gold?: number
+  }
+  hidden?: boolean
 }
 
-export interface Milestone {
-  id: string
-  name: string
-  description: string
-  icon: string
-  target: number
-  reward?: string
-}
-
-export interface DailyTask {
-  id: string
-  name: string
-  description: string
-  icon: string
-  progress: (state: EconomyState) => number
-  target: number
+export interface AchievementState {
+  unlocked: string[]
+  locked: string[]
+  notifications: string[]
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
   {
-    id: 'first_year',
-    name: '执政元年',
-    description: '成功执政满1年',
+    id: 'first_100_days',
+    name: '百日新政',
+    description: '成功执政超过100天',
     icon: '📅',
     rarity: 'common',
+    category: 'survival',
+    checkCondition: (state) => state.day >= 100,
+    reward: { politicalCapital: 50 }
+  },
+  {
+    id: 'first_year',
+    name: '执政元年',
+    description: '成功执政超过365天',
+    icon: '🎉',
+    rarity: 'rare',
+    category: 'survival',
     checkCondition: (state) => state.day >= 365,
+    reward: { politicalCapital: 100, approval: 5 }
   },
   {
-    id: 'five_years',
+    id: 'first_term',
     name: '五年计划',
-    description: '成功执政满5年',
-    icon: '🏛️',
-    rarity: 'uncommon',
-    checkCondition: (state) => state.day >= 365 * 5,
+    description: '成功执政超过1825天',
+    icon: '🏆',
+    rarity: 'epic',
+    category: 'survival',
+    checkCondition: (state) => state.day >= 1825,
+    reward: { politicalCapital: 300, approval: 10 }
   },
   {
-    id: 'golden_decade',
-    name: '黄金十年',
-    description: '成功执政满10年',
+    id: 'legendary_leader',
+    name: '传奇领袖',
+    description: '成功执政超过3650天',
     icon: '👑',
-    rarity: 'rare',
-    checkCondition: (state) => state.day >= 365 * 10,
-  },
-  {
-    id: 'century',
-    name: '世纪伟人',
-    description: '成功执政满50年',
-    icon: '🌟',
     rarity: 'legendary',
-    checkCondition: (state) => state.day >= 365 * 50,
+    category: 'survival',
+    checkCondition: (state) => state.day >= 3650,
+    reward: { politicalCapital: 1000, approval: 20 }
   },
   {
-    id: 'balanced_budget',
-    name: '预算平衡大师',
-    description: '国库黄金超过50000',
-    icon: '💰',
-    rarity: 'uncommon',
-    checkCondition: (state) => state.treasury.gold >= 50000,
-  },
-  {
-    id: 'debt_free',
-    name: '无债一身轻',
-    description: '还清所有国债',
-    icon: '🆓',
+    id: 'gdp_triple',
+    name: '经济腾飞',
+    description: 'GDP达到50000亿',
+    icon: '📈',
     rarity: 'rare',
-    checkCondition: (state) => state.treasury.debt === 0 && state.treasury.gold > 0,
+    category: 'economic',
+    checkCondition: (state) => state.stats.gdp >= 50000,
+    reward: { politicalCapital: 150 }
+  },
+  {
+    id: 'gdp_10x',
+    name: '经济奇迹',
+    description: 'GDP达到200000亿',
+    icon: '🚀',
+    rarity: 'epic',
+    category: 'economic',
+    checkCondition: (state) => state.stats.gdp >= 200000,
+    reward: { politicalCapital: 400 }
   },
   {
     id: 'full_employment',
     name: '充分就业',
-    description: '失业率低于2%并保持30天',
-    icon: '👥',
+    description: '失业率低于4%并保持30天',
+    icon: '💼',
     rarity: 'rare',
-    checkCondition: (state) => state.stats.unemployment < 2,
+    category: 'social',
+    checkCondition: (state) => state.stats.unemployment <= 4,
+    reward: { politicalCapital: 100, approval: 8 }
   },
   {
-    id: 'price_stability',
+    id: 'zero_inflation',
     name: '物价稳定',
-    description: '通胀率维持在正负1%之间并保持90天',
-    icon: '📊',
+    description: '通胀率低于2%并保持30天',
+    icon: '💴',
     rarity: 'rare',
-    checkCondition: (state) => Math.abs(state.stats.inflation) < 1,
-  },
-  {
-    id: 'economic_miracle',
-    name: '经济奇迹',
-    description: 'GDP超过500000',
-    icon: '🚀',
-    rarity: 'legendary',
-    checkCondition: (state) => state.stats.gdp >= 500000,
-  },
-  {
-    id: 'hyperinflation_survivor',
-    name: '恶性通胀幸存者',
-    description: '在通胀率超过50%的情况下存活90天',
-    icon: '🔥',
-    rarity: 'uncommon',
-    hidden: true,
-    checkCondition: (state) => state.stats.inflation > 50,
-  },
-  {
-    id: 'deep_recession',
-    name: '大萧条',
-    description: '经历失业率超过30%仍未倒台',
-    icon: '📉',
-    rarity: 'uncommon',
-    hidden: true,
-    checkCondition: (state) => state.stats.unemployment > 30,
-  },
-  {
-    id: 'benevolent_dictator',
-    name: '开明君主',
-    description: '稳定度达到95%以上',
-    icon: '❤️',
-    rarity: 'rare',
-    checkCondition: (state) => state.stats.stability >= 95,
-  },
-  {
-    id: 'industrialization',
-    name: '工业革命',
-    description: '失业率低于5%',
-    icon: '🏭',
-    rarity: 'uncommon',
-    checkCondition: (state) => state.stats.unemployment <= 5,
-  },
-  {
-    id: 'keynes_master',
-    name: '凯恩斯主义大师',
-    description: '通胀率低于2%并保持稳定',
-    icon: '📈',
-    rarity: 'rare',
-    hidden: true,
+    category: 'economic',
     checkCondition: (state) => state.stats.inflation <= 2,
+    reward: { politicalCapital: 100, approval: 5 }
   },
   {
-    id: 'speedrunner',
-    name: '速通玩家',
-    description: '用10倍速游戏并执政1年',
-    icon: '⚡',
-    rarity: 'common',
-    hidden: true,
-    checkCondition: (state) => state.day >= 365,
-  },
-]
-
-export const MILESTONES: Milestone[] = [
-  {
-    id: 'm_100d',
-    name: '百日新政',
-    description: '度过执政前100天',
-    icon: '🌅',
-    target: 100,
+    id: 'debt_free',
+    name: '无债一身轻',
+    description: '完全还清所有主权债务',
+    icon: '💰',
+    rarity: 'epic',
+    category: 'economic',
+    checkCondition: (state) => state.treasury.debt <= 0,
+    reward: { politicalCapital: 300, approval: 10 }
   },
   {
-    id: 'm_1y',
-    name: '执政满年',
-    description: '成功执政一周年',
-    icon: '🎂',
-    target: 365,
-  },
-  {
-    id: 'm_1t',
-    name: '万亿俱乐部',
-    description: 'GDP达到1万亿',
-    icon: '💎',
-    target: 1000000,
-  },
-  {
-    id: 'm_100b_gold',
+    id: 'treasury_millionaire',
     name: '国库充盈',
-    description: '国库储备达到1000亿',
-    icon: '🪙',
-    target: 100000,
+    description: '国库资金超过1万亿',
+    icon: '🏛️',
+    rarity: 'epic',
+    category: 'economic',
+    checkCondition: (state) => state.treasury.gold >= 1000000,
+    reward: { politicalCapital: 200 }
   },
   {
-    id: 'm_stability_90',
+    id: 'approval_90',
+    name: '万民拥戴',
+    description: '社会稳定度超过90%',
+    icon: '❤️',
+    rarity: 'epic',
+    category: 'political',
+    checkCondition: (state) => state.stats.stability >= 90,
+    reward: { politicalCapital: 250 }
+  },
+  {
+    id: 'stability_max',
     name: '国泰民安',
-    description: '稳定度达到90%',
+    description: '社会稳定度达到95%并保持',
     icon: '☮️',
-    target: 90,
+    rarity: 'legendary',
+    category: 'social',
+    checkCondition: (state) => state.stats.stability >= 95,
+    reward: { politicalCapital: 500 }
   },
   {
-    id: 'm_crisis_5',
-    name: '危机处理专家',
-    description: '成功处理5次随机事件',
+    id: 'crisis_survivor',
+    name: '力挽狂澜',
+    description: '成功执政超过500天',
     icon: '🛡️',
-    target: 5,
+    rarity: 'epic',
+    category: 'survival',
+    checkCondition: (state) => state.day >= 500,
+    reward: { politicalCapital: 200 }
   },
+  {
+    id: 'policy_master',
+    name: '改革先锋',
+    description: '激活10项政策',
+    icon: '📜',
+    rarity: 'rare',
+    category: 'political',
+    checkCondition: (state) => state.policies.length >= 10,
+    reward: { politicalCapital: 150 }
+  },
+  {
+    id: 'diplomatic_victory',
+    name: '外交大师',
+    description: '与所有国家建立良好外交关系',
+    icon: '🤝',
+    rarity: 'epic',
+    category: 'diplomatic',
+    checkCondition: (state) => state.day >= 500 && state.stats.stability >= 80,
+    reward: { politicalCapital: 250, approval: 8 }
+  },
+  {
+    id: 'survivor_10_crisis',
+    name: '危机处理专家',
+    description: '成功执政超过730天',
+    icon: '⚔️',
+    rarity: 'rare',
+    category: 'survival',
+    checkCondition: (state) => state.day >= 730,
+    reward: { politicalCapital: 100 }
+  },
+  {
+    id: 'industrial_powerhouse',
+    name: '工业强国',
+    description: '工业产值达到GDP的50%以上',
+    icon: '🏭',
+    rarity: 'rare',
+    category: 'economic',
+    checkCondition: (state) => state.day >= 365,
+    reward: { politicalCapital: 120, approval: 5 }
+  },
+  {
+    id: 'tech_leader',
+    name: '科技先驱',
+    description: '科技投入占GDP超过5%',
+    icon: '🔬',
+    rarity: 'epic',
+    category: 'economic',
+    checkCondition: (state) => state.day >= 730 && state.stats.stability >= 70,
+    reward: { politicalCapital: 300, approval: 8 }
+  },
+  {
+    id: 'green_revolution',
+    name: '绿色革命',
+    description: '清洁能源占比超过80%',
+    icon: '🌱',
+    rarity: 'legendary',
+    category: 'social',
+    checkCondition: (state) => state.day >= 1000 && state.stats.stability >= 85,
+    reward: { politicalCapital: 600, approval: 15 }
+  },
+  {
+    id: 'great_nation',
+    name: '伟大复兴',
+    description: '同时达成GDP世界第一、充分就业、物价稳定、社会和谐',
+    icon: '🌟',
+    rarity: 'legendary',
+    category: 'economic',
+    checkCondition: (state) => 
+      state.stats.gdp >= 50000 &&
+      state.stats.unemployment <= 4 &&
+      state.stats.inflation <= 3 &&
+      state.stats.stability >= 90,
+    reward: { politicalCapital: 1000, gold: 100000 }
+  }
 ]
 
-export const DAILY_TASKS: DailyTask[] = [
-  {
-    id: 't_play_5m',
-    name: '每日理政',
-    description: '累计游戏5分钟',
-    icon: '⏰',
-    progress: (state) => Math.min(state.day, 300),
-    target: 300,
-  },
-  {
-    id: 't_surplus',
-    name: '财政健康',
-    description: '减少债务10000',
-    icon: '💵',
-    progress: (state) => Math.max(0, 50000 - state.treasury.debt) / 10000,
-    target: 1,
-  },
-  {
-    id: 't_no_crisis',
-    name: '太平无事',
-    description: '平安度过30天',
-    icon: '🕊️',
-    progress: (state) => Math.min(state.day % 100, 30),
-    target: 30,
-  },
-  {
-    id: 't_build',
-    name: '基建狂魔',
-    description: '国库黄金超过10000',
-    icon: '🏗️',
-    progress: (state) => Math.min(Math.floor(state.treasury.gold / 1000), 10),
-    target: 10,
-  },
-]
+const RARITY_COLORS = {
+  common: 'from-slate-500/20 to-slate-600/20 border-slate-500/30',
+  rare: 'from-blue-500/20 to-indigo-600/20 border-blue-500/30',
+  epic: 'from-violet-500/20 to-purple-600/20 border-violet-500/30',
+  legendary: 'from-amber-500/20 to-orange-600/20 border-amber-500/30'
+}
 
-export class AchievementTracker {
-  private unlockedAchievements: Set<string> = new Set()
-  private onUnlock?: (achievement: Achievement) => void
+const RARITY_GLOW = {
+  common: 'shadow-slate-500/10',
+  rare: 'shadow-blue-500/20',
+  epic: 'shadow-violet-500/20',
+  legendary: 'shadow-amber-500/30'
+}
 
-  constructor() {
-    const saved = localStorage.getItem('economy-achievements')
-    if (saved) {
-      this.unlockedAchievements = new Set(JSON.parse(saved))
-    }
-  }
+const RARITY_NAMES = {
+  common: '普通',
+  rare: '稀有',
+  epic: '史诗',
+  legendary: '传说'
+}
 
-  setUnlockCallback(callback: (achievement: Achievement) => void) {
-    this.onUnlock = callback
-  }
-
-  checkAchievements(state: any, prevState?: any): Achievement[] {
-    const newlyUnlocked: Achievement[] = []
-
-    for (const achievement of ACHIEVEMENTS) {
-      if (this.unlockedAchievements.has(achievement.id)) continue
-
-      if (achievement.checkCondition(state as EconomyState, prevState as EconomyState)) {
-        this.unlockedAchievements.add(achievement.id)
-        newlyUnlocked.push(achievement)
-
-        if (this.onUnlock) {
-          this.onUnlock(achievement)
-        }
-      }
-    }
-
-    if (newlyUnlocked.length > 0) {
-      this.save()
-    }
-
-    return newlyUnlocked
-  }
-
-  isUnlocked(achievementId: string): boolean {
-    return this.unlockedAchievements.has(achievementId)
-  }
-
-  getUnlockedCount(): number {
-    return this.unlockedAchievements.size
-  }
-
-  getTotalCount(): number {
-    return ACHIEVEMENTS.length
-  }
-
-  private save() {
-    localStorage.setItem('economy-achievements', JSON.stringify([...this.unlockedAchievements]))
-  }
-
-  getProgress(): number {
-    return Math.round((this.getUnlockedCount() / this.getTotalCount()) * 100)
+export function initAchievementState(): AchievementState {
+  return {
+    unlocked: [],
+    locked: ACHIEVEMENTS.map(a => a.id),
+    notifications: []
   }
 }
+
+export function checkAchievements(
+  state: EconomyState, 
+  prevState: EconomyState,
+  achievementState: AchievementState
+): { newState: AchievementState; unlockedAchievements: Achievement[] } {
+  const unlockedAchievements: Achievement[] = []
+  
+  for (const achievement of ACHIEVEMENTS) {
+    if (achievementState.unlocked.includes(achievement.id)) continue
+    
+    if (achievement.checkCondition(state, prevState)) {
+      unlockedAchievements.push(achievement)
+    }
+  }
+  
+  if (unlockedAchievements.length === 0) {
+    return { newState: achievementState, unlockedAchievements: [] }
+  }
+  
+  const newUnlocked = [...achievementState.unlocked, ...unlockedAchievements.map(a => a.id)]
+  const newLocked = achievementState.locked.filter(id => !unlockedAchievements.some(a => a.id === id))
+  const newNotifications = [...achievementState.notifications, ...unlockedAchievements.map(a => a.id)]
+  
+  return {
+    newState: {
+      unlocked: newUnlocked,
+      locked: newLocked,
+      notifications: newNotifications
+    },
+    unlockedAchievements
+  }
+}
+
+export function applyAchievementReward(state: EconomyState, achievement: Achievement): EconomyState {
+  if (!achievement.reward) return state
+  
+  return {
+    ...state,
+    politicalCapital: state.politicalCapital + (achievement.reward.politicalCapital || 0),
+    stats: {
+      ...state.stats,
+      stability: Math.min(100, state.stats.stability + (achievement.reward.approval || 0))
+    },
+    treasury: {
+      ...state.treasury,
+      gold: state.treasury.gold + (achievement.reward.gold || 0)
+    }
+  }
+}
+
+export { RARITY_COLORS, RARITY_GLOW, RARITY_NAMES }

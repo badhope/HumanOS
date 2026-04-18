@@ -1,3 +1,5 @@
+import type { DifficultyLevel } from './difficulty-system'
+
 export interface Commodity {
   id: string
   name: string
@@ -176,6 +178,7 @@ export interface EconomyState {
   day: number
   tick: number
   speed: 1 | 2 | 5 | 10
+  difficulty: DifficultyLevel
   
   gameStatus: GameStatus
   endCondition: GameEndCondition | null

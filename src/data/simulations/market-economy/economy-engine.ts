@@ -4,6 +4,7 @@ import { getEligibleEvents } from './world-events'
 import { generateDailyNews, addNewsToState } from './news-generator'
 import { simulateAIActions } from './ai-simulator'
 import { processIndustryTick } from './industry-system'
+import { getDifficultyConfig } from './difficulty-system'
 
 function deepClone<T>(obj: T): T {
   try {
@@ -39,12 +40,20 @@ export function checkAndTriggerEvents(state: EconomyState): { newState: EconomyS
     }
   })
   
+  const difficultyConfig = getDifficultyConfig(state.difficulty)
+  
   const eligibleEvents = getEligibleEvents(newState).filter(
     event => !COOLDOWNS[event.id]
   )
   
   for (const event of eligibleEvents) {
-    if (Math.random() < event.probability) {
+    const probabilityMultiplier = event.severity === 'catastrophic' || event.severity === 'major'
+      ? difficultyConfig.crisisProbabilityMultiplier
+      : difficultyConfig.eventProbabilityMultiplier
+    
+    const adjustedProbability = event.probability * probabilityMultiplier
+    
+    if (Math.random() < adjustedProbability) {
       COOLDOWNS[event.id] = event.cooldownDays || 90
       return { newState, triggeredEvent: event }
     }

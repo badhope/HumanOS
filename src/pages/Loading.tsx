@@ -1,26 +1,68 @@
-import { useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useEffect, useMemo } from 'react'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Brain, Sparkles, BarChart3, FileText } from 'lucide-react'
+import { Brain, Sparkles, BarChart3, FileText, Cloud, CloudOff, Server } from 'lucide-react'
+import type { CalculationResponse as UnifiedCalculationResult } from '@services/apiClient'
 
 const loadingSteps = [
   { icon: Brain, text: '分析答题数据...', delay: 0 },
-  { icon: BarChart3, text: '计算维度得分...', delay: 0.5 },
-  { icon: Sparkles, text: '生成个性画像...', delay: 1 },
-  { icon: FileText, text: '撰写专业报告...', delay: 1.5 },
+  { icon: BarChart3, text: '计算维度得分...', delay: 0.4 },
+  { icon: Sparkles, text: '生成个性画像...', delay: 0.8 },
+  { icon: FileText, text: '撰写专业报告...', delay: 1.2 },
 ]
+
+interface LoadingState {
+  calculationSource?: 'frontend' | 'backend'
+  calculationResult?: UnifiedCalculationResult
+}
 
 export default function Loading() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+  const state = location.state as LoadingState
+
+  const calculationInfo = useMemo(() => {
+    if (state?.calculationSource === 'backend') {
+      return {
+        icon: Cloud,
+        label: '云端引擎',
+        color: 'text-emerald-400',
+        bg: 'bg-emerald-500/20',
+        description: 'GPU集群加速计算中',
+      }
+    }
+    if (state?.calculationSource === 'frontend') {
+      return {
+        icon: CloudOff,
+        label: '本地引擎',
+        color: 'text-amber-400',
+        bg: 'bg-amber-500/20',
+        description: '浏览器本地加密计算',
+      }
+    }
+    return {
+      icon: Server,
+      label: '自动选择',
+      color: 'text-violet-400',
+      bg: 'bg-violet-500/20',
+      description: '最优计算节点分配中',
+    }
+  }, [state])
+
+  const loadTime = state?.calculationResult?.latency
+    ? Math.max(1500, 2500 - state.calculationResult.latency)
+    : 2500
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate(`/results/${id}`)
-    }, 3000)
+      navigate(`/results/${id}`, { state: state?.calculationResult })
+    }, loadTime)
 
     return () => clearTimeout(timer)
-  }, [id, navigate])
+  }, [id, navigate, loadTime, state])
+
+  const InfoIcon = calculationInfo.icon
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 flex items-center justify-center">
@@ -56,7 +98,7 @@ export default function Loading() {
         </motion.div>
 
         <motion.h1
-          className="text-3xl font-bold text-white mb-4"
+          className="text-3xl font-bold text-white mb-2"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -64,14 +106,31 @@ export default function Loading() {
           正在生成您的测评报告
         </motion.h1>
 
-        <motion.p
-          className="text-white/60 mb-8"
+        <motion.div
+          className="mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.25 }}
         >
-          请稍候，AI正在为您深度分析...
-        </motion.p>
+          <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full ${calculationInfo.bg}`}>
+            <InfoIcon className={`w-4 h-4 ${calculationInfo.color}`} />
+            <span className={`text-sm ${calculationInfo.color} font-medium`}>
+              {calculationInfo.label}
+            </span>
+            <span className="text-white/40 text-xs">·</span>
+            <span className="text-white/60 text-sm">
+              {calculationInfo.description}
+            </span>
+            {state?.calculationResult?.latency && (
+              <>
+                <span className="text-white/40 text-xs">·</span>
+                <span className="text-white/60 text-sm">
+                  {state.calculationResult.latency}ms
+                </span>
+              </>
+            )}
+          </div>
+        </motion.div>
 
         <div className="space-y-3 max-w-md mx-auto">
           {loadingSteps.map((step, index) => {

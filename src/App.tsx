@@ -10,6 +10,11 @@ import { I18nProvider } from './i18n'
 import { useAppStore } from './store'
 import PageTransitionController from './components/animations/PageTransitionController'
 import ErrorBoundary from './components/ErrorBoundary'
+import QuickSearchModal from './components/QuickSearchModal'
+import KeyboardShortcutsHelp from './components/KeyboardShortcutsHelp'
+import ShortcutInitializer from './components/ShortcutInitializer'
+import { ToastProvider } from './components/ui/Toast'
+import { ShortcutProvider } from './components/ShortcutProvider'
 
 const Home = lazy(() => import('./pages/Home'))
 const CategorySelect = lazy(() => import('./pages/CategorySelect'))
@@ -58,15 +63,20 @@ export default function App() {
   return (
     <I18nProvider>
       <ErrorBoundary>
-        <PageTransitionController useThemeTransition={true} defaultPreset="page">
-          <>
-            {showSplash && (
-              <SplashScreen onComplete={handleSplashComplete} minDuration={4500} />
-            )}
+        <ToastProvider>
+          <ShortcutProvider>
+            <PageTransitionController useThemeTransition={true} defaultPreset="page">
+              <>
+                <ShortcutInitializer />
+                {showSplash && (
+                  <SplashScreen onComplete={handleSplashComplete} minDuration={4500} />
+                )}
 
-            <ProfileButton />
-            <SettingsButton />
-            <AdButton />
+                <ProfileButton />
+                <SettingsButton />
+                <AdButton />
+                <QuickSearchModal />
+                <KeyboardShortcutsHelp />
 
           <motion.div
             initial={{ opacity: 0 }}
@@ -106,9 +116,11 @@ export default function App() {
               </Routes>
             </Suspense>
           </motion.div>
-        </>
-      </PageTransitionController>
-      </ErrorBoundary>
-    </I18nProvider>
+                </>
+              </PageTransitionController>
+            </ShortcutProvider>
+          </ToastProvider>
+        </ErrorBoundary>
+      </I18nProvider>
   )
 }

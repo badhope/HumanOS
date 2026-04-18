@@ -35,12 +35,49 @@ import {
   hasAutosave,
   type GameSave,
 } from '@data/simulations/market-economy/game-save'
+import {
+  TUTORIAL_CHOICES,
+  FULL_TUTORIAL_STEPS,
+  QUICK_TUTORIAL_STEPS,
+  type TutorialStep,
+} from '@data/simulations/market-economy/tutorial-system'
+import { formatLargeNumber, formatPercent, formatMoney as formatMoneyStandard, formatGDP, formatPopulation } from '@data/simulations/market-economy/data-formatting'
+import { useGameEngine, getComputeStatusInfo, gameEngine } from '@services/gameEngineClient'
 import SaveMenu from '@components/ui/SaveMenu'
+import StatTooltip, { ECONOMY_METRICS } from '@components/ui/StatTooltip'
+import AchievementPanel, { AchievementNotificationPopup } from '@components/economy/AchievementPanel'
+import {
+  initAchievementState,
+  checkAchievements,
+  applyAchievementReward,
+  type AchievementState,
+  type Achievement,
+} from '@data/simulations/market-economy/achievement-system'
+import {
+  getDifficultyList,
+  type DifficultyLevel,
+  type DifficultyConfig,
+} from '@data/simulations/market-economy/difficulty-system'
 
 const SPEEDS = [1, 2, 5, 10]
 const POP_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
 
 export default function EconomyDashboard() {
+  // =============================================================================
+  //  Phase 3: 默认启用后端计算引擎
+  //  启动时自动检查后端健康状态
+  // =============================================================================
+  const { executeTick, stats } = useGameEngine()
+  const [engineReady, setEngineReady] = useState(false)
+
+  useEffect(() => {
+    (async () => {
+      const healthy = await gameEngine.checkBackendHealth()
+      console.log(`[引擎] 后端连接状态: ${healthy ? '已连接 ✅' : '离线 ❌'}`)
+      setEngineReady(true)
+    })()
+  }, [])
+
   const [state, setState] = useState<EconomyState>(() => preRunHistory(createInitialEconomyState('china'), 365))
   const [isPaused, setIsPaused] = useState(true)
   const [speedIndex, setSpeedIndex] = useState(0)
@@ -50,6 +87,8 @@ export default function EconomyDashboard() {
   const [newOrder, setNewOrder] = useState<{ commodityId: string; type: 'buy' | 'sell'; amount: number } | null>(null)
   const [screen, setScreen] = useState<'start' | 'countrySelect' | 'game'>('start')
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
+  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('normal')
+  const difficultyList = getDifficultyList()
   const [activeEvent, setActiveEvent] = useState<WorldEvent | null>(null)
   const [eventLog, setEventLog] = useState<{ event: WorldEvent; day: number; optionSelected: number }[]>([])
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -74,6 +113,58 @@ export default function EconomyDashboard() {
     toastTimeoutRef.current = setTimeout(() => setToast(null), duration)
   }, [])
 
+  const [tutorialChoice, setTutorialChoice] = useState<'full' | 'quick' | 'skip' | null>(null)
+  const [tutorialStep, setTutorialStep] = useState<number>(0)
+  const [showTutorialModal, setShowTutorialModal] = useState(false)
+  const [currentTutorialStep, setCurrentTutorialStep] = useState<TutorialStep | null>(null)
+
+  const [achievementState, setAchievementState] = useState<AchievementState>(initAchievementState)
+  const [showAchievementPanel, setShowAchievementPanel] = useState(false)
+  const [popupAchievement, setPopupAchievement] = useState<Achievement | null>(null)
+  const prevStateRef = useRef<EconomyState>(state)
+
+  const handleDismissAchievementNotification = useCallback((id: string) => {
+    setAchievementState(prev => ({
+      ...prev,
+      notifications: prev.notifications.filter(n => n !== id)
+    }))
+  }, [])
+
+  const handleTutorialChoice = useCallback((choice: 'full' | 'quick' | 'skip') => {
+    setTutorialChoice(choice)
+    if (choice === 'skip') {
+      setScreen('game')
+      setIsPaused(true)
+      showToast('🚀 教程已跳过，祝您政运昌隆！', 'info', 2000)
+    } else {
+      setScreen('game')
+      setIsPaused(true)
+      setTutorialStep(0)
+      setShowTutorialModal(true)
+      const steps = choice === 'full' ? FULL_TUTORIAL_STEPS : QUICK_TUTORIAL_STEPS
+      setCurrentTutorialStep(steps[0])
+    }
+  }, [showToast])
+
+  const handleNextTutorialStep = useCallback(() => {
+    const steps = tutorialChoice === 'full' ? FULL_TUTORIAL_STEPS : QUICK_TUTORIAL_STEPS
+    if (tutorialStep < steps.length - 1) {
+      const nextStep = tutorialStep + 1
+      setTutorialStep(nextStep)
+      setCurrentTutorialStep(steps[nextStep])
+    } else {
+      setShowTutorialModal(false)
+      setCurrentTutorialStep(null)
+      showToast('🎉 教程完成！开始您的治国之路吧！', 'success', 3000)
+    }
+  }, [tutorialChoice, tutorialStep, showToast])
+
+  const handleSkipTutorial = useCallback(() => {
+    setShowTutorialModal(false)
+    setCurrentTutorialStep(null)
+    showToast('📚 教程已跳过', 'info', 1500)
+  }, [showToast])
+
   useEffect(() => {
     return () => {
       if (toastTimeoutRef.current) {
@@ -82,15 +173,20 @@ export default function EconomyDashboard() {
     }
   }, [])
 
+  // =============================================================================
+  //  主游戏循环 - Phase 3: 默认使用后端计算
+  //  自动降级：后端失败时无缝切回前端计算
+  // =============================================================================
   useEffect(() => {
     if (isPaused || state.gameStatus !== 'running') return
     if (activeEvent) return
 
-    const interval = setInterval(() => {
-      setState(prev => {
-        let newState = prev
-        for (let i = 0; i < SPEEDS[speedIndex]; i++) {
-          newState = executeEconomyTick(newState)
+    const interval = setInterval(async () => {
+      try {
+        const result = await executeTick(state, SPEEDS[speedIndex])
+        
+        setState(prev => {
+          let newState = result.state
           
           const { newState: stateAfterCheck, triggeredEvent } = checkAndTriggerEvents(newState)
           newState = stateAfterCheck
@@ -99,17 +195,56 @@ export default function EconomyDashboard() {
             setActiveEvent(triggeredEvent)
             setIsPaused(true)
           }
-        }
-        return newState
-      })
+          
+          const { newState: newAchievementState, unlockedAchievements } = checkAchievements(
+            newState,
+            prevStateRef.current,
+            achievementState
+          )
+          
+          if (unlockedAchievements.length > 0) {
+            setAchievementState(newAchievementState)
+            unlockedAchievements.forEach(achievement => {
+              newState = applyAchievementReward(newState, achievement)
+              setPopupAchievement(achievement)
+            })
+          }
+          
+          prevStateRef.current = newState
+          return newState
+        })
+        
+      } catch (e) {
+        console.warn('[引擎] 后端计算失败，降级到前端:', e)
+        setState(prev => {
+          let newState = prev
+          for (let i = 0; i < SPEEDS[speedIndex]; i++) {
+            newState = executeEconomyTick(newState)
+            
+            const { newState: stateAfterCheck, triggeredEvent } = checkAndTriggerEvents(newState)
+            newState = stateAfterCheck
+            
+            if (triggeredEvent) {
+              setActiveEvent(triggeredEvent)
+              setIsPaused(true)
+            }
+          }
+          return newState
+        })
+      }
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [isPaused, speedIndex, state.gameStatus, activeEvent])
+  }, [isPaused, state.gameStatus, speedIndex, activeEvent, executeTick, achievementState])
 
-  const handleTick = useCallback(() => {
-    setState(prev => executeEconomyTick(prev))
-  }, [])
+  const handleTick = useCallback(async () => {
+    try {
+      const result = await executeTick(state, 1)
+      setState(result.state)
+    } catch {
+      setState(prev => executeEconomyTick(prev))
+    }
+  }, [executeTick, state])
 
   const handleReset = useCallback(() => {
     setState(resetGame(state, () => preRunHistory(createInitialEconomyState('china'), 365)))
@@ -215,7 +350,7 @@ export default function EconomyDashboard() {
 
   const handleStartGame = useCallback(() => {
     if (!selectedCountry) return
-    const initialState = preRunHistory(createInitialEconomyState(selectedCountry.id as CountryId), 365)
+    const initialState = preRunHistory(createInitialEconomyState(selectedCountry.id as CountryId, selectedDifficulty), 365)
     setState(initialState)
     setScreen('game')
     setIsPaused(true)
@@ -533,6 +668,34 @@ export default function EconomyDashboard() {
             )}
           </AnimatePresence>
 
+          <div className="bg-slate-800/50 backdrop-blur rounded-2xl p-6 border border-slate-700/50 mb-8">
+            <h3 className="text-lg font-semibold mb-4 text-center">🎮 选择游戏难度</h3>
+            <div className="grid grid-cols-5 gap-3">
+              {difficultyList.map((difficulty) => (
+                <motion.button
+                  key={difficulty.id}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setSelectedDifficulty(difficulty.id)}
+                  className={`p-4 rounded-xl border transition-all text-center ${
+                    selectedDifficulty === difficulty.id
+                      ? 'border-emerald-500 bg-emerald-500/20 ring-2 ring-emerald-500/30'
+                      : 'border-slate-600/50 bg-slate-700/30 hover:border-emerald-500/50'
+                  } ${difficulty.recommended ? 'ring-2 ring-amber-500/50' : ''}`}
+                >
+                  <div className="text-2xl mb-2">{difficulty.icon}</div>
+                  <div className="font-semibold text-sm mb-1">{difficulty.name}</div>
+                  {difficulty.recommended && (
+                    <span className="text-xs px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded-full">
+                      推荐
+                    </span>
+                  )}
+                  <p className="text-xs text-slate-400 mt-2 line-clamp-2">{difficulty.description}</p>
+                </motion.button>
+              ))}
+            </div>
+          </div>
+
           <div className="flex gap-4 justify-center">
             <button
               onClick={() => {
@@ -679,6 +842,61 @@ export default function EconomyDashboard() {
                 )
               })()}
               
+              <button
+                onClick={() => setShowAchievementPanel(true)}
+                className="relative px-4 py-2 bg-amber-500/10 hover:bg-amber-500/20 rounded-xl text-sm transition-all border border-amber-500/20 hover:border-amber-500/40 flex items-center gap-2"
+              >
+                <Trophy className="w-4 h-4 text-amber-400" />
+                成就
+                {achievementState.notifications.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full text-xs flex items-center justify-center font-bold shadow-lg">
+                    {achievementState.notifications.length}
+                  </span>
+                )}
+              </button>
+              
+              <div className="h-8 w-px bg-white/10" />
+              
+              <div className="px-3 py-2 bg-white/5 rounded-xl text-sm border border-white/5">
+                {(() => {
+                  const info = getComputeStatusInfo()
+                  return (
+                    <div className={`flex items-center gap-1.5 ${info.color} font-mono text-xs`}>
+                      <div className="w-2 h-2 rounded-full bg-current animate-pulse" />
+                      {info.label}
+                    </div>
+                  )
+                })()}
+              </div>
+              
+              <div className="h-8 w-px bg-white/10" />
+              
+              <button
+                onClick={async () => {
+                  if (stats.backendAvailable) {
+                    gameEngine.forceFallback()
+                    showToast('⚡ 已切换到本地计算模式', 'info', 2000)
+                  } else {
+                    await gameEngine.resetFallback()
+                    showToast('☁️  已切换到云端加速模式', 'success', 2000)
+                  }
+                }}
+                className="px-3 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs transition-all border border-white/5 hover:border-white/10 flex items-center gap-2"
+                title={stats.backendAvailable ? '点击切换到本地计算' : '点击切换到云端加速'}
+              >
+                {stats.backendAvailable ? (
+                  <>
+                    <Globe className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-slate-400">云端</span>
+                  </>
+                ) : (
+                  <>
+                    <Activity className="w-3.5 h-3.5 text-amber-400" />
+                    <span className="text-slate-400">本地</span>
+                  </>
+                )}
+              </button>
+              
               <div className="h-8 w-px bg-white/10" />
               
               <button
@@ -724,25 +942,28 @@ export default function EconomyDashboard() {
           </div>
 
           <div className="grid grid-cols-5 gap-4 mt-4">
-            <StatusMetric label="国库" value={formatMoney(state.treasury.gold)} warn={state.treasury.gold < 10000} critical={state.treasury.gold < 3000} />
-            <StatusMetric label="GDP" value={formatMoney(state.stats.gdp)} />
+            <StatusMetric label="国库" value={formatMoney(state.treasury.gold)} warn={state.treasury.gold < 10000} critical={state.treasury.gold < 3000} metricId="treasury" />
+            <StatusMetric label="GDP" value={formatMoney(state.stats.gdp)} metricId="gdp" />
             <StatusMetric 
               label="通胀率" 
               value={`${state.stats.inflation.toFixed(1)}%`} 
               warn={state.stats.inflation > 5} 
               critical={state.stats.inflation > 10} 
               inverse={true}
+              metricId="inflation"
             />
             <StatusMetric 
               label="稳定度" 
               value={`${state.stats.stability.toFixed(0)}%`} 
               warn={state.stats.stability < 50} 
               critical={state.stats.stability < 30}
+              metricId="stability"
             />
             <StatusMetric 
               label="政治点数" 
               value={state.politicalCapital.toFixed(0)}
               highlight={true}
+              metricId="politicalCapital"
             >
               <span className="text-emerald-400 text-[10px] ml-1">+{state.dailyPoliticalGain}/天</span>
             </StatusMetric>
@@ -1150,6 +1371,75 @@ export default function EconomyDashboard() {
           </motion.div>
         )}
 
+        {showTutorialModal && currentTutorialStep && (
+          <motion.div
+            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            animate={{ opacity: 1, backdropFilter: 'blur(8px)' }}
+            exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+            className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.92, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 10 }}
+              transition={{ type: 'spring', damping: 25 }}
+              className="bg-gradient-to-br from-zinc-900/95 to-neutral-900/95 backdrop-blur-2xl rounded-3xl max-w-lg w-full border border-emerald-500/30 shadow-[0_32px_64px_-12px_rgba(16,185,129,0.2)] overflow-hidden"
+            >
+              <div className="bg-gradient-to-r from-emerald-500/15 to-teal-500/10 p-6 border-b border-emerald-500/20">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-3xl">📚</span>
+                  <span className="text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-semibold">
+                    {tutorialStep + 1} / {tutorialChoice === 'full' ? FULL_TUTORIAL_STEPS.length : QUICK_TUTORIAL_STEPS.length}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-emerald-400">{currentTutorialStep.title}</h3>
+              </div>
+              <div className="p-6">
+                <p className="text-slate-300 mb-6 leading-relaxed whitespace-pre-line">
+                  {currentTutorialStep.content}
+                </p>
+                
+                {currentTutorialStep.highlight && (
+                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-6">
+                    <div className="flex items-start gap-3">
+                      <span className="text-xl">💡</span>
+                      <p className="text-amber-300 text-sm leading-relaxed">
+                        {currentTutorialStep.highlight}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="w-full bg-slate-800 rounded-full h-1.5 mb-6">
+                  <div 
+                    className="bg-gradient-to-r from-emerald-500 to-teal-500 h-1.5 rounded-full transition-all duration-500"
+                    style={{ width: `${((tutorialStep + 1) / (tutorialChoice === 'full' ? FULL_TUTORIAL_STEPS.length : QUICK_TUTORIAL_STEPS.length)) * 100}%` }}
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleSkipTutorial}
+                    className="px-5 py-3 bg-white/5 hover:bg-white/10 rounded-2xl font-semibold transition-all border border-white/10 hover:border-white/20 text-slate-400 hover:text-white"
+                  >
+                    跳过教程
+                  </button>
+                  <button
+                    onClick={handleNextTutorialStep}
+                    className="flex-1 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-2xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                  >
+                    {tutorialStep < (tutorialChoice === 'full' ? FULL_TUTORIAL_STEPS.length : QUICK_TUTORIAL_STEPS.length) - 1 ? (
+                      <>下一步 →</>
+                    ) : (
+                      <>🎉 完成教程</>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+
         {confirmDialog && (
           <motion.div
             initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
@@ -1226,6 +1516,21 @@ export default function EconomyDashboard() {
             {toast.message}
           </motion.div>
         )}
+
+        {popupAchievement && (
+          <AchievementNotificationPopup
+            achievement={popupAchievement}
+            onClose={() => setPopupAchievement(null)}
+          />
+        )}
+
+        {showAchievementPanel && (
+          <AchievementPanel
+            achievementState={achievementState}
+            onClose={() => setShowAchievementPanel(false)}
+            onDismissNotification={handleDismissAchievementNotification}
+          />
+        )}
       </AnimatePresence>
 
       <SaveMenu
@@ -1274,13 +1579,14 @@ function StatCard({ label, value, trend }: { label: string; value: string; trend
   )
 }
 
-function StatusMetric({ label, value, warn, critical, inverse, highlight, children }: { 
+function StatusMetric({ label, value, warn, critical, inverse, highlight, metricId, children }: { 
   label: string
   value: string
   warn?: boolean
   critical?: boolean
   inverse?: boolean
   highlight?: boolean
+  metricId?: keyof typeof ECONOMY_METRICS
   children?: React.ReactNode
 }) {
   let gradient = 'from-emerald-500/5 to-teal-500/5'
@@ -1321,9 +1627,18 @@ function StatusMetric({ label, value, warn, critical, inverse, highlight, childr
     }
   }
   
+  const metricData = metricId && ECONOMY_METRICS[metricId]
+  const labelContent = metricData ? (
+    <StatTooltip {...metricData}>
+      <span className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">{label}</span>
+    </StatTooltip>
+  ) : (
+    <div className="text-[11px] text-slate-500 font-medium uppercase tracking-wider">{label}</div>
+  )
+  
   return (
     <div className={`bg-gradient-to-br ${gradient} rounded-2xl px-6 py-4 border ${border} shadow-lg ${glow} ${critical ? 'animate-pulse' : ''} backdrop-blur-sm`}>
-      <div className="text-[11px] text-slate-500 mb-2 font-medium uppercase tracking-wider">{label}</div>
+      {labelContent}
       <div className={`font-mono text-xl font-bold ${textColor} tracking-tight flex items-center`}>
         {value}
         {children}

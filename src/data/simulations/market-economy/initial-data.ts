@@ -848,7 +848,9 @@ function generateInitialBuildings(countryId: CountryId) {
   }))
 }
 
-export function createInitialEconomyState(countryId: CountryId = 'china'): EconomyState {
+import { applyDifficultySettings, type DifficultyLevel } from './difficulty-system'
+
+export function createInitialEconomyState(countryId: CountryId = 'china', difficulty: DifficultyLevel = 'normal'): EconomyState {
   const country = getCountry(countryId)
   
   const initialMarket: EconomyState['market'] = {}
@@ -864,12 +866,13 @@ export function createInitialEconomyState(countryId: CountryId = 'china'): Econo
     }
   })
   
-  return {
+  const baseState: EconomyState = {
     countryId,
     date: { ...country.startingDate },
     day: 1,
     tick: 0,
     speed: 1,
+    difficulty,
     
     gameStatus: 'running' as const,
     endCondition: null,
@@ -932,6 +935,8 @@ export function createInitialEconomyState(countryId: CountryId = 'china'): Econo
     
     history: [],
   }
+  
+  return applyDifficultySettings(baseState, difficulty)
 }
 
 export function generateInitialInterestGroups(countryId: CountryId): import('./vic3-types').InterestGroup[] {

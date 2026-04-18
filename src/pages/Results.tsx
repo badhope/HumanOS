@@ -26,6 +26,7 @@ import jsPDF from 'jspdf'
 import { useAppStore } from '../store'
 import { getAssessmentById } from '@data/assessments'
 import ReportTemplate from '@components/ReportTemplate'
+import ResultExportButton from '@components/ResultExportButton'
 
 export default function Results() {
   const { id } = useParams<{ id: string }>()
@@ -178,7 +179,7 @@ export default function Results() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-24 pb-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="result-export-container" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           className="flex items-center gap-4 mb-8"
           initial={{ opacity: 0, x: -20 }}
@@ -236,6 +237,11 @@ export default function Results() {
           transition={{ delay: 0.8 }}
           className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
+          <ResultExportButton
+            resultId={id || 'result'}
+            title={assessment?.title || '测评报告'}
+            resultData={latestResult}
+          />
           <div className="relative" ref={shareRef}>
             <motion.button
               onClick={() => setShowShareMenu(!showShareMenu)}

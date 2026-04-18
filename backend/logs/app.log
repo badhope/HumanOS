@@ -1,0 +1,887 @@
+2026-04-18 20:38:19,128 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 20:38:19,221 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 20:38:19,222 - main - INFO - ✅ 所有系统就绪
+2026-04-18 20:38:46,711 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 20:38:46,712 - main - INFO - 👋 服务已安全关闭
+2026-04-18 20:38:48,420 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 20:38:48,426 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 20:38:48,426 - main - INFO - ✅ 所有系统就绪
+2026-04-18 20:38:48,539 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 20:38:48,540 - main - INFO - 👋 服务已安全关闭
+2026-04-18 20:38:50,215 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 20:38:50,222 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 20:38:50,222 - main - INFO - ✅ 所有系统就绪
+2026-04-18 20:38:51,935 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 20:38:51,936 - main - INFO - 👋 服务已安全关闭
+2026-04-18 20:38:53,592 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 20:38:53,600 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 20:38:53,600 - main - INFO - ✅ 所有系统就绪
+2026-04-18 21:21:31,780 - api.assessment - INFO - 计算测评: ocean-bigfive
+2026-04-18 21:22:53,928 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 21:22:53,929 - main - INFO - 👋 服务已安全关闭
+2026-04-18 21:22:56,916 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 21:22:56,927 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 21:22:56,927 - main - INFO - ✅ 所有系统就绪
+2026-04-18 21:23:01,961 - api.assessment - INFO - 计算测评: ocean-bigfive
+2026-04-18 21:23:03,994 - api.assessment - INFO - 计算测评: sas-standard
+2026-04-18 21:23:06,025 - api.assessment - INFO - 计算测评: iq-ravens
+2026-04-18 21:23:08,053 - api.assessment - INFO - 计算测评: foodie-level
+2026-04-18 21:23:10,077 - api.assessment - INFO - 计算测评: pua-resistance
+2026-04-18 22:05:47,661 - api.assessment - INFO - 计算测评: ocean-bigfive
+2026-04-18 22:05:49,724 - api.assessment - INFO - 计算测评: sas-standard
+2026-04-18 22:05:51,768 - api.assessment - INFO - 计算测评: dark-triad
+2026-04-18 22:05:53,833 - api.assessment - INFO - 计算测评: pua-resistance
+2026-04-18 22:05:58,924 - api.assessment - INFO - 计算测评: ocean-bigfive
+2026-04-18 22:06:33,082 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:06:33,123 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:06:36,794 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:06:36,843 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:06:36,844 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:06:44,744 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:06:44,749 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:06:44,750 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:07:12,008 - api.assessment - INFO - 计算测评: ocean-bigfive
+2026-04-18 22:07:14,044 - api.assessment - INFO - 计算测评: sas-standard
+2026-04-18 22:07:16,076 - api.assessment - INFO - 计算测评: iq-ravens
+2026-04-18 22:07:18,102 - api.assessment - INFO - 计算测评: foodie-level
+2026-04-18 22:07:20,140 - api.assessment - INFO - 计算测评: pua-resistance
+2026-04-18 22:09:55,982 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:09:55,983 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:10:02,008 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:10:02,021 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:10:02,021 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:10:02,136 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:10:02,137 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:11:10,052 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:11:10,075 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:11:10,076 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:11:51,795 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:11:51,797 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:11:55,004 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:11:55,012 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:11:55,012 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:11:55,117 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:11:55,118 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:11:58,306 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:11:58,327 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:11:58,328 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:12:05,091 - api.assessment - INFO - [1776521525091267] 计算测评 ocean-bigfive 来自 127.0.0.1
+2026-04-18 22:12:14,742 - api.assessment - INFO - [1776521534742316] 计算测评 ocean-bigfive 来自 127.0.0.1
+2026-04-18 22:12:30,124 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:12:30,125 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:12:32,673 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:12:32,681 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:12:32,681 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:12:42,106 - api.assessment - INFO - [1776521562106318] 计算测评 ocean-bigfive 来自 127.0.0.1
+2026-04-18 22:12:42,107 - api.assessment - INFO - [1776521562106318] 计算完成，耗时: 0.8ms
+2026-04-18 22:12:42,119 - api.assessment - WARNING - [1776521562106318] 存储结果失败: 'client_ip' is an invalid keyword argument for AssessmentResult
+2026-04-18 22:12:49,900 - api.assessment - INFO - [1776521569900910] 计算测评 ocean-bigfive 来自 127.0.0.1
+2026-04-18 22:12:49,901 - api.assessment - INFO - [1776521569900910] 计算完成，耗时: 0.6ms
+2026-04-18 22:12:49,901 - api.assessment - WARNING - [1776521569900910] 存储结果失败: 'client_ip' is an invalid keyword argument for AssessmentResult
+2026-04-18 22:12:58,966 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:12:58,968 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:13:00,800 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:13:00,812 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:13:00,812 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:13:11,237 - api.assessment - INFO - [1776521591237451] 计算测评 ocean-bigfive 来自 127.0.0.1
+2026-04-18 22:13:11,238 - api.assessment - INFO - [1776521591237451] 计算完成，耗时: 0.7ms
+2026-04-18 22:13:22,041 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:13:22,042 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:13:23,963 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:13:23,971 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:13:23,971 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:13:33,695 - api.assessment - INFO - [1776521613695599] 计算测评 ocean-bigfive 来自 127.0.0.1
+2026-04-18 22:13:33,696 - api.assessment - INFO - [1776521613695599] 计算完成，耗时: 0.7ms
+2026-04-18 22:13:37,750 - api.assessment - INFO - [1776521617750169] 计算测评 sas-standard 来自 127.0.0.1
+2026-04-18 22:13:37,750 - api.assessment - INFO - [1776521617750169] 计算完成，耗时: 0.5ms
+2026-04-18 22:13:39,766 - api.assessment - INFO - [1776521619766254] 计算测评 sas-standard 来自 127.0.0.1
+2026-04-18 22:13:39,766 - api.assessment - INFO - [1776521619766254] 计算完成，耗时: 0.6ms
+2026-04-18 22:13:41,782 - api.assessment - INFO - [1776521621782865] 计算测评 sas-standard 来自 127.0.0.1
+2026-04-18 22:13:41,783 - api.assessment - INFO - [1776521621782865] 计算完成，耗时: 0.4ms
+2026-04-18 22:13:43,824 - api.assessment - INFO - [1776521623824182] 计算测评 sas-standard 来自 127.0.0.1
+2026-04-18 22:13:43,824 - api.assessment - INFO - [1776521623824182] 计算完成，耗时: 0.4ms
+2026-04-18 22:13:45,875 - api.assessment - INFO - [1776521625875072] 计算测评 sas-standard 来自 127.0.0.1
+2026-04-18 22:13:45,875 - api.assessment - INFO - [1776521625875072] 计算完成，耗时: 0.4ms
+2026-04-18 22:21:22,696 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:21:22,773 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:21:26,634 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:21:26,650 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:21:26,650 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:22:12,892 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:22:12,898 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:22:15,106 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:22:15,114 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:22:15,115 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:22:15,220 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:22:15,221 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:22:17,320 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:22:17,328 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:22:17,328 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:22:27,179 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:22:27,180 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:22:29,268 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:22:29,275 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:22:29,275 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:22:37,366 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:22:37,367 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:22:39,530 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:22:39,538 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:22:39,538 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:23:01,183 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:23:01,185 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:23:05,057 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:23:05,067 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:23:05,068 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:23:15,479 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:23:15,480 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:23:19,453 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:23:19,469 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:23:19,469 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:23:21,652 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:23:21,653 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:23:24,305 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:23:24,316 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:23:24,317 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:23:32,071 - api.game - INFO - [gs_6d1850722165] 创建游戏会话 | 国家: china | IP: 127.0.0.1
+2026-04-18 22:23:41,329 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:23:41,331 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:23:44,534 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:23:44,543 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:23:44,544 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:32:48,294 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:32:48,312 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:32:48,313 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:32:57,027 - api.game - INFO - [gs_5a318ec22855] 创建游戏会话 | 国家: china | IP: 127.0.0.1
+2026-04-18 22:33:01,062 - api.game - INFO - [gs_5a318ec22855] 计算完成 | steps=1 | tick=1 | 0.6ms | IP: 127.0.0.1
+2026-04-18 22:33:03,087 - api.game - INFO - [gs_5a318ec22855] 计算完成 | steps=100 | tick=101 | 2.8ms | IP: 127.0.0.1
+2026-04-18 22:33:05,123 - api.game - WARNING - [gs_5a318ec22855] 状态不一致告警
+2026-04-18 22:33:07,143 - api.game - INFO - [gs_5a318ec22855] 会话已销毁
+2026-04-18 22:46:03,831 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:46:03,889 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:46:11,072 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:46:11,082 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:46:11,082 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:51:25,276 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:51:25,285 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:51:30,503 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:51:30,521 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:51:30,521 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:52:25,484 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:52:25,486 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:52:29,568 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:52:29,579 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:52:29,580 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:53:16,712 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:53:16,713 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:53:19,252 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:53:19,259 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:53:19,259 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:53:26,820 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:53:26,821 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:53:29,334 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:53:29,346 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:53:29,346 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:53:45,043 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:53:45,044 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:53:47,568 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:53:47,575 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:53:47,575 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:54:34,626 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:54:34,627 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:54:37,574 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:54:37,585 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:54:37,585 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:55:15,521 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:55:15,524 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:55:20,705 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:55:20,752 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:55:20,793 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:55:35,253 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:55:35,254 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:55:38,031 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:55:38,042 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:55:38,043 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:56:05,003 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:56:05,010 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:56:05,010 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:56:54,366 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:56:54,369 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:56:54,396 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:56:54,398 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:56:59,057 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:56:59,060 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:56:59,071 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:56:59,072 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:56:59,076 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:56:59,076 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:57:30,249 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:57:30,251 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:57:30,265 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:57:30,267 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:57:33,853 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:57:33,864 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:57:33,864 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:57:33,904 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:57:33,916 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:57:33,916 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:57:53,355 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:57:53,358 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:57:53,400 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:57:53,401 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:57:56,358 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:57:56,369 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:57:56,370 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:57:56,411 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:57:56,420 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:57:56,421 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:58:00,307 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:58:00,308 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:58:00,353 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:58:00,354 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:58:03,318 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:58:03,332 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:58:03,333 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:58:03,350 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:58:03,361 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:58:03,362 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:58:25,527 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:58:25,528 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:58:25,602 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:58:25,603 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:58:27,969 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:58:27,977 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:58:27,977 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:58:28,010 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:58:28,018 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:58:28,018 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:59:02,018 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:59:02,019 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:59:02,066 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 22:59:02,067 - main - INFO - 👋 服务已安全关闭
+2026-04-18 22:59:04,728 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:59:04,736 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:59:04,736 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:59:04,744 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 22:59:04,754 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 22:59:04,754 - main - INFO - ✅ 所有系统就绪
+2026-04-18 22:59:18,503 - api.game - INFO - [gs_4797835c8b61] 创建游戏会话 | 国家: china | IP: 127.0.0.1
+2026-04-18 23:05:50,894 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:05:50,897 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:05:55,081 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:05:55,081 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:05:55,097 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:05:55,097 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:05:55,097 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:05:55,097 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:06:02,146 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:06:02,146 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:06:02,150 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:06:02,150 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:06:07,645 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:06:07,660 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:06:07,661 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:06:07,661 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:06:07,677 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:06:07,677 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:06:33,141 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:06:33,151 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:06:33,151 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:06:53,441 - api.game - INFO - [gs_a4260db66b1d] 创建游戏会话 | 国家: china | IP: 127.0.0.1
+2026-04-18 23:07:16,887 - api.game - INFO - [gs_59ad322c9a92] 创建游戏会话 | 国家: china | IP: 127.0.0.1
+2026-04-18 23:07:45,553 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:45,720 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:07:45,720 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:07:45,720 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:07:45,722 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:07:45,722 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:07:45,722 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:07:46,727 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:47,865 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:49,279 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:07:49,280 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:07:49,316 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:07:49,316 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:07:49,316 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:07:49,316 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:07:49,330 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:49,357 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:07:49,377 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:07:49,378 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:07:49,695 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:51,114 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:52,684 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:54,346 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:55,962 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:57,579 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:07:59,194 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:00,808 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:02,428 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:04,045 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:05,211 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:06,777 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:08,398 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:10,043 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:11,717 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:13,333 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:15,000 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:15,416 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:15,607 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:08:15,607 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:08:15,607 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:08:15,608 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:08:15,608 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:08:16,557 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:17,772 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:18,542 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:08:18,552 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:08:18,552 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:08:18,555 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:08:18,564 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:08:18,564 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:08:18,598 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:08:18,607 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:08:18,607 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:08:18,639 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:20,300 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:21,923 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:23,558 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:23,921 - watchfiles.main - INFO - 4 changes detected
+2026-04-18 23:08:25,512 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:27,181 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:37,578 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:39,506 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:41,283 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:43,047 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:44,516 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:44,654 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:08:44,655 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:08:44,703 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:08:44,704 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:08:44,768 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:08:44,770 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:08:45,649 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:46,916 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:47,733 - watchfiles.main - INFO - 5 changes detected
+2026-04-18 23:08:47,865 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:08:47,879 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:08:47,880 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:08:47,892 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:08:47,908 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:08:47,908 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:08:47,976 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:08:47,989 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:08:47,989 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:08:48,090 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:49,562 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:51,226 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:52,843 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:54,465 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:56,081 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:08:57,706 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:03,835 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:05,466 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:06,590 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:06,794 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:09:06,795 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:09:06,796 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:09:06,796 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:09:06,796 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:09:08,039 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:09,139 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:10,356 - watchfiles.main - INFO - 5 changes detected
+2026-04-18 23:09:10,449 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:09:10,453 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:09:10,463 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:09:10,463 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:09:10,465 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:09:10,465 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:09:10,503 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:09:10,513 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:09:10,513 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:09:10,712 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:12,183 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:13,860 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:15,493 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:17,170 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:18,791 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:20,417 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:22,026 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:23,658 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:25,276 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:26,893 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:28,056 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:28,200 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:09:28,200 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:09:28,204 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:09:28,202 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:09:28,203 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:09:29,261 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:30,428 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:31,823 - watchfiles.main - INFO - 5 changes detected
+2026-04-18 23:09:31,974 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:09:31,978 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:09:31,988 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:09:31,989 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:09:31,993 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:09:31,994 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:09:31,995 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:09:32,007 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:09:32,008 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:09:32,175 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:33,637 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:35,259 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:36,873 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:38,437 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:40,167 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:49,099 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:50,667 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:52,291 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:53,907 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:55,533 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:57,119 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:09:58,743 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:00,356 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:01,989 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:03,855 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:05,681 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:07,245 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:08,869 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:10,494 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:12,124 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:13,701 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:15,328 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:16,949 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:21,496 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:23,083 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:24,709 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:26,324 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:27,945 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:29,566 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:31,186 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:32,807 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:34,382 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:36,053 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:37,683 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:39,255 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:39,611 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:39,759 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:10:39,759 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:10:39,760 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:10:40,866 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:42,040 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:43,663 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:44,497 - watchfiles.main - INFO - 5 changes detected
+2026-04-18 23:10:44,527 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:10:44,545 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:10:44,545 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:10:44,581 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:10:44,595 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:10:44,596 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:10:44,706 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:10:44,720 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:10:44,721 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:10:44,858 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:10:57,056 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:10:57,069 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:10:57,069 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:11:10,828 - api.game - INFO - [gs_986fa5608a3b] 创建游戏会话 | 国家: china | IP: 127.0.0.1
+2026-04-18 23:11:12,855 - api.game - INFO - [gs_986fa5608a3b] 计算完成 | steps=24 | tick=24 | 1.5ms | IP: 127.0.0.1
+2026-04-18 23:11:14,894 - api.game - INFO - [gs_986fa5608a3b] 计算完成 | steps=100 | tick=124 | 9.3ms | IP: 127.0.0.1
+2026-04-18 23:11:51,785 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:11:52,138 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:11:53,634 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:11:55,208 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:11:56,864 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:11:57,588 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:11:59,280 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:02,012 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:04,412 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:33,586 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:35,201 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:37,781 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:39,393 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:41,005 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:43,275 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:44,894 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:46,510 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:12:48,232 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:04,476 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:07,396 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:13,078 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:19,096 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:20,718 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:22,291 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:23,965 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:25,621 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:27,215 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:28,927 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:31,735 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:33,456 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:35,294 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:36,949 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:38,582 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:40,393 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:13:42,891 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:01,993 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:03,617 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:05,234 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:06,845 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:08,467 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:10,080 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:11,699 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:13,362 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:14,980 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:16,593 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:18,207 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:19,781 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:21,396 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:23,018 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:24,644 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:26,271 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:27,882 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:29,508 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:31,123 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:32,739 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:34,352 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:35,976 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:37,606 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:39,191 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:40,806 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:42,421 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:44,044 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:45,658 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:46,678 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:46,833 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:14:46,833 - main - INFO - 🔻 正在关闭服务...
+2026-04-18 23:14:46,835 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:14:46,839 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:14:46,840 - main - INFO - 👋 服务已安全关闭
+2026-04-18 23:14:47,992 - watchfiles.main - INFO - 2 changes detected
+2026-04-18 23:14:49,213 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:50,819 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:51,005 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:14:51,006 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:14:51,019 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:14:51,018 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:14:51,021 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:14:51,226 - main - INFO - 🚀 启动 HumanOS 测评系统后端服务...
+2026-04-18 23:14:51,236 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:51,241 - main - INFO - ✅ 数据库初始化完成
+2026-04-18 23:14:51,241 - main - INFO - ✅ 所有系统就绪
+2026-04-18 23:14:56,918 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:14:57,282 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:01,515 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:03,887 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:05,510 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:07,080 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:08,700 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:10,322 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:11,933 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:14,614 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:18,045 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:22,753 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:29,965 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:31,576 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:35,611 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:37,436 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:39,056 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:40,675 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:42,293 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:43,907 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:45,524 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:47,087 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:48,756 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:50,426 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:52,037 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:53,702 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:15:56,379 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:12,050 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:17,285 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:19,864 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:21,479 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:23,090 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:24,707 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:26,324 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:27,934 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:29,500 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:31,172 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:32,795 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:34,362 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:36,023 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:37,644 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:39,263 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:40,886 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:42,752 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:44,368 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:45,986 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:47,599 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:49,219 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:50,784 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:52,413 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:53,973 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:55,592 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:57,208 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:16:58,820 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:00,435 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:02,054 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:03,667 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:05,283 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:06,860 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:08,478 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:10,089 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:11,700 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:13,317 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:14,932 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:16,547 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:18,156 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:19,768 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:21,384 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:23,427 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:25,039 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:26,655 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:28,217 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:29,831 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:31,451 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:33,018 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:34,682 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:37,013 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:38,625 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:40,243 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:41,860 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:43,426 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:45,050 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:46,664 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:48,274 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:49,894 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:51,506 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:53,232 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:54,848 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:56,410 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:58,029 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:17:59,642 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:01,265 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:02,883 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:04,499 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:06,481 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:08,099 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:09,713 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:11,331 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:12,942 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:14,559 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:16,171 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:17,817 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:19,438 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:21,049 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:22,610 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:24,226 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:25,835 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:28,815 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:30,433 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:31,999 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:33,614 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:35,739 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:37,308 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:38,924 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:40,543 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:42,154 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:43,773 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:45,401 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:47,016 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:48,632 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:50,249 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:51,866 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:53,482 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:55,051 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:56,665 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:58,328 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:18:59,937 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:01,551 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:03,187 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:04,828 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:06,494 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:08,167 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:09,793 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:11,355 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:12,975 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:14,594 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:16,208 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:17,837 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:19,449 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:21,062 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:22,729 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:24,343 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:25,961 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:27,625 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:29,389 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:38,577 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:40,974 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:44,027 - api.game - INFO - [gs_d09a6edb7087] 创建游戏会话 | 国家: china | IP: 127.0.0.1
+2026-04-18 23:19:45,202 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:46,069 - api.game - INFO - [gs_d09a6edb7087] 计算完成 | steps=24 | tick=24 | 1.7ms | IP: 127.0.0.1
+2026-04-18 23:19:48,100 - api.game - INFO - [gs_d09a6edb7087] 计算完成 | steps=100 | tick=124 | 7.1ms | IP: 127.0.0.1
+2026-04-18 23:19:52,422 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:54,103 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:56,781 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:19:59,174 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:00,792 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:02,374 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:03,995 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:05,659 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:07,327 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:09,151 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:10,865 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:12,548 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:14,223 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:15,897 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:17,462 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:19,089 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:20,707 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:22,330 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:23,948 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:25,565 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:27,191 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:28,868 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:30,437 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:32,058 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:33,671 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:35,288 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:37,001 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:38,618 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:40,328 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:41,997 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:43,568 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:45,237 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:46,858 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:48,495 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:50,161 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:51,741 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:53,364 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:54,977 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:56,695 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:20:58,335 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:00,053 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:01,865 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:05,421 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:07,044 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:08,676 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:10,296 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:11,911 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:13,529 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:15,151 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:16,716 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:18,378 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:19,996 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:22,001 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:23,628 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:25,248 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:26,862 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:28,481 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:30,107 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:31,720 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:33,343 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:34,954 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:36,574 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:38,193 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:39,810 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:41,445 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:43,491 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:45,058 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:46,685 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:48,554 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:21:50,567 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:16,039 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:17,923 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:20,759 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:22,375 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:24,064 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:25,687 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:27,315 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:28,922 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:30,589 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:32,306 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:33,894 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:35,525 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:37,196 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:38,773 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:40,459 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:42,191 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:43,792 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:46,021 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:48,349 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:50,066 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:22:56,470 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:23:31,848 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:23:35,473 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:23:43,379 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:23:45,045 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:23:52,809 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:05,178 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:09,621 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:20,544 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:22,008 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:23,623 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:25,227 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:26,866 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:28,435 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:30,065 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:31,689 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:33,334 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:34,949 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:36,603 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:38,313 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:39,943 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:41,554 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:43,178 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:44,804 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:46,452 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:48,051 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:49,688 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:51,331 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:53,020 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:54,644 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:56,291 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:57,912 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:24:59,588 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:01,213 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:02,907 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:04,522 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:06,131 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:07,746 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:09,354 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:10,991 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:12,603 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:14,215 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:16,788 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:27,783 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:38,986 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:25:42,870 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:29,528 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:42,589 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:44,419 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:46,040 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:47,655 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:49,269 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:50,893 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:52,464 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:54,085 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:26:56,060 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:27:21,287 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:27:24,472 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:27:30,603 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:27:36,438 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:28:33,894 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:28:42,893 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:28:49,150 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:28:50,759 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:29:21,070 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:29:36,125 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:29:40,121 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:29:41,986 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:29:45,118 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:29:46,781 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:29:48,398 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:29:51,124 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:29:59,468 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:30:01,840 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:30:03,467 - watchfiles.main - INFO - 1 change detected
+2026-04-18 23:30:16,840 - watchfiles.main - INFO - 1 change detected

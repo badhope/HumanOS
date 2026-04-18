@@ -18,7 +18,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, Home, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, Home, CheckCircle2, Cloud, CloudOff, RefreshCw } from 'lucide-react'
 import { getAssessmentById } from '@data/assessments'
 import { LoadingState, ErrorState } from '@components/ui/LoadingState'
 import { useAppStore } from '../store'
@@ -26,6 +26,8 @@ import type { Answer, Question, ProfessionalQuestion } from '../types'
 import { cn } from '@utils/cn'
 import AnswerSheet from '@components/AnswerSheet'
 import { calculateProfessionalResult } from '@utils/professionalCalculators'
+import { calculatorService } from '@services/calculatorWrapper'
+import type { CalculationResponse as UnifiedCalculationResult } from '@services/apiClient'
 import {
   mbtiProfessionalQuestions,
   bigFiveProfessionalQuestions,
@@ -59,6 +61,8 @@ export default function Assessment() {
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false)
   const [isTimeout, setIsTimeout] = useState(false)
   const [showSubmitSuccess, setShowSubmitSuccess] = useState(false)
+  const [calculationSource, setCalculationSource] = useState<'auto' | 'frontend' | 'backend' | 'checking'>('checking')
+  const [calculating, setCalculating] = useState(false)
   
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isInitializedRef = useRef(false)
@@ -109,6 +113,12 @@ export default function Assessment() {
         trait: opt.trait,
       })),
     }
+  }, [])
+
+  useEffect(() => {
+    calculatorService.checkBackendAvailability().then((available) => {
+      setCalculationSource(available ? 'backend' : 'frontend')
+    })
   }, [])
 
   useEffect(() => {
@@ -235,21 +245,51 @@ export default function Assessment() {
     }
   }, [questions.length])
 
-  const submitAssessment = useCallback(() => {
+  const submitAssessment = useCallback(async () => {
     if (!assessment) return
 
     if (timerRef.current) {
       clearInterval(timerRef.current)
     }
     
+    setCalculating(true)
     setShowSubmitSuccess(true)
     
-    setTimeout(() => {
-      let result
-      if (mode === 'professional') {
-        result = calculateProfessionalResult(assessment.id, answers, mode)
-      } else {
-        result = assessment.resultCalculator(answers)
+    setTimeout(async () => {
+      let result: UnifiedCalculationResult
+      
+      const answerMap: Record<string, number> = {}
+      answers.forEach((a, idx) => {
+        const qNum = idx + 1
+        answerMap[String(qNum)] = a.value ?? 3
+      })
+      
+      try {
+        result = await calculatorService.calculate(
+          assessment.id as any,
+          answerMap,
+          { forceFrontend: mode === 'professional' }
+        )
+        
+        setCalculationSource(result.source || 'frontend')
+      } catch (error) {
+        console.warn('计算失败，使用前端计算:', error)
+        let rawResult
+        if (mode === 'professional') {
+          rawResult = calculateProfessionalResult(assessment.id, answers, mode)
+        } else {
+          rawResult = assessment.resultCalculator(answers)
+        }
+        
+        result = {
+          ...rawResult,
+          source: 'frontend',
+          calculated_at: new Date().toISOString(),
+          version: 'fallback',
+          assessment_id: assessment.id,
+          assessment_name: assessment.title,
+          dimensions: [],
+        } as unknown as UnifiedCalculationResult
       }
       
       addCompletedAssessment({
@@ -260,7 +300,10 @@ export default function Assessment() {
         mode,
       })
 
-      navigate(`/loading/${assessment.id}`)
+      setCalculating(false)
+      navigate(`/loading/${assessment.id}`, {
+        state: { calculationSource: result.source, calculationResult: result }
+      })
     }, 800)
   }, [assessment, answers, addCompletedAssessment, mode, navigate])
 
@@ -361,9 +404,33 @@ export default function Assessment() {
             <span className="text-white/60">
               题目 {currentQuestion + 1} / {questions.length}
             </span>
-            <span className="text-white/60">
-              已答 {answeredCount} / {questions.length}
-            </span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  const newVal = calculationSource === 'backend' ? 'frontend' : 'backend'
+                  calculatorService.setUseBackend(newVal === 'backend')
+                  setCalculationSource(newVal)
+                }}
+                className="flex items-center gap-1.5 px-2 py-1 rounded-lg hover:bg-white/10 transition-all"
+                title="切换计算引擎"
+                type="button"
+              >
+                {calculationSource === 'backend' ? (
+                  <Cloud className="w-4 h-4 text-emerald-400" />
+                ) : calculationSource === 'checking' ? (
+                  <RefreshCw className="w-4 h-4 text-amber-400 animate-spin" />
+                ) : (
+                  <CloudOff className="w-4 h-4 text-slate-400" />
+                )}
+                <span className="text-xs">
+                  {calculationSource === 'backend' ? '云端计算' :
+                   calculationSource === 'checking' ? '连接中' : '本地计算'}
+                </span>
+              </button>
+              <span className="text-white/60">
+                已答 {answeredCount} / {questions.length}
+              </span>
+            </div>
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
             <motion.div

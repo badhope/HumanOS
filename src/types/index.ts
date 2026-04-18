@@ -259,9 +259,10 @@ export interface UserProfile {
 export interface CompletedAssessment {
   assessmentId: string
   completedAt: Date
-  result: AssessmentResult
+  result: any
   answers: Answer[]
   mode?: string
+  calculationSource?: 'frontend' | 'backend'
 }
 
 export interface NavItem {
