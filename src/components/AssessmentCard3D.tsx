@@ -109,9 +109,12 @@ export default function AssessmentCard3D({ assessment, index = 0, onSelect }: As
   const renderCardContent = () => (
     <div className="relative z-10">
       <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/10 text-white/80">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-400 border border-blue-500/30">
             {assessment.category}
+          </span>
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-300 border border-purple-500/30">
+            {assessment.subcategory}
           </span>
           <span className="px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border border-amber-500/30">
             {difficultyLabels[assessment.difficulty]}

@@ -66,7 +66,7 @@ interface AppStore {
   // Assessment History (from useStore)
   completedAssessments: CompletedAssessment[]
   addCompletedAssessment: (assessment: CompletedAssessment) => void
-  deleteAssessment: (assessmentId: string, completedAt: Date) => void
+  deleteAssessment: (recordId: string) => void
   clearAllAssessments: () => void
 
   // Assessment Records (from useUserStore)
@@ -139,12 +139,13 @@ export const useAppStore = create<AppStore>()(
       // History
       completedAssessments: [],
       addCompletedAssessment: (assessment) => set((state) => ({
-        completedAssessments: [assessment, ...state.completedAssessments],
+        completedAssessments: [
+          { id: assessment.id || crypto.randomUUID(), ...assessment },
+          ...state.completedAssessments,
+        ],
       })),
-      deleteAssessment: (assessmentId, completedAt) => set((state) => ({
-        completedAssessments: state.completedAssessments.filter(
-          (a) => !(a.assessmentId === assessmentId && a.completedAt === completedAt)
-        ),
+      deleteAssessment: (recordId: string) => set((state) => ({
+        completedAssessments: state.completedAssessments.filter((a) => a.id !== recordId),
       })),
       clearAllAssessments: () => set({
         completedAssessments: [],
@@ -154,7 +155,7 @@ export const useAppStore = create<AppStore>()(
       // Records
       records: [],
       addRecord: (record) => set((state) => {
-        const newRecords = [record, ...state.records]
+        const newRecords = [{ id: crypto.randomUUID(), ...record }, ...state.records]
         const completedIds = new Set(newRecords.map(r => r.assessmentId))
 
         const updatedAchievements = state.achievements.map(a => {

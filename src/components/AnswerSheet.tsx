@@ -1,21 +1,4 @@
-/**
- * ==============================================
- * 📋 答题卡侧边栏组件
- * ==============================================
- * 【组件功能】
- * 测评答题时的概览面板，显示所有题目的作答状态
- * 
- * 【状态指示】
- * - ✅ 绿色边框：已作答
- * - ⚪ 灰色边框：未作答
- * - 🔵 蓝色高亮：当前题目
- * 
- * 【交互功能】
- * - 点击题目直接跳转到对应题号
- * - 实时显示已完成/总题数进度
- * - 动画滑入滑出侧边栏
- */
-
+import { memo, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Check } from 'lucide-react'
 import type { Answer, Question } from '../types'
@@ -30,7 +13,51 @@ interface AnswerSheetProps {
   onQuestionSelect: (index: number) => void
 }
 
-export default function AnswerSheet({
+interface QuestionItemProps {
+  question: Question
+  index: number
+  isAnswered: boolean
+  isCurrent: boolean
+  onClick: () => void
+}
+
+const QuestionItem = memo(function QuestionItem({
+  question,
+  index,
+  isAnswered,
+  isCurrent,
+  onClick,
+}: QuestionItemProps) {
+  return (
+    <motion.button
+      onClick={onClick}
+      className={cn(
+        'w-full p-3 rounded-lg text-left transition-all flex items-center justify-between',
+        isCurrent
+          ? 'bg-violet-500/30 border-2 border-violet-500 text-white'
+          : isAnswered
+          ? 'bg-emerald-500/20 border-2 border-emerald-500/50 text-white/80'
+          : 'bg-white/5 border-2 border-transparent text-white/50 hover:bg-white/10'
+      )}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      type="button"
+    >
+      <span className="font-medium">
+        {index + 1}. {question.text?.slice(0, 30)}{question.text?.length > 30 ? '...' : ''}
+      </span>
+      {isAnswered && <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 ml-2" />}
+    </motion.button>
+  )
+}, (prev, next) => {
+  return (
+    prev.isAnswered === next.isAnswered &&
+    prev.isCurrent === next.isCurrent &&
+    prev.question.id === next.question.id
+  )
+})
+
+function AnswerSheet({
   isOpen,
   onClose,
   questions,
@@ -38,11 +65,9 @@ export default function AnswerSheet({
   currentQuestion,
   onQuestionSelect,
 }: AnswerSheetProps) {
-  const getQuestionStatus = (questionId: string, index: number) => {
-    const isAnswered = answers.some(a => a.questionId === questionId)
-    const isCurrent = index === currentQuestion
-    return { isAnswered, isCurrent }
-  }
+  const answeredIds = useMemo(() => {
+    return new Set(answers.map(a => a.questionId))
+  }, [answers])
 
   const answeredCount = answers.length
   const totalCount = questions.length
@@ -99,74 +124,18 @@ export default function AnswerSheet({
                 </div>
               </div>
 
-              <div className="grid grid-cols-5 gap-3">
-                {questions.map((question, index) => {
-                  const { isAnswered, isCurrent } = getQuestionStatus(question.id, index)
-                  
-                  return (
-                    <motion.button
-                      key={question.id}
-                      onClick={() => {
-                        onQuestionSelect(index)
-                        onClose()
-                      }}
-                      className={cn(
-                        'aspect-square rounded-xl flex items-center justify-center text-sm font-semibold transition-all relative',
-                        isCurrent && 'ring-2 ring-violet-500',
-                        isAnswered
-                          ? 'bg-gradient-to-r from-violet-500 to-pink-500 text-white'
-                          : 'glass text-white/60 hover:bg-white/10'
-                      )}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: index * 0.02 }}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      type="button"
-                    >
-                      {index + 1}
-                      {isAnswered && (
-                        <motion.div
-                          className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                        >
-                          <Check className="w-2.5 h-2.5 text-white" />
-                        </motion.div>
-                      )}
-                    </motion.button>
-                  )
-                })}
+              <div className="space-y-2">
+                {questions.map((question, index) => (
+                  <QuestionItem
+                    key={question.id || index}
+                    question={question}
+                    index={index}
+                    isAnswered={answeredIds.has(question.id)}
+                    isCurrent={index === currentQuestion}
+                    onClick={() => onQuestionSelect(index)}
+                  />
+                ))}
               </div>
-
-              <div className="mt-6 pt-6 border-t border-white/10">
-                <div className="flex items-center gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-gradient-to-r from-violet-500 to-pink-500" />
-                    <span className="text-white/60">已答</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded glass" />
-                    <span className="text-white/60">未答</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded glass ring-2 ring-violet-500" />
-                    <span className="text-white/60">当前</span>
-                  </div>
-                </div>
-              </div>
-
-              {answeredCount === totalCount && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30"
-                >
-                  <p className="text-green-400 text-sm text-center font-medium">
-                    🎉 所有题目已完成！
-                  </p>
-                </motion.div>
-              )}
             </div>
           </motion.div>
         </>
@@ -174,3 +143,12 @@ export default function AnswerSheet({
     </AnimatePresence>
   )
 }
+
+export default memo(AnswerSheet, (prev, next) => {
+  return (
+    prev.isOpen === next.isOpen &&
+    prev.currentQuestion === next.currentQuestion &&
+    prev.questions.length === next.questions.length &&
+    prev.answers.length === next.answers.length
+  )
+})

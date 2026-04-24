@@ -11,6 +11,9 @@ from datetime import datetime, timedelta
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 from database.database import get_db
 from database import models
@@ -19,9 +22,16 @@ load_dotenv()
 
 router = APIRouter()
 
-SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 10080))
+
+if not SECRET_KEY:
+    if ENVIRONMENT == "production":
+        raise RuntimeError("❌ 生产环境必须设置 SECRET_KEY 环境变量！")
+    SECRET_KEY = "dev-secret-key-only-for-development"
+    logger.warning("⚠️  使用开发默认密钥，仅用于本地开发！生产环境请设置 SECRET_KEY")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/login")

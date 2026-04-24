@@ -6,7 +6,7 @@ import { simulateAIActions } from './ai-simulator'
 import { processIndustryTick } from './industry-system'
 import { getDifficultyConfig } from './difficulty-system'
 
-function deepClone<T>(obj: T): T {
+export function deepClone<T>(obj: T): T {
   try {
     return structuredClone(obj)
   } catch {
@@ -649,7 +649,7 @@ export function calculateTreasury(state: EconomyState): EconomyState['treasury']
 }
 
 export function calculateNationalStats(state: EconomyState): EconomyState['stats'] {
-  const stats = JSON.parse(JSON.stringify(state.stats)) as EconomyState['stats']
+  const stats = deepClone(state.stats)
   
   stats.population = Math.max(1, state.pops.reduce((sum, p) => sum + p.size, 0))
   
@@ -1209,7 +1209,7 @@ export function fireWorkers(state: EconomyState, buildingId: string, amount: num
 export function printMoney(state: EconomyState, amount: number): EconomyState {
   if (amount <= 0) return state
   
-  const newState = JSON.parse(JSON.stringify(state)) as EconomyState
+  const newState = deepClone(state)
   
   const moneySupplyRatio = amount / Math.max(1, newState.stats.gdp * 1)
   

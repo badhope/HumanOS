@@ -20,6 +20,7 @@
  */
 import type { EconomyState } from './types'
 import type { GeoPoliticalState, InternationalRelation } from './vic3-types'
+import { deepClone } from './economy-engine'
 
 export interface InternationalTradeDeal {
   id: string

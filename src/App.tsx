@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PageSkeleton } from './components/Loading'
 import SplashScreen from './components/animations/SplashScreen'
@@ -8,6 +8,7 @@ import ProfileButton from './components/ProfileButton'
 import AdButton from './components/AdButton'
 import { I18nProvider } from './i18n'
 import { useAppStore } from './store'
+import visitorService from './services/visitorIdentity'
 import PageTransitionController from './components/animations/PageTransitionController'
 import ErrorBoundary from './components/ErrorBoundary'
 import QuickSearchModal from './components/QuickSearchModal'
@@ -35,19 +36,38 @@ const IsmsPage = lazy(() => import('./pages/IsmsPage'))
 const PlatformStoryPage = lazy(() => import('./pages/PlatformStoryPage'))
 const WorldHall = lazy(() => import('./pages/WorldHall'))
 const WorldPlay = lazy(() => import('./pages/WorldPlay'))
+const WorldPlayV2 = lazy(() => import('./pages/WorldPlayV2'))
 const ScenarioSelect = lazy(() => import('./pages/ScenarioSelect'))
 const ScenarioPlay = lazy(() => import('./pages/ScenarioPlay'))
 const OnePieceModeSelect = lazy(() => import('./pages/OnePieceModeSelect'))
-const EconomyDashboard = lazy(() => import('./components/economy/EconomyDashboard'))
+const EconomyDashboard = lazy(() => import('./components/economy/EconomyDashboardHoi4'))
 const XianxiaDashboard = lazy(() => import('./pages/XianxiaDashboard'))
+const XianxiaGame = lazy(() => import('./pages/XianxiaGame'))
 const QuestionOptimizer = lazy(() => import('./pages/QuestionOptimizer'))
 const ThemeAnalysisDemo = lazy(() => import('./pages/ThemeAnalysisDemo'))
 const ChartShowcase = lazy(() => import('./pages/ChartShowcase'))
+const Leaderboard = lazy(() => import('./pages/Leaderboard'))
+const SoulMatch = lazy(() => import('./pages/SoulMatch'))
+const Profile = lazy(() => import('./pages/Profile'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true)
   const theme = useAppStore((state) => state.theme)
+  const location = useLocation()
+  
+  const isFullscreenGame = 
+    location.pathname.includes('/simulated-world') ||
+    location.pathname.includes('/simulation/') ||
+    location.pathname.includes('/assessment') ||
+    location.pathname.includes('/world/play') ||
+    location.pathname.includes('/scenario/') ||
+    location.pathname.includes('/economy') ||
+    location.pathname.includes('/xianxia')
+
+  useEffect(() => {
+    visitorService.getVisitorId()
+  }, [])
 
   useEffect(() => {
     const root = document.documentElement
@@ -72,9 +92,13 @@ export default function App() {
                   <SplashScreen onComplete={handleSplashComplete} minDuration={4500} />
                 )}
 
-                <ProfileButton />
-                <SettingsButton />
-                <AdButton />
+                {!isFullscreenGame && (
+                  <>
+                    <ProfileButton />
+                    <SettingsButton />
+                    <AdButton />
+                  </>
+                )}
                 <QuickSearchModal />
                 <KeyboardShortcutsHelp />
 
@@ -95,12 +119,15 @@ export default function App() {
                 <Route path="/world/scenarios" element={<ScenarioSelect />} />
                 <Route path="/world/scenario/:scenarioId" element={<ScenarioPlay />} />
                 <Route path="/world/play/:scenarioId" element={<WorldPlay />} />
+                <Route path="/world/v2" element={<WorldPlayV2 />} />
                 <Route path="/simulation/country" element={<EconomyDashboard />} />
                 <Route path="/simulation/xianxia" element={<XianxiaDashboard />} />
+                <Route path="/simulation/xianxia/game" element={<XianxiaGame />} />
                 <Route path="/confirm/:id" element={<AssessmentConfirm />} />
                 <Route path="/assessment/:id" element={<Assessment />} />
                 <Route path="/loading/:id" element={<Loading />} />
                 <Route path="/results/:id" element={<Results />} />
+                <Route path="/result/:hash" element={<Results />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/theory/:theoryId" element={<TheoryDetail />} />
@@ -112,6 +139,9 @@ export default function App() {
                 <Route path="/tools/question-optimizer" element={<QuestionOptimizer />} />
                 <Route path="/demos/theme-analysis" element={<ThemeAnalysisDemo />} />
                 <Route path="/demos/charts" element={<ChartShowcase />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/soul-match" element={<SoulMatch />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

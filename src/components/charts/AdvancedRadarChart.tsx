@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   RadarChart,
@@ -72,12 +72,6 @@ export default function AdvancedRadarChart({
   height = 400,
 }: AdvancedRadarChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), animated ? 500 : 0)
-    return () => clearTimeout(timer)
-  }, [animated])
 
   const colors = colorSchemes[colorScheme]
 

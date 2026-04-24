@@ -1,4 +1,5 @@
 import type { EconomyState } from './types'
+import { deepClone } from './economy-engine'
 
 export type PoliticalSystemType = 'parliamentary' | 'presidential' | 'one_party' | 'authoritarian' | 'hybrid'
 
@@ -203,9 +204,7 @@ const COUNTRY_POLITICAL_SYSTEMS: { [key: string]: PoliticalSystem } = {
 }
 
 export function getPoliticalSystem(countryId: string): PoliticalSystem {
-  return JSON.parse(JSON.stringify(
-    COUNTRY_POLITICAL_SYSTEMS[countryId] || COUNTRY_POLITICAL_SYSTEMS.default
-  ))
+  return deepClone(COUNTRY_POLITICAL_SYSTEMS[countryId] || COUNTRY_POLITICAL_SYSTEMS.default)
 }
 
 export function proposePolicy(
@@ -213,7 +212,7 @@ export function proposePolicy(
   policyId: string,
   state: EconomyState
 ): { politicalSystem: PoliticalSystem; success: boolean; message: string } {
-  const newSystem = JSON.parse(JSON.stringify(politicalSystem)) as PoliticalSystem
+  const newSystem = deepClone(politicalSystem)
   
   if (state.treasury.gold < newSystem.policyImplementationCost) {
     return {
@@ -276,7 +275,7 @@ export function processPendingLaws(
   politicalSystem: PoliticalSystem,
   state: EconomyState
 ): { politicalSystem: PoliticalSystem; enactedPolicies: string[] } {
-  const newSystem = JSON.parse(JSON.stringify(politicalSystem)) as PoliticalSystem
+  const newSystem = deepClone(politicalSystem)
   const enactedPolicies: string[] = []
   
   newSystem.pendingLaws = newSystem.pendingLaws.filter(law => {

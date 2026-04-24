@@ -26,11 +26,12 @@ export function safeDivide(numerator: number, denominator: number, fallback: num
 export function calculateDimensionScore(
   answerMap: Record<string, number>,
   questionIds: string[],
-  defaultValue: number = 3
+  defaultValue?: number
 ): { score: number; percentage: number } {
-  const count = questionIds.length || 1
-  const maxScore = count * 5
-  const score = questionIds.reduce((sum, id) => sum + (answerMap[id] ?? defaultValue), 0)
+  const answeredIds = questionIds.filter(id => answerMap[id] !== undefined)
+  const count = answeredIds.length || 1
+  const maxScore = count * 4
+  const score = answeredIds.reduce((sum, id) => sum + answerMap[id], 0)
   const percentage = Math.round(safeDivide(score, maxScore, 0.5) * 100)
   return { score, percentage }
 }
@@ -39,16 +40,17 @@ export function calculateLikertScore(
   answerMap: Record<string, number>,
   items: string[],
   reverse: string[] = [],
-  defaultValue: number = 3
+  defaultValue?: number
 ): number {
-  const count = items.length || 1
+  const answeredItems = items.filter(id => answerMap[id] !== undefined)
+  const count = answeredItems.length || 1
   let raw = 0
-  items.forEach(id => {
-    let val = answerMap[id] ?? defaultValue
+  answeredItems.forEach(id => {
+    let val = answerMap[id]
     if (reverse.includes(id)) val = 6 - val
     raw += val
   })
-  return Math.round(safeDivide(raw - count, count * 4, 0.5) * 100)
+  return Math.round(safeDivide(raw - count, count * 3, 0.5) * 100)
 }
 
 export function normalizeScore(score: number, min: number = 0, max: number = 100): number {

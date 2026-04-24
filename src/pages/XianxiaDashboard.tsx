@@ -271,6 +271,7 @@ export default function XianxiaDashboard() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/simulation/xianxia/game')}
             className="px-12 py-5 bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 text-white text-xl font-bold rounded-2xl shadow-2xl shadow-purple-500/25 flex items-center gap-3 mx-auto"
           >
             <Play className="w-6 h-6" />

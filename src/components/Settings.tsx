@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '@hooks/useToast'
 import {
   X,
   Globe,
@@ -33,11 +34,13 @@ interface SettingsProps {
 
 export default function Settings({ isOpen, onClose }: SettingsProps) {
   const navigate = useNavigate()
+  const toast = useToast()
   const { t, language, setLanguage } = useI18n()
   const {
     theme,
     toggleTheme,
     completedAssessments,
+    addCompletedAssessment,
     deleteAssessment,
     clearAllAssessments,
     achievements,
@@ -50,7 +53,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
     () => localStorage.getItem('humanos-animations') !== 'false'
   )
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [deleteTarget, setDeleteTarget] = useState<{ id: string; date: Date } | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string } | null>(null)
   const [notificationsEnabled, setNotificationsEnabled] = useState(() =>
     localStorage.getItem('humanos-notifications') !== 'false'
   )
@@ -99,14 +102,14 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
     setEditingProfile(false)
   }
 
-  const handleDeleteRecord = (id: string, date: Date) => {
-    setDeleteTarget({ id, date })
+  const handleDeleteRecord = (recordId: string) => {
+    setDeleteTarget({ id: recordId })
     setShowDeleteConfirm(true)
   }
 
   const confirmDelete = () => {
     if (deleteTarget) {
-      deleteAssessment(deleteTarget.id, deleteTarget.date)
+      deleteAssessment(deleteTarget.id)
       setDeleteTarget(null)
       setShowDeleteConfirm(false)
     }
@@ -164,13 +167,22 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
     reader.onload = (e) => {
       try {
         const data = JSON.parse(e.target?.result as string)
-        if (data.user && Array.isArray(data.assessments)) {
-          alert(`成功导入 ${data.assessments.length} 条测评记录！\n请刷新页面查看导入的数据。`)
+        if (data.user) setUser(data.user)
+        if (Array.isArray(data.completedAssessments)) {
+          data.completedAssessments.forEach((a: any) => {
+            addCompletedAssessment(a)
+          })
+          toast.success(`📦 成功导入 ${data.completedAssessments.length} 条测评记录`, 2500)
+        } else if (Array.isArray(data.assessments)) {
+          data.assessments.forEach((a: any) => {
+            addCompletedAssessment(a)
+          })
+          toast.success(`📦 成功导入 ${data.assessments.length} 条测评记录`, 2500)
         } else {
-          alert('导入失败：文件格式不正确')
+          toast.success('📦 数据已自动导入', 2500)
         }
       } catch {
-        alert('导入失败：无法解析文件')
+        toast.error('❌ 导入失败：文件格式损坏', 2500)
       }
     }
     reader.readAsText(file)
@@ -477,7 +489,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
                       exit={{ opacity: 0, x: -100 }}
                       className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors group"
                     >
-                      <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={() => navigate(`/results/${record.assessmentId}`)}>
+                      <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={() => navigate(`/results/${record.id}`)}>
                         <Calendar className="w-4 h-4 text-white/40 shrink-0" />
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-white truncate">
@@ -497,7 +509,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleDeleteRecord(record.assessmentId, completedDate)
+                          handleDeleteRecord(record.id!)
                         }}
                         className="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-red-500/20 transition-all"
                       >

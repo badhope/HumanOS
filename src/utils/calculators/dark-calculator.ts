@@ -30,10 +30,16 @@
  */
 
 import type { Answer, AssessmentResult } from '../../types'
+import { diversityEngine, isomericEngine } from '../../data/assessments/diversity-enhancement-engine'
+import { darkAssessment } from '../../data/assessments/dark-triad'
 
-/**
- * 工具函数：从数组随机挑选一个（全项目通用）
- */
+const DARK_NORMS = {
+  machiavellianism: { mean: 42, sd: 23 },
+  narcissism: { mean: 48, sd: 21 },
+  psychopathy: { mean: 38, sd: 25 },
+  sadism: { mean: 35, sd: 24 },
+}
+
 const randomPick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)]
 
 /**
@@ -89,10 +95,34 @@ export function calculateDark(answers: Answer[]): DarkResult {
     return Math.round(((raw - items.length) / (items.length * 4)) * 100)
   }
 
-  const machiavellianism = calcScore(machItems)
-  const narcissism = calcScore(narcItems)
-  const psychopathy = calcScore(psychItems)
-  const sadism = calcScore(sadismItems)
+  const rawScores = {
+    machiavellianism: calcScore(machItems),
+    narcissism: calcScore(narcItems),
+    psychopathy: calcScore(psychItems),
+    sadism: calcScore(sadismItems),
+  }
+
+  const responseValues = Object.fromEntries(
+    Object.entries(answerMap).map(([k, v]) => [k, typeof v === 'number' ? v : Number(v) || 3])
+  )
+  const responseStyle = diversityEngine.calculateResponseStyle(responseValues, 5)
+  const correctedScores = diversityEngine.applyResponseStyleCorrection(rawScores, responseStyle)
+  const enhanced = diversityEngine.enhanceResultDiversity(correctedScores, {
+    responseId: 'dark-' + Date.now(),
+    rawScores,
+    responseStyle,
+    diversityMetrics: {
+      scoreEntropy: diversityEngine.calculateShannonEntropy(Object.values(rawScores)),
+      dimensionSpread: Math.max(...Object.values(rawScores)) - Math.min(...Object.values(rawScores)),
+      resultUniqueness: diversityEngine.calculateUniquenessScore(rawScores, DARK_NORMS),
+    },
+  }) as typeof rawScores
+
+  const { machiavellianism, narcissism, psychopathy, sadism } = enhanced
+
+  const allScoresInMidrange = Object.values(enhanced).every(s => s >= 42 && s <= 58)
+  const fingerprint = isomericEngine.generateResponseFingerprint(responseValues, darkAssessment.questions)
+  const midrangeSubtype = isomericEngine.classifyMidrangeSubtype(fingerprint, enhanced)
 
   const totalDarkScore = Math.round((machiavellianism + narcissism + psychopathy + sadism) / 4)
 
@@ -280,6 +310,9 @@ export function calculateDark(answers: Answer[]): DarkResult {
     'default': ['黑暗不是你的敌人，它是你的工具。知道什么时候用，什么时候收起来。', '光明和黑暗都不是答案，平衡才是。'],
   }
 
+  const finalDarkProfile = allScoresInMidrange ? midrangeSubtype.name : darkProfile
+  const finalEmoji = allScoresInMidrange ? '🎯' : darkProfileEmoji
+
   return {
     machiavellianism,
     narcissism,
@@ -288,16 +321,26 @@ export function calculateDark(answers: Answer[]): DarkResult {
     totalDarkScore,
     darkLevel,
     primaryDarkTrait,
-    darkProfile,
-    darkProfileEmoji,
+    darkProfile: finalDarkProfile,
+    darkProfileEmoji: finalEmoji,
     dimensions,
     radarData,
-    profileDescription: randomPick(profileDescriptions[darkProfile] || profileDescriptions['正常人 🧑']),
+    profileDescription: allScoresInMidrange ? midrangeSubtype.description : randomPick(profileDescriptions[darkProfile] || profileDescriptions['正常人 🧑']),
     darkTraits: traitDescriptions[primaryDarkTrait] || ['复杂的人性'],
     celebrityMatch: celebrityDatabase[darkProfile] || celebrityDatabase['正常人 🧑'],
     manipulativeStyle: randomPick(manipulationStyles),
     relationshipAdvice: randomPick(relationshipAdvices[darkProfile] || relationshipAdvices['default']),
     powerDynamics: randomPick(powerDynamicTemplates),
     growthAreas: growthAreasByProfile[darkProfile] || growthAreasByProfile['default'],
+    diversityAnalysis: {
+      uniquenessScore: Math.round(diversityEngine.calculateUniquenessScore(rawScores, DARK_NORMS)),
+      extremityScore: Math.round(responseStyle.extremityScore * 100),
+      midpointAvoidance: Math.round((1 - responseStyle.midpointRatio) * 100),
+    },
+    isomericAnalysis: allScoresInMidrange ? {
+      enabled: true,
+      subtype: midrangeSubtype.name,
+      characteristicItems: midrangeSubtype.characteristicItems,
+    } : null,
   }
 }

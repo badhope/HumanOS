@@ -33,7 +33,6 @@ import {
   FileText,
   Lock,
   Globe,
-  ChevronRight,
   Quote,
   BadgeCheck,
   Trophy,
@@ -41,8 +40,6 @@ import {
   Target,
   Zap,
 } from 'lucide-react'
-
-const COLORS = ['#8b5cf6', '#ec4899', '#f97316', '#06b6d4', '#22c55e', '#eab308']
 
 const keyMetrics = [
   { label: '测评准确率', value: 98.76, suffix: '%', icon: Target, color: 'from-violet-500 to-purple-500' },

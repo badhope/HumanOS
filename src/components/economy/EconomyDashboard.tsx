@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Play, Pause, RotateCcw, ChevronDown, TrendingUp, TrendingDown, Coins, Users, Building2, BarChart3, Settings, ShoppingCart, Activity, AlertTriangle, Trophy, Skull, Home, Printer, Globe, Info, Save } from 'lucide-react'
+import { Play, Pause, RotateCcw, ChevronDown, TrendingUp, TrendingDown, Coins, Users, Building2, BarChart3, Settings, ShoppingCart, Activity, AlertTriangle, Trophy, Skull, Home, Printer, Globe, Info, Save, HelpCircle } from 'lucide-react'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell, Legend, BarChart, Bar, CartesianGrid } from 'recharts'
 import type { EconomyState, TradeOrder, Country, CountryId } from '@data/simulations/market-economy/types'
 import type { WorldEvent, SectorBreakdown } from '@data/simulations/market-economy/vic3-types'
@@ -41,10 +41,19 @@ import {
   QUICK_TUTORIAL_STEPS,
   type TutorialStep,
 } from '@data/simulations/market-economy/tutorial-system'
+import {
+  CORE_QUESTS,
+  checkQuestProgress,
+  getCurrentHint,
+  type Quest,
+} from '@data/simulations/market-economy/quest-system'
 import { formatLargeNumber, formatPercent, formatMoney as formatMoneyStandard, formatGDP, formatPopulation } from '@data/simulations/market-economy/data-formatting'
 import { useGameEngine, getComputeStatusInfo, gameEngine } from '@services/gameEngineClient'
 import SaveMenu from '@components/ui/SaveMenu'
-import StatTooltip, { ECONOMY_METRICS } from '@components/ui/StatTooltip'
+import StatTooltip from '@components/ui/StatTooltip'
+import AreaHelpTooltip from '@components/ui/AreaHelpTooltip'
+import GameHelpCenter from '@components/economy/GameHelpCenter'
+import { ECONOMY_METRICS } from '@data/economy-metrics'
 import AchievementPanel, { AchievementNotificationPopup } from '@components/economy/AchievementPanel'
 import {
   initAchievementState,
@@ -72,8 +81,7 @@ export default function EconomyDashboard() {
 
   useEffect(() => {
     (async () => {
-      const healthy = await gameEngine.checkBackendHealth()
-      console.log(`[引擎] 后端连接状态: ${healthy ? '已连接 ✅' : '离线 ❌'}`)
+      await gameEngine.checkBackendHealth()
       setEngineReady(true)
     })()
   }, [])
@@ -85,7 +93,7 @@ export default function EconomyDashboard() {
   const [openPanel, setOpenPanel] = useState<'treasury' | 'policies' | 'industry' | 'population' | 'interestGroups' | 'market' | 'diplomacy' | 'news' | 'events' | null>(null)
   const [tradeOrders, setTradeOrders] = useState<TradeOrder[]>([])
   const [newOrder, setNewOrder] = useState<{ commodityId: string; type: 'buy' | 'sell'; amount: number } | null>(null)
-  const [screen, setScreen] = useState<'start' | 'countrySelect' | 'game'>('start')
+  const [screen, setScreen] = useState<'start' | 'countrySelect' | 'tutorialChoice' | 'game'>('start')
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel>('normal')
   const difficultyList = getDifficultyList()
@@ -122,6 +130,33 @@ export default function EconomyDashboard() {
   const [showAchievementPanel, setShowAchievementPanel] = useState(false)
   const [popupAchievement, setPopupAchievement] = useState<Achievement | null>(null)
   const prevStateRef = useRef<EconomyState>(state)
+
+  const [completedQuests, setCompletedQuests] = useState<Set<string>>(new Set())
+  const [showQuestPanel, setShowQuestPanel] = useState(false)
+  const [newQuestCompleted, setNewQuestCompleted] = useState<Quest | null>(null)
+  const [showHelpCenter, setShowHelpCenter] = useState(false)
+
+  const questProgress = useMemo(() => {
+    if (!state || screen !== 'game') return null
+    return checkQuestProgress(state, completedQuests)
+  }, [state, completedQuests, screen])
+
+  const currentHint = useMemo(() => {
+    if (!state || screen !== 'game') return ''
+    return getCurrentHint(state)
+  }, [state, screen])
+
+  useEffect(() => {
+    if (!questProgress?.completed.length) return
+
+    questProgress.completed.forEach(quest => {
+      setCompletedQuests(prev => new Set([...prev, quest.id]))
+      setNewQuestCompleted(quest)
+      showToast(`✅ 任务完成：${quest.title}`, 'success', 4000)
+    })
+
+    setTimeout(() => setNewQuestCompleted(null), 4000)
+  }, [questProgress?.completed, showToast])
 
   const handleDismissAchievementNotification = useCallback((id: string) => {
     setAchievementState(prev => ({
@@ -235,7 +270,7 @@ export default function EconomyDashboard() {
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [isPaused, state.gameStatus, speedIndex, activeEvent, executeTick, achievementState])
+  }, [isPaused, state, state.gameStatus, speedIndex, activeEvent, executeTick, achievementState])
 
   const handleTick = useCallback(async () => {
     try {
@@ -321,6 +356,11 @@ export default function EconomyDashboard() {
             setShowSaveMenu(prev => !prev)
           }
           break
+        case 'F1':
+          e.preventDefault()
+          setShowHelpCenter(prev => !prev)
+          showToast('📚 帮助中心已打开', 'info', 1500)
+          break
       }
     }
     
@@ -352,9 +392,9 @@ export default function EconomyDashboard() {
     if (!selectedCountry) return
     const initialState = preRunHistory(createInitialEconomyState(selectedCountry.id as CountryId, selectedDifficulty), 365)
     setState(initialState)
-    setScreen('game')
+    setScreen('tutorialChoice')
     setIsPaused(true)
-  }, [selectedCountry])
+  }, [selectedCountry, selectedDifficulty])
 
   const handleCreateOrder = useCallback(() => {
     if (!newOrder) return
@@ -523,6 +563,63 @@ export default function EconomyDashboard() {
             >
               🌍 选择国家 (新游戏)
             </button>
+          </div>
+        </motion.div>
+      </div>
+    )
+  }
+
+  if (screen === 'tutorialChoice') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-zinc-900 text-white flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', damping: 25 }}
+          className="max-w-2xl w-full mx-4"
+        >
+          <div className="text-center mb-10">
+            <div className="text-6xl mb-4">📚</div>
+            <h1 className="text-3xl font-bold mb-2">选择教程模式</h1>
+            <p className="text-slate-400">治国不易，先了解游戏玩法</p>
+          </div>
+
+          <div className="grid gap-4 mb-8">
+            {TUTORIAL_CHOICES.map((choice, index) => (
+              <motion.button
+                key={choice.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 + 0.3 }}
+                whileHover={{ scale: 1.02, x: 8 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleTutorialChoice(choice.id as 'full' | 'quick' | 'skip')}
+                className={`w-full text-left p-6 rounded-2xl border transition-all ${
+                  choice.recommended
+                    ? 'bg-gradient-to-r from-emerald-500/15 to-teal-500/10 border-emerald-500/50 ring-2 ring-emerald-500/30 hover:ring-emerald-500/50'
+                    : 'bg-slate-800/50 border-slate-700/50 hover:border-emerald-500/50 hover:bg-slate-700/50'
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <span className="text-4xl">{choice.icon}</span>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-bold text-lg">{choice.title}</span>
+                      {choice.recommended && (
+                        <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs rounded-full">
+                          推荐
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-slate-400 text-sm">{choice.description}</p>
+                  </div>
+                </div>
+              </motion.button>
+            ))}
+          </div>
+
+          <div className="text-center text-slate-500 text-sm">
+            💡 选择教程后随时可以在游戏中按 F1 重新打开帮助
           </div>
         </motion.div>
       </div>
@@ -808,20 +905,21 @@ export default function EconomyDashboard() {
 
       <div className="sticky top-0 z-50 bg-black/60 backdrop-blur-2xl border-b border-white/5 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center border border-emerald-500/30 shadow-lg">
-                <span className="text-xl">{currentCountry?.flag || '🏛️'}</span>
-              </div>
-              <div>
-                <h1 className="text-lg font-bold tracking-tight">{currentCountry?.name || '国家经济治理'}</h1>
-                <div className="text-xs text-slate-500 font-medium">
-                  {state.date.year}年{state.date.month}月{state.date.day}日 · 第 {state.day} 天
+          <AreaHelpTooltip areaId="top-bar" position="bottom">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center border border-emerald-500/30 shadow-lg">
+                  <span className="text-xl">{currentCountry?.flag || '🏛️'}</span>
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold tracking-tight">{currentCountry?.name || '国家经济治理'}</h1>
+                  <div className="text-xs text-slate-500 font-medium">
+                    {state.date.year}年{state.date.month}月{state.date.day}日 · 第 {state.day} 天
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
+              
+              <div className="flex items-center gap-2">
               {(() => {
                 const unreadNews = state.news.filter(n => !n.isRead).length
                 return (
@@ -938,10 +1036,22 @@ export default function EconomyDashboard() {
               >
                 <RotateCcw className="w-5 h-5" />
               </button>
+              
+              <div className="h-8 w-px bg-white/10" />
+              
+              <button
+                onClick={() => setShowHelpCenter(true)}
+                className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-sky-600/20 hover:from-blue-500/30 hover:to-sky-600/30 rounded-xl transition-all border border-blue-500/30 flex items-center justify-center group"
+                title="按 F1 打开帮助中心"
+              >
+                <HelpCircle className="w-5 h-5 text-blue-400 group-hover:scale-110 transition-transform" />
+              </button>
             </div>
-          </div>
+            </div>
+          </AreaHelpTooltip>
 
-          <div className="grid grid-cols-5 gap-4 mt-4">
+          <AreaHelpTooltip areaId="metrics-bar" position="bottom">
+            <div className="grid grid-cols-5 gap-4 mt-4">
             <StatusMetric label="国库" value={formatMoney(state.treasury.gold)} warn={state.treasury.gold < 10000} critical={state.treasury.gold < 3000} metricId="treasury" />
             <StatusMetric label="GDP" value={formatMoney(state.stats.gdp)} metricId="gdp" />
             <StatusMetric 
@@ -967,7 +1077,58 @@ export default function EconomyDashboard() {
             >
               <span className="text-emerald-400 text-[10px] ml-1">+{state.dailyPoliticalGain}/天</span>
             </StatusMetric>
-          </div>
+            </div>
+          </AreaHelpTooltip>
+
+          {currentHint && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="mt-4"
+            >
+              <div className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/30 rounded-xl px-4 py-3 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Info className="w-5 h-5 text-emerald-400" />
+                  <span className="text-emerald-300 text-sm">{currentHint}</span>
+                </div>
+                <button
+                  onClick={() => setShowQuestPanel(true)}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 rounded-lg text-emerald-400 text-sm font-medium transition-colors"
+                >
+                  <Trophy className="w-4 h-4" />
+                  任务 {completedQuests.size}/{CORE_QUESTS.length}
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {questProgress?.nextMilestone && !newQuestCompleted && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-3"
+            >
+              <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-xl px-4 py-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                      <TrendingUp className="w-4 h-4 text-amber-400" />
+                    </div>
+                    <div>
+                      <div className="text-amber-400 text-sm font-medium">当前目标</div>
+                      <div className="text-white">{questProgress.nextMilestone.title}</div>
+                    </div>
+                  </div>
+                  {questProgress.nextMilestone.hint && (
+                    <div className="text-amber-300/70 text-sm max-w-sm text-right">
+                      💡 {questProgress.nextMilestone.hint}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
 
@@ -987,29 +1148,30 @@ export default function EconomyDashboard() {
             const hasEvent = panel.id === 'events' && activeEvent
             
             return (
-              <motion.button
-                key={panel.id}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setOpenPanel(panel.id as any)}
-                className={`relative p-4 rounded-xl bg-gradient-to-br ${panel.color} border ${panel.border} hover:shadow-lg transition-all text-center group`}
-              >
-                <div className="text-2xl mb-1 group-hover:scale-110 transition-transform">{panel.icon}</div>
-                <div className={`text-xs font-bold ${panel.accent}`}>{panel.name}</div>
-                
-                {unreadNews > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-red-500 to-rose-500 rounded-full text-[10px] flex items-center justify-center font-bold shadow-lg text-white">
-                    {unreadNews > 9 ? '!' : unreadNews}
-                  </span>
-                )}
-                
-                {hasEvent && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5">
-                    <span className="absolute inset-0 bg-amber-500 rounded-full animate-ping opacity-75" />
-                    <span className="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full" />
-                  </span>
-                )}
-              </motion.button>
+              <AreaHelpTooltip key={panel.id} areaId={`panel-${panel.id}`} position="top" showIcon={false}>
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setOpenPanel(panel.id as any)}
+                  className={`relative p-4 rounded-xl bg-gradient-to-br ${panel.color} border ${panel.border} hover:shadow-lg transition-all text-center group w-full`}
+                >
+                  <div className="text-2xl mb-1 group-hover:scale-110 transition-transform">{panel.icon}</div>
+                  <div className={`text-xs font-bold ${panel.accent}`}>{panel.name}</div>
+                  
+                  {unreadNews > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-red-500 to-rose-500 rounded-full text-[10px] flex items-center justify-center font-bold shadow-lg text-white">
+                      {unreadNews > 9 ? '!' : unreadNews}
+                    </span>
+                  )}
+                  
+                  {hasEvent && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5">
+                      <span className="absolute inset-0 bg-amber-500 rounded-full animate-ping opacity-75" />
+                      <span className="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full" />
+                    </span>
+                  )}
+                </motion.button>
+              </AreaHelpTooltip>
             )
           })}
         </div>
@@ -1531,6 +1693,11 @@ export default function EconomyDashboard() {
             onDismissNotification={handleDismissAchievementNotification}
           />
         )}
+
+        <GameHelpCenter
+          isOpen={showHelpCenter}
+          onClose={() => setShowHelpCenter(false)}
+        />
       </AnimatePresence>
 
       <SaveMenu

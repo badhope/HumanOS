@@ -6,6 +6,7 @@ export const hollandSDSAssessment: Assessment = {
   title: '霍兰德SDS职业兴趣测试',
   description: '基于John Holland教授的RIASEC职业人格理论，90个标准化项目，6大维度×15题，全面评估你的职业倾向。',
   category: '职业发展',
+  subcategory: '职业兴趣',
   difficulty: 'standard',
   duration: 13,
   quality: '学术',

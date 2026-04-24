@@ -15,13 +15,15 @@
  * - 点击卡片跳转到测评确认页
  */
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { preloader } from '@utils/preloader'
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion'
-import { ArrowRight, Sparkles, Brain, Search, ChevronDown, Globe, Crown, ChevronRight } from 'lucide-react'
+import { ArrowRight, Sparkles, Brain, Search, ChevronDown, Globe, Crown, ChevronRight, Trophy } from 'lucide-react'
 import { usePageTransition } from '@components/animations/PageTransitionController'
 import AssessmentCard3D from '@components/AssessmentCard3D'
 import TypingEffect, { ShimmerText } from '@components/TypingEffect'
-import { FadeInSection, AnimatedNumber } from '@components/animations'
+import { FadeInSection, AnimatedNumber, GlowCard } from '@components/animations'
+import ParticleBackground from '@components/ParticleBackground'
 import {
   staggerContainer,
   staggerItem,
@@ -33,6 +35,10 @@ export default function Home() {
   const { navigateWithTransition } = usePageTransition()
   const [selectedCategory, setSelectedCategory] = useState<string>('全部')
   const [searchQuery, setSearchQuery] = useState('')
+
+  useEffect(() => {
+    preloader.start()
+  }, [])
 
   const handleNavigate = (path: string) => {
     navigateWithTransition(path, {
@@ -62,7 +68,8 @@ export default function Home() {
   })
 
   return (
-    <div className="relative">
+    <div className="relative min-h-screen overflow-hidden">
+      <ParticleBackground variant="stars" />
       <motion.section
         ref={heroRef}
         style={{ y: springY, opacity: springOpacity, scale: springScale }}
@@ -424,7 +431,7 @@ export default function Home() {
         </div>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6"
           variants={staggerContainer}
           initial="initial"
           whileInView="enter"
@@ -438,6 +445,129 @@ export default function Home() {
               onSelect={() => handleNavigate(`/mode-select/${assessment.id}`)}
             />
           ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-20 mb-10"
+        >
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">🎮 探索你的世界</h2>
+          <p className="text-white/50">发现更多有趣的玩法</p>
+        </motion.div>
+
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          whileInView="enter"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto"
+        >
+          <motion.div variants={staggerItem}>
+            <GlowCard
+              className="rounded-3xl overflow-hidden cursor-pointer group aspect-square"
+              glowColor="rgba(251, 191, 36, 0.3)"
+              onClick={() => handleNavigate('/leaderboard')}
+            >
+              <div className="w-full h-full bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-rose-500/10 border border-amber-500/20 rounded-3xl flex flex-col items-center justify-center p-6">
+                <motion.div
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    rotate: [0, -5, 5, -5, 0],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-xl shadow-amber-500/30 mb-4"
+                >
+                  <Trophy className="w-8 h-8 text-white" />
+                </motion.div>
+                <h3 className="text-lg font-bold text-white mb-1 group-hover:text-gradient transition-all">
+                  全球排行榜
+                </h3>
+                <p className="text-white/60 text-sm text-center">
+                  谁是最黑暗的灵魂？
+                </p>
+              </div>
+            </GlowCard>
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <GlowCard
+              className="rounded-3xl overflow-hidden cursor-pointer group aspect-square"
+              glowColor="rgba(139, 92, 246, 0.4)"
+              onClick={() => handleNavigate('/soul-match')}
+            >
+              <div className="w-full h-full bg-gradient-to-br from-violet-500/10 via-fuchsia-500/10 to-pink-500/10 border border-violet-500/20 rounded-3xl flex flex-col items-center justify-center p-6">
+                <motion.div
+                  animate={{
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-400 to-fuchsia-500 flex items-center justify-center shadow-xl shadow-violet-500/30 mb-4"
+                >
+                  <Sparkles className="w-8 h-8 text-white" />
+                </motion.div>
+                <h3 className="text-lg font-bold text-white mb-1 group-hover:text-gradient transition-all">
+                  灵魂匹配
+                </h3>
+                <p className="text-white/60 text-sm text-center">
+                  三公里内，谁和你同频？
+                </p>
+              </div>
+            </GlowCard>
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <GlowCard
+              className="rounded-3xl overflow-hidden cursor-pointer group aspect-square"
+              glowColor="rgba(52, 211, 153, 0.4)"
+              onClick={() => handleNavigate('/xianxia')}
+            >
+              <div className="w-full h-full bg-gradient-to-br from-emerald-500/10 via-teal-500/10 to-cyan-500/10 border border-emerald-500/20 rounded-3xl flex flex-col items-center justify-center p-6">
+                <motion.div
+                  animate={{
+                    rotate: [0, 5, -5, 0],
+                  }}
+                  transition={{ duration: 2.5, repeat: Infinity }}
+                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-xl shadow-emerald-500/30 mb-4"
+                >
+                  ⚔️
+                </motion.div>
+                <h3 className="text-lg font-bold text-white mb-1 group-hover:text-gradient transition-all">
+                  修仙系统
+                </h3>
+                <p className="text-white/60 text-sm text-center">
+                  今天炼气几层了？
+                </p>
+              </div>
+            </GlowCard>
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <GlowCard
+              className="rounded-3xl overflow-hidden cursor-pointer group aspect-square"
+              glowColor="rgba(59, 130, 246, 0.4)"
+              onClick={() => handleNavigate('/world')}
+            >
+              <div className="w-full h-full bg-gradient-to-br from-blue-500/10 via-indigo-500/10 to-violet-500/10 border border-blue-500/20 rounded-3xl flex flex-col items-center justify-center p-6">
+                <motion.div
+                  animate={{
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-xl shadow-blue-500/30 mb-4"
+                >
+                  🌍
+                </motion.div>
+                <h3 className="text-lg font-bold text-white mb-1 group-hover:text-gradient transition-all">
+                  国家模拟器
+                </h3>
+                <p className="text-white/60 text-sm text-center">
+                  你会怎么治理国家？
+                </p>
+              </div>
+            </GlowCard>
+          </motion.div>
         </motion.div>
 
         {filteredAssessments.length === 0 && (

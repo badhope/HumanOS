@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
-import { Award, TrendingUp, Lightbulb, Briefcase, Target, Brain, BarChart3 } from 'lucide-react'
-import { ComprehensiveChartSystem, CircularProgressChart, AdvancedBarChart } from './charts'
+import { Award, TrendingUp, Lightbulb, Briefcase, Brain, BarChart3 } from 'lucide-react'
+import { ComprehensiveChartSystem, CircularProgressChart } from './charts'
 import type { AssessmentResult, ProfessionalAssessmentResult } from '../types'
 
 interface EnhancedReportTemplateProps {

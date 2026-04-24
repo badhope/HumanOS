@@ -2,6 +2,11 @@
 #  计算器单元测试
 # =============================================================================
 import pytest
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from calculators import get_calculator, list_calculators
 import json
 

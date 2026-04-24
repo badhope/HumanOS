@@ -1,11 +1,13 @@
 import type { Assessment } from '../../types'
 import { calculateOcean } from '../../utils/calculators/ocean-calculator'
 
-export const oceanAssessment: Assessment = {
+export const oceanAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'ocean-bigfive',
   title: '大五人格OCEAN',
-  description: '心理学最权威的人格测评没有之一。五个维度精准描绘你的人格画像。心理学界的黄金标准。',
-  category: '人格心理',
+  description: '当代心理学最权威的人格特质模型，从五个维度全面描绘你的人格画像',
+  icon: '🌊',
+  category: '自我认知',
+  subcategory: '特质论人格',
   difficulty: 'standard',
   duration: 7,
   quality: '专业',

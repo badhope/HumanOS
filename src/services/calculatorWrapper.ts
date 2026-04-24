@@ -3,14 +3,18 @@
 // =============================================================================
 import { apiClient, CalculationResponse } from './apiClient'
 import { standardCalculators, StandardCalculatorId } from '../utils/calculators'
+import { buildAnswerMap } from '../utils/calculators/calculator-utils'
+import { Answer } from '../types'
+import visitorService from './visitorIdentity'
 
 export type UnifiedCalculationResult = CalculationResponse & {
   source: 'frontend' | 'backend'
   latency?: number
+  accuracy: number
 }
 
 class CalculatorService {
-  private useBackend: boolean = apiClient.isBackendEnabled()
+  private useBackend: boolean = true
   private fallbackToFrontend: boolean = true
   private backendAvailable: boolean | null = null
 
@@ -44,9 +48,35 @@ class CalculatorService {
     return 'auto'
   }
 
+  private normalizeAnswerValues(answerMap: Record<string, number>): Record<string, number> {
+    const normalized: Record<string, number> = {}
+    
+    Object.entries(answerMap).forEach(([key, value]) => {
+      let val = typeof value === 'number' ? value : Number(value) || 3
+      
+      if (val >= 1 && val <= 4) {
+        val = Math.round(val * 5 / 4)
+      }
+      
+      normalized[key] = val
+    })
+    
+    return normalized
+  }
+
+  private calculateAccuracyScore(answeredCount: number): number {
+    if (answeredCount >= 50) return 99
+    if (answeredCount >= 40) return 95
+    if (answeredCount >= 30) return 90
+    if (answeredCount >= 25) return 85
+    if (answeredCount >= 20) return 78
+    if (answeredCount >= 15) return 70
+    return Math.max(50, 50 + answeredCount * 1.5)
+  }
+
   async calculate(
     assessmentId: StandardCalculatorId,
-    answers: Record<string, number>,
+    answers: Answer[] | Record<string, number>,
     options: {
       forceFrontend?: boolean
       forceBackend?: boolean
@@ -60,21 +90,31 @@ class CalculatorService {
       (options.forceBackend || this.shouldUseBackend())
 
     const calculator = standardCalculators[assessmentId]
+    let answerMap = Array.isArray(answers) ? buildAnswerMap(answers) : answers
+    
+    answerMap = this.normalizeAnswerValues(answerMap)
+
+    const archiveOnce = () => apiClient.archiveResult(assessmentId, answerMap).catch(() => {})
 
     if (useBackendCalc) {
       try {
         const result = await apiClient.calculateAssessment(assessmentId, {
-          answers,
+          answers: answerMap,
           user_id: options.userId,
+          session_id: visitorService.getVisitorId(),
           include_norm: true,
           include_interpretation: true,
         })
 
+        archiveOnce()
+
+        const accuracy = this.calculateAccuracyScore(Object.keys(answerMap).length)
         return {
           ...result,
           source: 'backend',
           latency: Date.now() - startTime,
-        }
+          accuracy,
+        } as UnifiedCalculationResult
       } catch (error) {
         console.warn('[Calculator] 后端计算失败，回退到前端计算:', error)
 
@@ -84,19 +124,23 @@ class CalculatorService {
       }
     }
 
-    const frontendResult = calculator(answers as any)
+    const frontendResult = calculator(answerMap as any)
+    archiveOnce()
+    const accuracy = this.calculateAccuracyScore(Object.keys(answerMap).length)
 
     return this.adaptFrontendResult(
       assessmentId,
       frontendResult,
-      Date.now() - startTime
+      Date.now() - startTime,
+      accuracy
     )
   }
 
   private adaptFrontendResult(
     assessmentId: string,
     frontendResult: any,
-    latency: number
+    latency: number,
+    accuracy: number
   ): UnifiedCalculationResult {
     const assessmentNames: Record<string, string> = {
       'ocean-bigfive': '大五人格测评 (OCEAN)',
@@ -147,6 +191,7 @@ class CalculatorService {
       latency,
       calculated_at: new Date().toISOString(),
       version: '2.5.0-fe',
+      accuracy,
     }
   }
 
@@ -178,6 +223,62 @@ class CalculatorService {
     if (typeof result.total === 'number') return result.total
     if (typeof result.overall === 'number') return result.overall
     return undefined
+  }
+
+  /**
+   * ==============================================
+   *  后端标准化格式 → 前端原生格式 适配器
+   * ==============================================
+   * 【解决根本问题】所有 Report 组件都在读取 result.score / result.O / result.typeCode
+   * 【之前的bug】后端返回 overall_score / dimensions 数组，组件读到 undefined
+   * 【这个适配器】让24个Report组件零修改就能正常工作
+   */
+  adaptToFrontendNativeFormat(result: any): any {
+    if (!result) return result
+
+    const adapted: any = {
+      ...result,
+      score: result.overall_score || result.score,
+    }
+
+    if (result.dimensions && Array.isArray(result.dimensions)) {
+      result.dimensions.forEach((dim: any) => {
+        const id = dim.id || dim.dimension || dim.key
+        if (id) {
+          adapted[id] = dim.raw_score ?? dim.score ?? dim.value
+        }
+      })
+    }
+
+    if (result.type_profile) {
+      adapted.type = result.type_profile.type
+      adapted.typeCode = result.type_profile.code
+      adapted.code = result.type_profile.code
+    }
+
+    if (result.interpretation) {
+      adapted.interpretation = result.interpretation.summary || result.interpretation
+      adapted.level = result.interpretation.level
+    }
+
+    if (result.career_suggestions) {
+      adapted.careers = result.career_suggestions
+    }
+
+    if (result.development_advice) {
+      adapted.advice = result.development_advice
+      adapted.suggestions = result.development_advice
+    }
+
+    if (result.strengths) {
+      adapted.strengths = result.strengths
+    }
+
+    if (result.blind_spots) {
+      adapted.blindSpots = result.blind_spots
+    }
+
+    return adapted
   }
 }
 

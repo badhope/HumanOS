@@ -3,8 +3,17 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Clock, Target, Brain, Heart, Users, Briefcase, BarChart3, Shield, Palette, Gamepad2, Sparkles } from 'lucide-react'
 import { usePageTransition } from '@components/animations/PageTransitionController'
+import ParticleBackground from '@components/ParticleBackground'
 import { assessments } from '@data/assessments'
 import { cn } from '@utils/cn'
+
+const getDefaultConfig = (gradient: string, icon: React.ReactNode) => ({
+  gradient,
+  icon,
+  bgGradient: 'bg-gradient-to-br from-slate-900/60 to-slate-800/40',
+  borderColor: 'border-white/10',
+  shadowColor: 'shadow-white/5',
+})
 
 const categoryConfig: Record<string, {
   gradient: string
@@ -13,61 +22,194 @@ const categoryConfig: Record<string, {
   borderColor: string
   shadowColor: string
 }> = {
-  '人格心理': {
+  '特质论人格': {
     gradient: 'from-violet-500 to-purple-600',
     icon: <Brain className="w-5 h-5" />,
     bgGradient: 'bg-gradient-to-br from-violet-950/40 to-purple-900/30',
     borderColor: 'border-violet-500/30',
     shadowColor: 'shadow-violet-500/20',
   },
-  '认知能力': {
-    gradient: 'from-blue-500 to-cyan-500',
-    icon: <BarChart3 className="w-5 h-5" />,
-    bgGradient: 'bg-gradient-to-br from-blue-950/40 to-cyan-900/30',
-    borderColor: 'border-blue-500/30',
-    shadowColor: 'shadow-blue-500/20',
+  '黑暗三角': {
+    gradient: 'from-slate-600 to-slate-800',
+    icon: <Shield className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-slate-900/60 to-zinc-900/40',
+    borderColor: 'border-slate-500/30',
+    shadowColor: 'shadow-slate-500/20',
   },
-  '职业发展': {
-    gradient: 'from-emerald-500 to-teal-500',
-    icon: <Briefcase className="w-5 h-5" />,
-    bgGradient: 'bg-gradient-to-br from-emerald-950/40 to-teal-900/30',
-    borderColor: 'border-emerald-500/30',
-    shadowColor: 'shadow-emerald-500/20',
+  '互联网人格': {
+    gradient: 'from-fuchsia-500 to-pink-500',
+    icon: <Sparkles className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-fuchsia-950/40 to-pink-900/30',
+    borderColor: 'border-fuchsia-500/30',
+    shadowColor: 'shadow-fuchsia-500/20',
   },
-  '情绪管理': {
+  '心智成熟度': {
+    gradient: 'from-amber-500 to-orange-500',
+    icon: <Target className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-amber-950/40 to-orange-900/30',
+    borderColor: 'border-amber-500/30',
+    shadowColor: 'shadow-amber-500/20',
+  },
+  '情绪能力': {
     gradient: 'from-pink-500 to-rose-500',
     icon: <Heart className="w-5 h-5" />,
     bgGradient: 'bg-gradient-to-br from-pink-950/40 to-rose-900/30',
     borderColor: 'border-pink-500/30',
     shadowColor: 'shadow-pink-500/20',
   },
-  '人际关系': {
-    gradient: 'from-orange-500 to-amber-500',
-    icon: <Users className="w-5 h-5" />,
-    bgGradient: 'bg-gradient-to-br from-orange-950/40 to-amber-900/30',
-    borderColor: 'border-orange-500/30',
-    shadowColor: 'shadow-orange-500/20',
-  },
-  '心理健康': {
-    gradient: 'from-red-500 to-pink-600',
-    icon: <Shield className="w-5 h-5" />,
-    bgGradient: 'bg-gradient-to-br from-red-950/40 to-pink-900/30',
+  '焦虑水平': {
+    gradient: 'from-red-500 to-orange-500',
+    icon: <Clock className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-red-950/40 to-orange-900/30',
     borderColor: 'border-red-500/30',
     shadowColor: 'shadow-red-500/20',
   },
-  '意识形态': {
+  '流体智力': {
+    gradient: 'from-blue-500 to-cyan-500',
+    icon: <Brain className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-blue-950/40 to-cyan-900/30',
+    borderColor: 'border-blue-500/30',
+    shadowColor: 'shadow-blue-500/20',
+  },
+  '政治坐标': {
     gradient: 'from-indigo-500 to-violet-600',
-    icon: <Palette className="w-5 h-5" />,
+    icon: <Target className="w-5 h-5" />,
     bgGradient: 'bg-gradient-to-br from-indigo-950/40 to-violet-900/30',
     borderColor: 'border-indigo-500/30',
     shadowColor: 'shadow-indigo-500/20',
   },
-  '娱乐趣味': {
-    gradient: 'from-fuchsia-500 to-pink-500',
+  '国家认同': {
+    gradient: 'from-red-600 to-rose-600',
+    icon: <Heart className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-red-950/40 to-rose-900/30',
+    borderColor: 'border-red-600/30',
+    shadowColor: 'shadow-red-600/20',
+  },
+  '哲学立场': {
+    gradient: 'from-purple-600 to-violet-700',
+    icon: <Palette className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-purple-950/40 to-violet-900/30',
+    borderColor: 'border-purple-500/30',
+    shadowColor: 'shadow-purple-500/20',
+  },
+  '精神分析': {
+    gradient: 'from-slate-700 to-zinc-800',
+    icon: <Brain className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-slate-900/60 to-zinc-900/40',
+    borderColor: 'border-slate-600/30',
+    shadowColor: 'shadow-slate-600/20',
+  },
+  '存在主义': {
+    gradient: 'from-stone-600 to-neutral-700',
+    icon: <Sparkles className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-stone-900/60 to-neutral-900/40',
+    borderColor: 'border-stone-500/30',
+    shadowColor: 'shadow-stone-500/20',
+  },
+  '潜意识': {
+    gradient: 'from-teal-500 to-cyan-600',
+    icon: <Palette className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-teal-950/40 to-cyan-900/30',
+    borderColor: 'border-teal-500/30',
+    shadowColor: 'shadow-teal-500/20',
+  },
+  '职业兴趣': {
+    gradient: 'from-emerald-500 to-teal-500',
+    icon: <Briefcase className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-emerald-950/40 to-teal-900/30',
+    borderColor: 'border-emerald-500/30',
+    shadowColor: 'shadow-emerald-500/20',
+  },
+  '职业耗竭': {
+    gradient: 'from-orange-500 to-amber-500',
+    icon: <Clock className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-orange-950/40 to-amber-900/30',
+    borderColor: 'border-orange-500/30',
+    shadowColor: 'shadow-orange-500/20',
+  },
+  '企业文化': {
+    gradient: 'from-rose-500 to-pink-500',
+    icon: <Users className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-rose-950/40 to-pink-900/30',
+    borderColor: 'border-rose-500/30',
+    shadowColor: 'shadow-rose-500/20',
+  },
+  '职场行为': {
+    gradient: 'from-cyan-500 to-blue-500',
     icon: <Gamepad2 className="w-5 h-5" />,
-    bgGradient: 'bg-gradient-to-br from-fuchsia-950/40 to-pink-900/30',
-    borderColor: 'border-fuchsia-500/30',
-    shadowColor: 'shadow-fuchsia-500/20',
+    bgGradient: 'bg-gradient-to-br from-cyan-950/40 to-blue-900/30',
+    borderColor: 'border-cyan-500/30',
+    shadowColor: 'shadow-cyan-500/20',
+  },
+  '权力适应': {
+    gradient: 'from-stone-600 to-amber-700',
+    icon: <BarChart3 className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-stone-900/60 to-amber-900/40',
+    borderColor: 'border-amber-700/30',
+    shadowColor: 'shadow-amber-700/20',
+  },
+  '社会智力': {
+    gradient: 'from-amber-500 to-yellow-500',
+    icon: <Users className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-amber-950/40 to-yellow-900/30',
+    borderColor: 'border-amber-500/30',
+    shadowColor: 'shadow-amber-500/20',
+  },
+  '依恋风格': {
+    gradient: 'from-rose-500 to-pink-500',
+    icon: <Heart className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-rose-950/40 to-pink-900/30',
+    borderColor: 'border-rose-500/30',
+    shadowColor: 'shadow-rose-500/20',
+  },
+  '恋爱模式': {
+    gradient: 'from-pink-400 to-fuchsia-500',
+    icon: <Heart className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-pink-950/40 to-fuchsia-900/30',
+    borderColor: 'border-pink-400/30',
+    shadowColor: 'shadow-pink-400/20',
+  },
+  '亲子关系': {
+    gradient: 'from-amber-500 to-orange-500',
+    icon: <Users className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-amber-950/40 to-orange-900/30',
+    borderColor: 'border-amber-500/30',
+    shadowColor: 'shadow-amber-500/20',
+  },
+  '反操纵能力': {
+    gradient: 'from-slate-600 to-zinc-700',
+    icon: <Shield className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-slate-900/60 to-zinc-900/40',
+    borderColor: 'border-indigo-500/30',
+    shadowColor: 'shadow-indigo-500/20',
+  },
+  '动漫同人': {
+    gradient: 'from-blue-500 to-cyan-500',
+    icon: <Gamepad2 className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-blue-950/40 to-cyan-900/30',
+    borderColor: 'border-blue-500/30',
+    shadowColor: 'shadow-blue-500/20',
+  },
+  '饮食文化': {
+    gradient: 'from-orange-500 to-amber-500',
+    icon: <Clock className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-orange-950/40 to-amber-900/30',
+    borderColor: 'border-orange-500/30',
+    shadowColor: 'shadow-orange-500/20',
+  },
+  '数字生活': {
+    gradient: 'from-violet-500 to-purple-600',
+    icon: <Sparkles className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-violet-950/40 to-purple-900/30',
+    borderColor: 'border-violet-500/30',
+    shadowColor: 'shadow-violet-500/20',
+  },
+  '亲密探索': {
+    gradient: 'from-pink-500 to-rose-500',
+    icon: <Heart className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-pink-950/40 to-rose-900/30',
+    borderColor: 'border-pink-500/30',
+    shadowColor: 'shadow-pink-500/20',
   },
 }
 
@@ -87,7 +229,7 @@ export default function AssessmentSelect() {
   const { scrollXProgress } = useScroll({ container: containerRef })
 
   const filteredAssessments = selectedCategory
-    ? assessments.filter(a => a.category === selectedCategory)
+    ? assessments.filter(a => a.subcategory === selectedCategory)
     : assessments
 
   const scroll = (direction: 'left' | 'right') => {
@@ -105,7 +247,8 @@ export default function AssessmentSelect() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-24 pb-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-24 pb-12 relative overflow-hidden">
+      <ParticleBackground variant="meteors" />
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500"
@@ -202,7 +345,7 @@ export default function AssessmentSelect() {
           >
             <div className="flex gap-6" style={{ width: 'max-content' }}>
               {filteredAssessments.map((assessment, index) => {
-                const config = categoryConfig[assessment.category] || categoryConfig['人格心理']
+                const config = categoryConfig[assessment.subcategory] || categoryConfig['特质论人格']
                 return (
                 <motion.div
                   key={assessment.id}

@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { ArrowLeft, Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
 import { usePageTransition } from '@components/animations/PageTransitionController'
-import { assessments } from '@data/assessments'
+import ParticleBackground from '@components/ParticleBackground'
+import { assessments, getSubcategoriesByCategory } from '@data/assessments'
 import { cn } from '@utils/cn'
 
 interface SubCategory {
@@ -11,13 +12,14 @@ interface SubCategory {
   icon: React.ReactNode
   description: string
   color: string
+  count: number
 }
 
 interface CategoryGroup {
   id: string
   name: string
   gradient: string
-  icon: React.ReactNode
+  icon: string
   description: string
   color: string
   subCategories: SubCategory[]
@@ -25,105 +27,277 @@ interface CategoryGroup {
 
 const categoryGroups: CategoryGroup[] = [
   {
-    id: 'self-awareness',
+    id: 'self-cognition',
     name: '自我认知',
     gradient: 'from-violet-500 to-purple-600',
     icon: '🧠',
-    description: '探索你的性格特质、认知模式与价值观',
+    description: '探索你的性格特质、情绪能力与认知水平',
     color: '#8b5cf6',
     subCategories: [
       {
-        name: '人格心理',
+        name: '特质论人格',
         gradient: 'from-violet-500 to-purple-600',
-        icon: <div className="w-5 h-5 flex items-center justify-center">🎭</div>,
-        description: '探索你的性格特质与内心世界',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🌊</div>,
+        description: '大五人格等经典特质理论测评',
         color: '#8b5cf6',
+        count: 1,
       },
       {
-        name: '认知能力',
+        name: '黑暗三角',
+        gradient: 'from-slate-600 to-slate-800',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🌑</div>,
+        description: '马基雅维利主义、自恋、精神病态',
+        color: '#475569',
+        count: 1,
+      },
+      {
+        name: '互联网人格',
+        gradient: 'from-fuchsia-500 to-pink-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">😂</div>,
+        description: '当代互联网特色人格测试',
+        color: '#d946ef',
+        count: 1,
+      },
+      {
+        name: '心智成熟度',
+        gradient: 'from-amber-500 to-orange-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🧘</div>,
+        description: '测试你的心理年龄与成熟程度',
+        color: '#f59e0b',
+        count: 1,
+      },
+      {
+        name: '情绪能力',
+        gradient: 'from-pink-500 to-rose-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">❤️</div>,
+        description: '戈尔曼情绪智力五维测评',
+        color: '#ec4899',
+        count: 1,
+      },
+      {
+        name: '焦虑水平',
+        gradient: 'from-red-500 to-orange-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">⚡</div>,
+        description: 'SAS标准化焦虑水平测评',
+        color: '#ef4444',
+        count: 1,
+      },
+      {
+        name: '流体智力',
         gradient: 'from-blue-500 to-cyan-500',
-        icon: <div className="w-5 h-5 flex items-center justify-center">📊</div>,
-        description: '评估你的思维方式与智力潜能',
-        color: '#0ea5e9',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🧮</div>,
+        description: '瑞文标准智力测验',
+        color: '#3b82f6',
+        count: 1,
+      },
+    ],
+  },
+  {
+    id: 'ideology',
+    name: '意识形态',
+    gradient: 'from-indigo-500 to-violet-600',
+    icon: '🏛️',
+    description: '哲学、政治、文化认同与精神世界',
+    color: '#6366f1',
+    subCategories: [
+      {
+        name: '政治坐标',
+        gradient: 'from-indigo-500 to-violet-600',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🎯</div>,
+        description: '意识形态九方阵专业测试',
+        color: '#6366f1',
+        count: 1,
       },
       {
-        name: '价值观',
-        gradient: 'from-indigo-500 to-violet-600',
+        name: '国家认同',
+        gradient: 'from-red-600 to-rose-600',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🇨🇳</div>,
+        description: '爱国纯度灵魂拷问',
+        color: '#dc2626',
+        count: 1,
+      },
+      {
+        name: '哲学立场',
+        gradient: 'from-purple-600 to-violet-700',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🏛️</div>,
+        description: '当代哲学光谱精准定位',
+        color: '#7c3aed',
+        count: 1,
+      },
+      {
+        name: '精神分析',
+        gradient: 'from-slate-700 to-zinc-800',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🔮</div>,
+        description: '拉康精神分析临床诊断',
+        color: '#334155',
+        count: 1,
+      },
+      {
+        name: '存在主义',
+        gradient: 'from-stone-600 to-neutral-700',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🌌</div>,
+        description: '人生意义深度拷问',
+        color: '#57534e',
+        count: 1,
+      },
+      {
+        name: '潜意识',
+        gradient: 'from-teal-500 to-cyan-600',
         icon: <div className="w-5 h-5 flex items-center justify-center">🎨</div>,
-        description: '绘制你的价值观与意识形态图谱',
-        color: '#6366f1',
+        description: '色彩投射潜意识测试',
+        color: '#14b8a6',
+        count: 1,
+      },
+    ],
+  },
+  {
+    id: 'career',
+    name: '职业发展',
+    gradient: 'from-emerald-500 to-teal-500',
+    icon: '💼',
+    description: '职业兴趣、职场生态与企业文化',
+    color: '#10b981',
+    subCategories: [
+      {
+        name: '职业兴趣',
+        gradient: 'from-emerald-500 to-teal-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🔍</div>,
+        description: '霍兰德SDS职业兴趣测评',
+        color: '#10b981',
+        count: 1,
+      },
+      {
+        name: '职业耗竭',
+        gradient: 'from-orange-500 to-amber-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🔥</div>,
+        description: 'MBI职业倦怠标准化测评',
+        color: '#f59e0b',
+        count: 1,
+      },
+      {
+        name: '企业文化',
+        gradient: 'from-rose-500 to-pink-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🙏</div>,
+        description: '福报指数与职场PUA耐受度',
+        color: '#f43f5e',
+        count: 1,
+      },
+      {
+        name: '职场行为',
+        gradient: 'from-cyan-500 to-blue-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🐟</div>,
+        description: '打工人摸鱼纯度测试',
+        color: '#06b6d4',
+        count: 1,
+      },
+      {
+        name: '权力适应',
+        gradient: 'from-stone-600 to-amber-700',
+        icon: <div className="w-5 h-5 flex items-center justify-center">👔</div>,
+        description: 'D.R.E.A.M官场人格测评',
+        color: '#78716c',
+        count: 1,
+      },
+    ],
+  },
+  {
+    id: 'social',
+    name: '社交关系',
+    gradient: 'from-amber-500 to-orange-500',
+    icon: '👥',
+    description: '社会智力、依恋风格与人情世故',
+    color: '#f59e0b',
+    subCategories: [
+      {
+        name: '社会智力',
+        gradient: 'from-amber-500 to-yellow-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🎭</div>,
+        description: 'G.M.A人情世故成熟度',
+        color: '#eab308',
+        count: 1,
+      },
+      {
+        name: '依恋风格',
+        gradient: 'from-rose-500 to-pink-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">💕</div>,
+        description: 'ECR成人依恋风格标准化量表',
+        color: '#f43f5e',
+        count: 1,
+      },
+      {
+        name: '恋爱模式',
+        gradient: 'from-pink-400 to-fuchsia-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🐱</div>,
+        description: 'ABM恋爱动物人格测试',
+        color: '#f472b6',
+        count: 1,
+      },
+      {
+        name: '亲子关系',
+        gradient: 'from-amber-500 to-orange-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">👨‍👩‍👧</div>,
+        description: 'C.A.S.T中国式家长教养方式',
+        color: '#f59e0b',
+        count: 1,
+      },
+      {
+        name: '反操纵能力',
+        gradient: 'from-slate-600 to-zinc-700',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🛡️</div>,
+        description: 'PUA耐受度S.H.I.E.L.D测评',
+        color: '#4f46e5',
+        count: 1,
       },
     ],
   },
   {
     id: 'mental-health',
     name: '心理健康',
-    gradient: 'from-pink-500 to-rose-500',
-    icon: '💖',
-    description: '关注你的心理状态与情绪健康',
-    color: '#ec4899',
-    subCategories: [
-      {
-        name: '情绪管理',
-        gradient: 'from-pink-500 to-rose-500',
-        icon: <div className="w-5 h-5 flex items-center justify-center">❤️</div>,
-        description: '了解你的情商水平与情绪调节能力',
-        color: '#ec4899',
-      },
-      {
-        name: '心理健康',
-        gradient: 'from-red-500 to-pink-600',
-        icon: <div className="w-5 h-5 flex items-center justify-center">🛡️</div>,
-        description: '关注你的心理状态，守护心灵健康',
-        color: '#ef4444',
-      },
-    ],
-  },
-  {
-    id: 'career-social',
-    name: '职业与社交',
-    gradient: 'from-emerald-500 to-teal-500',
-    icon: '💼',
-    description: '规划职业生涯，提升社交能力',
-    color: '#10b981',
-    subCategories: [
-      {
-        name: '职业发展',
-        gradient: 'from-emerald-500 to-teal-500',
-        icon: <div className="w-5 h-5 flex items-center justify-center">💼</div>,
-        description: '发现你的职场优势与发展方向',
-        color: '#10b981',
-      },
-      {
-        name: '能力评估',
-        gradient: 'from-cyan-500 to-blue-500',
-        icon: <div className="w-5 h-5 flex items-center justify-center">⚡</div>,
-        description: '评估你的专业能力与综合素养',
-        color: '#06b6d4',
-      },
-      {
-        name: '人际关系',
-        gradient: 'from-orange-500 to-amber-500',
-        icon: <div className="w-5 h-5 flex items-center justify-center">👥</div>,
-        description: '分析你的社交风格与人际互动模式',
-        color: '#f59e0b',
-      },
-    ],
+    gradient: 'from-red-500 to-pink-600',
+    icon: '💚',
+    description: '焦虑、抑郁、压力与心理状态评估',
+    color: '#ef4444',
+    subCategories: [],
   },
   {
     id: 'entertainment',
     name: '娱乐趣味',
     gradient: 'from-fuchsia-500 to-pink-500',
     icon: '🎮',
-    description: '趣味测试，发现你的隐藏属性',
+    description: 'ACG、饮食、数字生活与休闲娱乐',
     color: '#d946ef',
     subCategories: [
       {
-        name: '娱乐趣味',
-        gradient: 'from-fuchsia-500 to-pink-500',
-        icon: <div className="w-5 h-5 flex items-center justify-center">🎮</div>,
-        description: '趣味测试，发现你的隐藏属性与专属标签',
-        color: '#d946ef',
+        name: '动漫同人',
+        gradient: 'from-blue-500 to-cyan-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🏴‍☠️</div>,
+        description: '海贼王赏金专业测评',
+        color: '#3b82f6',
+        count: 1,
+      },
+      {
+        name: '饮食文化',
+        gradient: 'from-orange-500 to-amber-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🍚</div>,
+        description: '干饭人等级认证测试',
+        color: '#f59e0b',
+        count: 1,
+      },
+      {
+        name: '数字生活',
+        gradient: 'from-violet-500 to-purple-600',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🌐</div>,
+        description: '网瘾程度深度测评',
+        color: '#8b5cf6',
+        count: 1,
+      },
+      {
+        name: '亲密探索',
+        gradient: 'from-pink-500 to-rose-500',
+        icon: <div className="w-5 h-5 flex items-center justify-center">🔥</div>,
+        description: '性经验指数老司机认证',
+        color: '#ec4899',
+        count: 1,
       },
     ],
   },
@@ -133,7 +307,7 @@ export default function CategorySelect() {
   const { navigateWithTransition } = usePageTransition()
   const containerRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(containerRef, { once: true })
-  const [expandedGroup, setExpandedGroup] = useState<string | null>('self-awareness')
+  const [expandedGroup, setExpandedGroup] = useState<string | null>('self-cognition')
 
   const toggleGroup = (groupId: string) => {
     setExpandedGroup(expandedGroup === groupId ? null : groupId)
@@ -147,226 +321,154 @@ export default function CategorySelect() {
 
   const handleBack = () => {
     navigateWithTransition('/', {
-      loadingText: '正在返回...',
-      duration: 1500,
+      loadingText: '返回首页...',
     })
   }
 
-  const getCategoryCount = (categoryName: string) => {
-    return assessments.filter(a => a.category === categoryName).length
-  }
-
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-30"
-          style={{
-            background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
-          }}
-          animate={{
-            scale: [1, 1.1, 1],
-            x: [0, 30, 0],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-25"
-          style={{
-            background: 'radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 70%)',
-          }}
-          animate={{
-            scale: [1.1, 1, 1.1],
-            x: [0, -20, 0],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </div>
-
-      <div className="max-w-5xl mx-auto relative">
+    <div className="relative min-h-screen overflow-hidden">
+      <ParticleBackground variant="stars" />
+      
+      <div className="relative z-10 max-w-6xl mx-auto px-4 py-20">
         <motion.button
-          onClick={handleBack}
-          className="flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors group"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          type="button"
+          onClick={handleBack}
+          className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8"
         >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          返回首页
+          <ArrowLeft className="w-5 h-5" />
+          <span>返回首页</span>
         </motion.button>
 
         <motion.div
           ref={containerRef}
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          initial="initial"
+          animate={isInView ? 'enter' : 'initial'}
+          variants={{
+            initial: { opacity: 0 },
+            enter: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1 },
+            },
+          }}
+          className="space-y-4"
         >
           <motion.div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
+            variants={{
+              initial: { opacity: 0, y: 20 },
+              enter: { opacity: 1, y: 0 },
+            }}
+            className="text-center mb-12"
           >
-            <Sparkles className="w-4 h-4 text-violet-400" />
-            <span className="text-sm text-white/70">AI 工具库</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              选择测评分类
+            </h1>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">
+              5大领域 × 27个精细化分类，全面探索你的每一个维度
+            </p>
           </motion.div>
 
-          <motion.h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-          >
-            <span className="text-white">探索 </span>
-            <span className="text-gradient">你的世界</span>
-          </motion.h1>
-
-          <motion.p
-            className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-          >
-            选择分类，开启你的自我发现之旅
-          </motion.p>
-        </motion.div>
-
-        <div className="space-y-4">
           {categoryGroups.map((group, groupIndex) => (
             <motion.div
               key={group.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.6 + groupIndex * 0.1,
-                duration: 0.6,
-                type: 'spring',
-                stiffness: 100,
+              variants={{
+                initial: { opacity: 0, y: 20 },
+                enter: { opacity: 1, y: 0 },
               }}
-              className="rounded-2xl overflow-hidden"
+              transition={{ delay: groupIndex * 0.1 }}
             >
               <motion.button
                 onClick={() => toggleGroup(group.id)}
                 className={cn(
-                  'w-full p-6 flex items-center justify-between text-left transition-all duration-300',
-                  'bg-gradient-to-r border',
+                  'w-full flex items-center justify-between p-6 rounded-2xl glass border transition-all duration-300',
                   expandedGroup === group.id
-                    ? `from-${group.color}30 to-${group.color}15 border-${group.color}50`
-                    : 'from-white/5 to-white/2 border-white/10 hover:from-white/10 hover:to-white/5'
+                    ? `bg-gradient-to-r ${group.gradient} border-transparent shadow-lg`
+                    : 'bg-white/5 border-white/10 hover:bg-white/10'
                 )}
-                style={{
-                  background: expandedGroup === group.id
-                    ? `linear-gradient(135deg, ${group.color}30 0%, ${group.color}15 100%)`
-                    : undefined,
-                  borderColor: expandedGroup === group.id ? `${group.color}50` : undefined,
-                }}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
-                type="button"
               >
                 <div className="flex items-center gap-4">
-                  <motion.div
-                    className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl"
-                    style={{
-                      background: `linear-gradient(135deg, ${group.color}40, ${group.color}20)`,
-                    }}
-                    animate={expandedGroup === group.id ? {
-                      scale: [1, 1.05, 1],
-                      rotate: [0, 3, -3, 0],
-                    } : {}}
-                    transition={{ duration: 0.6 }}
-                  >
-                    {group.icon}
-                  </motion.div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                  <span className="text-3xl">{group.icon}</span>
+                  <div className="text-left">
+                    <h3 className="text-xl font-bold text-white">
                       {group.name}
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium glass text-white/60">
-                        {group.subCategories.reduce((sum, sub) => sum + getCategoryCount(sub.name), 0)} 项测评
-                      </span>
                     </h3>
-                    <p className="text-sm text-white/50 mt-1">{group.description}</p>
+                    <p className={cn(
+                      'text-sm',
+                      expandedGroup === group.id ? 'text-white/80' : 'text-white/50'
+                    )}>
+                      {group.description} · {group.subCategories.length} 个子类
+                    </p>
                   </div>
                 </div>
-                <motion.div
-                  animate={{ rotate: expandedGroup === group.id ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="text-white/40"
-                >
-                  <ChevronDown className="w-6 h-6" />
-                </motion.div>
+                <div className="flex items-center gap-3">
+                  <div className="hidden md:flex items-center gap-1">
+                    {group.subCategories.slice(0, 4).map((sub, i) => (
+                      <div
+                        key={i}
+                        className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"
+                        title={sub.name}
+                      >
+                        {sub.icon}
+                      </div>
+                    ))}
+                    {group.subCategories.length > 4 && (
+                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs text-white/60">
+                        +{group.subCategories.length - 4}
+                      </div>
+                    )}
+                  </div>
+                  {expandedGroup === group.id ? (
+                    <ChevronUp className="w-5 h-5 text-white/70" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-white/40" />
+                  )}
+                </div>
               </motion.button>
 
-              <AnimatePresence>
-                {expandedGroup === group.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="p-4 pt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 bg-black/20">
-                      {group.subCategories.map((subCategory, subIndex) => {
-                        const count = getCategoryCount(subCategory.name)
-                        if (count === 0) return null
-
-                        return (
-                          <motion.div
-                            key={subCategory.name}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: subIndex * 0.05 }}
-                            onClick={() => handleCategorySelect(subCategory.name)}
-                            className="group p-4 rounded-xl cursor-pointer transition-all duration-300 hover:bg-white/10 bg-white/5 border border-white/5 hover:border-white/15"
-                            whileHover={{ scale: 1.02, x: 5 }}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div
-                                className="w-10 h-10 rounded-lg flex items-center justify-center"
-                                style={{
-                                  background: `linear-gradient(135deg, ${subCategory.color}40, ${subCategory.color}20)`,
-                                }}
-                              >
-                                {subCategory.icon}
-                              </div>
-                              <div>
-                                <h4 className="font-semibold text-white group-hover:text-gradient transition-all">
-                                  {subCategory.name}
-                                </h4>
-                                <div className="flex items-center gap-2 mt-0.5">
-                                  <span className="text-xs text-white/40">
-                                    {count} 项测评
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <p className="text-xs text-white/40 mt-2 ml-13">
-                              {subCategory.description}
-                            </p>
-                          </motion.div>
-                        )
-                      })}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {expandedGroup === group.id && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 ml-8">
+                    {group.subCategories.map((sub, subIndex) => (
+                      <motion.button
+                        key={sub.name}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: subIndex * 0.05 }}
+                        onClick={() => handleCategorySelect(sub.name)}
+                        className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all group"
+                        whileHover={{ scale: 1.02, x: 5 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <div className={cn(
+                          'w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center',
+                          sub.gradient
+                        )}>
+                          {sub.icon}
+                        </div>
+                        <div className="flex-1 text-left">
+                          <h4 className="font-semibold text-white group-hover:text-amber-400 transition-colors">
+                            {sub.name}
+                          </h4>
+                          <p className="text-xs text-white/50">
+                            {sub.description}
+                          </p>
+                        </div>
+                        <Sparkles className="w-4 h-4 text-white/20 group-hover:text-amber-400 transition-colors" />
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
           ))}
-        </div>
-
-        <motion.div
-          className="mt-12 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
-        >
-          <p className="text-white/40 text-sm">
-            共 {assessments.length} 项专业测评 · 持续更新中
-          </p>
         </motion.div>
       </div>
     </div>

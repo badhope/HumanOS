@@ -3,22 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   BarChart3,
   TrendingUp,
-  Users,
   Target,
   Calendar,
   Award,
   Merge,
   Download,
-  RefreshCw,
   ChevronRight,
   CheckCircle2,
-  XCircle,
   AlertTriangle,
   Lightbulb,
   ArrowUpRight,
   ArrowDownRight,
-  Minus,
-  Filter,
 } from 'lucide-react'
 import type { CompletedAssessment } from '../types'
 import { useAppStore } from '../store'
@@ -47,10 +42,9 @@ interface MergedAnalysis {
 
 export default function Dashboard({ className }: DashboardProps) {
   const { t, language } = useI18n()
-  const { completedAssessments, achievements } = useAppStore()
+  const { completedAssessments } = useAppStore()
   const [selectedRecords, setSelectedRecords] = useState<Set<number>>(new Set())
   const [showMergeModal, setShowMergeModal] = useState(false)
-  const [showExportModal, setShowExportModal] = useState(false)
   const [activeTab, setActiveTab] = useState<'overview' | 'trends' | 'insights' | 'merge'>('overview')
   const [mergedAnalysis, setMergedAnalysis] = useState<MergedAnalysis | null>(null)
 
@@ -241,13 +235,6 @@ export default function Dashboard({ className }: DashboardProps) {
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                     📋 {language === 'zh' ? '最近测评' : 'Recent Assessments'}
                   </h2>
-                  <button
-                    onClick={() => setShowExportModal(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                  >
-                    <Download className="w-4 h-4" />
-                    {t.export.title}
-                  </button>
                 </div>
                 <div className="space-y-3">
                   {completedAssessments.slice(-5).reverse().map((assessment, index) => (
@@ -1016,5 +1003,11 @@ function getAssessmentName(id: string, language: 'zh' | 'en'): string {
 }
 
 async function handleExportMergedReport(analysis: MergedAnalysis) {
-  console.log('Exporting merged report:', analysis)
+  const blob = new Blob([JSON.stringify(analysis, null, 2)], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `humanos-merged-${Date.now()}.json`
+  a.click()
+  URL.revokeObjectURL(url)
 }

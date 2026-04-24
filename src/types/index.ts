@@ -3,9 +3,11 @@ export interface Assessment {
   title: string
   description: string
   category: string
+  subcategory: string
   difficulty: 'lite' | 'standard' | 'expert'
   duration: number
   quality: string
+  icon?: string
   questionCount?: number
   questions: Question[]
   resultCalculator: (answers: Answer[]) => Record<string, any> | AssessmentResult
@@ -257,6 +259,7 @@ export interface UserProfile {
 }
 
 export interface CompletedAssessment {
+  id?: string
   assessmentId: string
   completedAt: Date
   result: any

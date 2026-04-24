@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Keyboard, X, ChevronRight } from 'lucide-react'
 import { Button } from '@components/ui/Button'
-import { useShortcutContext } from '@components/ShortcutProvider'
+import { useShortcutContext } from '@hooks/useShortcutContext'
 
 interface ShortcutGroup {
   title: string
@@ -71,18 +71,7 @@ export default function KeyboardShortcutsHelp() {
   )
 
   return (
-    <>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 z-40 shadow-lg bg-slate-800/80 backdrop-blur-xl border border-slate-700/50 hover:bg-slate-700/80"
-      >
-        <Keyboard className="w-4 h-4 mr-2" />
-        快捷键
-      </Button>
-
-      <AnimatePresence>
+    <AnimatePresence>
         {isOpen && (
           <>
             <motion.div
@@ -174,6 +163,5 @@ export default function KeyboardShortcutsHelp() {
           </>
         )}
       </AnimatePresence>
-    </>
   )
 }

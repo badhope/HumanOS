@@ -49,7 +49,7 @@ export const standardCalculators = {
   'holland-sds': calculateHolland,
   'eq-goleman': calculateEQ,
   'ocean-bigfive': calculateOcean,
-  'dark-triangle': calculateDark,
+  'dark-triad': calculateDark,
   'iq-ravens': calculateIQ,
   'ideology-9square': calculateIdeology,
   'slacking-purity': calculateSlacking,

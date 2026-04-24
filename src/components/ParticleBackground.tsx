@@ -3,185 +3,162 @@ import { useEffect, useRef } from 'react'
 interface Particle {
   x: number
   y: number
-  vx: number
-  vy: number
-  radius: number
-  baseRadius: number
+  size: number
+  speedX: number
+  speedY: number
   opacity: number
   color: string
-  pulse: number
-  pulseSpeed: number
 }
 
-const COLORS = [
-  '139, 92, 246',   // violet
-  '236, 72, 153',   // pink
-  '6, 182, 212',    // cyan
-  '16, 185, 129',   // emerald
-  '245, 158, 11',   // amber
-]
+interface Meteor {
+  x: number
+  y: number
+  length: number
+  speed: number
+  opacity: number
+  angle: number
+}
 
-const CONNECTION_DIST = 130
-const MOUSE_RADIUS = 120
-const MAX_PARTICLES = 60
-const PARTICLE_DENSITY = 18000 // one particle per N sq pixels
-
-export default function ParticleBackground() {
+export default function ParticleBackground({
+  variant = 'stars'
+}: {
+  variant?: 'stars' | 'meteors' | 'mixed'
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const mouseRef = useRef({ x: -9999, y: -9999 })
-  const animRef = useRef<number>(0)
   const particlesRef = useRef<Particle[]>([])
+  const meteorsRef = useRef<Meteor[]>([])
+  const animationRef = useRef<number>()
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const ctx = canvas.getContext('2d', { alpha: true })
+    const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
-
-    // Check prefers-reduced-motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion) return
-
-    const resize = () => {
-      canvas.width = window.innerWidth * dpr
-      canvas.height = window.innerHeight * dpr
-      canvas.style.width = `${window.innerWidth}px`
-      canvas.style.height = `${window.innerHeight}px`
-      ctx.scale(dpr, dpr)
-      createParticles()
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
     }
 
-    const createParticles = () => {
-      const w = window.innerWidth
-      const h = window.innerHeight
-      const count = Math.min(Math.floor((w * h) / PARTICLE_DENSITY), MAX_PARTICLES)
-      particlesRef.current = Array.from({ length: count }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        baseRadius: Math.random() * 1.8 + 0.6,
-        radius: 0,
+    resizeCanvas()
+    window.addEventListener('resize', resizeCanvas)
+
+    const colors = [
+      'rgba(251, 191, 36, ',
+      'rgba(139, 92, 246, ',
+      'rgba(236, 72, 153, ',
+      'rgba(59, 130, 246, ',
+      'rgba(255, 255, 255, ',
+    ]
+
+    const initParticles = () => {
+      particlesRef.current = Array.from({ length: 80 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 1.5 + 0.3,
+        speedX: (Math.random() - 0.5) * 0.15,
+        speedY: (Math.random() - 0.5) * 0.15,
         opacity: Math.random() * 0.4 + 0.1,
-        color: COLORS[Math.min(Math.floor(Math.random() * COLORS.length), COLORS.length - 1)],
-        pulse: Math.random() * Math.PI * 2,
-        pulseSpeed: Math.random() * 0.02 + 0.005,
+        color: colors[Math.floor(Math.random() * colors.length)],
       }))
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY }
+    const createMeteor = () => {
+      if (Math.random() > 0.995 && meteorsRef.current.length < 3) {
+        meteorsRef.current.push({
+          x: Math.random() * canvas.width * 1.5,
+          y: -50,
+          length: Math.random() * 60 + 30,
+          speed: Math.random() * 6 + 4,
+          opacity: 0.8,
+          angle: Math.PI / 4,
+        })
+      }
     }
 
-    const handleMouseLeave = () => {
-      mouseRef.current = { x: -9999, y: -9999 }
-    }
-
-    let animationRunning = true
+    initParticles()
 
     const animate = () => {
-      if (!animationRunning) return
-      const w = window.innerWidth
-      const h = window.innerHeight
-      const particles = particlesRef.current
-      const mouse = mouseRef.current
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      ctx.clearRect(0, 0, w, h)
+      particlesRef.current.forEach((particle, i) => {
+        particle.x += particle.speedX
+        particle.y += particle.speedY
+        particle.opacity += (Math.random() - 0.5) * 0.05
+        particle.opacity = Math.max(0.1, Math.min(1, particle.opacity))
 
-      // Update & draw particles
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i]
+        if (particle.x < 0) particle.x = canvas.width
+        if (particle.x > canvas.width) particle.x = 0
+        if (particle.y < 0) particle.y = canvas.height
+        if (particle.y > canvas.height) particle.y = 0
 
-        // Pulse animation
-        p.pulse += p.pulseSpeed
-        p.radius = p.baseRadius + Math.sin(p.pulse) * 0.4
-
-        // Mouse repulsion
-        const mdx = p.x - mouse.x
-        const mdy = p.y - mouse.y
-        const mDist = Math.sqrt(mdx * mdx + mdy * mdy)
-        if (mDist < MOUSE_RADIUS && mDist > 0) {
-          const force = ((MOUSE_RADIUS - mDist) / MOUSE_RADIUS) * 0.3
-          p.vx += (mdx / mDist) * force
-          p.vy += (mdy / mDist) * force
-        }
-
-        // Apply velocity with friction
-        p.vx *= 0.995
-        p.vy *= 0.995
-        p.x += p.vx
-        p.y += p.vy
-
-        // Wrap around edges
-        if (p.x < -10) p.x = w + 10
-        if (p.x > w + 10) p.x = -10
-        if (p.y < -10) p.y = h + 10
-        if (p.y > h + 10) p.y = -10
-
-        // Draw particle
         ctx.beginPath()
-        ctx.arc(p.x, p.y, Math.max(0.1, p.radius), 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${p.color}, ${p.opacity})`
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.fillStyle = particle.color + particle.opacity + ')'
         ctx.fill()
-      }
 
-      // Draw connections
-      ctx.lineWidth = 0.5
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
-          const dist = dx * dx + dy * dy
-          if (dist < CONNECTION_DIST * CONNECTION_DIST) {
-            const alpha = 0.08 * (1 - Math.sqrt(dist) / CONNECTION_DIST)
-            ctx.beginPath()
-            ctx.moveTo(particles[i].x, particles[i].y)
-            ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.strokeStyle = `rgba(139, 92, 246, ${alpha})`
-            ctx.stroke()
-          }
+        if (Math.random() > 0.97) {
+          ctx.beginPath()
+          ctx.arc(particle.x, particle.y, particle.size * 3, 0, Math.PI * 2)
+          ctx.fillStyle = particle.color + particle.opacity * 0.3 + ')'
+          ctx.fill()
         }
+      })
+
+      if (variant === 'meteors' || variant === 'mixed') {
+        createMeteor()
+
+        meteorsRef.current = meteorsRef.current.filter(meteor => {
+          meteor.x += Math.cos(meteor.angle) * meteor.speed
+          meteor.y += Math.sin(meteor.angle) * meteor.speed
+
+          const gradient = ctx.createLinearGradient(
+            meteor.x, meteor.y,
+            meteor.x - Math.cos(meteor.angle) * meteor.length,
+            meteor.y - Math.sin(meteor.angle) * meteor.length
+          )
+          gradient.addColorStop(0, `rgba(255, 255, 255, ${meteor.opacity})`)
+          gradient.addColorStop(0.5, `rgba(251, 191, 36, ${meteor.opacity * 0.5})`)
+          gradient.addColorStop(1, 'rgba(251, 191, 36, 0)')
+
+          ctx.beginPath()
+          ctx.moveTo(meteor.x, meteor.y)
+          ctx.lineTo(
+            meteor.x - Math.cos(meteor.angle) * meteor.length,
+            meteor.y - Math.sin(meteor.angle) * meteor.length
+          )
+          ctx.strokeStyle = gradient
+          ctx.lineWidth = 2
+          ctx.stroke()
+
+          ctx.beginPath()
+          ctx.arc(meteor.x, meteor.y, 3, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(255, 255, 255, ${meteor.opacity})`
+          ctx.fill()
+
+          return meteor.y < canvas.height + 100 && meteor.opacity > 0
+        })
       }
 
-      // Mouse glow
-      if (mouse.x > -999) {
-        const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, MOUSE_RADIUS)
-        gradient.addColorStop(0, 'rgba(139, 92, 246, 0.06)')
-        gradient.addColorStop(0.5, 'rgba(236, 72, 153, 0.02)')
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
-        ctx.beginPath()
-        ctx.arc(mouse.x, mouse.y, MOUSE_RADIUS, 0, Math.PI * 2)
-        ctx.fillStyle = gradient
-        ctx.fill()
-      }
-
-      animRef.current = requestAnimationFrame(animate)
+      animationRef.current = requestAnimationFrame(animate)
     }
 
-    resize()
     animate()
 
-    window.addEventListener('resize', resize)
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseleave', handleMouseLeave)
-
     return () => {
-      animationRunning = false
-      cancelAnimationFrame(animRef.current)
-      window.removeEventListener('resize', resize)
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseleave', handleMouseLeave)
+      window.removeEventListener('resize', resizeCanvas)
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
     }
-  }, [])
+  }, [variant])
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0, opacity: 0.7 }}
+      className="fixed inset-0 z-0 pointer-events-none"
+      style={{ background: 'transparent' }}
     />
   )
 }

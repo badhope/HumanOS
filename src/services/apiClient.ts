@@ -197,6 +197,62 @@ class AssessmentApiClient {
     const response = await this.client.get('/api/v1/auth/me')
     return response.data
   }
+
+  // =============================================================================
+  //  📄 云端导出 API
+  // =============================================================================
+  async checkCloudExportStatus(): Promise<{ enabled: boolean; engine: string | null }> {
+    try {
+      const response = await this.client.get('/api/v1/assessment/export/status')
+      return response.data
+    } catch {
+      return { enabled: false, engine: null }
+    }
+  }
+
+  async exportToPDF(resultId: string, resultHash?: string): Promise<Blob> {
+    const effectiveId = resultHash || resultId
+    const response = await this.client.post(
+      `/api/v1/assessment/export/${effectiveId}/pdf`,
+      {},
+      { responseType: 'blob' }
+    )
+    return response.data
+  }
+
+  async exportToImage(resultId: string, resultHash?: string): Promise<Blob> {
+    const effectiveId = resultHash || resultId
+    const response = await this.client.post(
+      `/api/v1/assessment/export/${effectiveId}/image`,
+      {},
+      { responseType: 'blob' }
+    )
+    return response.data
+  }
+
+  // =============================================================================
+  //  🔗 永久链接 API
+  // =============================================================================
+  async archiveResult(assessmentId: string, answers: Record<string, number>): Promise<{
+    result_hash: string
+    exists: boolean
+    created_at: string
+  }> {
+    const response = await this.client.post('/api/v1/assessment/archive', {
+      assessment_id: assessmentId,
+      answers,
+    })
+    return response.data
+  }
+
+  async getArchivedResult(resultHash: string): Promise<{
+    assessment_id: string
+    answers: Record<string, number>
+    result: any
+  }> {
+    const response = await this.client.get(`/api/v1/assessment/archive/${resultHash}`)
+    return response.data
+  }
 }
 
 export const apiClient = new AssessmentApiClient()

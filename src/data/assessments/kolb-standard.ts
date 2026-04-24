@@ -1,0 +1,101 @@
+import type { Assessment } from '../../types'
+import { calculateKolb } from '../../utils/calculators/kolb-calculator'
+
+export const kolbStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
+  id: 'kolb-standard',
+  title: 'Kolb 学习风格量表',
+  description: '教育心理学经典 | 发现你最有效的学习方式：发散×同化×收敛×调适 四象限',
+  icon: '🧠',
+  category: '认知',
+  subcategory: '学习科学',
+  difficulty: 'standard',
+  duration: 4,
+  quality: '经典',
+  resultCalculator: calculateKolb,
+  questions: [
+    { id: 'kolb1', type: 'likert-5', text: '我倾向于从亲身经历中学习', reverseScored: false, dimension: 'concrete-experience', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb2', type: 'likert-5', text: '我喜欢观察和分析后再行动', reverseScored: false, dimension: 'reflective-observation', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb3', type: 'likert-5', text: '我喜欢建立概念和理论模型', reverseScored: false, dimension: 'abstract-conceptualization', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb4', type: 'likert-5', text: '我喜欢动手实践和尝试新事物', reverseScored: false, dimension: 'active-experimentation', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb5', type: 'likert-5', text: '我对人的感受和情绪很敏感', reverseScored: false, dimension: 'concrete-experience', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb6', type: 'likert-5', text: '我会多角度思考同一个问题', reverseScored: false, dimension: 'reflective-observation', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb7', type: 'likert-5', text: '我擅长归纳总结形成体系', reverseScored: false, dimension: 'abstract-conceptualization', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb8', type: 'likert-5', text: '遇到问题我会马上尝试解决', reverseScored: false, dimension: 'active-experimentation', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb9', type: 'likert-5', text: '我相信直觉和感受的判断', reverseScored: false, dimension: 'concrete-experience', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb10', type: 'likert-5', text: '做决定前我会充分考虑各种可能性', reverseScored: false, dimension: 'reflective-observation', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb11', type: 'likert-5', text: '我追求逻辑的严谨性', reverseScored: false, dimension: 'abstract-conceptualization', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+    { id: 'kolb12', type: 'likert-5', text: '我从错误中学习进步最快', reverseScored: false, dimension: 'active-experimentation', options: [
+      { id: '1', text: '❌ 完全不符合', value: 1 },
+      { id: '2', text: '⚪️ 不太符合', value: 2 },
+      { id: '3', text: '🔵 一般符合', value: 3 },
+      { id: '4', text: '🟢 比较符合', value: 4 },
+      { id: '5', text: '✅ 完全符合', value: 5 },
+    ]},
+  ]
+}

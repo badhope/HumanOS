@@ -149,6 +149,12 @@ export default function ReportTemplate({ result, assessmentType }: ReportTemplat
   if (assessmentType === 'internet-addiction')return <InternetAddictionReport result={result} /> // 网瘾程度
   if (assessmentType === 'sexual-experience') return <SexualExperienceReport result={result} /> // 性经验指数
 
+  // ---------- 新增趣味测评 - 修复报告空白bug ----------
+  if (assessmentType === 'color-subconscious') return <ColorSubconsciousReport result={result} />   // 颜色潜意识
+  if (assessmentType === 'abm-love-animal')   return <AbmLoveAnimalReport result={result} />       // ABM恋爱动物
+  if (assessmentType === 'mental-age')        return <MentalAgeReport result={result} />            // 精神年龄
+  if (assessmentType === 'sbti-personality')  return <SBTIPersonalityReport result={result} />      // SBTI傻屌人格
+
   // ---------- 兜底 fallback ----------
   // 所有未注册的测评都会走到这里
   // 注意：新测评没加分支的话就只显示标题+描述！
@@ -3103,6 +3109,360 @@ function SexualExperienceReport({ result }: { result: any }) {
               className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-100 italic"
             >
               💖 "{quote}"
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+/**
+ * ==============================================
+ * 🎨 颜色潜意识测试 - 完整报告渲染组件
+ * ==============================================
+ */
+function ColorSubconsciousReport({ result }: { result: any }) {
+  return (
+    <div className="space-y-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative overflow-hidden rounded-3xl p-8 border border-white/10"
+        style={{ background: `linear-gradient(135deg, ${result.hex || '#8B5CF6'}30, #1e1b4b, ${result.hex || '#8B5CF6'}15)` }}
+      >
+        <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" style={{ backgroundColor: result.hex, opacity: 0.3 }} />
+        
+        <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="w-24 h-24 rounded-3xl flex items-center justify-center shadow-2xl" style={{ backgroundColor: result.hex }}>
+            <span className="text-5xl">{result.emoji || '🌈'}</span>
+          </div>
+          
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="px-3 py-1 rounded-full text-white text-sm font-semibold" style={{ backgroundColor: result.hex }}>
+                灵魂色彩诊断
+              </span>
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-2">{result.name || '你的灵魂色彩'}</h2>
+            <p className="text-white/60 leading-relaxed max-w-2xl text-lg">{result.desc}</p>
+          </div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <BarChart3 className="w-6 h-6 text-violet-400" />
+          五维色彩人格分析
+        </h3>
+        <div className="grid md:grid-cols-5 gap-3">
+          {(result.dimensions || []).map((dim: any, index: number) => (
+            <motion.div
+              key={dim.name}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 + index * 0.08 }}
+              className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 p-5 border border-white/10 text-center"
+            >
+              <div className="text-3xl font-bold mb-2" style={{ color: dim.color }}>{dim.score}</div>
+              <div className="text-white/60 text-sm">{dim.name}</div>
+              <div className="mt-3 h-2 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${dim.score}%`, backgroundColor: dim.color }} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 border border-white/10"
+      >
+        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+          <Award className="w-6 h-6 text-rose-400" />
+          九色灵魂图鉴
+        </h3>
+        <div className="grid md:grid-cols-3 gap-3">
+          {(result.allColors || []).slice(0, 9).map((color: any, index: number) => (
+            <motion.div
+              key={color.type}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 + index * 0.05 }}
+              className={`p-4 rounded-xl border ${result.type === color.type ? 'ring-2 ring-white/50 border-white/30' : 'border-white/10'} bg-white/5`}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{color.emoji}</span>
+                <div>
+                  <div className="font-semibold text-white">{color.name}</div>
+                  <div className="text-white/40 text-xs">{color.type}</div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+/**
+ * ==============================================
+ * 🐕 ABM恋爱动物人格 - 完整报告渲染组件
+ * ==============================================
+ */
+function AbmLoveAnimalReport({ result }: { result: any }) {
+  return (
+    <div className="space-y-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-rose-900/40 via-purple-900/30 to-amber-900/30 p-8 border border-white/10"
+      >
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-rose-500/20 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        
+        <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-rose-500 via-pink-500 to-purple-500 flex items-center justify-center shadow-2xl shadow-rose-500/30">
+            <span className="text-5xl">{result.emoji || '🐱'}</span>
+          </div>
+          
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white text-sm font-semibold">
+                恋爱动物人格
+              </span>
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-2">{result.name || '你的恋爱动物'}</h2>
+            <p className="text-white/60 leading-relaxed max-w-2xl text-lg">{result.desc}</p>
+          </div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <Heart className="w-6 h-6 text-rose-400" />
+          恋爱五维分析
+        </h3>
+        <div className="grid md:grid-cols-5 gap-3">
+          {(result.dimensions || []).map((dim: any, index: number) => (
+            <motion.div
+              key={dim.name}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 + index * 0.08 }}
+              className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 p-5 border border-white/10 text-center"
+            >
+              <div className="text-3xl font-bold mb-2" style={{ color: dim.color }}>{dim.score}</div>
+              <div className="text-white/60 text-sm">{dim.name}</div>
+              <div className="mt-3 h-2 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${dim.score}%`, backgroundColor: dim.color }} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="rounded-3xl bg-gradient-to-br from-slate-900 via-rose-900/20 to-slate-900 p-8 border border-white/10"
+      >
+        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+          <Users className="w-6 h-6 text-rose-400" />
+          十二种恋爱动物全图鉴
+        </h3>
+        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {(result.allAnimals || []).map((animal: any, index: number) => (
+            <motion.div
+              key={animal.type}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 + index * 0.03 }}
+              className={`p-4 rounded-xl border ${result.type === animal.type ? 'ring-2 ring-rose-500/50 border-rose-400/50 bg-rose-500/10' : 'border-white/10 bg-white/5'}`}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{animal.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-white truncate">{animal.name}</div>
+                  <div className="text-white/40 text-xs truncate">{animal.desc?.slice(0, 15)}...</div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+/**
+ * ==============================================
+ * 🧠 精神年龄诊断 - 完整报告渲染组件
+ * ==============================================
+ */
+function MentalAgeReport({ result }: { result: any }) {
+  return (
+    <div className="space-y-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-900/40 via-orange-900/20 to-yellow-900/30 p-8 border border-white/10"
+      >
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-amber-500/20 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        
+        <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-500 flex items-center justify-center shadow-2xl shadow-amber-500/30">
+            <span className="text-5xl">{result.emoji || '🏛️'}</span>
+          </div>
+          
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-semibold">
+                精神年龄诊断
+              </span>
+              <span className="text-white/40 text-lg font-bold">{result.mentalAge || 99} 岁</span>
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-2">{result.overall || '精神年龄'}</h2>
+            <p className="text-white/60 leading-relaxed max-w-2xl text-lg">
+              你的身体在上班，灵魂已经退休了吗？
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <Brain className="w-6 h-6 text-amber-400" />
+          心智五维分析
+        </h3>
+        <div className="grid md:grid-cols-5 gap-3">
+          {(result.dimensions || []).map((dim: any, index: number) => (
+            <motion.div
+              key={dim.name}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 + index * 0.08 }}
+              className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 p-5 border border-white/10 text-center"
+            >
+              <div className="text-3xl font-bold mb-2" style={{ color: dim.color }}>{dim.score}</div>
+              <div className="text-white/60 text-sm">{dim.name}</div>
+              <div className="mt-3 h-2 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${dim.score}%`, backgroundColor: dim.color }} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+/**
+ * ==============================================
+ * 🦥 SBTI傻屌人格测试 - 完整报告渲染组件
+ * ==============================================
+ */
+function SBTIPersonalityReport({ result }: { result: any }) {
+  return (
+    <div className="space-y-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-900/40 via-blue-900/20 to-cyan-900/30 p-8 border border-white/10"
+      >
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-violet-500/20 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        
+        <div className="relative flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-violet-500 via-blue-500 to-cyan-500 flex items-center justify-center shadow-2xl shadow-violet-500/30">
+            <span className="text-5xl">{result.emoji || '🦥'}</span>
+          </div>
+          
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-violet-500 to-blue-500 text-white text-sm font-semibold">
+                SBTI 人格类型
+              </span>
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-2">{result.overall || result.type || 'SBTI人格类型'}</h2>
+            <p className="text-white/60 leading-relaxed max-w-2xl text-lg">
+              2026全网爆火！比MBTI更懂你的摆烂人生 ✨
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+          <Target className="w-6 h-6 text-violet-400" />
+          SBTI 四维度分析
+        </h3>
+        <div className="grid md:grid-cols-4 gap-3">
+          {(result.dimensions || []).map((dim: any, index: number) => (
+            <motion.div
+              key={dim.name}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 + index * 0.1 }}
+              className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 p-5 border border-white/10 text-center"
+            >
+              <div className="text-3xl font-bold mb-2" style={{ color: dim.color }}>{dim.score}</div>
+              <div className="text-white/60 text-sm">{dim.name}</div>
+              <div className="mt-3 h-2 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${dim.score}%`, backgroundColor: dim.color }} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="rounded-3xl bg-gradient-to-br from-slate-900 via-violet-900/20 to-slate-900 p-8 border border-white/10"
+      >
+        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+          <Award className="w-6 h-6 text-violet-400" />
+          SBTI 四大天王
+        </h3>
+        <div className="grid md:grid-cols-4 gap-4">
+          {[
+            { type: '职业吗喽', emoji: '🙈', desc: '只要给够加班费，当牛做马无所谓' },
+            { type: '摆烂之王', emoji: '🦥', desc: '工作的意义就是为了下班' },
+            { type: '顶级杠精', emoji: '🦝', desc: '你说的都对，但我就是要杠' },
+            { type: '无限社恐', emoji: '🦔', desc: '只要我足够透明，就没人能发现我' },
+          ].map((item, index) => (
+            <motion.div
+              key={item.type}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.25 + index * 0.08 }}
+              className={`p-5 rounded-xl border ${result.type === item.type ? 'ring-2 ring-violet-500/50 border-violet-400/50 bg-violet-500/10' : 'border-white/10 bg-white/5'}`}
+            >
+              <div className="text-center">
+                <span className="text-4xl block mb-3">{item.emoji}</span>
+                <div className="font-bold text-white mb-1">{item.type}</div>
+                <div className="text-white/50 text-xs">{item.desc}</div>
+              </div>
             </motion.div>
           ))}
         </div>

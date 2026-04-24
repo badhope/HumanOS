@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Command, FileText, Sparkles, ArrowRight, Clock, TrendingUp } from 'lucide-react'
+import { Search, X, Command, FileText, Sparkles, TrendingUp, Keyboard, ChevronRight, ArrowRight, Clock } from 'lucide-react'
 import { assessments } from '@data/assessments'
 import { useNavigate } from 'react-router-dom'
+import { useShortcutContext } from '@hooks/useShortcutContext'
 
 interface SearchResult {
   id: string
@@ -23,10 +24,8 @@ const STATIC_PAGES: SearchResult[] = [
   { id: 'world-sim', type: 'page', title: '国家模拟器', description: '宏观经济政策模拟', icon: <Sparkles className="w-4 h-4" />, path: '/world', keywords: ['经济', '模拟', 'simulator', 'economy', '国家', 'policy'] },
 ]
 
-import { useShortcutContext } from '@components/ShortcutProvider'
-
 export default function QuickSearchModal() {
-  const { searchOpen: isOpen, setSearchOpen: setIsOpen } = useShortcutContext()
+  const { searchOpen: isOpen, setSearchOpen: setIsOpen, setHelpOpen } = useShortcutContext()
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -117,18 +116,25 @@ export default function QuickSearchModal() {
 
   return (
     <>
-      <button
+      <motion.button
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        whileHover={{ scale: 1.02, y: -1 }}
+        whileTap={{ scale: 0.98 }}
         onClick={() => setIsOpen(true)}
-        className="group flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 transition-all"
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-40 group flex items-center gap-2.5 px-3 sm:px-5 py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-slate-800/95 via-slate-800/90 to-slate-800/95 backdrop-blur-2xl border border-white/10 hover:border-violet-500/50 transition-all duration-300 shadow-xl hover:shadow-violet-500/10 hover:shadow-2xl ml-14 sm:ml-0 mr-14 sm:mr-0 max-w-[calc(100vw-8rem)] sm:max-w-none"
       >
-        <Search className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" />
-        <span className="text-sm text-slate-400 group-hover:text-slate-200 transition-colors hidden sm:inline">
+        <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-violet-500 to-blue-600 flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-all shrink-0">
+          <Search className="w-4 h-4 text-white" />
+        </div>
+        <span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors hidden md:inline">
           快速搜索
         </span>
-        <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-lg bg-slate-700/50 text-slate-400 border border-slate-600/50">
+        <kbd className="hidden lg:inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-xl bg-violet-500/20 text-violet-300 border border-violet-500/30 font-mono">
           <Command className="w-3 h-3" />K
         </kbd>
-      </button>
+      </motion.button>
 
       <AnimatePresence>
         {isOpen && (
@@ -228,12 +234,28 @@ export default function QuickSearchModal() {
                 </div>
 
                 <div className="px-4 py-2.5 border-t border-slate-700/50 bg-slate-900/50">
-                  <div className="flex items-center justify-between text-[11px] text-slate-500">
-                    <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 text-[11px] text-slate-500">
                       <span>↑↓ 导航</span>
                       <span>↵ 选择</span>
                       <span>esc 关闭</span>
                     </div>
+                    <button
+                      onClick={() => {
+                        setIsOpen(false)
+                        setTimeout(() => setHelpOpen(true), 50)
+                      }}
+                      className="flex items-center gap-1.5 px-2 py-1 rounded-lg hover:bg-slate-700/50 text-xs text-slate-400 hover:text-white transition-all"
+                    >
+                      <Keyboard className="w-3.5 h-3.5" />
+                      <span>快捷键</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="px-4 py-2.5 border-t border-slate-700/50 bg-slate-900/50">
+                  <div className="flex items-center justify-between text-[11px] text-slate-500">
                     <div className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       <span>{results.length} 个结果</span>

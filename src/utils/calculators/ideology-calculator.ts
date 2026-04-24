@@ -30,11 +30,20 @@
  */
 
 import type { Answer, AssessmentResult } from '../../types'
+import { diversityEngine, isomericEngine } from '../../data/assessments/diversity-enhancement-engine'
+import { ideologyAssessment } from '../../data/assessments/ideology-9square'
 
 /**
  * 工具函数：从数组随机挑选一个（全项目通用）
  */
 const randomPick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)]
+
+const IDEOLOGY_NORMS = {
+  economicScore: { mean: 52, sd: 22 },
+  socialScore: { mean: 48, sd: 24 },
+  diplomaticScore: { mean: 55, sd: 21 },
+  culturalScore: { mean: 53, sd: 23 },
+}
 
 /**
  * 意识形态九宫格结果接口
@@ -111,10 +120,34 @@ export function calculateIdeology(answers: Answer[]): IdeologyResult {
     return Math.round(((raw - items.length) / (items.length * 4)) * 100)
   }
 
-  const economicScore = calcScore(economicItems, reverseEconomic)
-  const socialScore = calcScore(socialItems, reverseSocial)
-  const diplomaticScore = calcScore(diplomaticItems, reverseDiplomatic)
-  const culturalScore = calcScore(culturalItems, reverseCultural)
+  const rawScores = {
+    economicScore: calcScore(economicItems, reverseEconomic),
+    socialScore: calcScore(socialItems, reverseSocial),
+    diplomaticScore: calcScore(diplomaticItems, reverseDiplomatic),
+    culturalScore: calcScore(culturalItems, reverseCultural),
+  }
+
+  const responseValues = Object.fromEntries(
+    Object.entries(answerMap).map(([k, v]) => [k, typeof v === 'number' ? v : Number(v) || 3])
+  )
+  const responseStyle = diversityEngine.calculateResponseStyle(responseValues, 5)
+  const correctedScores = diversityEngine.applyResponseStyleCorrection(rawScores, responseStyle)
+  const enhanced = diversityEngine.enhanceResultDiversity(correctedScores, {
+    responseId: 'ideology-' + Date.now(),
+    rawScores,
+    responseStyle,
+    diversityMetrics: {
+      scoreEntropy: diversityEngine.calculateShannonEntropy(Object.values(rawScores)),
+      dimensionSpread: Math.max(...Object.values(rawScores)) - Math.min(...Object.values(rawScores)),
+      resultUniqueness: diversityEngine.calculateUniquenessScore(rawScores, IDEOLOGY_NORMS),
+    },
+  }) as typeof rawScores
+
+  const { economicScore, socialScore, diplomaticScore, culturalScore } = enhanced
+
+  const allScoresInMidrange = Object.values(enhanced).every(s => s >= 42 && s <= 58)
+  const fingerprint = isomericEngine.generateResponseFingerprint(responseValues, ideologyAssessment.questions)
+  const midrangeSubtype = isomericEngine.classifyMidrangeSubtype(fingerprint, enhanced)
 
   const getEconomicAxis = (s: number) => {
     if (s < 15) return 'far-left'
@@ -470,6 +503,9 @@ export function calculateIdeology(answers: Answer[]): IdeologyResult {
   const defaultQuote = ['生活还要继续']
   const defaultHistory = '历史就是历史，争论毫无意义'
 
+  const finalIdeology = allScoresInMidrange ? `${midrangeSubtype.name}` : specificIdeology
+  const finalEmoji = allScoresInMidrange ? '🎯' : ideologyEmoji
+
   return {
     economicScore,
     socialScore,
@@ -479,13 +515,13 @@ export function calculateIdeology(answers: Answer[]): IdeologyResult {
     socialAxis,
     diplomaticAxis: diplomaticScore < 33 ? 'internationalist' : diplomaticScore < 66 ? 'neutral' : 'nationalist',
     culturalAxis: culturalScore < 20 ? 'radical' : culturalScore < 40 ? 'progressive' : culturalScore < 60 ? 'neutral' : culturalScore < 80 ? 'conservative' : 'traditionalist',
-    ideologyType: specificIdeology.split(' ')[0],
-    ideologyEmoji,
-    specificIdeology,
+    ideologyType: allScoresInMidrange ? midrangeSubtype.name : specificIdeology.split(' ')[0],
+    ideologyEmoji: finalEmoji,
+    specificIdeology: finalIdeology,
     gridPosition: { row, col },
     dimensions,
     compassData,
-    typeDescription: randomPick(typeDescriptions[specificIdeology] || typeDescriptions['中间派 🤷']),
+    typeDescription: allScoresInMidrange ? midrangeSubtype.description : randomPick(typeDescriptions[specificIdeology] || typeDescriptions['中间派 🤷']),
     famousPeople: famousPeopleDatabase[specificIdeology] || famousPeopleDatabase['中间派 🤷'],
     typicalTraits: traitDatabase[specificIdeology] || traitDatabase['中间派 🤷'],
     internetPersona: internetPersonaDatabase[specificIdeology] || defaultPersona,
@@ -500,6 +536,16 @@ export function calculateIdeology(answers: Answer[]): IdeologyResult {
     memeLevel,
     purityScore,
     culturalPosition,
+    diversityAnalysis: {
+      uniquenessScore: Math.round(diversityEngine.calculateUniquenessScore(rawScores, IDEOLOGY_NORMS)),
+      extremityScore: Math.round(responseStyle.extremityScore * 100),
+      midpointAvoidance: Math.round((1 - responseStyle.midpointRatio) * 100),
+    },
+    isomericAnalysis: allScoresInMidrange ? {
+      enabled: true,
+      subtype: midrangeSubtype.name,
+      characteristicItems: midrangeSubtype.characteristicItems,
+    } : null,
   }
 }
 

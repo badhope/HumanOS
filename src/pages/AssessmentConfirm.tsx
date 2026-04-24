@@ -10,8 +10,29 @@ export default function AssessmentConfirm() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const assessment = id ? getAssessmentById(id) : undefined
-  const mode = searchParams.get('mode') || 'normal'
+  const [selectedMode, setSelectedMode] = useState<'normal' | 'professional'>('normal')
   const [showCredibility, setShowCredibility] = useState(false)
+
+  const modeConfigs = {
+    normal: {
+      label: '标准版',
+      sublabel: '推荐选择',
+      questionCount: '约 28 题',
+      duration: '约 5 分钟',
+      accuracy: '高准确率',
+      color: 'from-violet-500 to-pink-500',
+      description: '科学抽样，去重优化，适合大多数用户快速获得准确结果'
+    },
+    professional: {
+      label: '专业版',
+      sublabel: '深度分析',
+      questionCount: '全量题库',
+      duration: '约 10-20 分钟',
+      accuracy: '学术级精度',
+      color: 'from-amber-500 to-orange-500',
+      description: '完整量表，信效度最高，适合心理学爱好者和专业人士'
+    },
+  }
 
   if (!assessment) {
     return (
@@ -31,12 +52,12 @@ export default function AssessmentConfirm() {
   }
 
   const handleStart = () => {
-    navigate(`/assessment/${id}?mode=${mode}`)
+    navigate(`/assessment/${id}?mode=${selectedMode}`)
   }
 
   const realQuestionCount = assessment.questions?.length || 0
-  const questionCount = realQuestionCount || assessment.questionCount || 40
-  const durationMinutes = Math.max(3, Math.ceil(questionCount * 8 / 60))
+  const durationMinutes = selectedMode === 'normal' ? 5 : Math.max(10, Math.ceil(realQuestionCount * 10 / 60))
+  const displayQuestionCount = selectedMode === 'normal' ? 28 : realQuestionCount || 60
   const qualityLabel = {
     lite: '科学',
     standard: '专业',
@@ -103,10 +124,72 @@ export default function AssessmentConfirm() {
           </motion.div>
 
           <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+            className="mb-8"
+          >
+            <p className="text-white/70 text-sm mb-3 text-left">请选择测评版本：</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {(['normal', 'professional'] as const).map((mode) => {
+                const config = modeConfigs[mode]
+                const isSelected = selectedMode === mode
+                return (
+                  <motion.button
+                    key={mode}
+                    onClick={() => setSelectedMode(mode)}
+                    className={`relative p-5 rounded-2xl border-2 transition-all text-left overflow-hidden ${
+                      isSelected
+                        ? `border-violet-500`
+                        : 'border-white/10 hover:border-white/20'
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="button"
+                  >
+                    {isSelected && (
+                      <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-30`} />
+                    )}
+                    {isSelected && (
+                      <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-violet-500 flex items-center justify-center z-20">
+                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                    <div className="relative z-10">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`text-lg font-bold ${
+                        isSelected ? 'text-white' : 'text-white/90'
+                      }`}>
+                        {config.label}
+                      </span>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        mode === 'normal'
+                          ? 'bg-violet-500/20 text-violet-400'
+                          : 'bg-amber-500/20 text-amber-400'
+                      }`}>
+                        {config.sublabel}
+                      </span>
+                    </div>
+                    <p className="text-white/60 text-sm mb-3">{config.description}</p>
+                    <div className="flex gap-4 text-xs">
+                      <span className="text-white/50">📝 {config.questionCount}</span>
+                      <span className="text-white/50">⏱️ {config.duration}</span>
+                      <span className="text-white/50">🎯 {config.accuracy}</span>
+                    </div>
+                    </div>
+                  </motion.button>
+                )
+              })}
+            </div>
+          </motion.div>
+
+          <motion.div
             className="grid grid-cols-3 gap-4 mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.55 }}
           >
             <div className="glass rounded-xl p-4">
               <Clock className="w-6 h-6 text-violet-400 mx-auto mb-2" />
@@ -115,7 +198,7 @@ export default function AssessmentConfirm() {
             </div>
             <div className="glass rounded-xl p-4">
               <Target className="w-6 h-6 text-pink-400 mx-auto mb-2" />
-              <p className="text-white font-semibold">{questionCount} 题</p>
+              <p className="text-white font-semibold">{displayQuestionCount} 题</p>
               <p className="text-white/50 text-sm">题目数量</p>
             </div>
             <div className="glass rounded-xl p-4">

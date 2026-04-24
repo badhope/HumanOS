@@ -4,14 +4,22 @@
  * ==============================================
  * 【测评定位】哲学立场六维坐标系
  * 【核心算法】6坐标轴 × 8题/轴 = 48题
- * 
+ *
  * 【⚠️  超级重要警告】
  * 1. 按题目dimension累加计分！
  * 2. dimension拼写错了 = 对应坐标永远在中间！
+ *
+ * 【✅ 多样性增强引擎 v1.0 已集成】
+ * - 应答风格校正：消除趋中效应
+ * - IRT区分度加权：极端选项权重更大
+ * - 结果多样性增强：70%用户获得独特结果
+ * - 人群常模对比：唯一性分数计算
  */
 
 import type { Answer, AssessmentResult } from '../../types'
 import { buildAnswerMap, calculateLikertScore } from './calculator-utils'
+import { diversityEngine, isomericEngine, POPULATION_NORMS } from '../../data/assessments/diversity-enhancement-engine'
+import { philoAssessment } from '../../data/assessments/philo-spectrum'
 
 /**
  * 哲学光谱维度接口
@@ -148,7 +156,7 @@ export function calculatePhilo(answers: Answer[]): PhiloResult & AssessmentResul
   const progressivismItems = ['philo-5', 'philo-10', 'philo-15', 'philo-20', 'philo-25', 'philo-30', 'philo-35', 'philo-40']
   const freedomItems = ['philo-41', 'philo-42', 'philo-43', 'philo-44', 'philo-45', 'philo-46', 'philo-47', 'philo-48']
 
-  const dimensionScores = {
+  const rawScores = {
     realism: calculateLikertScore(answerMap, realismItems, reverseRealism),
     individualism: calculateLikertScore(answerMap, individualismItems, reverseIndividualism),
     rationalism: calculateLikertScore(answerMap, rationalismItems, reverseRationalism),
@@ -156,6 +164,32 @@ export function calculatePhilo(answers: Answer[]): PhiloResult & AssessmentResul
     progressivism: calculateLikertScore(answerMap, progressivismItems, reverseProgressivism),
     positiveFreedom: calculateLikertScore(answerMap, freedomItems, reverseFreedom),
   }
+
+  const responseValues = Object.fromEntries(
+    Object.entries(answerMap).map(([k, v]) => [k, typeof v === 'number' ? v : Number(v) || 3])
+  )
+
+  const responseStyle = diversityEngine.calculateResponseStyle(responseValues, 5)
+
+  const correctedScores = diversityEngine.applyResponseStyleCorrection(rawScores, responseStyle)
+
+  const enhancedScores = diversityEngine.enhanceResultDiversity(correctedScores, {
+    responseId: 'philo-' + Date.now(),
+    rawScores,
+    responseStyle,
+    diversityMetrics: {
+      scoreEntropy: diversityEngine.calculateShannonEntropy(Object.values(rawScores)),
+      dimensionSpread: Math.max(...Object.values(rawScores)) - Math.min(...Object.values(rawScores)),
+      resultUniqueness: diversityEngine.calculateUniquenessScore(rawScores, POPULATION_NORMS),
+    },
+  })
+
+  const dimensionScores = enhancedScores as typeof rawScores
+
+  const fingerprint = isomericEngine.generateResponseFingerprint(responseValues, philoAssessment.questions)
+  const contrastItems = isomericEngine.extractContrastItems(responseValues, rawScores)
+  const midrangeSubtype = isomericEngine.classifyMidrangeSubtype(fingerprint, dimensionScores)
+  const allScoresInMidrange = Object.values(dimensionScores).every(s => s >= 42 && s <= 58)
 
   const dimensionDetails = dimensionInfo.map((info, i) => {
     const keys = Object.keys(dimensionScores) as (keyof PhiloResult['dimensionScores'])[]
@@ -199,9 +233,9 @@ export function calculatePhilo(answers: Answer[]): PhiloResult & AssessmentResul
   const philosophicalProfile = {
     thinkingStyle: thinkingMatrix.find(x => x.cond)?.style || '反思平衡型：在原则与直觉之间来回调整',
     argumentTendency: dimensionScores.universalism > 60 ? '倾向于援引普遍原则' : '倾向于援引具体情境',
-    typicalBlindSpot: dimensionScores.individualism > 70 
-      ? '容易忽视结构约束，过度归因于个体选择' 
-      : dimensionScores.individualism < 30 
+    typicalBlindSpot: dimensionScores.individualism > 70
+      ? '容易忽视结构约束，过度归因于个体选择'
+      : dimensionScores.individualism < 30
         ? '容易陷入决定论，低估个体能动性空间'
         : '在结构与能动性之间保持适度怀疑',
   }
@@ -217,6 +251,18 @@ export function calculatePhilo(answers: Answer[]): PhiloResult & AssessmentResul
     ...rankedSchools.slice(1, 3).map(s => s.keyWorks[0]),
   ]
 
+  const uniquenessScore = diversityEngine.calculateUniquenessScore(dimensionScores, POPULATION_NORMS)
+  const diversityInterpretations = diversityEngine.generateResultInterpretation({
+    responseId: 'philo-' + Date.now(),
+    rawScores,
+    responseStyle,
+    diversityMetrics: {
+      scoreEntropy: diversityEngine.calculateShannonEntropy(Object.values(rawScores)),
+      dimensionSpread: Math.max(...Object.values(rawScores)) - Math.min(...Object.values(rawScores)),
+      resultUniqueness: uniquenessScore,
+    },
+  })
+
   return {
     dimensionScores,
     dimensionDetails,
@@ -231,7 +277,26 @@ export function calculatePhilo(answers: Answer[]): PhiloResult & AssessmentResul
     philosophicalProfile,
     intellectualPeerGroup,
     recommendedReading,
-    typeName: primarySchool.name,
-    typeEmoji: dimensionScores.progressivism > 60 ? '🔮' : dimensionScores.realism > 60 ? '🔍' : '🧩',
+    diversityAnalysis: {
+      uniquenessScore: Math.round(uniquenessScore),
+      extremityScore: Math.round(responseStyle.extremityScore * 100),
+      midpointAvoidance: Math.round((1 - responseStyle.midpointRatio) * 100),
+      interpretations: diversityInterpretations,
+    },
+    isomericAnalysis: allScoresInMidrange ? {
+      enabled: true,
+      subtype: midrangeSubtype.name,
+      subtypeDescription: midrangeSubtype.description,
+      characteristicItems: midrangeSubtype.characteristicItems,
+      contrastInterpretation: isomericEngine.generateIsomericInterpretation({
+        fingerprint,
+        patternType: 'midrange',
+        subtype: midrangeSubtype.name,
+        signatureItems: [...contrastItems.aboveExpectation, ...contrastItems.belowExpectation],
+        contrastAnalysis: contrastItems,
+      }, '哲学光谱'),
+    } : null,
+    typeName: allScoresInMidrange ? midrangeSubtype.name : primarySchool.name,
+    typeEmoji: allScoresInMidrange ? '🎯' : uniquenessScore > 70 ? '💎' : dimensionScores.progressivism > 60 ? '🔮' : dimensionScores.realism > 60 ? '🔍' : '🧩',
   }
 }

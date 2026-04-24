@@ -25,6 +25,7 @@ import { useAppStore } from '../store'
 import type { Answer, Question, ProfessionalQuestion } from '../types'
 import { cn } from '@utils/cn'
 import AnswerSheet from '@components/AnswerSheet'
+import { AssessmentOption } from '@components/AssessmentOption'
 import { calculateProfessionalResult } from '@utils/professionalCalculators'
 import { calculatorService } from '@services/calculatorWrapper'
 import type { CalculationResponse as UnifiedCalculationResult } from '@services/apiClient'
@@ -43,8 +44,10 @@ import {
   politicalIdeologyQuestions,
   sdsProfessionalQuestions,
 } from '@data/professional'
+import { processAssessmentQuestions } from '@utils/questionQualityControl'
 
-const QUESTION_TIME_LIMIT = 30
+const QUESTION_TIME_LIMIT = 45
+const ANSWER_STORAGE_KEY = 'assessment-answers-draft'
 
 export default function Assessment() {
   const { id } = useParams<{ id: string }>()
@@ -147,15 +150,32 @@ export default function Assessment() {
       selectedQuestions = assessment.questions
     }
 
-    const uniqueQuestions = selectedQuestions.filter((q, index, self) => 
-      index === self.findIndex(t => t.id === q.id)
+    const processedQuestions = processAssessmentQuestions(
+      selectedQuestions,
+      mode as any
     )
     
-    const shuffledQuestions = [...uniqueQuestions].sort(() => Math.random() - 0.5)
+    setQuestions(processedQuestions)
     
-    setQuestions(shuffledQuestions)
-    setCurrentQuestion(0)
-    setAnswers([])
+    const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
+    const savedDraft = localStorage.getItem(storageKey)
+    
+    if (savedDraft) {
+      try {
+        const draft = JSON.parse(savedDraft)
+        if (draft.answers && draft.answers.length > 0) {
+          setAnswers(draft.answers)
+          setCurrentQuestion(Math.min(draft.answers.length, processedQuestions.length - 1))
+        }
+      } catch {
+        setCurrentQuestion(0)
+        setAnswers([])
+      }
+    } else {
+      setCurrentQuestion(0)
+      setAnswers([])
+    }
+    
     setSelectedOption(null)
     setTimeLeft(QUESTION_TIME_LIMIT)
   }, [assessment, mode, navigate, getProfessionalQuestions, convertProfessionalToQuestion])
@@ -217,11 +237,22 @@ export default function Assessment() {
       
       const newAnswer = createAnswer(question.id, optionId, question)
       const filtered = prev.filter(a => a.questionId !== question.id)
-      return [...filtered, newAnswer]
+      const newAnswers = [...filtered, newAnswer]
+      
+      if (assessment) {
+        const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
+        localStorage.setItem(storageKey, JSON.stringify({
+          answers: newAnswers,
+          lastQuestion: currentQuestion,
+          savedAt: Date.now(),
+        }))
+      }
+      
+      return newAnswers
     })
     
     setTimeLeft(QUESTION_TIME_LIMIT)
-  }, [questions, currentQuestion, createAnswer])
+  }, [questions, currentQuestion, assessment, mode, createAnswer])
 
   const handleNext = useCallback(() => {
     if (currentQuestion < questions.length - 1) {
@@ -292,17 +323,24 @@ export default function Assessment() {
         } as unknown as UnifiedCalculationResult
       }
       
+      const adaptedResult = calculatorService.adaptToFrontendNativeFormat(result)
+      const recordId = crypto.randomUUID()
+      
       addCompletedAssessment({
+        id: recordId,
         assessmentId: assessment.id,
         answers,
-        result,
+        result: adaptedResult,
         completedAt: new Date(),
         mode,
       })
 
+      const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
+      localStorage.removeItem(storageKey)
+
       setCalculating(false)
-      navigate(`/loading/${assessment.id}`, {
-        state: { calculationSource: result.source, calculationResult: result }
+      navigate(`/loading/${recordId}`, {
+        state: { calculationSource: adaptedResult.source, calculationResult: adaptedResult }
       })
     }, 800)
   }, [assessment, answers, addCompletedAssessment, mode, navigate])
@@ -337,6 +375,19 @@ export default function Assessment() {
   const answeredCount = answers.length
   const allAnswered = answeredCount === questions.length
   const currentQ = questions[currentQuestion]
+  
+  const estimatedTimeRemaining = useMemo(() => {
+    const remaining = questions.length - currentQuestion - 1
+    const minutes = Math.ceil(remaining * 0.25)
+    if (minutes <= 1) return '约1分钟'
+    return `约 ${minutes} 分钟`
+  }, [currentQuestion, questions.length])
+
+  const modeLabels: Record<string, string> = {
+    normal: '标准版',
+    advanced: '进阶版',
+    professional: '专业版',
+  }
 
   useEffect(() => {
     if (!currentQ) return
@@ -385,8 +436,71 @@ export default function Assessment() {
     )
   }
 
+  const showDraftRecovery = answeredCount > 0 && answeredCount < questions.length && currentQuestion > 0
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 flex flex-col overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <motion.div
+          className="absolute top-20 right-20 w-32 h-32 opacity-5"
+          animate={{
+            rotate: 360,
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            rotate: { duration: 20, repeat: Infinity, ease: 'linear' },
+            scale: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
+          }}
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full text-violet-400">
+            <path d="M12 2L8 6h8l-4-4zm0 20l4-4H8l4 4zm-6-8l-4 4 4 4v-8zm12 0v8l4-4-4-4z" />
+          </svg>
+        </motion.div>
+        <motion.div
+          className="absolute bottom-32 left-16 w-24 h-24 opacity-5"
+          animate={{
+            rotate: -360,
+            scale: [1, 0.9, 1],
+          }}
+          transition={{
+            rotate: { duration: 25, repeat: Infinity, ease: 'linear' },
+            scale: { duration: 5, repeat: Infinity, ease: 'easeInOut' },
+          }}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-full h-full text-pink-400">
+            <path d="M19 3L5 12l14 9V3z" />
+          </svg>
+        </motion.div>
+        <motion.div
+          className="absolute top-1/3 left-1/4 w-16 h-16 opacity-3"
+          animate={{
+            y: [0, -15, 0],
+            rotate: [0, 10, -10, 0],
+          }}
+          transition={{
+            y: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
+            rotate: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
+          }}
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full text-amber-400">
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+        </motion.div>
+      </div>
+      {showDraftRecovery && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-emerald-500/10 border-b border-emerald-500/30"
+        >
+          <div className="max-w-4xl mx-auto px-4 py-2 flex items-center justify-center gap-3">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span className="text-emerald-300 text-sm">
+              ✨ 已自动恢复上次答题进度（已完成 {answeredCount} 题）
+            </span>
+          </div>
+        </motion.div>
+      )}
       <div className="flex items-center justify-between p-4 sm:p-6">
         <motion.button
           onClick={handleExit}
@@ -401,10 +515,22 @@ export default function Assessment() {
 
         <div className="flex-1 max-w-md mx-4">
           <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-white/60">
-              题目 {currentQuestion + 1} / {questions.length}
-            </span>
             <div className="flex items-center gap-3">
+              <span className="text-white/60">
+                第 {currentQuestion + 1} 题 / 共 {questions.length} 题
+              </span>
+              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                mode === 'professional' 
+                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                  : 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
+              }`}>
+                {modeLabels[mode] || '标准版'}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-emerald-400 text-xs hidden sm:inline">
+                剩余 {estimatedTimeRemaining}
+              </span>
               <button
                 onClick={() => {
                   const newVal = calculationSource === 'backend' ? 'frontend' : 'backend'
@@ -492,33 +618,14 @@ export default function Assessment() {
 
               <div className="space-y-3">
                 {currentQ.options.map((option, index) => (
-                  <motion.button
+                  <AssessmentOption
                     key={option.id || index}
-                    onClick={() => handleOptionSelect(option.id || index.toString())}
-                    className={cn(
-                      'w-full p-4 sm:p-5 rounded-xl text-left transition-all flex items-start gap-4',
-                      (option.id && selectedOption === option.id)
-                        ? 'bg-gradient-to-r from-violet-500/30 to-pink-500/30 border-2 border-violet-500 text-white'
-                        : 'glass text-white/80 hover:bg-white/10 border-2 border-transparent'
-                    )}
+                    option={option}
+                    index={index}
+                    selected={!!(option.id && selectedOption === option.id)}
+                    onClick={handleOptionSelect}
                     variants={optionVariants}
-                    initial="hidden"
-                    animate="visible"
-                    custom={index}
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    type="button"
-                  >
-                    <div className={cn(
-                      'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-semibold',
-                      (option.id && selectedOption === option.id)
-                        ? 'bg-violet-500 text-white'
-                        : 'bg-white/10 text-white/60'
-                    )}>
-                      {String.fromCharCode(65 + index)}
-                    </div>
-                    <span className="flex-1 pt-1">{option.text}</span>
-                  </motion.button>
+                  />
                 ))}
               </div>
             </div>

@@ -6,6 +6,7 @@ export const ideologyAssessment: Assessment = {
   title: '意识形态罗盘 5×5',
   description: '真正专业的政治坐标测试。4大维度，50道题，精准定位你在19种意识形态中的位置。从斯大林到安兰德，从托洛茨基到希特勒，你到底站在哪一边？',
   category: '意识形态',
+  subcategory: '政治坐标',
   difficulty: 'standard',
   duration: 7,
   quality: '专业',

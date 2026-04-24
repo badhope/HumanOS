@@ -1,7 +1,17 @@
+
 import React, { Component, ErrorInfo, ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { AlertTriangle, RefreshCw, Home, RotateCcw } from 'lucide-react'
 
+/**
+ * 错误边界组件 Props 接口
+ * 
+ * 🔧 配置选项:
+ * - children: 需要错误保护的子组件树
+ * - fallback: 自定义错误降级 UI (可选)
+ * - onReset: 重置回调函数 (用于清理状态重试)
+ * - componentName: 组件名称 (用于日志和用户提示)
+ */
 interface ErrorBoundaryProps {
   children: ReactNode
   fallback?: ReactNode
@@ -9,12 +19,43 @@ interface ErrorBoundaryProps {
   componentName?: string
 }
 
+/**
+ * 错误边界内部状态
+ * 
+ * 记录完整的错误上下文信息，用于调试和用户反馈
+ */
 interface ErrorBoundaryState {
   hasError: boolean
   error: Error | null
   errorInfo: ErrorInfo | null
 }
 
+/**
+ * React 错误边界组件
+ * 
+ * 🔧 核心功能:
+ * 1. 错误捕获 - 捕获子组件树中任何位置的 JavaScript 异常
+ * 2. 优雅降级 - 显示友好的错误界面，而非整个应用白屏
+ * 3. 错误日志 - 完整记录错误堆栈便于调试
+ * 4. 恢复机制 - 提供重置组件、刷新页面、返回首页三种恢复方式
+ * 
+ * 📊 技术原理:
+ * 这是 React 16+ 提供的官方错误处理机制。
+ * 类似 JavaScript 的 try/catch，但作用于 React 组件渲染树。
+ * 没有它，一个组件崩溃会导致整个应用卸载。
+ * 
+ * 💡 使用场景:
+ * - 包裹数据可视化图表 (数据异常容易崩溃)
+ * - 包裹第三方集成组件
+ * - 包裹用户动态内容渲染区域
+ * - 应用根节点全局兜底保护
+ * 
+ * 👥 面向人群说明:
+ * 非技术人员: 这就像是每个功能模块装了一个"保险丝"。
+ * 如果某个功能出bug了，不会让整个网站崩溃，只会显示一个提示，
+ * 你还可以"重置"、"刷新"或者"回到首页"继续使用其他功能。
+ * 就像家里跳闸了只会断一个房间，不会全家停电。
+ */
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props)
@@ -25,6 +66,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
   }
 
+  /**
+   * 静态生命周期方法: 错误发生时更新状态
+   * 
+   * 在渲染阶段捕获到错误时触发，
+   * 返回的对象会合并到组件 state 中触发重渲染。
+   */
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return {
       hasError: true,
@@ -32,14 +79,29 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
   }
 
+  /**
+   * 错误捕获完成后回调
+   * 
+   * 在 commit 阶段触发，适合做:
+   * - 错误日志上报
+   * - Sentry / 监控系统埋点
+   * - 用户行为回溯记录
+   */
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({
       error,
       errorInfo,
     })
+    
     console.error(`ErrorBoundary caught an error in ${this.props.componentName || 'component'}:`, error, errorInfo)
   }
 
+  /**
+   * 重置组件状态处理函数
+   * 
+   * 清除错误标记，让组件重新渲染子树
+   * 同时调用用户传入的 onReset 回调清理外部状态
+   */
   handleReset = () => {
     this.setState({
       hasError: false,
@@ -68,12 +130,24 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 }
 
+/**
+ * 错误降级 UI 组件 Props
+ */
 interface ErrorFallbackProps {
   error: Error | null
   componentName?: string
   onReset?: () => void
 }
 
+/**
+ * 友好的错误提示界面
+ * 
+ * 🎯 设计理念:
+ * 1. 共情 - 用轻松的语气道歉，不让用户感到挫败
+ * 2. 透明 - 显示错误发生的位置和简单的技术信息
+ * 3. 行动 - 提供明确的恢复选项，而非让用户不知所措
+ * 4. 美观 - 即使出错也要保持品牌的设计调性
+ */
 export function ErrorFallback({ error, componentName, onReset }: ErrorFallbackProps) {
   return (
     <motion.div
@@ -147,17 +221,4 @@ export function ErrorFallback({ error, componentName, onReset }: ErrorFallbackPr
       </div>
     </motion.div>
   )
-}
-
-export function withErrorBoundary<P extends object>(
-  Component: React.ComponentType<P>,
-  componentName: string
-) {
-  return function WrappedWithErrorBoundary(props: P) {
-    return (
-      <ErrorBoundary componentName={componentName}>
-        <Component {...props} />
-      </ErrorBoundary>
-    )
-  }
 }

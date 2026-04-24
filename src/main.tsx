@@ -1,3 +1,6 @@
+import './utils/logger'
+import './utils/assessmentCache'
+import { preloadTopAssessments } from './utils/dynamicAssessmentLoader'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { HashRouter, BrowserRouter } from 'react-router-dom'
@@ -18,6 +21,14 @@ const getRouterMode = () => {
 }
 
 const Router = getRouterMode()
+
+setTimeout(() => {
+  preloadTopAssessments()
+  
+  if (import.meta.env.DEV) {
+    import('./utils/performanceBenchmark')
+  }
+}, 3000)
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

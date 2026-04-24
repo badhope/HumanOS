@@ -27,6 +27,7 @@ export const foodieLevelAssessment: Assessment = {
   title: '干饭人等级测评',
   description: '35道灵魂拷问，测出你是"饭渣"还是"饭神"！从食欲、味觉、厨艺、探店、消费五个维度，全面鉴定你的干饭人纯度。',
   category: '娱乐趣味',
+  subcategory: '饮食文化',
   difficulty: 'standard',
   duration: 5,
   quality: '娱乐',

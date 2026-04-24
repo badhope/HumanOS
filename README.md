@@ -2,12 +2,12 @@
 <!-- Professional Frontend Framework Showcase Platform -->
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=50&duration=4000&pause=1000&color=61DAFB&background=0F0F23&center=true&vCenter=true&multiline=true&width=900&height=100&lines=HumanOS%20~%20Professional%20Assessment%20Platform" alt="HumanOS">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=45&duration=4000&pause=1000&color=61DAFB&background=0F0F23&center=true&vCenter=true&multiline=true&width=900&height=100&lines=HumanOS+%F0%9F%8C%8E+~+Political+Economy+Simulator" alt="HumanOS">
 </p>
 
 <p align="center">
   <a href="https://github.com/badhope/HumanOS">
-    <img src="https://img.shields.io/badge/Version-v2.4.0-61dafb?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/Version-v2.5.0-61dafb?style=for-the-badge" alt="Version">
   </a>
   <a href="https://creativecommons.org/licenses/by-nc/4.0/">
     <img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue?style=for-the-badge" alt="License">
@@ -18,555 +18,197 @@
   <a href="https://reactjs.org/">
     <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react" alt="React">
   </a>
-  <a href="./TEMPLATE_GUIDE.md">
-    <img src="https://img.shields.io/badge/Template-Available-brightgreen?style=for-the-badge" alt="Template">
-  </a>
   <a href="https://humanos.dpdns.org/">
     <img src="https://img.shields.io/badge/Demo-Live-success?style=for-the-badge" alt="Demo">
   </a>
+  <img src="https://img.shields.io/badge/Build-%E2%9C%85%20Passing-brightgreen?style=for-the-badge" alt="Build">
 </p>
 
-<p align="center">
-  <a href="https://github.com/badhope/HumanOS/stargazers">
-    <img src="https://img.shields.io/github/stars/badhope/HumanOS?style=for-the-badge&color=yellow" alt="Stars">
-  </a>
-  <a href="https://github.com/badhope/HumanOS/network/members">
-    <img src="https://img.shields.io/github/forks/badhope/HumanOS?style=for-the-badge&color=orange" alt="Forks">
-  </a>
-  <a href="https://github.com/badhope/HumanOS/issues">
-    <img src="https://img.shields.io/badge/Issues-Welcome-brightgreen?style=for-the-badge" alt="Issues">
-  </a>
-  <a href="https://github.com/badhope/HumanOS/pulls">
-    <img src="https://img.shields.io/badge/PR-Welcome-blue?style=for-the-badge" alt="PR">
-  </a>
-</p>
+---
 
-<div align="center">
+## 🎮 Hearts of Iron 风格政治经济模拟器
+
+> **钢铁雄心级别的大战略游戏体验，现在可以在浏览器中玩了！**
+
+### 🔥 核心特色
+
+| 🏛️ 政治系统 | 💹 经济引擎 | 🎯 国策系统 | 🎲 随机事件 |
+|------------|------------|------------|------------|
+| 6大利益集团 | 数学经济引擎 | 4条国策路线 | 危机事件系统 |
+| 意识形态斗争 | 美联储货币政策 | 28个独特国策 | 游戏结束机制 |
+| 总统法令 | 联邦预算管理 | 互斥路线选择 | 每日判定 |
+
+---
+
+### 🎯 11个完整可玩面板
+
+| | 模块 | 状态 | 功能 |
+|---|------|------|------|
+| 🌳 | **国策树** | ✅ 完成 | 4条路线 × 28个国策 |
+| 🔬 | **科技树** | ✅ 完成 | 缩放平移 + 完整Tooltip |
+| 📜 | **总统法令** | ✅ 完成 | 即时生效 + 冷却机制 |
+| 🏛️ | **利益集团** | ✅ 完成 | 6大派系 + 满意度系统 |
+| 🗳️ | **选举地图** | ✅ 完成 | 50州选举人团可视化 |
+| 📊 | **数据可视化** | ✅ 完成 | 6指标 + 3张趋势图 |
+| 📋 | **研究队列** | ✅ 完成 | 国策/科技进度跟踪 |
+| 💰 | **联邦预算** | ✅ 完成 | 收支双饼图 + 月度趋势 |
+| 🏦 | **美联储** | ✅ 完成 | 加息/降息 + QE/QT |
+| 👥 | **人口统计** | ✅ 完成 | 劳动力市场 + 行业分布 |
+| 💹 | **经济面板** | ✅ 完成 | 完整市场数据 |
+
+---
+
+### 🧠 智能Tooltip系统
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                ║
-║     ██╗   ██╗ ██████╗ ██████╗ ███████╗███╗   ██╗ ██████╗ ██╗███╗   ██╗    ║
-║     ██║   ██║██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔════╝ ██║████╗  ██║    ║
-║     ██║   ██║██║   ██║██║  ██║█████╗  ██╔██╗ ██║██║  ███╗██║██╔██╗ ██║    ║
-║     ╚██╗ ██╔╝██║   ██║██║  ██║██╔══╝  ██║╚██╗██║██║   ██║██║██║╚██╗██║    ║
-║      ╚████╔╝ ╚██████╔╝██████╔╝███████╗██║ ╚████║╚██████╔╝██║██║ ╚████║    ║
-║       ╚═══╝   ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝╚═╝  ╚═══╝    ║
-║                                                                                ║
-║                🎭  Professional Assessment Platform  🎭                              ║
-║                                                                                ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
+✅ 自动四方向定位 - 永不超出视口
+✅ 永不遮挡内容 - 智能选最佳位置
+✅ 全部11面板覆盖 - 每个元素都有详情
+✅ 动画过渡效果 - Framer Motion 驱动
 ```
 
-</div>
-
 ---
 
-## 🎯 What is HumanOS?
-
-**HumanOS** is a professional online assessment platform that provides comprehensive psychological, personality, career, and cognitive evaluations.
-
-> *"Discover yourself through scientific assessments."*
-
-### 🎯 Project Positioning
-
-HumanOS serves as a **professional assessment platform** for:
-- 👤 **Individuals** - Self-discovery and personal development
-- 🏢 **Organizations** - Talent assessment and team building
-- 🎓 **Educational Institutions** - Student guidance and career planning
-- 🏥 **Healthcare** - Psychological screening and mental health support
-
-### Key Philosophy
-
-| Principle | Description |
-|-----------|-------------|
-| 🧠 **Scientific Basis** | All assessments based on validated psychological theories |
-| 📊 **Comprehensive Analysis** | Multi-dimensional evaluation with detailed insights |
-| 🎯 **Three-Tier System** | Basic, Advanced, and Professional versions for all needs |
-| 🔒 **Privacy First** | All data stored locally, complete privacy protection |
-
----
-
-## ✨ Key Features
-
-| Category | Modules | Count | Description | Status |
-|----------|---------|-------|-------------|--------|
-| 🧠 **人格心理** | MBTI, 大五人格, 黑暗四人格, 依恋风格, 情商 | 5 | 基于荣格、McCrae、Paulhus等科学理论 | ✅ |
-| 🧮 **认知能力** | 瑞文标准智商测验 | 1 | 矩阵推理理论, 五大认知维度 | ✅ |
-| 🌐 **意识形态** | 政治坐标12轴专业测验 | 3 | 标准版60题 / 进阶版120题 / 专业版300题, 共计480道极致争议性深度理论题, 全维度覆盖现代意识形态谱系 | ✅ |
-| 💼 **职业规划** | 霍兰德职业兴趣测评 | 1 | 六大职业类型匹配 | ✅ |
-| 💪 **心理健康** | 焦虑自评量表SAS | 1 | 专业标准化量表 | ✅ |
-| 🏴‍☠️ **娱乐IP** | 角色匹配, 赏金测算, 知识测验 | 3 | 海贼王专属娱乐模块 | ✅ |
-| 📊 **三级测评** | 基础版, 进阶版, 专业版 | 3 | 不同深度满足各类需求 | ✅ |
-| 🎨 **用户体验** | Modern UI, 响应式设计, 本地化 | - | 极致体验与隐私保护 | ✅ |
-
-**📊 系统总览：12+ 专业测评, 600+ 专业题目, 覆盖 7 大领域**
-
----
-
-## 🆕 Latest Update (v2.3.0)
-
-### 🎉 Major Features
-
-#### 📊 Three-Tier Assessment System
-- ✅ **基础版 (Basic)** - 10+ questions, quick assessment
-- ✅ **进阶版 (Advanced)** - 50% of professional questions, balanced depth
-- ✅ **专业版 (Professional)** - Complete question bank, comprehensive analysis
-
-#### 🌐 Custom Domain Support
-- ✅ Configured custom domain: `humanos.dpdns.org`
-- ✅ Updated all meta tags and structured data
-- ✅ Enhanced SEO with custom domain
-
-#### 📦 Deployment Package
-- ✅ Created standalone deployment package (`HumanOS-web-deploy`)
-- ✅ Ready-to-deploy static files
-- ✅ Comprehensive deployment documentation
-
-#### 🎯 Enhanced Question Banks (v2.3.0 最新数据)
-
-| 测评类型 | 题目总数 | 预计时长 | 难度等级 | 理论基础 |
-|---------|---------|---------|---------|---------|
-| **MBTI人格测试** | 93题 | 12分钟 | 进阶版 | 荣格心理类型理论 |
-| **大五人格量表** | 120题 | 15分钟 | 进阶版 | McCrae & Costa OCEAN模型 |
-| **情商EQ测评** | 50题 | 12分钟 | 进阶版 | 戈尔曼情绪智力理论 |
-| **瑞文标准智商测验** | 60题 | 20分钟 | 进阶版 | 瑞文矩阵推理理论 |
-| **黑暗四人格DARK TRIAD** | 40题 | 15分钟 | 专业版 | Paulhus黑暗四人格 |
-| **政治坐标6轴测验** | 72题 | 18分钟 | 进阶版 | 8values & Political Compass |
-| **霍兰德职业兴趣** | 72题 | 15分钟 | 进阶版 | Holland职业六边形模型 |
-| **成人依恋量表** | 36题 | 12分钟 | 进阶版 | Bowlby依恋理论 |
-| **焦虑自评量表SAS** | 20题 | 8分钟 | 进阶版 | Zung标准化量表 |
-| **海贼王角色匹配** | 24题 | 8分钟 | 休闲级 | 娱乐IP专属 |
-| **海贼王赏金测算** | 18题 | 6分钟 | 休闲级 | 娱乐IP专属 |
-| **海贼王知识测验** | 50题 | 15分钟 | 困难级 | 骨灰粉丝挑战 |
-
-**📊 累计：12套专业测评, 655+ 题目, 总测评时长 156 分钟**
-
-### 🔧 Technical Improvements
-- ✅ Optimized build configuration for production
-- ✅ Enhanced GitHub Actions deployment workflow
-- ✅ Improved code splitting and lazy loading
-- ✅ Updated dependencies to latest versions
-
----
-
-## Previous Update (v2.2.1)
-
-### 🐛 Bug Fixes & Accessibility
-
-#### Navigation & Interaction
-- ✅ Fixed Navbar "测评" navigation path error
-- ✅ Fixed Assessment back button not navigating properly
-- ✅ Fixed Dashboard "View All Achievements" button missing functionality
-- ✅ Improved Results share button with Web Share API support
-
-#### Content Consistency
-- ✅ Updated Home page content to reflect frontend framework showcase positioning
-- ✅ Corrected version display to v2.2.1
-
-#### ♿ Accessibility Improvements
-- ✅ Added `type="button"` to all interactive buttons
-- ✅ Added `aria-label` to search input
-- ✅ Added `aria-label` and `aria-pressed` to category filter buttons
-- ✅ Added `aria-label` to delete buttons
-
-#### 🔧 Code Refactoring
-- ✅ Refactored AssessmentCard3D component - reduced 60 lines of duplicate code
-- ✅ Optimized bundle size: Home component 16.56KB → 14.94KB (-9.8%)
-
----
-
-## Previous Update (v2.2.0)
-
-### Major Improvements
-
-#### 🚀 Performance & Quality Optimization
-- ✅ **Code Quality**: Removed 25+ unused imports and variables
-- ✅ **Performance**: Implemented lazy loading for all routes
-- ✅ **SEO**: Added Open Graph, Twitter Card, and structured data
-- ✅ **Accessibility**: Enhanced ARIA labels and keyboard navigation
-- ✅ **Mobile**: Optimized responsive design for all devices
-- ✅ **Type Safety**: Zero TypeScript errors with strict mode
-- ✅ **Build**: Optimized chunk splitting for faster loading
-
-#### 📚 Enhanced Question Banks
-- **MBTI Assessment**: Expanded to **40 questions** with optimized options
-- **Big Five (OCEAN)**: Comprehensive **20-question** personality profile
-- **Career Assessments**: Holland Code + Leadership Style tests
-- **Relationship Tests**: Attachment Style + Communication Style
-- **Cognitive Evaluations**: Learning Style + Critical Thinking
-- **Health & Wellness**: Stress Management + Creativity Potential
-
-#### 🔧 Quality Fixes
-- ✅ Eliminated repetitive questions and options across all assessments
-- ✅ Fixed display issues for previously broken question banks
-- ✅ Added detailed, personalized result analysis for every test
-- ✅ Ensured theme-specific feedback (no more mixed/confused analysis)
-- ✅ Improved score calculation algorithms for accuracy
-
-#### 🎯 New Assessment Categories
-| Category | Tests | Questions/Test | Key Features |
-|----------|-------|----------------|--------------|
-| 🧠 **Personality** | MBTI, Big Five, Anxiety, EQ | 20-40 | Trait analysis, career suggestions |
-| 💼 **Career** | Holland Code, Leadership | 12-15 | RIASEC model, leadership profiles |
-| 💑 **Relationships** | Attachment, Communication | 8-10 | Adult attachment theory, comm styles |
-| 🎓 **Cognitive** | Learning Style, Critical Thinking | 5-8 | VARK model, bias detection |
-| 💪 **Wellness** | Stress Management, Creativity | 5-8 | Coping strategies, innovation tips |
-
----
-
-## 🎨 Use Cases
-
-**HumanOS** can be used for:
-
-- 👤 **Personal Development** - Self-discovery, career planning, relationship improvement
-- 🏢 **Organizations** - Talent assessment, team building, employee development
-- 🎓 **Education** - Student guidance, career counseling, learning style assessment
-- 🏥 **Healthcare** - Psychological screening, mental health support, patient assessment
-- 🔬 **Research** - Data collection, psychological studies, behavioral analysis
-
-### Quick Start
-
-1. **Choose Assessment** - Browse categories and select a test
-2. **Select Version** - Basic, Advanced, or Professional
-3. **Complete Questions** - Answer honestly for accurate results
-4. **View Results** - Get detailed analysis and recommendations
-5. **Save & Share** - Export or share your results
-
-📖 **See [User Guide](./USER_GUIDE.md) for detailed instructions**
-
----
-
-## 🚀 Quick Start
-
-### Requirements
-
-- Node.js >= 18.0.0
-- npm >= 9.0.0 or pnpm >= 8.0.0
-
-### Installation
+### 🚀 快速开始
 
 ```bash
-# Clone repository
+# 克隆项目
 git clone https://github.com/badhope/HumanOS.git
 
-# Navigate to directory
+# 进入目录
 cd HumanOS
 
-# Install dependencies
+# 安装依赖
 npm install
-# or
-pnpm install
-```
 
-### Development
-
-```bash
-# Start dev server
+# 启动开发服务器
 npm run dev
 
-# Open http://localhost:5173
-```
-
-### Build
-
-```bash
-# Production build
+# 生产构建
 npm run build
-
-# Preview build
-npm run preview
-```
-
-### Deployment
-
-```bash
-# Deploy to GitHub Pages (automatic via GitHub Actions)
-git push origin main
-
-# Or use the deployment package
-# Upload HumanOS-web-deploy folder to any web server
-```
-
-### Live Demo
-
-- **Custom Domain**: [https://humanos.dpdns.org/](https://humanos.dpdns.org/)
-- **GitHub Pages**: [https://badhope.github.io/HumanOS/](https://badhope.github.io/HumanOS/)
-
-### Code Quality
-
-```bash
-# Run ESLint
-npm run lint
-
-# TypeScript check
-npm run typecheck
 ```
 
 ---
 
-## 🛠️ Tech Stack
+### 🛠️ 技术栈
 
-### Core Frameworks
-- **[React 18](https://reactjs.org/)** - UI library
-- **[TypeScript 5](https://www.typescriptlang.org/)** - Type safety
-- **[Vite 5](https://vitejs.dev/)** - Next-gen build tool
-
-### UI & Styling
-- **[Tailwind CSS](https://tailwindcss.com/)** - Atomic CSS framework
-- **[Framer Motion](https://www.framer.com/motion/)** - Animation library
-- **[Lucide Icons](https://lucide.dev/)** - Icon library
-
-### State Management
-- **[Zustand](https://github.com/pmndrs/zustand)** - Lightweight state management
-
-### 3D Effects
-- **[Three.js](https://threejs.org/)** - 3D rendering
-- **[React Three Fiber](https://docs.pmnd.rs/react-three-fiber)** - React 3D renderer
-
-### Tools
-- **[ESLint](https://eslint.org/)** - Code linting
-- **[Prettier](https://prettier.io/)** - Code formatting
-- **[PostCSS](https://postcss.org/)** - CSS post-processing
+| 层级 | 技术 | 版本 |
+|------|------|------|
+| ⚛️ **框架** | React | 18.2 |
+| 📘 **语言** | TypeScript | 5.2 |
+| 💨 **样式** | Tailwind CSS | 3.4 |
+| ✨ **动画** | Framer Motion | 11.0 |
+| 📊 **图表** | Recharts | 2.12 |
+| 🛠️ **构建** | Vite | 5.2 |
+| 📱 **PWA** | Vite PWA | 0.19 |
 
 ---
 
-## 🎨 Animation System
+### 🎮 游戏玩法演示
 
-HumanOS features a complete animation system:
+```
+┌─────────────────────────────────────────────────┐
+│  【游戏循环】                                    │
+├─────────────────────────────────────────────────┤
+│  1. 选择国策 → 等待天数 → 自动生效              │
+│  2. 研究科技 → 解锁加成 → 影响经济              │
+│  3. 签署法令 → 改变参数 → 影响派系好感           │
+│  4. 平衡6大利益集团 → 维持稳定度                │
+│  5. 应对随机事件 → 做出选择 → 承担后果          │
+│  6. 管理经济 → 控制通胀 → 降低失业              │
+│  7. 避免游戏结束 → 政变/弹劾/经济崩溃            │
+└─────────────────────────────────────────────────┘
+```
 
-### Page Transitions
-- Fade In/Out
-- Slide
-- 3D Flip
-- Zoom
+---
 
-### Interactive Animations
-| Component | Effect |
-|----------|--------|
-| **GlowCard** | Hover glow effect |
-| **RippleButton** | Click ripple animation |
-| **AnimatedNumber** | Number scroll animation |
-| **AnimatedProgress** | Progress bar animation |
+### 📸 游戏截图
 
-### Scene Animations
-| Component | Description |
-|-----------|-------------|
-| **SplashScreen** | Loading animation |
-| **ResultReveal** | Result reveal effect |
-| **AchievementUnlock** | Achievement unlock animation |
+| 国策树系统 | 利益集团面板 |
+|-----------|------------|
+| 4条路线互斥选择 | 6派系好感度实时计算 |
 
-### Animation Configuration
+| 美联储面板 | 联邦预算 |
+|-----------|---------|
+| 加息/降息货币政策 | 收支双饼图可视化 |
+
+---
+
+### 🧮 数学经济引擎
+
+游戏背后的核心计算模型：
+
 ```typescript
-import { pageVariants, cardVariants } from '@utils/animation-config'
-import { GlowCard, RippleButton, FadeInSection } from '@components/animations'
+// 稳定度计算公式
+stability = baseStability 
+  + Σ(集团满意度 ? 势力 × 加成 : 势力 × 惩罚)
+  + 国策效果 + 法令效果 + 事件修正
+
+// 支持率计算公式
+approval = baseApproval
+  + 0.4 × gdpGrowth - 0.3 × inflation - 0.3 × unemployment
+  + 媒体修正 + 事件选择修正
 ```
 
 ---
 
-## 📂 Project Structure
+### 🌟 项目亮点
+
+1. **✅ 零类型错误** - 严格TypeScript类型检查
+2. **✅ 零运行警告** - 完整ESLint覆盖
+3. **✅ 全组件Tooltip** - 100% 信息不遗漏
+4. **✅ 响应式设计** - 完美适配各种屏幕
+5. **✅ PWA支持** - 可离线安装使用
+6. **✅ 专业图表** - Recharts 数据可视化
+7. **✅ 丝滑动画** - Framer Motion 60fps
+
+---
+
+### 📁 项目结构
 
 ```
 HumanOS/
-├── .github/
-│   ├── workflows/          # CI/CD pipelines
-│   └── ISSUE_TEMPLATE/     # Issue templates
-├── public/                 # Static assets
 ├── src/
-│   ├── components/        # React components
-│   │   ├── animations/    # Animation components
-│   │   ├── AssessmentCard3D.tsx
-│   │   ├── PersonalityRadar.tsx
-│   │   └── ...
-│   ├── data/             # Assessment data
-│   ├── pages/            # Page components
-│   ├── store/            # State management
-│   ├── types/            # TypeScript types
-│   ├── utils/            # Utilities
-│   ├── App.tsx           # App entry
-│   └── main.tsx          # Render entry
-├── CHANGELOG.md           # Changelog
-├── CODE_OF_CONDUCT.md     # Code of conduct
-├── CONTRIBUTING.md        # Contributing guide
-├── LICENSE               # CC BY-NC 4.0
-├── README.md             # Chinese docs
-├── README_EN.md          # English docs
-├── SECURITY.md           # Security policy
+│   ├── components/game/          # 🎮 游戏核心面板
+│   │   ├── FocusTreePanel.tsx    # 国策树
+│   │   ├── TechTreeView.tsx      # 科技树
+│   │   ├── DecreesPanel.tsx      # 总统法令
+│   │   ├── InterestGroupsPanel.tsx # 利益集团
+│   │   └── CenterViewPanel.tsx   # 11个面板入口
+│   ├── data/game/                # 📊 游戏数据
+│   │   ├── usa-focus-tree.ts     # 28个国策定义
+│   │   ├── usa-tech-tree.ts      # 科技树定义
+│   │   ├── usa-interest-groups.ts # 6大派系
+│   │   └── usa-random-events.ts  # 随机事件库
+│   └── engine/
+│       └── MathematicalEconomyEngine.ts # 核心计算引擎
 ├── package.json
-├── tailwind.config.js
-├── tsconfig.json
-└── vite.config.ts
+├── vite.config.ts
+└── README.md
 ```
 
 ---
 
-## 🎯 How Assessments Work
+### 🤝 参与贡献
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           Assessment Flow                                      │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│  1️⃣  Choose Assessment                                                        │
-│      └─► Browse 6+ categories, 20+ assessments                                 │
-│                                                                              │
-│  2️⃣  Select Version                                                           │
-│      └─► Basic (10+ Q), Advanced (50%), Professional (100%)                   │
-│                                                                              │
-│  3️⃣  Complete Questions                                                       │
-│      └─► Answer honestly, track progress                                       │
-│                                                                              │
-│  4️⃣  Calculate Results                                                        │
-│      └─► Scientific algorithms, multi-dimensional analysis                     │
-│                                                                              │
-│  5️⃣  View Report                                                              │
-│      └─► Visual charts, detailed insights, recommendations                     │
-│                                                                              │
-│  6️⃣  Save & Share                                                             │
-│      └─► Local storage, export PDF, share results                              │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+欢迎提交 Issue 和 Pull Request！
+
+1. Fork 本仓库
+2. 创建特性分支
+3. 提交更改
+4. 推送到分支
+5. 创建 Pull Request
 
 ---
 
-## 🤝 Contributing
+### 📄 许可证
 
-We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
-
-### Ways to Contribute
-
-1. 🍴 Fork this repository
-2. 🌿 Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. 💾 Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. 📤 Push to branch (`git push origin feature/AmazingFeature`)
-5. 🎉 Open Pull Request
-
-### Development Standards
-
-- Follow [Conventional Commits](https://www.conventionalcommits.org/)
-- Pass ESLint and TypeScript checks
-- Add tests for new features
-- Update documentation
-
----
-
-## 📄 License
-
-This project is licensed under **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**.
-
-You are free to:
-- ✅ Share — copy and redistribute the material
-- ✅ Adapt — remix, transform, and build upon the material
-
-Under the following terms:
-- ⚠️ Attribution — Give appropriate credit
-- ⚠️ NonCommercial — You may not use the material for commercial purposes
-
-See [LICENSE](LICENSE) for details.
-
----
-
-## 🙏 Acknowledgments
-
-### Scientific Foundation
-- Psychological assessment theories and validated instruments
-- Research in personality psychology and behavioral science
-
-### Open Source Projects
-- [React](https://reactjs.org/) - UI framework
-- [Vite](https://vitejs.dev/) - Build tool
-- [Tailwind CSS](https://tailwindcss.com/) - Styling
-- [Framer Motion](https://www.framer.com/motion/) - Animations
-- [Recharts](https://recharts.org/) - Data visualization
-
-### Special Thanks
-Thanks to all contributors and the psychological assessment community!
-
----
-
-## 🚀 Future Roadmap
-
-### Platform Expansion
-
-HumanOS is evolving into a comprehensive **assessment ecosystem**:
-
-#### 📱 Upcoming Features
-
-| Feature | Description | Status |
-|---------|-------------|--------|
-| 🌍 **Multi-language Support** | i18n for global users | 🔬 Planning |
-| 📊 **Advanced Analytics** | AI-powered insights and trends | 🔬 Planning |
-| 🤝 **Team Assessments** | Group evaluation and comparison | 🔬 Planning |
-| 📱 **Mobile App** | Native iOS and Android apps | 🔬 Planning |
-| 🔗 **API Access** | RESTful API for integration | 🔬 Planning |
-| 🏆 **Certification System** | Verified assessment certificates | 🔬 Planning |
-
-#### 🎯 Assessment Expansion
-
-| Category | New Tests | Timeline |
-|----------|-----------|----------|
-| **Personality** | DISC, StrengthsFinder, VIA Character | Q2 2026 |
-| **Career** | Skills Assessment, Job Fit, Work Values | Q2 2026 |
-| **Cognitive** | Memory Tests, Attention Span, Problem Solving | Q3 2026 |
-| **Health** | Sleep Quality, Burnout Risk, Resilience | Q3 2026 |
-| **Education** | Study Skills, Academic Motivation, Test Anxiety | Q4 2026 |
-
-#### 🔧 Technical Improvements
-
-- **AI Integration** - Personalized recommendations and insights
-- **Cloud Sync** - Cross-device data synchronization
-- **Offline Mode** - Complete assessments without internet
-- **Export Options** - PDF reports, data export, integration APIs
-- **Accessibility** - Enhanced support for users with disabilities
-
-### 🤝 Partnership Opportunities
-
-We're actively seeking partnerships with:
-
-- 🏢 **Organizations** - Custom assessment solutions
-- 🎓 **Educational Institutions** - Curriculum integration
-- 🏥 **Healthcare Providers** - Clinical assessment tools
-- 🔬 **Research Institutions** - Collaborative studies
-
-For partnership inquiries: [contact@humanos.dev](mailto:contact@humanos.dev)
-
----
-
-## 📞 Support
-
-| Channel | Link |
-|---------|------|
-| 🐛 **Bug Reports** | [GitHub Issues](https://github.com/badhope/HumanOS/issues) |
-| 💬 **Discussions** | [GitHub Discussions](https://github.com/badhope/HumanOS/discussions) |
-| 📖 **Wiki** | [GitHub Wiki](https://github.com/badhope/HumanOS/wiki) |
+CC BY-NC 4.0 - 非商业使用
 
 ---
 
 <p align="center">
-  <strong>⭐ If this project helps you, please give it a star! ⭐</strong>
+  <strong>Made with ❤️ by HumanOS Team</strong>
+  <br>
+  <sub>钢铁雄心级政治经济模拟器 · 浏览器即可游玩</sub>
 </p>
-
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/badhope">HumanOS Team</a>
-</p>
-
----
-
-<p align="center">
-  <a href="https://github.com/badhope/HumanOS">Home</a> •
-  <a href="https://github.com/badhope/HumanOS/releases">Releases</a> •
-  <a href="https://github.com/badhope/HumanOS/issues">Issues</a> •
-  <a href="https://github.com/badhope/HumanOS/discussions">Discussions</a>
-</p>
-
----
-
-<!-- MARKDOWN BADGES -->
-
-[version-shield]: https://img.shields.io/badge/Version-v2.2.1-61dafb?style=for-the-badge
-[license-shield]: https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue?style=for-the-badge
-[typescript-shield]: https://img.shields.io/badge/TypeScript-5.2-blue?style=for-the-badge
-[react-shield]: https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react
-[stars-shield]: https://img.shields.io/github/stars/badhope/HumanOS?style=for-the-badge&color=yellow
-[forks-shield]: https://img.shields.io/github/forks/badhope/HumanOS?style=for-the-badge&color=orange

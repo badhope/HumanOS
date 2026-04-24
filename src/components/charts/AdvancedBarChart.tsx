@@ -1,5 +1,5 @@
-import React, { useMemo, useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import React, { useState, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import {
   BarChart,
   Bar,
@@ -8,7 +8,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Cell,
   LabelList,
 } from 'recharts'
 import type { Dimension } from '../../types'
@@ -38,8 +37,6 @@ const gradientColors = [
   { start: '#84cc16', end: '#a3e635' },
 ]
 
-const solidColors = ['#8b5cf6', '#ec4899', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#3b82f6', '#84cc16']
-
 export default function AdvancedBarChart({
   dimensions,
   title,
@@ -54,12 +51,6 @@ export default function AdvancedBarChart({
   borderRadius = 8,
 }: AdvancedBarChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), animated ? 300 : 0)
-    return () => clearTimeout(timer)
-  }, [animated])
 
   const barData = useMemo(() => {
     return dimensions.map((dim, index) => ({

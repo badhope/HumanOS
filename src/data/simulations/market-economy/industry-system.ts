@@ -1,5 +1,6 @@
+import type { EconomyState, PopGroup, Modifier } from './types'
 import type { Industry } from './vic3-types'
-import type { EconomyState } from './types'
+import { deepClone } from './economy-engine'
 
 export interface IndustryInput {
   commodity: string
@@ -535,7 +536,7 @@ export function getDefaultIndustries(countryId: string): { [id: string]: Industr
   const modifier = modifiers[countryId] || modifiers.default
   
   INDUSTRY_DEFINITIONS.forEach(industry => {
-    const adjustedIndustry = JSON.parse(JSON.stringify(industry)) as Industry
+    const adjustedIndustry = deepClone(industry)
     adjustedIndustry.level = Math.round(industry.level * modifier)
     adjustedIndustry.capacity = Math.round(industry.capacity * modifier)
     adjustedIndustry.capitalStock = Math.round(industry.capitalStock * modifier)
@@ -582,7 +583,7 @@ export function investInIndustry(
   industryId: string,
   amount: number
 ): { state: EconomyState; success: boolean; message: string } {
-  const newState = JSON.parse(JSON.stringify(state)) as EconomyState
+  const newState = deepClone(state)
   
   if (!newState.industries || !newState.industries[industryId]) {
     return { state, success: false, message: '行业不存在' }

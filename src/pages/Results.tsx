@@ -18,35 +18,82 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Share2, Download, Copy, Check, QrCode, FileText, Image, Home } from 'lucide-react'
+import { ArrowLeft, QrCode, Home, Trophy, Clock, Link2 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { QRCodeSVG } from 'qrcode.react'
-import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
 import { useAppStore } from '../store'
 import { getAssessmentById } from '@data/assessments'
-import ReportTemplate from '@components/ReportTemplate'
+import ReportRouter from '@components/reports/lazy'
 import ResultExportButton from '@components/ResultExportButton'
+import { apiClient } from '@services/apiClient'
 
 export default function Results() {
-  const { id } = useParams<{ id: string }>()
+  const { id, hash } = useParams<{ id: string; hash: string }>()
   const navigate = useNavigate()
   const completedAssessments = useAppStore((state) => state.completedAssessments)
-  const [showShareMenu, setShowShareMenu] = useState(false)
+  const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment)
   const [showQRCode, setShowQRCode] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [exporting, setExporting] = useState(false)
-  const shareRef = useRef<HTMLDivElement>(null)
+  const [restoring, setRestoring] = useState(false)
+  const [restoreError, setRestoreError] = useState<string | null>(null)
   const reportRef = useRef<HTMLDivElement>(null)
 
-  const latestResult = completedAssessments.find(
-    (a) => a.assessmentId === id
-  )
+  useEffect(() => {
+    if (!hash) return
 
-  const assessment = id ? getAssessmentById(id) : undefined
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 8000)
+
+    setRestoring(true)
+
+    apiClient.getArchivedResult(hash)
+      .then((archived) => {
+        const answersArray = Object.entries(archived.answers).map(([questionId, value]) => ({
+          questionId,
+          value: value as number,
+          selectedOptions: [],
+        }))
+
+        const recordId = crypto.randomUUID()
+        addCompletedAssessment({
+          id: recordId,
+          assessmentId: archived.assessment_id,
+          answers: answersArray,
+          result: archived.result,
+          completedAt: new Date(),
+        })
+
+        navigate(`/results/${recordId}`, { replace: true })
+      })
+      .catch((e) => {
+        const message = controller.signal.aborted 
+          ? '连接超时，请检查网络后重试'
+          : '此链接无效或已过期，请重新完成测评'
+        setRestoreError(message)
+      })
+      .finally(() => {
+        clearTimeout(timeoutId)
+        setRestoring(false)
+      })
+
+    return () => {
+      controller.abort()
+      clearTimeout(timeoutId)
+    }
+  }, [hash, addCompletedAssessment, navigate])
+
+  const resultRecord = completedAssessments.find((a) => a.id === id)
+
+  const assessment = resultRecord ? getAssessmentById(resultRecord.assessmentId) : undefined
 
   useEffect(() => {
-    if (!latestResult) {
+    if (!id && !hash) {
+      navigate('/')
+      return
+    }
+
+    if (hash || restoring) return
+
+    if (!resultRecord) {
       navigate('/')
       return
     }
@@ -79,88 +126,44 @@ export default function Results() {
     }, 250)
 
     return () => clearInterval(interval)
-  }, [latestResult, navigate])
+  }, [resultRecord, navigate])
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (shareRef.current && !shareRef.current.contains(event.target as Node)) {
-        setShowShareMenu(false)
-      }
-    }
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
 
-  const handleCopyLink = () => {
-    const url = window.location.href
-    navigator.clipboard.writeText(url)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  if (restoring) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
+          <h2 className="text-2xl font-bold text-white mb-4">正在恢复测评结果...</h2>
+          <p className="text-white/60">永久链接加载中</p>
+        </div>
+      </div>
+    )
   }
 
-  const handleExportPDF = async () => {
-    if (!reportRef.current || !assessment) return
-    
-    setExporting(true)
-    try {
-      const canvas = await html2canvas(reportRef.current, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#0f172a'
-      })
-      
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF('p', 'mm', 'a4')
-      const imgWidth = 210
-      const pageHeight = 297
-      const imgHeight = (canvas.height * imgWidth) / canvas.width
-      let heightLeft = imgHeight
-      let position = 0
-      
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-      heightLeft -= pageHeight
-      
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight
-        pdf.addPage()
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-        heightLeft -= pageHeight
-      }
-      
-      pdf.save(`${assessment.title}-测评报告.pdf`)
-    } catch (error) {
-      console.error('PDF导出失败:', error)
-    } finally {
-      setExporting(false)
-    }
+  if (restoreError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-center">
+          <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-6">
+            <Link2 className="w-8 h-8 text-red-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-4">链接无效</h2>
+          <p className="text-white/60 mb-6">{restoreError}</p>
+          <button
+            onClick={() => navigate('/assessments')}
+            className="px-6 py-3 rounded-xl bg-violet-500 text-white"
+            type="button"
+          >
+            开始测评
+          </button>
+        </div>
+      </div>
+    )
   }
 
-  const handleExportImage = async () => {
-    if (!reportRef.current || !assessment) return
-    
-    setExporting(true)
-    try {
-      const canvas = await html2canvas(reportRef.current, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#0f172a'
-      })
-      
-      const link = document.createElement('a')
-      link.download = `${assessment.title}-测评报告.png`
-      link.href = canvas.toDataURL('image/png')
-      link.click()
-    } catch (error) {
-      console.error('图片导出失败:', error)
-    } finally {
-      setExporting(false)
-    }
-  }
-
-  if (!latestResult || !assessment || !latestResult.result) {
+  if (!resultRecord || !assessment || !resultRecord.result) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">
@@ -217,18 +220,30 @@ export default function Results() {
           >
             您的测评报告
           </motion.h1>
-          <motion.p
-            className="text-white/60 text-lg"
+          <motion.div
+            className="flex items-center justify-center gap-3 flex-wrap"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            {assessment.title} · 测评准确度 {latestResult.result.accuracy}%
-          </motion.p>
+            <span className="text-white/60 text-lg">{assessment.title}</span>
+            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+              resultRecord.mode === 'professional'
+                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                : 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
+            }`}>
+              {resultRecord.mode === 'professional' ? '专业版' : '标准版'}
+            </span>
+            <span className="text-white/60 text-lg">· 测评准确度 {resultRecord.result.accuracy}%</span>
+          </motion.div>
         </motion.div>
 
         <div ref={reportRef}>
-          <ReportTemplate result={latestResult.result} assessmentType={assessment.id} mode={(latestResult.mode as 'normal' | 'advanced' | 'professional') || 'normal'} />
+          <ReportRouter
+            result={resultRecord.result}
+            assessmentType={assessment.id}
+            mode={(resultRecord.mode as 'normal' | 'advanced' | 'professional') || 'normal'}
+          />
         </div>
 
         <motion.div
@@ -240,85 +255,10 @@ export default function Results() {
           <ResultExportButton
             resultId={id || 'result'}
             title={assessment?.title || '测评报告'}
-            resultData={latestResult}
+            resultData={resultRecord}
+            resultHash={resultRecord?.result?.result_hash}
+            onShowQRCode={() => setShowQRCode(true)}
           />
-          <div className="relative" ref={shareRef}>
-            <motion.button
-              onClick={() => setShowShareMenu(!showShareMenu)}
-              className="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold hover:shadow-lg hover:shadow-violet-500/25 transition-all"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="button"
-            >
-              <Share2 className="w-5 h-5" />
-              分享报告
-            </motion.button>
-
-            {showShareMenu && (
-              <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute top-full mt-2 left-1/2 -translate-x-1/2 w-72 glass rounded-xl p-4 z-50"
-              >
-                <div className="space-y-2">
-                  <button
-                    onClick={handleCopyLink}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left"
-                    type="button"
-                  >
-                    {copied ? (
-                      <Check className="w-5 h-5 text-green-400" />
-                    ) : (
-                      <Copy className="w-5 h-5 text-white/60" />
-                    )}
-                    <span className="text-white">{copied ? '已复制链接' : '复制链接'}</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowQRCode(true)
-                      setShowShareMenu(false)
-                    }}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left"
-                    type="button"
-                  >
-                    <QrCode className="w-5 h-5 text-white/60" />
-                    <span className="text-white">生成二维码</span>
-                  </button>
-                  <button
-                    onClick={handleExportPDF}
-                    disabled={exporting}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left disabled:opacity-50"
-                    type="button"
-                  >
-                    <FileText className="w-5 h-5 text-white/60" />
-                    <span className="text-white">{exporting ? '导出中...' : '导出PDF'}</span>
-                  </button>
-                  <button
-                    onClick={handleExportImage}
-                    disabled={exporting}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left disabled:opacity-50"
-                    type="button"
-                  >
-                    <Image className="w-5 h-5 text-white/60" />
-                    <span className="text-white">{exporting ? '导出中...' : '导出图片'}</span>
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </div>
-
-          <motion.button
-            onClick={handleExportPDF}
-            disabled={exporting}
-            className="flex items-center gap-2 px-8 py-4 rounded-xl glass text-white font-semibold hover:bg-white/10 border border-white/20 transition-all disabled:opacity-50"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            type="button"
-          >
-            <Download className="w-5 h-5" />
-            {exporting ? '导出中...' : '导出PDF'}
-          </motion.button>
 
           <motion.button
             onClick={() => navigate('/assessments')}
@@ -328,6 +268,17 @@ export default function Results() {
             type="button"
           >
             继续测评
+          </motion.button>
+
+          <motion.button
+            onClick={() => navigate('/leaderboard')}
+            className="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold hover:shadow-lg hover:shadow-amber-500/25 transition-all"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            type="button"
+          >
+            <Trophy className="w-5 h-5" />
+            查看排行榜
           </motion.button>
         </motion.div>
       </div>

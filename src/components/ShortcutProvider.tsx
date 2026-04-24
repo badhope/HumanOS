@@ -32,6 +32,4 @@ export function ShortcutProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function useShortcutContext() {
-  return useContext(ShortcutContext)
-}
+export { ShortcutContext }

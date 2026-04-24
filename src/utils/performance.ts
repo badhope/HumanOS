@@ -1,330 +1,144 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useMemo, useCallback, useEffect, useRef } from 'react'
 
-export function usePerformance() {
-  const [fps, setFps] = useState(60)
-  const frameCount = useRef(0)
-  const lastTime = useRef(performance.now())
-  const animationFrameId = useRef<number>()
+type AnyFunction = (...args: any[]) => any
 
-  const measureFPS = useCallback(() => {
-    const now = performance.now()
-    frameCount.current++
+export function shallowEqual(objA: any, objB: any): boolean {
+  if (Object.is(objA, objB)) return true
 
-    if (now - lastTime.current >= 1000) {
-      setFps(frameCount.current)
-      frameCount.current = 0
-      lastTime.current = now
-    }
+  if (typeof objA !== 'object' || objA === null ||
+      typeof objB !== 'object' || objB === null) {
+    return false
+  }
 
-    animationFrameId.current = requestAnimationFrame(measureFPS)
-  }, [])
+  const keysA = Object.keys(objA)
+  const keysB = Object.keys(objB)
 
-  useEffect(() => {
-    animationFrameId.current = requestAnimationFrame(measureFPS)
-    return () => {
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current)
-      }
-    }
-  }, [measureFPS])
+  if (keysA.length !== keysB.length) return false
 
-  return { fps }
+  for (const key of keysA) {
+    if (!Object.prototype.hasOwnProperty.call(objB, key)) return false
+    if (!Object.is(objA[key], objB[key])) return false
+  }
+
+  return true
 }
 
-export function useIntersectionObserver(
-  options: IntersectionObserverInit = {}
+export function memoEqual<T extends React.ComponentType<any>>(
+  Component: T,
+  customEqual?: (prev: any, next: any) => boolean
 ) {
-  const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null)
-  const [node, setNode] = useState<Element | null>(null)
-
-  const observer = useRef<IntersectionObserver | null>(null)
-
-  useEffect(() => {
-    if (observer.current) {
-      observer.current.disconnect()
-    }
-
-    const currentOptions = {
-      threshold: 0.1,
-      rootMargin: '0px',
-      ...options,
-    }
-
-    observer.current = new IntersectionObserver(
-      ([entry]) => setEntry(entry),
-      currentOptions
-    )
-
-    const currentNode = node
-    if (currentNode) {
-      observer.current.observe(currentNode)
-    }
-
-    return () => {
-      if (observer.current) {
-        observer.current.disconnect()
-      }
-    }
-  }, [node, options])
-
-  return { setRef: setNode, entry, isIntersecting: entry?.isIntersecting }
+  return memo(Component, customEqual || shallowEqual)
 }
 
-export function useLazyLoad<T extends HTMLElement>() {
-  const ref = useRef<T>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-
-  useEffect(() => {
-    const currentRef = ref.current
-    if (!currentRef) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsLoaded(true)
-          observer.disconnect()
-        }
-      },
-      { rootMargin: '100px' }
-    )
-
-    observer.observe(currentRef)
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
-
-  return { ref, isLoaded }
-}
-
-export function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value)
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-
-    return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
-
-  return debouncedValue
-}
-
-export function useThrottle<T extends (...args: any[]) => any>(
-  callback: T,
-  delay: number
-): T {
-  const lastCall = useRef(0)
-  const callbackRef = useRef(callback)
-  callbackRef.current = callback
-
-  return useCallback(
-    ((...args: Parameters<T>) => {
-      const now = Date.now()
-      if (now - lastCall.current >= delay) {
-        lastCall.current = now
-        return callbackRef.current(...args)
-      }
-    }) as T,
-    [delay]
-  )
-}
-
-export function useRafCallback<T extends (...args: any[]) => any>(
-  callback: T
-): T {
-  const rafId = useRef<number>()
-  const callbackRef = useRef(callback)
-  callbackRef.current = callback
-
-  return useCallback(
-    ((...args: Parameters<T>) => {
-      if (rafId.current) {
-        cancelAnimationFrame(rafId.current)
-      }
-
-      rafId.current = requestAnimationFrame(() => {
-        callbackRef.current(...args)
-      })
-    }) as T,
-    []
-  )
-}
-
-export function useReducedMotion(): boolean {
-  const [reducedMotion, setReducedMotion] = useState(false)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(mediaQuery.matches)
-
-    const handler = (event: MediaQueryListEvent) => {
-      setReducedMotion(event.matches)
-    }
-
-    mediaQuery.addEventListener('change', handler)
-    return () => {
-      mediaQuery.removeEventListener('change', handler)
-    }
-  }, [])
-
-  return reducedMotion
-}
-
-export function useHardwareConcurrency(): number {
-  const [cores, setCores] = useState(4)
-
-  useEffect(() => {
-    if ('hardwareConcurrency' in navigator) {
-      setCores(navigator.hardwareConcurrency || 4)
-    }
-  }, [])
-
-  return cores
-}
-
-export function useMemoryInfo() {
-  const [memory, setMemory] = useState({
-    usedJSHeapSize: 0,
-    totalJSHeapSize: 0,
-    jsHeapSizeLimit: 0,
-  })
-
-  useEffect(() => {
-    const updateMemory = () => {
-      if ('memory' in performance && (performance as any).memory) {
-        const { usedJSHeapSize, totalJSHeapSize, jsHeapSizeLimit } = 
-          (performance as any).memory
-        setMemory({ usedJSHeapSize, totalJSHeapSize, jsHeapSizeLimit })
-      }
-    }
-
-    updateMemory()
-    const interval = setInterval(updateMemory, 5000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  return memory
-}
-
-export function useNetworkStatus() {
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
-  const [effectiveType, setEffectiveType] = useState('4g')
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
-
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
-
-    if ('connection' in navigator && (navigator as any).connection) {
-      const connection = (navigator as any).connection
-      setEffectiveType(connection.effectiveType || '4g')
-
-      const handleChange = () => {
-        setEffectiveType(connection.effectiveType || '4g')
-      }
-
-      connection.addEventListener('change', handleChange)
-      return () => {
-        connection.removeEventListener('change', handleChange)
-        window.removeEventListener('online', handleOnline)
-        window.removeEventListener('offline', handleOffline)
-      }
-    }
-
-    return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    }
-  }, [])
-
-  return { isOnline, effectiveType }
-}
-
-export function useViewportSize() {
-  const [size, setSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  })
-
-  useEffect(() => {
-    const handleResize = () => {
-      setSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-    }
-
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  return size
-}
-
-export function useScrollPosition() {
-  const [scrollPosition, setScrollPosition] = useState(0)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY)
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  return scrollPosition
-}
-
-export function useElementSize<T extends HTMLElement>() {
-  const ref = useRef<T>(null)
-  const [size, setSize] = useState({ width: 0, height: 0 })
-
-  useEffect(() => {
-    const currentRef = ref.current
-    if (!currentRef) return
-
-    const observer = new ResizeObserver((entries) => {
-      if (entries[0]) {
-        const { width, height } = entries[0].contentRect
-        setSize({ width, height })
-      }
-    })
-
-    observer.observe(currentRef)
-    return () => observer.disconnect()
-  }, [])
-
-  return { ref, ...size }
-}
-
-export function useOptimizedAnimation(
-  callback: () => void,
-  deps: any[] = []
+export function memoWithKeys<T extends React.ComponentType<any>>(
+  Component: T,
+  keys: string[]
 ) {
-  const rafId = useRef<number>()
-  const reducedMotion = useReducedMotion()
-  const callbackRef = useRef(callback)
-  callbackRef.current = callback
+  return memo(Component, (prevProps, nextProps) => {
+    return keys.every(key => Object.is(prevProps[key], nextProps[key]))
+  })
+}
+
+export function useStableCallback<T extends AnyFunction>(callback: T): T {
+  const ref = useRef<T>(callback)
+  useEffect(() => {
+    ref.current = callback
+  })
+  return useCallback(((...args: any[]) => ref.current(...args)) as T, [])
+}
+
+export function useDeepMemo<T>(factory: () => T, deps: any[]): T {
+  const ref = useRef<{ deps: any[]; value: T }>()
+
+  if (!ref.current || !deps.every((d, i) => Object.is(d, ref.current!.deps[i]))) {
+    ref.current = { deps, value: factory() }
+  }
+
+  return ref.current.value
+}
+
+const TIMING_ENABLED = false
+
+export function withTiming<T extends AnyFunction>(
+  fn: T,
+  label: string
+): T {
+  if (!__TIMING_ENABLED) return fn
+
+  return ((...args: any[]) => {
+    const start = performance.now()
+    const result = fn(...args)
+    const end = performance.now()
+    console.log(`[PERF: ${label} took ${(end - start).toFixed(2)}ms`)
+    return result
+  }) as T
+}
+
+export function useTiming(label: string, deps: any[] = []) {
+  if (!__TIMING_ENABLED) return
 
   useEffect(() => {
-    if (reducedMotion) return
-
-    rafId.current = requestAnimationFrame(() => callbackRef.current())
-
+    const start = performance.now()
     return () => {
-      if (rafId.current) {
-        cancelAnimationFrame(rafId.current)
+      const end = performance.now()
+      console.log(`[PERF] ${label} lifecycle: ${(end - start).toFixed(2)}ms`)
+    }
+  }, deps)
+}
+
+export class LRUCache<K, V> {
+  private cache: Map<K, V>
+  private maxSize: number
+
+  constructor(maxSize: number = 100) {
+    this.cache = new Map()
+    this.maxSize = maxSize
+  }
+
+  get(key: K): V | undefined {
+    const value = this.cache.get(key)
+    if (value !== undefined) {
+      this.cache.delete(key)
+      this.cache.set(key, value)
+    }
+    return value
+  }
+
+  set(key: K, value: V): void {
+    if (this.cache.has(key)) {
+      this.cache.delete(key)
+    } else if (this.cache.size >= this.maxSize) {
+      const firstKey = this.cache.keys().next().value as K
+      if (firstKey !== undefined) {
+        this.cache.delete(firstKey)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reducedMotion, ...deps])
+    this.cache.set(key, value)
+  }
+
+  has(key: K): boolean {
+    return this.cache.has(key)
+  }
+
+  get size(): number {
+    return this.cache.size
+  }
+
+  clear(): void {
+    this.cache.clear()
+  }
 }
+
+export function createCacheKey(...parts: any[]): string {
+  return parts.map(p => {
+    if (typeof p === 'object' && p !== null) {
+      if (Array.isArray(p)) {
+        return p.length > 10 ? `arr[${p.length}]` : p.join(',')
+      }
+      return JSON.stringify(p)
+    }
+    return String(p)
+  }).join(':')
+}
+
+declare const __TIMING_ENABLED: boolean

@@ -22,8 +22,8 @@ import { IDEOLOGY_DIMENSIONS, POLITICAL_IDEOLOGIES } from '../../data/political-
 import type { ModeSpectrumResult, IdeologyConflictAnalysis, IdeologyMatch, PerspectiveResult } from '../../data/political-ideology/ideology-weighted-calculator'
 import type { AssessmentMode } from '../../data/political-ideology/mode-configuration'
 import { MODE_CONFIGURATIONS } from '../../data/political-ideology/mode-configuration'
-import { withErrorBoundary } from '../ui/ErrorBoundary'
-import { useToast } from '../ui/Toast'
+import { withErrorBoundary } from '@utils/withErrorBoundary.tsx'
+import { useToast } from '@hooks/useToast'
 
 interface PoliticalIdeologySpectrumProps {
   result: ModeSpectrumResult
@@ -891,4 +891,6 @@ function PoliticalIdeologySpectrum({
   )
 }
 
-export default withErrorBoundary(PoliticalIdeologySpectrum, '政治意识形态光谱分析')
+const ErrorBoundariedPoliticalIdeologySpectrum = withErrorBoundary(PoliticalIdeologySpectrum, '政治意识形态光谱分析')
+
+export default ErrorBoundariedPoliticalIdeologySpectrum

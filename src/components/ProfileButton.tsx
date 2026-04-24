@@ -7,11 +7,8 @@ import { useNavigate } from 'react-router-dom'
 import { getAssessmentById } from '../data/assessments'
 import {
   analyzeAchievements,
-  getFineScoreRange,
   DIMENSION_CATEGORIES,
-  FINE_SCORE_RANGES,
   type AssessmentRecord,
-  type AnalysisResult,
 } from '../utils/achievementAnalysis'
 
 interface ProfilePanelProps {
@@ -273,7 +270,7 @@ function ProfilePanel({ isOpen, onClose }: ProfilePanelProps) {
                           className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
                           onClick={() => {
                             onClose()
-                            navigate(`/results/${record.assessmentId}`)
+                            navigate(`/results/${record.id}`)
                           }}
                         >
                           <div className="flex items-center gap-3">
@@ -304,13 +301,13 @@ function ProfilePanel({ isOpen, onClose }: ProfilePanelProps) {
                   <button
                     onClick={() => {
                       onClose()
-                      navigate('/dashboard')
+                      navigate('/profile')
                     }}
                     className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-medium flex items-center justify-center gap-2"
                     type="button"
                   >
-                    <BarChart3 className="w-5 h-5" />
-                    查看完整分析
+                    <User className="w-5 h-5" />
+                    进入个人中心
                   </button>
                   <button
                     onClick={() => {

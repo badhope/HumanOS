@@ -3,8 +3,6 @@ import { motion } from 'framer-motion'
 import {
   Target,
   Microscope,
-  Zap,
-  Settings2,
   Check,
   Crown,
   Sparkles,

@@ -23,6 +23,7 @@ export const internetAddictionAssessment: Assessment = {
   title: '网瘾程度深度测评',
   description: '25道灵魂拷问，测出你的网瘾严重程度。从数字隐士到赛博飞升，看看你在互联网世界修仙到哪个段位了！',
   category: '娱乐趣味',
+  subcategory: '数字生活',
   difficulty: 'standard',
   duration: 4,
   quality: '娱乐',

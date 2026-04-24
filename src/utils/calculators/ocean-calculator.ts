@@ -30,11 +30,24 @@
  */
 
 import type { Answer, AssessmentResult } from '../../types'
+import { diversityEngine, isomericEngine } from '../../data/assessments/diversity-enhancement-engine'
+import { oceanAssessment } from '../../data/assessments/ocean-bigfive'
 
 /**
  * 工具函数：从数组随机挑选一个（全项目通用）
  */
 const randomPick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)]
+
+/**
+ * 大五人格人群常模 - 基于McRae标准化数据
+ */
+const OCEAN_NORMS = {
+  openness: { mean: 54, sd: 18 },
+  conscientiousness: { mean: 58, sd: 19 },
+  extraversion: { mean: 51, sd: 22 },
+  agreeableness: { mean: 56, sd: 17 },
+  neuroticism: { mean: 49, sd: 21 },
+}
 
 /**
  * 大五人格结果接口定义
@@ -104,11 +117,36 @@ export function calculateOcean(answers: Answer[]): OceanResult {
     return Math.round(((raw - items.length) / (items.length * 4)) * 100)
   }
 
-  const openness = calcScore(oItems, reverseO)
-  const conscientiousness = calcScore(cItems, reverseC)
-  const extraversion = calcScore(eItems, reverseE)
-  const agreeableness = calcScore(aItems, reverseA)
-  const neuroticism = calcScore(nItems, reverseN)
+  const rawScores = {
+    openness: calcScore(oItems, reverseO),
+    conscientiousness: calcScore(cItems, reverseC),
+    extraversion: calcScore(eItems, reverseE),
+    agreeableness: calcScore(aItems, reverseA),
+    neuroticism: calcScore(nItems, reverseN),
+  }
+
+  const responseValues = Object.fromEntries(
+    Object.entries(answerMap).map(([k, v]) => [k, typeof v === 'number' ? v : Number(v) || 3])
+  )
+  const responseStyle = diversityEngine.calculateResponseStyle(responseValues, 5)
+  const correctedScores = diversityEngine.applyResponseStyleCorrection(rawScores, responseStyle)
+  const enhanced = diversityEngine.enhanceResultDiversity(correctedScores, {
+    responseId: 'ocean-' + Date.now(),
+    rawScores,
+    responseStyle,
+    diversityMetrics: {
+      scoreEntropy: diversityEngine.calculateShannonEntropy(Object.values(rawScores)),
+      dimensionSpread: Math.max(...Object.values(rawScores)) - Math.min(...Object.values(rawScores)),
+      resultUniqueness: diversityEngine.calculateUniquenessScore(rawScores, OCEAN_NORMS),
+    },
+  })
+
+  const { openness, conscientiousness, extraversion, agreeableness, neuroticism } = enhanced as typeof rawScores
+
+  const fingerprint = isomericEngine.generateResponseFingerprint(responseValues, oceanAssessment.questions)
+  const contrastItems = isomericEngine.extractContrastItems(responseValues, rawScores)
+  const midrangeSubtype = isomericEngine.classifyMidrangeSubtype(fingerprint, enhanced)
+  const allScoresInMidrange = Object.values(enhanced).every(s => s >= 42 && s <= 58)
 
   const traits = [
     { name: '开放性', score: openness, letter: 'O' },
@@ -311,6 +349,9 @@ export function calculateOcean(answers: Answer[]): OceanResult {
     '自我提升：接受自己本来的样子。然后在此基础上，成为更好的版本。',
   ]
 
+  const finalProfile = allScoresInMidrange ? midrangeSubtype.name : oceanProfile
+  const finalEmoji = allScoresInMidrange ? '🎯' : profileEmoji
+
   return {
     openness,
     conscientiousness,
@@ -318,15 +359,28 @@ export function calculateOcean(answers: Answer[]): OceanResult {
     agreeableness,
     neuroticism,
     primaryTrait,
-    oceanProfile,
-    profileEmoji,
+    oceanProfile: finalProfile,
+    profileEmoji: finalEmoji,
     dimensions,
     radarData,
-    profileDescription: randomPick(profileDescriptions[oceanProfile] || profileDescriptions['平衡型人格 ⚖️']),
+    profileDescription: allScoresInMidrange 
+      ? midrangeSubtype.description 
+      : randomPick(profileDescriptions[oceanProfile] || profileDescriptions['平衡型人格 ⚖️']),
     traitBreakdown,
     famousMatch: celebrityDatabase[oceanProfile] || celebrityDatabase['平衡型人格 ⚖️'],
     careerSuggestions: careerDatabase[oceanProfile] || careerDatabase['平衡型人格 ⚖️'],
     relationshipInsight: randomPick(relationshipTemplates),
     growthAreas: growthTemplates,
+    diversityAnalysis: {
+      uniquenessScore: Math.round(diversityEngine.calculateUniquenessScore(rawScores, OCEAN_NORMS)),
+      extremityScore: Math.round(responseStyle.extremityScore * 100),
+      midpointAvoidance: Math.round((1 - responseStyle.midpointRatio) * 100),
+    },
+    isomericAnalysis: allScoresInMidrange ? {
+      enabled: true,
+      subtype: midrangeSubtype.name,
+      subtypeDescription: midrangeSubtype.description,
+      characteristicItems: midrangeSubtype.characteristicItems,
+    } : null,
   }
 }

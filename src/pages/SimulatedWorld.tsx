@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Globe, Sparkles, Construction, Clock, Play } from 'lucide-react'
 import { usePageTransition } from '@components/animations/PageTransitionController'
 import { useState } from 'react'
-import EconomyDashboard from '@components/economy/EconomyDashboard'
+import EconomyDashboard from '@components/economy/EconomyDashboardHoi4'
 
 export default function SimulatedWorld() {
   const { navigateWithTransition } = usePageTransition()

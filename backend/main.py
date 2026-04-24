@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from middleware.rate_limiter import RateLimiterMiddleware
 import logging
 from dotenv import load_dotenv
 import os
@@ -80,22 +81,27 @@ app = FastAPI(
 #  中间件配置
 # =============================================================================
 app.add_middleware(GZipMiddleware, minimum_size=1000)
+app.add_middleware(RateLimiterMiddleware, requests_per_minute=120)
 
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 cors_origins = os.getenv("CORS_ORIGINS", "").split(",")
 cors_origins = [o.strip() for o in cors_origins if o.strip()]
 
 if not cors_origins:
-    cors_origins = [
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://localhost:5175",
-        "http://localhost:5176",
-        "http://localhost:5177",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:5174",
-        "http://127.0.0.1:5175",
-    ]
+    if ENVIRONMENT == "production":
+        logger.warning("⚠️  生产环境未配置 CORS_ORIGINS，建议明确设置允许的域名！")
+        cors_origins = []
+    else:
+        cors_origins = [
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:5174",
+            "http://localhost:5175",
+            "http://127.0.0.1:5173",
+            "http://127.0.0.1:5174",
+            "http://127.0.0.1:5175",
+        ]
+        logger.info(f"🔓 开发环境 CORS 已允许本地端口: {cors_origins}")
 
 app.add_middleware(
     CORSMiddleware,

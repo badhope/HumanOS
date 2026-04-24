@@ -545,6 +545,7 @@ export const EXPRESSION_STYLES: ExpressionStyle[] = [
 // ==================== 六、核心分析算法 ====================
 
 export interface AssessmentRecord {
+  id?: string
   assessmentId: string
   completedAt: number
   score: number
