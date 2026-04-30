@@ -3,13 +3,33 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Play, Pause, SkipForward, Volume2, VolumeX, Check, Trophy, Timer, Heart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
+type ExerciseType = 'breathing' | 'guided' | 'reflection' | 'rest' | 'countdown' | 'journal' | 'visualization' | 'affirmation'
+
 interface Exercise {
   id: string
   title: string
   instruction: string
   duration: number
-  type: 'breathing' | 'guided' | 'reflection' | 'rest' | 'countdown'
+  type: ExerciseType
   customRenderer?: (props: any) => JSX.Element
+}
+
+type TrainingCategory = 
+  | 'emotion'      // 情绪管理轨道
+  | 'cognition'    // 思维认知轨道
+  | 'attachment'   // 亲密关系轨道
+  | 'social'       // 人际社交轨道
+  | 'career'       // 职业发展轨道
+  | 'values'       // 价值观念轨道
+  | 'mindfulness'  // 正念存在轨道
+  | 'fun'          // 趣味娱乐轨道
+
+type TrainingLevel = 1 | 2 | 3 | 4
+
+interface UnlockCondition {
+  type: 'assessment' | 'training_count' | 'streak' | 'dimension_score'
+  target: string
+  threshold?: number
 }
 
 interface TrainingProgram {
@@ -18,10 +38,16 @@ interface TrainingProgram {
   subtitle: string
   icon: string
   duration: string
-  level: '入门' | '进阶' | '专业'
+  level: TrainingLevel
+  levelLabel: '入门觉醒' | '刻意练习' | '深度整合' | '大师精通'
   benefits: string[]
   exercises: Exercise[]
-  category: 'emotion' | 'cognition' | 'social' | 'behavior' | 'fun'
+  category: TrainingCategory
+  targetDimension?: string
+  targetScoreRange?: [number, number]
+  unlockCondition?: UnlockCondition
+  isLocked?: boolean
+  relatedAssessments?: string[]
 }
 
 interface TrainingContextType {

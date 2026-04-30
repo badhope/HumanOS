@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/badhope/HumanOS">
-    <img src="https://img.shields.io/badge/Version-v2.5.0-61dafb?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/Version-v3.0.0-61dafb?style=for-the-badge" alt="Version">
   </a>
   <a href="https://creativecommons.org/licenses/by-nc/4.0/">
     <img src="https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue?style=for-the-badge" alt="License">

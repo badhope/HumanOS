@@ -1,15 +1,34 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronRight, Lock, Play, Brain, Gamepad2 } from 'lucide-react'
+import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Gem, Sun, Sparkles, Gamepad2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../store'
 import { useResponsive } from '../hooks/useResponsive'
-import { GROWTH_TRAININGS, FUN_TRAININGS, ALL_TRAININGS, getRecommendedTrainings } from '../data/training-library'
+import {
+  FOUNDATION_TRAININGS,
+  COGNITION_TRAININGS_FULL,
+  EMOTION_TRAININGS_FULL,
+  ATTACHMENT_TRAININGS_FULL,
+  SOCIAL_TRAININGS_FULL,
+  FUN_TRAININGS_FULL,
+  ALL_TRAININGS,
+  getRecommendedTrainings
+} from '../data/training-library'
 
-type TabType = 'recommended' | 'growth' | 'fun'
+type TabType = 'recommended' | 'emotion' | 'cognition' | 'attachment' | 'social' | 'career' | 'fun'
+
+const TRACK_CONFIG = {
+  recommended: { label: '为你推荐', icon: Sparkles, gradient: 'from-violet-500 to-pink-500' },
+  emotion: { label: '情绪管理', icon: Sun, gradient: 'from-amber-500 to-rose-500' },
+  cognition: { label: '思维认知', icon: Brain, gradient: 'from-blue-500 to-cyan-500' },
+  attachment: { label: '亲密关系', icon: Heart, gradient: 'from-pink-500 to-rose-500' },
+  social: { label: '人际社交', icon: Users, gradient: 'from-emerald-500 to-teal-500' },
+  career: { label: '职业发展', icon: Briefcase, gradient: 'from-blue-500 to-violet-500' },
+  fun: { label: '趣味娱乐', icon: Gamepad2, gradient: 'from-orange-500 to-amber-500' },
+}
 
 export default function Training() {
-  const { hasCompletedAssessment, completedAssessments: assessmentHistory, getMoodForDate } = useAppStore() as any
+  const { hasCompletedAssessment, completedAssessments: assessmentHistory, getMoodForDate, results } = useAppStore() as any
   const { isDesktop } = useResponsive()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<TabType>('recommended')
@@ -20,12 +39,17 @@ export default function Training() {
   const trainingRecords = JSON.parse(localStorage.getItem('training-records') || '[]')
   const lastTraining = trainingRecords[trainingRecords.length - 1]
 
-  const recommendedTrainings = getRecommendedTrainings(todayMood?.mood)
+  const bigfiveResult = results['bigfive']?.data?.dimensions
+  const recommendedTrainings = getRecommendedTrainings(todayMood?.mood, bigfiveResult)
 
   const displayTrainings = 
     activeTab === 'recommended' ? recommendedTrainings :
-    activeTab === 'growth' ? GROWTH_TRAININGS :
-    FUN_TRAININGS
+    activeTab === 'emotion' ? EMOTION_TRAININGS_FULL :
+    activeTab === 'cognition' ? COGNITION_TRAININGS_FULL :
+    activeTab === 'attachment' ? ATTACHMENT_TRAININGS_FULL :
+    activeTab === 'social' ? SOCIAL_TRAININGS_FULL :
+    activeTab === 'career' ? FOUNDATION_TRAININGS.filter(t => t.category === 'career') :
+    FUN_TRAININGS_FULL
 
   return (
     <motion.div
@@ -104,25 +128,25 @@ export default function Training() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="flex gap-2 p-1 bg-white/5 rounded-xl"
+        className="flex flex-wrap gap-2 p-1 bg-white/5 rounded-xl"
       >
-        {[
-          { id: 'recommended' as TabType, label: '为你推荐', icon: '✨' },
-          { id: 'growth' as TabType, label: '专业成长', icon: Brain },
-          { id: 'fun' as TabType, label: '趣味娱乐', icon: Gamepad2 },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 ${activeTab === tab.id
-              ? 'bg-violet-500 text-white shadow-lg shadow-violet-500/30'
-              : 'text-white/60 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            {typeof tab.icon === 'string' ? tab.icon : <tab.icon size={14} />}
-            <span className="hidden sm:inline">{tab.label}</span>
-          </button>
-        ))}
+        {(Object.keys(TRACK_CONFIG) as TabType[]).map((tabId) => {
+          const config = TRACK_CONFIG[tabId]
+          const Icon = config.icon
+          return (
+            <button
+              key={tabId}
+              onClick={() => setActiveTab(tabId)}
+              className={`flex-1 min-w-[80px] py-2 px-3 rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-1.5 ${activeTab === tabId
+                ? `bg-gradient-to-r ${config.gradient} text-white shadow-lg`
+                : 'text-white/60 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Icon size={14} />
+              <span className="hidden sm:inline">{config.label}</span>
+            </button>
+          )
+        })}
       </motion.div>
 
       <motion.div
@@ -151,9 +175,12 @@ export default function Training() {
                     <span className={`inline-block px-2 py-0.5 rounded text-xs ${
                       plan.category === 'fun'
                         ? 'bg-amber-500/20 text-amber-300'
-                        : 'bg-violet-500/20 text-violet-300'
+                        : plan.level === 1 ? 'bg-emerald-500/20 text-emerald-300'
+                        : plan.level === 2 ? 'bg-blue-500/20 text-blue-300'
+                        : plan.level === 3 ? 'bg-amber-500/20 text-amber-300'
+                        : 'bg-rose-500/20 text-rose-300'
                     }`}>
-                      {plan.level} · {plan.duration}
+                      L{plan.level} {plan.levelLabel || ''} · {plan.duration}
                     </span>
                   </div>
                   <h4 className="font-medium mb-1">{plan.title}</h4>

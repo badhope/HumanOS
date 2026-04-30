@@ -1,17 +1,22 @@
 import type { TrainingProgram } from '../components/training/TrainingEngine'
+import COGNITION_TRAININGS from './training-cognition'
+import EMOTION_TRAININGS from './training-emotion'
+import ATTACHMENT_TRAININGS from './training-attachment'
+import { SOCIAL_TRAININGS, FUN_EXTENDED_TRAININGS } from './training-social-fun'
 
 // ============================================
-// 🧠 第一轨道：专业成长类训练
+// 📚 完整8大轨道训练体系
 // ============================================
 
-export const GROWTH_TRAININGS: TrainingProgram[] = [
+export const FOUNDATION_TRAININGS: TrainingProgram[] = [
   {
     id: 'emotion-anchoring',
     title: '情绪锚定训练',
     subtitle: '建立你的情绪稳定开关',
     icon: '🧘',
     duration: '5分钟',
-    level: '入门',
+    level: 1,
+    levelLabel: '入门觉醒',
     category: 'emotion',
     benefits: [
       '478呼吸法 - 60秒快速平复焦虑',
@@ -32,7 +37,8 @@ export const GROWTH_TRAININGS: TrainingProgram[] = [
     subtitle: '停止自我攻击，与自己和解',
     icon: '💗',
     duration: '8分钟',
-    level: '入门',
+    level: 1,
+    levelLabel: '入门觉醒',
     category: 'emotion',
     benefits: [
       '学会像对待朋友一样对待自己',
@@ -54,7 +60,8 @@ export const GROWTH_TRAININGS: TrainingProgram[] = [
     subtitle: '学会说不，不做老好人',
     icon: '🛡️',
     duration: '10分钟',
-    level: '进阶',
+    level: 2,
+    levelLabel: '刻意练习',
     category: 'social',
     benefits: [
       '识别自己的边界在哪里',
@@ -76,8 +83,9 @@ export const GROWTH_TRAININGS: TrainingProgram[] = [
     subtitle: '用最小行动打破拖延',
     icon: '🌱',
     duration: '3分钟',
-    level: '入门',
-    category: 'behavior',
+    level: 1,
+    levelLabel: '入门觉醒',
+    category: 'career',
     benefits: [
       '永远从"小到不可能失败"开始',
       '不需要意志力，也能坚持',
@@ -97,7 +105,8 @@ export const GROWTH_TRAININGS: TrainingProgram[] = [
     subtitle: '打破负面思维的死循环',
     icon: '🔄',
     duration: '12分钟',
-    level: '进阶',
+    level: 2,
+    levelLabel: '刻意练习',
     category: 'cognition',
     benefits: [
       '识别认知扭曲的10种模式',
@@ -117,91 +126,75 @@ export const GROWTH_TRAININGS: TrainingProgram[] = [
 ]
 
 // ============================================
-// 🎮 第二轨道：趣味娱乐类项目
+// 🎮 经典趣味训练（已移至 training-social-fun.ts 扩展）
 // ============================================
 
-export const FUN_TRAININGS: TrainingProgram[] = [
-  {
-    id: 'onepiece-challenge',
-    title: '海贼王意志力挑战',
-    subtitle: '像草帽海贼团一样战斗！',
-    icon: '🏴‍☠️',
-    duration: '5分钟',
-    level: '入门',
-    category: 'fun',
-    benefits: [
-      '我是要成为海贼王的男人！',
-      '路飞的三档爆发训练',
-      '索隆的三千世界专注力',
-    ],
-    exercises: [
-      { id: 'op1', title: '准备', instruction: '戴上你的草帽！', duration: 10, type: 'guided' },
-      { id: 'op2', title: '梅利号出航', instruction: '伙伴就在身边！我们不是孤单一人！', duration: 30, type: 'guided' },
-      { id: 'op3', title: '二档！', instruction: '橡胶橡胶的... 喷气手枪！', duration: 60, type: 'countdown' },
-      { id: 'op4', title: '休息', instruction: '吃肉！大口吃肉补充体力！', duration: 20, type: 'rest' },
-      { id: 'op5', title: '三档！骨气球！', instruction: '为了伙伴，我要变得更强！', duration: 60, type: 'guided' },
-      { id: 'op6', title: '胜利！', instruction: '海贼王，我当定了！', duration: 15, type: 'guided' },
-    ],
-  },
-  {
-    id: 'anime-character-immersive',
-    title: '角色代入沉浸体验',
-    subtitle: '今天你是谁？',
-    icon: '🎭',
-    duration: '8分钟',
-    level: '入门',
-    category: 'fun',
-    benefits: [
-      '体验你推的人生5分钟',
-      '沉浸式角色信念注入',
-      '今天也要像TA一样活着！',
-    ],
-    exercises: [
-      { id: 'a1', title: '选择角色', instruction: '今天你想成为谁？', duration: 15, type: 'guided' },
-      { id: 'a2', title: '注入', instruction: '闭上眼，感受TA的灵魂与你同在', duration: 60, type: 'guided' },
-      { id: 'a3', title: '名台词', instruction: '说出TA最经典的那句台词！', duration: 30, type: 'guided' },
-      { id: 'a4', title: '战斗曲', instruction: 'BGM响起！', duration: 60, type: 'guided' },
-      { id: 'a5', title: '升华', instruction: '带着TA的力量，去过今天！', duration: 30, type: 'guided' },
-    ],
-  },
-  {
-    id: 'meme-meditation',
-    title: '梗图冥想',
-    subtitle: '用互联网梗图净化心灵',
-    icon: '😂',
-    duration: '4分钟',
-    level: '入门',
-    category: 'fun',
-    benefits: [
-      '众生皆苦，不如哈哈哈哈',
-      '没什么事是一张梗图解不开的',
-      '当代年轻人的正念修行',
-    ],
-    exercises: [
-      { id: 'm1', title: '准备', instruction: '回想今天看到的最好笑的梗', duration: 10, type: 'guided' },
-      { id: 'm2', title: '哈哈哈', instruction: '现在在心里把它笑出来', duration: 45, type: 'guided' },
-      { id: 'm3', title: '人类的悲欢并不相通', instruction: '但我们可以一起沙雕', duration: 30, type: 'guided' },
-      { id: 'm4', title: '虚无主义解毒', instruction: '反正百年之后都是尘埃', duration: 60, type: 'guided' },
-      { id: 'm5', title: '完成', instruction: '有什么大不了的呢？开心最重要', duration: 15, type: 'guided' },
-    ],
-  },
-]
+export const FUN_TRAININGS: TrainingProgram[] = []
 
-export const ALL_TRAININGS = [...GROWTH_TRAININGS, ...FUN_TRAININGS]
+// ============================================
+// 🚀 八轨道训练体系导出
+// ============================================
+
+export const EMOTION_TRAININGS_FULL = [...EMOTION_TRAININGS]
+export const COGNITION_TRAININGS_FULL = [...COGNITION_TRAININGS]
+export const ATTACHMENT_TRAININGS_FULL = [...ATTACHMENT_TRAININGS]
+export const SOCIAL_TRAININGS_FULL = [...SOCIAL_TRAININGS]
+export const FUN_TRAININGS_FULL = [...FUN_TRAININGS, ...FUN_EXTENDED_TRAININGS]
+
+// 暂时开放：职业、价值观、正念轨道为占位
+export const CAREER_TRAININGS: TrainingProgram[] = []
+export const VALUES_TRAININGS: TrainingProgram[] = []
+export const MINDFULNESS_TRAININGS: TrainingProgram[] = []
+
+// ============================================
+// 📊 训练总库 - 目前共 41+ 个训练项目
+// ============================================
+
+export const ALL_TRAININGS = [
+  ...FOUNDATION_TRAININGS,
+  ...EMOTION_TRAININGS_FULL,
+  ...COGNITION_TRAININGS_FULL,
+  ...ATTACHMENT_TRAININGS_FULL,
+  ...SOCIAL_TRAININGS_FULL,
+  ...FUN_TRAININGS_FULL,
+  ...CAREER_TRAININGS,
+  ...VALUES_TRAININGS,
+  ...MINDFULNESS_TRAININGS,
+]
 
 export const getTrainingById = (id: string) => ALL_TRAININGS.find(t => t.id === id)
 
 export const getTrainingsByCategory = (category: string) => 
   ALL_TRAININGS.filter(t => t.category === category)
 
-export const getRecommendedTrainings = (moodLevel?: number, dimensions?: Record<string, any>) => {
-  let trainings = [...GROWTH_TRAININGS]
+export const getTrainingsForDimension = (dimension: string, score: number) => {
+  return ALL_TRAININGS.filter(t => {
+    if (t.targetDimension !== dimension) return false
+    if (!t.targetScoreRange) return true
+    const [min, max] = t.targetScoreRange
+    return score >= min && score <= max
+  })
+}
+
+export const getRecommendedTrainings = (moodLevel?: number, dimensions?: Record<string, number>) => {
+  let trainings = [...ALL_TRAININGS].filter(t => t.level === 1)
   
-  if (moodLevel !== undefined && moodLevel <= 1) {
-    trainings = trainings.filter(t => ['emotion'].includes(t.category))
-  } else if (moodLevel !== undefined && moodLevel >= 3) {
-    trainings = trainings.filter(t => ['behavior', 'social', 'cognition'].includes(t.category))
+  if (dimensions) {
+    const dimensionRecommendations: TrainingProgram[] = []
+    Object.entries(dimensions).forEach(([dim, score]) => {
+      const matched = getTrainingsForDimension(dim, score)
+      dimensionRecommendations.push(...matched)
+    })
+    if (dimensionRecommendations.length > 0) {
+      return dimensionRecommendations.slice(0, 5)
+    }
   }
   
-  return trainings.slice(0, 3)
+  if (moodLevel !== undefined && moodLevel <= 1) {
+    trainings = trainings.filter(t => ['emotion', 'attachment'].includes(t.category))
+  } else if (moodLevel !== undefined && moodLevel >= 3) {
+    trainings = trainings.filter(t => ['cognition', 'social', 'career'].includes(t.category))
+  }
+  
+  return trainings.slice(0, 5)
 }
