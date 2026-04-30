@@ -153,7 +153,7 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
                 className="text-4xl font-bold text-white"
                 variants={introTextVariants}
               >
-                humanitysOS
+                心镜 MindMirror
               </motion.h1>
               <motion.p
                 className="mt-2 text-violet-400/80"

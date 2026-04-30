@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-HumanOS Deployment Verification Script
+MindMirror Deployment Verification Script
 Verify all services are running correctly
 """
 
@@ -28,7 +28,7 @@ def check_service(name, url, timeout=5):
 
 def main():
     print("=" * 50)
-    print("HumanOS - Deployment Verification")
+    print("MindMirror - Deployment Verification")
     print("=" * 50)
     print()
 

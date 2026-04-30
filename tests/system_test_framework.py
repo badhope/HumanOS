@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-HumanOS 系统全面自动化测试框架
+MindMirror 系统全面自动化测试框架
 功能测试 + 性能评估 + 错误检测与修复
 """
 
@@ -403,7 +403,7 @@ class SystemTestFramework:
     def run_all_tests(self) -> TestResult:
         """运行所有测试"""
         logger.info("=" * 60)
-        logger.info("🚀 HumanOS 系统全面测试启动")
+        logger.info("🚀 MindMirror 系统全面测试启动")
         logger.info("=" * 60)
         
         test_suites = [
@@ -483,7 +483,7 @@ def main():
     framework = SystemTestFramework(project_root)
     
     print("\n" + "=" * 60)
-    print("🔧 HumanOS 自动化测试与自我修复系统")
+    print("🔧 MindMirror 自动化测试与自我修复系统")
     print("=" * 60)
     print("1. TypeScript 类型安全检查")
     print("2. 知识库完整性测试")

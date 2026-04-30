@@ -8,7 +8,7 @@ import json
 import time
 
 print("\n" + "="*80)
-print("  🚀 HUMANOS 最终验收测试套件")
+print("  🚀 MindMirror 最终验收测试套件")
 print("="*80)
 
 FRONTEND = "http://localhost:5175"
@@ -115,7 +115,7 @@ def test_6():
 
 def test_7():
     import os
-    os.chdir("c:\\Users\\X1882\\Desktop\\github\\HumanOS")
+    os.chdir("c:\\Users\\X1882\\Desktop\\github\\MindMirror")
     import subprocess
     result = subprocess.run(["npm", "run", "typecheck"], capture_output=True, text=True)
     passed = result.returncode == 0
@@ -124,7 +124,7 @@ def test_7():
 
 def test_8():
     import os
-    os.chdir("c:\\Users\\X1882\\Desktop\\github\\HumanOS\\backend")
+    os.chdir("c:\\Users\\X1882\\Desktop\\github\\MindMirror\\backend")
     print("     后端Python导入检查...")
     imports = [
         "from fastapi import FastAPI",

@@ -25,6 +25,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+backend/logs/
+*.log
 
 # Environment
 .env
@@ -48,6 +50,21 @@ __tests__
 *.spec.ts
 *.spec.tsx
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
 # Archives
 *.zip
 *.tar.gz
@@ -62,6 +79,11 @@ deploy-website/
 
 # OS
 Thumbs.db
+.DS_Store
+
+# PWA dev
+sw.js
+workbox-*.js
 
 # Documentation (optional)
 # README_EN.md

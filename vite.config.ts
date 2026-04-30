@@ -26,9 +26,9 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'HumanOS - 人类操作系统',
-        short_name: 'HumanOS',
-        description: '22种专业心理测评，探索真实的自己',
+        name: 'humanitysOS - 心镜 MindMirror',
+        short_name: '心镜 MindMirror',
+        description: '观照内心，自成一界 - 43种专业心理测评，探索真实的自己',
         theme_color: '#581c87',
         background_color: '#0f172a',
         display: 'standalone',
@@ -57,7 +57,7 @@ export default defineConfig({
       },
     }),
   ],
-  base: '/',
+  base: './',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
