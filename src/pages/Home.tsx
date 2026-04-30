@@ -203,6 +203,122 @@ export default function Home() {
           </motion.div>
           </StandardContainer>
         </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="py-20 border-t border-violet-500/10 bg-gradient-to-b from-slate-950 to-slate-900"
+        >
+          <StandardContainer>
+            <div className="text-center mb-16">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 mb-6"
+              >
+                <span className="text-violet-400 text-sm">🪞 关于心镜</span>
+              </motion.div>
+              
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="text-4xl md:text-5xl font-bold mb-6"
+              >
+                <span className="bg-gradient-to-r from-violet-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
+                  心镜 MindMirror
+                </span>
+              </motion.h2>
+              
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="text-2xl md:text-3xl font-light text-white/60 mb-4"
+              >
+                照见自己，成为更好的自己
+              </motion.p>
+              
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="text-lg text-white/40 max-w-2xl mx-auto"
+              >
+                以心为镜，用科学的方法认识真实的自己
+              </motion.p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-16">
+              {[
+                {
+                  icon: '🔍',
+                  title: '科学测评',
+                  desc: '基于经典心理学理论，43+ 专业测评帮你全面认识自己',
+                  gradient: 'from-violet-500 to-blue-500'
+                },
+                {
+                  icon: '💪',
+                  title: '系统训练',
+                  desc: '不止于测评，更提供可执行的系统化心理训练方案',
+                  gradient: 'from-pink-500 to-rose-500'
+                },
+                {
+                  icon: '📈',
+                  title: '成长追踪',
+                  desc: '可视化的成长数据，见证你每一步的改变与进步',
+                  gradient: 'from-amber-500 to-orange-500'
+                }
+              ].map((item, i) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + i * 0.1 }}
+                  className="text-center p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-violet-500/30 transition-all group"
+                >
+                  <div className={`w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center text-3xl group-hover:scale-110 transition-transform`}>
+                    {item.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
+                  <p className="text-white/50">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="max-w-3xl mx-auto text-center p-8 rounded-3xl bg-gradient-to-br from-violet-500/10 to-pink-500/10 border border-violet-500/20"
+            >
+              <p className="text-xl text-white/70 leading-relaxed mb-6 italic">
+                "你的潜意识指引着你的人生，而你称其为命运。
+                <br />当潜意识被呈现，命运就被改写了。"
+              </p>
+              <p className="text-white/40">—— 卡尔·荣格</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
+              className="text-center mt-16 pt-8 border-t border-white/10"
+            >
+              <p className="text-white/30 text-sm">
+                © {new Date().getFullYear()} 心镜 MindMirror. 照见自己，成为更好的自己。
+              </p>
+            </motion.div>
+          </StandardContainer>
+        </motion.section>
     </div>
   )
 }
