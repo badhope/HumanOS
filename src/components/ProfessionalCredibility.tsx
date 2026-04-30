@@ -80,11 +80,11 @@ const userDistributionData = [
 ]
 
 const comparisonData = [
-  { name: '准确率', HumanOS: 98.76, 行业平均: 85.2 },
-  { name: '响应速度', HumanOS: 95.3, 行业平均: 72.8 },
-  { name: '用户满意度', HumanOS: 98.4, 行业平均: 81.5 },
-  { name: '报告深度', HumanOS: 96.7, 行业平均: 68.3 },
-  { name: '数据安全', HumanOS: 99.9, 行业平均: 87.6 },
+  { name: '准确率', MindMirror: 98.76, 行业平均: 85.2 },
+  { name: '响应速度', MindMirror: 95.3, 行业平均: 72.8 },
+  { name: '用户满意度', MindMirror: 98.4, 行业平均: 81.5 },
+  { name: '报告深度', MindMirror: 96.7, 行业平均: 68.3 },
+  { name: '数据安全', MindMirror: 99.9, 行业平均: 87.6 },
 ]
 
 const certifications = [
@@ -109,7 +109,7 @@ const successCases = [
     industry: '互联网',
     logo: '🏢',
     metrics: '员工测评满意度提升 47%',
-    quote: 'HumanOS帮助我们建立了科学的人才评估体系，招聘效率提升了3倍。',
+    quote: '心镜帮助我们建立了科学的人才评估体系，招聘效率提升了3倍。',
     author: '人力资源总监 刘女士',
   },
   {
@@ -125,7 +125,7 @@ const successCases = [
     industry: '科技',
     logo: '📱',
     metrics: '团队协作效能提升 52%',
-    quote: '通过HumanOS的团队诊断，我们优化了组织架构，项目交付周期缩短了40%。',
+    quote: '通过心镜的团队诊断，我们优化了组织架构，项目交付周期缩短了40%。',
     author: '组织发展部负责人 王先生',
   },
   {
@@ -243,7 +243,7 @@ function ChartsSection() {
             <Line
               type="monotone"
               dataKey="accuracy"
-              name="HumanOS"
+              name="MindMirror"
               stroke="#8b5cf6"
               strokeWidth={3}
               dot={{ fill: '#8b5cf6', strokeWidth: 2 }}
@@ -276,7 +276,7 @@ function ChartsSection() {
             <PolarAngleAxis dataKey="dimension" stroke="#94a3b8" />
             <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#94a3b8" />
             <Radar
-              name="HumanOS"
+              name="MindMirror"
               dataKey="value"
               stroke="#ec4899"
               fill="#ec4899"
@@ -344,7 +344,7 @@ function ChartsSection() {
               }}
             />
             <Legend />
-            <Bar dataKey="HumanOS" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
+            <Bar dataKey="MindMirror" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
             <Bar dataKey="行业平均" fill="#64748b" radius={[0, 4, 4, 0]} />
           </BarChart>
         </ResponsiveContainer>

@@ -381,5 +381,65 @@ export const fubaoIndexAssessment: Assessment = {
       { id: '4', text: '理解公司的难处', value: 4 },
       { id: '5', text: '主动申请降薪留任！不能拖累公司！', value: 5 },
     ]},
-  ]
+  ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '💰 W.O.R.K 福报指数诊断报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-emerald-950 via-green-900 to-teal-800">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-green-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-emerald-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">🧑‍💻</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.levelName || '打工人'}</h2>
+              <p className="text-green-200/80 text-lg mb-4">W.O.R.K 五维人格类型</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-green-400/30">
+                <span className="text-white">福报指数</span>
+                <span className="text-4xl font-black text-green-300">\${result.totalScore || 50}</span>
+                <span className="text-white/60">分</span>
+              </div>
+              
+              <p className="text-green-200 mt-6 text-sm italic">
+                " \${(result.totalScore || 50) >= 80 ? '重度福报深度患者' : 
+                  (result.totalScore || 50) >= 60 ? '奋斗逼本逼' :
+                  (result.totalScore || 50) >= 40 ? '资深搬砖人' :
+                  (result.totalScore || 50) >= 20 ? '反PUA达人' :
+                  '摸鱼学宗师'
+                } "
+              </p>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 W.O.R.K 五维雷达图',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['overtimeAcceptance', 'bossWorship', 'sacrificeWillingness', 'gratitudeLevel', 'struggleBelief'],
+        dimensionNames: {
+          overtimeAcceptance: '加班接受度',
+          bossWorship: '老板崇拜度',
+          sacrificeWillingness: '牺牲意愿',
+          gratitudeLevel: '感恩等级',
+          struggleBelief: '奋斗信仰'
+        }
+      },
+
+      {
+        id: 'diagnosis',
+        title: '🔬 深度诊断',
+        type: 'analysis-section',
+        content: ''
+      }
+    ]
+  }
 }

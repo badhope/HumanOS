@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Users, Target, Shield, Heart, Award, AlertTriangle, TrendingUp, Compass, Briefcase } from 'lucide-react'
-import { AdvancedBarChart, CircularProgressChart } from '../charts'
+import { ComprehensiveChartSystem, CircularProgressChart } from '../charts'
 import type { AssessmentResult } from '../../types'
 
 interface DISCReportProps {
@@ -139,16 +139,16 @@ export default function DISCProfessionalReport({ result, mode = 'normal' }: DISC
           <Compass className="w-6 h-6 text-violet-400" />
           DISC 四维行为画像
         </h3>
-        <AdvancedBarChart
+        <ComprehensiveChartSystem
           dimensions={dimensions.map(d => ({
             name: DISC_TYPES[d.name as keyof typeof DISC_TYPES]?.name.split(' · ')[0] || d.name,
             score: d.score,
             maxScore: 100,
             description: d.description,
           }))}
-          height={350}
-          colorScheme="gradient"
-          animated
+          overallScore={result.score || 75}
+          assessmentType="disc"
+          title="DISC 行为风格画像"
         />
       </motion.div>
 

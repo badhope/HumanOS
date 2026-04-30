@@ -1,5 +1,5 @@
 import type { Assessment } from '../../types'
-import { calculatePCQ } from '../../utils/calculators/pcq-calculator'
+import { calculatePCQ } from '../../utils/calculators/professional-calculators-factory'
 
 export const pcqStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'pcq-standard',
@@ -195,5 +195,52 @@ export const pcqStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
       { id: '4', text: '🟢 经常这样', value: 4 },
       { id: '5', text: '✅ 几乎总是这样', value: 5 },
     ]},
-  ]
+  ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '💎 PCQ心理资本量表报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-rose-950 via-pink-900 to-fuchsia-800">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-fuchsia-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-rose-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">💎</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.capitalLevel || '心理资本评估'}</h2>
+              <p className="text-rose-200/80 text-lg mb-4">Psychological Capital Questionnaire</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-rose-400/30">
+                <span className="text-white"> PsyCap 指数 </span>
+                <span className="text-4xl font-black text-rose-300">\${result.totalScore || 100}</span>
+                <span className="text-white/60">分</span>
+              </div>
+              
+              <p className="text-rose-200 mt-6 text-sm">
+                自我效能 · 希望 · 韧性 · 乐观
+              </p>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 HERO四维度心理资本',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['efficacy', 'hope', 'resilience', 'optimism'],
+        dimensionNames: {
+          efficacy: '自我效能',
+          hope: '希望',
+          resilience: '韧性',
+          optimism: '乐观'
+        }
+      }
+    ]
+  }
 }

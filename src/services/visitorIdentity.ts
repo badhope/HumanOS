@@ -7,7 +7,7 @@
 //  - localStorage + Cookie 双存储，防丢失
 //  - 后端可基于此做漏斗分析
 
-const VISITOR_ID_KEY = 'humanos_visitor_id'
+const VISITOR_ID_KEY = 'mindmirror_visitor_id'
 const VISITOR_COOKIE_KEY = 'visitor_id'
 
 export interface VisitorProfile {

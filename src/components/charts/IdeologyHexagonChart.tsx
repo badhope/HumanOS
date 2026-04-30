@@ -1,6 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ideologyDimensions } from '../../data/ideology-framework'
 
 interface IdeologyHexagonChartProps {
   dimensionScores: Map<string, number>
@@ -33,12 +32,12 @@ export default function IdeologyHexagonChart({
 
   const hexagonData = useMemo(() => {
     const dimensions = [
-      { id: 'economic', name: '经济制度', icon: '💰' },
-      { id: 'political', name: '政治权力', icon: '⚖️' },
-      { id: 'social', name: '社会结构', icon: '👥' },
-      { id: 'cultural', name: '文化价值', icon: '📜' },
-      { id: 'international', name: '国际关系', icon: '🌐' },
-      { id: 'technology', name: '技术态度', icon: '🔬' },
+      { id: 'economic', name: '经济制度', icon: '💰', description: '政府与市场的关系，从计划经济到自由放任' },
+      { id: 'political', name: '政治权力', icon: '⚖️', description: '权力集中与分散的平衡，威权与民主的光谱' },
+      { id: 'social', name: '社会结构', icon: '👥', description: '平等与等级，个体与集体的价值取向' },
+      { id: 'cultural', name: '文化价值', icon: '📜', description: '传统与进步，保守与开放的文化立场' },
+      { id: 'international', name: '国际关系', icon: '🌐', description: '民族主义与全球主义，孤立与合作的选择' },
+      { id: 'technology', name: '技术态度', icon: '🔬', description: '对科技进步的乐观与审慎，加速与限制' },
     ]
 
     return dimensions.map((dim, index) => {
@@ -268,15 +267,14 @@ export default function IdeologyHexagonChart({
                 const active = hexagonData.find(d => d.id === activeDimension)
                 if (!active) return null
                 
-                const dimension = ideologyDimensions.find(d => d.id === activeDimension)
                 return (
                   <div>
                     <div className="text-white font-bold text-lg mb-2">
                       {active.icon} {active.name}
                     </div>
                     <div className="text-white text-3xl font-bold mb-2">{active.score}</div>
-                    {dimension && (
-                      <div className="text-white/70 text-sm">{dimension.description}</div>
+                    {active.description && (
+                      <div className="text-white/70 text-sm">{active.description}</div>
                     )}
                   </div>
                 )

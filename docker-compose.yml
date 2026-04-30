@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  humanos:
+    build: .
+    container_name: humanos-app
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - humanos-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  humanos-network:
+    driver: bridge

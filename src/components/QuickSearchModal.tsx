@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, X, Command, FileText, Sparkles, TrendingUp, Keyboard, ChevronRight, ArrowRight, Clock } from 'lucide-react'
 import { assessments } from '@data/assessments'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useShortcutContext } from '@hooks/useShortcutContext'
 
 interface SearchResult {
@@ -30,6 +30,16 @@ export default function QuickSearchModal() {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
+  const location = useLocation()
+  
+  const isImmersiveMode = 
+    location.pathname.includes('/simulated-world') && location.pathname !== '/simulated-world' ||
+    location.pathname.includes('/assessment/') ||
+    location.pathname.includes('/world/play') ||
+    location.pathname.includes('/scenario/') ||
+    location.pathname.includes('/economy') ||
+    location.pathname.includes('/xianxia') ||
+    location.pathname.includes('/game/')
 
   const buildSearchIndex = useCallback((): SearchResult[] => {
     const assessmentItems: SearchResult[] = assessments.map(ass => ({
@@ -116,26 +126,6 @@ export default function QuickSearchModal() {
 
   return (
     <>
-      <motion.button
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        whileHover={{ scale: 1.02, y: -1 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-1/2 -translate-x-1/2 z-40 group flex items-center gap-2.5 px-3 sm:px-5 py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-slate-800/95 via-slate-800/90 to-slate-800/95 backdrop-blur-2xl border border-white/10 hover:border-violet-500/50 transition-all duration-300 shadow-xl hover:shadow-violet-500/10 hover:shadow-2xl ml-14 sm:ml-0 mr-14 sm:mr-0 max-w-[calc(100vw-8rem)] sm:max-w-none"
-      >
-        <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-violet-500 to-blue-600 flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-all shrink-0">
-          <Search className="w-4 h-4 text-white" />
-        </div>
-        <span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors hidden md:inline">
-          快速搜索
-        </span>
-        <kbd className="hidden lg:inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-xl bg-violet-500/20 text-violet-300 border border-violet-500/30 font-mono">
-          <Command className="w-3 h-3" />K
-        </kbd>
-      </motion.button>
-
       <AnimatePresence>
         {isOpen && (
           <>
@@ -221,7 +211,7 @@ export default function QuickSearchModal() {
                               item.type === 'assessment'
                                 ? 'bg-emerald-500/20 text-emerald-400'
                                 : item.type === 'action'
-                                ? 'bg-amber-500/20 text-amber-400'
+                                ? 'bg-violet-500/20 text-violet-400'
                                 : 'bg-blue-500/20 text-blue-400'
                             }`}>
                               {item.type === 'assessment' ? '测评' : item.type === 'action' ? '操作' : '页面'}

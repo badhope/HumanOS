@@ -26,7 +26,7 @@ const timeline = [
   {
     year: '2024',
     title: '平台上线',
-    description: 'HumanOS正式上线，首批推出MBTI、大五人格、霍兰德职业兴趣等经典测评。平台采用现代化技术架构，提供流畅的用户体验和专业的测评服务。',
+    description: '心镜 MindMirror 正式上线，首批推出MBTI、大五人格、霍兰德职业兴趣等经典测评。平台采用现代化技术架构，提供流畅的用户体验和专业的测评服务。',
     icon: Heart
   }
 ]
@@ -73,7 +73,7 @@ export default function PlatformStoryPage() {
           平台发展由来与背景故事
         </h1>
         <p className="text-base sm:text-lg text-white/70 leading-relaxed">
-          HumanOS的诞生源于对人类自我认知的深刻思考。我们相信，每个人都值得被科学地理解和尊重。
+          心镜 MindMirror 的诞生源于对人类自我认知的深刻思考。我们相信，每个人都值得被科学地理解和尊重。
         </p>
       </motion.div>
 
@@ -86,7 +86,7 @@ export default function PlatformStoryPage() {
             科学、值得信赖的测评平台。
           </p>
           <p className="text-white/70 leading-relaxed text-sm sm:text-base">
-            HumanOS不仅仅是一个测评工具，更是一个帮助人们探索自我、发现潜能、规划人生的平台。
+            心镜 MindMirror 不仅仅是一个测评工具，更是一个帮助人们探索自我、发现潜能、规划人生的平台。
             我们相信，科学的自我认知是个人成长的基础，而专业的测评工具是实现这一目标的重要途径。
           </p>
         </div>
@@ -147,13 +147,13 @@ export default function PlatformStoryPage() {
         <div className="glass rounded-2xl p-6 sm:p-8">
           <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">我们的团队</h2>
           <p className="text-white/70 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
-            HumanOS团队由心理学专家、软件工程师、用户体验设计师等多领域人才组成。
+            心镜 MindMirror 团队由心理学专家、软件工程师、用户体验设计师等多领域人才组成。
             我们的团队成员来自知名高校和企业，拥有丰富的专业背景和实践经验。
           </p>
           <p className="text-white/70 leading-relaxed text-sm sm:text-base">
             我们相信，跨学科的合作是打造优秀产品的关键。心理学专家确保测评的科学性，
             工程师保证平台的稳定性和性能，设计师创造流畅的用户体验。正是这种协作，
-            让HumanOS能够为用户提供真正专业、易用的测评服务。
+            让心镜 MindMirror 能够为用户提供真正专业、易用的测评服务。
           </p>
         </div>
       </FadeInSection>

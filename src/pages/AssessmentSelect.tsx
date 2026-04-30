@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, Clock, Target, Brain, Heart, Users, Briefcase, BarChart3, Shield, Palette, Gamepad2, Sparkles } from 'lucide-react'
 import { usePageTransition } from '@components/animations/PageTransitionController'
-import ParticleBackground from '@components/ParticleBackground'
+import { PageWrapper } from '@components/layout'
 import { assessments } from '@data/assessments'
 import { cn } from '@utils/cn'
 
@@ -211,6 +211,27 @@ const categoryConfig: Record<string, {
     borderColor: 'border-pink-500/30',
     shadowColor: 'shadow-pink-500/20',
   },
+  '压力管理': {
+    gradient: 'from-rose-500 to-red-500',
+    icon: <BarChart3 className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-rose-950/40 to-red-900/30',
+    borderColor: 'border-rose-500/30',
+    shadowColor: 'shadow-rose-500/20',
+  },
+  '情绪健康': {
+    gradient: 'from-orange-500 to-amber-500',
+    icon: <Heart className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-orange-950/40 to-amber-900/30',
+    borderColor: 'border-orange-500/30',
+    shadowColor: 'shadow-orange-500/20',
+  },
+  '积极心理学': {
+    gradient: 'from-emerald-500 to-green-600',
+    icon: <Sparkles className="w-5 h-5" />,
+    bgGradient: 'bg-gradient-to-br from-emerald-950/40 to-green-900/30',
+    borderColor: 'border-emerald-500/30',
+    shadowColor: 'shadow-emerald-500/20',
+  },
 }
 
 export default function AssessmentSelect() {
@@ -220,9 +241,9 @@ export default function AssessmentSelect() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   useEffect(() => {
-    const categoryFromUrl = searchParams.get('category')
-    if (categoryFromUrl) {
-      setSelectedCategory(decodeURIComponent(categoryFromUrl))
+    const subcategoryFromUrl = searchParams.get('subcategory') || searchParams.get('category')
+    if (subcategoryFromUrl) {
+      setSelectedCategory(decodeURIComponent(subcategoryFromUrl))
     }
   }, [searchParams])
 
@@ -247,16 +268,15 @@ export default function AssessmentSelect() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-24 pb-12 relative overflow-hidden">
-      <ParticleBackground variant="meteors" />
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    <PageWrapper type="wide" background="meteors">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-20">
         <motion.div
           className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500"
           style={{ scaleX: scrollXProgress }}
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+      <div className="mb-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -356,7 +376,7 @@ export default function AssessmentSelect() {
                   style={{ scrollSnapAlign: 'center' }}
                 >
                   <motion.div
-                    onClick={() => navigateWithTransition(`/mode-select/${assessment.id}`, {
+                    onClick={() => navigateWithTransition(`/legacy/mode-select/${assessment.id}`, {
                       preset: 'page',
                       loadingText: `正在加载 ${assessment.title}...`,
                     })}
@@ -487,6 +507,6 @@ export default function AssessmentSelect() {
           提示：使用左右箭头或滑动来浏览更多测评
         </motion.div>
       </div>
-    </div>
+    </PageWrapper>
   )
 }

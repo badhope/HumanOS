@@ -63,4 +63,51 @@ export const lacanAssessment: Assessment = {
     { id: 'lacan-49', type: 'likert-5', dimension: 'phobia', text: '看到血液或伤口会让我感到不适', options: [{ id: '1', text: '完全不符合', value: 1 }, { id: '2', text: '不太符合', value: 2 }, { id: '3', text: '中立', value: 3 }, { id: '4', text: '比较符合', value: 4 }, { id: '5', text: '完全符合', value: 5 }] },
     { id: 'lacan-50', type: 'likert-5', dimension: 'phobia', text: '黑暗中独处让我感到莫名的恐惧', options: [{ id: '1', text: '完全不符合', value: 1 }, { id: '2', text: '不太符合', value: 2 }, { id: '3', text: '中立', value: 3 }, { id: '4', text: '比较符合', value: 4 }, { id: '5', text: '完全符合', value: 5 }] },
   ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '🔮 拉康精神分析诊断报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-slate-950 via-zinc-900 to-neutral-800">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-purple-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">🪞</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.structure || '主体结构分析'}</h2>
+              <p className="text-purple-200/80 text-lg mb-4">Lacanian Psychoanalysis</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-purple-400/30">
+                <span className="text-white">无意识已解锁</span>
+              </div>
+              
+              <p className="text-purple-200 mt-6 text-sm italic">
+                " 无意识的结构如同语言 —— 雅克·拉康 "
+              </p>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 临床结构六维雷达',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['neurosis', 'obsession', 'hysteria', 'phobia', 'perversion', 'psychosis'],
+        dimensionNames: {
+          neurosis: '神经症',
+          obsession: '强迫症',
+          hysteria: '癔症',
+          phobia: '恐惧症',
+          perversion: '倒错',
+          psychosis: '精神病'
+        }
+      }
+    ]
+  }
 }

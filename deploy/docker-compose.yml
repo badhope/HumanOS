@@ -1,0 +1,70 @@
+version: '3.8'
+
+name: humanos
+
+services:
+  # Frontend - React + Nginx
+  client:
+    build:
+      context: ../
+      dockerfile: deploy/client/Dockerfile
+    container_name: humanos-client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - humanos-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend - FastAPI + Python
+  server:
+    build:
+      context: ../backend
+      dockerfile: ../deploy/server/Dockerfile
+    container_name: humanos-server
+    restart: unless-stopped
+    expose:
+      - "8000"
+    environment:
+      - DATABASE_URL=sqlite:///data/humanos.db
+      - ENVIRONMENT=production
+    volumes:
+      - humanos-data:/app/data
+    networks:
+      - humanos-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Optional: Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: humanos-redis
+    restart: unless-stopped
+    expose:
+      - "6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - humanos-network
+    command: redis-server --appendonly yes
+    profiles:
+      - with-redis
+
+networks:
+  humanos-network:
+    driver: bridge
+
+volumes:
+  humanos-data:
+    driver: local
+  redis-data:
+    driver: local

@@ -1081,7 +1081,7 @@ ${this.getRandomElement([
   '您的成长潜力巨大，相信通过持续努力，一定能实现更高的目标！',
 ])}
 
-*本报告由 HumanOS 智能分析系统生成，仅供参考。*`
+*本报告由 心镜 MindMirror 智能分析系统生成，仅供参考。*`
   }
 
   private getConfidenceDescription(confidence: number): string {

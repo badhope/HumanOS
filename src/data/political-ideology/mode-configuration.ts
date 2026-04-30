@@ -1,6 +1,6 @@
 import { IDEOLOGY_DIMENSIONS } from './ideology-theoretical-framework'
 
-export type AssessmentMode = 'normal' | 'advanced' | 'professional' | 'historical-scenario' | 'life-simulation'
+export type AssessmentMode = 'normal' | 'advanced' | 'professional'
 
 export interface ModeConfiguration {
   mode: AssessmentMode
@@ -328,96 +328,6 @@ export const MODE_CONFIGURATIONS: Record<AssessmentMode, ModeConfiguration> = {
           maxPosteriorUncertainty: 0.05,
         },
       },
-    },
-  },
-  'historical-scenario': {
-    mode: 'historical-scenario',
-    displayName: '历史决策模式',
-    description: '沉浸式历史角色扮演，在关键历史节点做出你的选择。通过你的决策路径揭示深层政治意识形态倾向',
-    icon: '⚔️',
-    questionConfig: {
-      totalQuestions: 0,
-      questionsPerDimension: {},
-      randomizeOrder: false,
-      showProgress: true,
-    },
-    analysisConfig: {
-      maxIdeologyMatches: 12,
-      minSimilarityThreshold: 0.50,
-      includeSecondaryDimensions: true,
-      includeConflictAnalysis: true,
-      includeHistoricalContext: true,
-      dimensionDepth: 'granular',
-      crossDimensionAnalysis: true,
-    },
-    outputConfig: {
-      showMatchPercentage: true,
-      showDimensionBreakdown: true,
-      includeRecommendations: true,
-      includeReadingList: true,
-      includeEndingAnalysis: true,
-      includeDecisionPath: true,
-      exportFormats: ['summary', 'detailed', 'json'],
-    },
-    uiConfig: {
-      compactMode: false,
-      showTooltips: true,
-      animatedVisualizations: true,
-      allowDrilldown: true,
-      showDecisionHistory: true,
-      showEndingGallery: true,
-    },
-    algorithmConfig: {
-      similarityMethod: 'weighted-cosine',
-      enableDistanceCalibration: true,
-      subDimensionWeighting: true,
-      performanceOptimization: true,
-      decisionPathWeighting: true,
-    },
-  },
-  'life-simulation': {
-    mode: 'life-simulation',
-    displayName: '人生模拟模式',
-    description: '模拟完整人生轨迹，从高考到退休的每一个重大选择。在生活的抉择中发现你真实的价值观和意识形态',
-    icon: '🎭',
-    questionConfig: {
-      totalQuestions: 0,
-      questionsPerDimension: {},
-      randomizeOrder: false,
-      showProgress: true,
-    },
-    analysisConfig: {
-      maxIdeologyMatches: 10,
-      minSimilarityThreshold: 0.50,
-      includeSecondaryDimensions: true,
-      includeConflictAnalysis: true,
-      includeHistoricalContext: false,
-      dimensionDepth: 'granular',
-      crossDimensionAnalysis: true,
-    },
-    outputConfig: {
-      showMatchPercentage: true,
-      showDimensionBreakdown: true,
-      includeRecommendations: true,
-      includeReadingList: false,
-      includeLifePathAnalysis: true,
-      includeValueMap: true,
-      exportFormats: ['summary', 'detailed', 'json'],
-    },
-    uiConfig: {
-      compactMode: false,
-      showTooltips: true,
-      animatedVisualizations: true,
-      allowDrilldown: true,
-      showDecisionHistory: true,
-      showCharacterFate: true,
-    },
-    algorithmConfig: {
-      similarityMethod: 'weighted-cosine',
-      enableDistanceCalibration: true,
-      subDimensionWeighting: true,
-      performanceOptimization: true,
-      lifeStageWeighting: true,
     },
   },
 }

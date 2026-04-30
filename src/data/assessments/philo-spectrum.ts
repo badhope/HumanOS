@@ -69,4 +69,53 @@ export const philoAssessment: Assessment = {
     { id: 'philo-47', type: 'likert-5', dimension: 'positiveFreedom', text: '我们的真实自我往往不是当下的欲望自我', options: DIVERSITY_OPTIMIZED_OPTIONS },
     { id: 'philo-48', type: 'likert-5', dimension: 'positiveFreedom', text: '解放就是摆脱虚假意识的控制', options: DIVERSITY_OPTIMIZED_OPTIONS },
   ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '🧠 哲学光谱诊断报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-indigo-950 via-purple-900 to-violet-800">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-purple-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">🏛️</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.archetype || '思想者'}</h2>
+              <p className="text-purple-200/80 text-lg mb-4">Philosophical Position Test</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-purple-400/30">
+                <span className="text-white">思想坐标已定位</span>
+              </div>
+              
+              <p className="text-purple-200 mt-6 text-sm italic">
+                " 未经审视的人生是不值得过的 —— 苏格拉底 "
+              </p>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 八维思想雷达图',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['existentialism', 'rationalism', 'empiricism', 'idealism', 'materialism', 'universalism', 'progressivism', 'positiveFreedom'],
+        dimensionNames: {
+          existentialism: '存在主义',
+          rationalism: '理性主义',
+          empiricism: '经验主义',
+          idealism: '观念论',
+          materialism: '唯物论',
+          universalism: '普世主义',
+          progressivism: '进步主义',
+          positiveFreedom: '积极自由'
+        }
+      }
+    ]
+  }
 }

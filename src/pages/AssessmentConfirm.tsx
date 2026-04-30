@@ -4,21 +4,22 @@ import { ArrowLeft, Clock, Target, Sparkles, Play, AlertCircle, ChevronDown, Che
 import { getAssessmentById } from '@data/assessments'
 import ProfessionalCredibility from '@components/ProfessionalCredibility'
 import { useState } from 'react'
+import LegacyHeader from '../app/components/LegacyHeader'
+import { PageWrapper } from '@components/layout'
 
 export default function AssessmentConfirm() {
   const { id } = useParams<{ id: string }>()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const assessment = id ? getAssessmentById(id) : undefined
-  const [selectedMode, setSelectedMode] = useState<'normal' | 'professional'>('normal')
+  const modeFromUrl = searchParams.get('mode') as 'normal' | 'professional'
+  const selectedMode = modeFromUrl === 'professional' ? 'professional' : 'normal'
   const [showCredibility, setShowCredibility] = useState(false)
 
   const modeConfigs = {
     normal: {
       label: '标准版',
       sublabel: '推荐选择',
-      questionCount: '约 28 题',
-      duration: '约 5 分钟',
       accuracy: '高准确率',
       color: 'from-violet-500 to-pink-500',
       description: '科学抽样，去重优化，适合大多数用户快速获得准确结果'
@@ -26,8 +27,6 @@ export default function AssessmentConfirm() {
     professional: {
       label: '专业版',
       sublabel: '深度分析',
-      questionCount: '全量题库',
-      duration: '约 10-20 分钟',
       accuracy: '学术级精度',
       color: 'from-amber-500 to-orange-500',
       description: '完整量表，信效度最高，适合心理学爱好者和专业人士'
@@ -52,7 +51,7 @@ export default function AssessmentConfirm() {
   }
 
   const handleStart = () => {
-    navigate(`/assessment/${id}?mode=${selectedMode}`)
+    navigate(`/legacy/assessment/${id}?mode=${selectedMode}`)
   }
 
   const realQuestionCount = assessment.questions?.length || 0
@@ -65,8 +64,10 @@ export default function AssessmentConfirm() {
   }[assessment.difficulty] || '专业'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-24 pb-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <PageWrapper type="narrow" background="gradient">
+      <LegacyHeader title={assessment.title || '开始测评'} />
+      
+      <div className="pt-8 w-full">
         <motion.div
           className="flex items-center gap-4 mb-8"
           initial={{ opacity: 0, x: -20 }}
@@ -129,59 +130,35 @@ export default function AssessmentConfirm() {
             transition={{ delay: 0.45 }}
             className="mb-8"
           >
-            <p className="text-white/70 text-sm mb-3 text-left">请选择测评版本：</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {(['normal', 'professional'] as const).map((mode) => {
-                const config = modeConfigs[mode]
-                const isSelected = selectedMode === mode
-                return (
-                  <motion.button
-                    key={mode}
-                    onClick={() => setSelectedMode(mode)}
-                    className={`relative p-5 rounded-2xl border-2 transition-all text-left overflow-hidden ${
-                      isSelected
-                        ? `border-violet-500`
-                        : 'border-white/10 hover:border-white/20'
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    type="button"
-                  >
-                    {isSelected && (
-                      <div className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-30`} />
-                    )}
-                    {isSelected && (
-                      <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-violet-500 flex items-center justify-center z-20">
-                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                    )}
-                    <div className="relative z-10">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className={`text-lg font-bold ${
-                        isSelected ? 'text-white' : 'text-white/90'
-                      }`}>
-                        {config.label}
-                      </span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        mode === 'normal'
-                          ? 'bg-violet-500/20 text-violet-400'
-                          : 'bg-amber-500/20 text-amber-400'
-                      }`}>
-                        {config.sublabel}
-                      </span>
-                    </div>
-                    <p className="text-white/60 text-sm mb-3">{config.description}</p>
-                    <div className="flex gap-4 text-xs">
-                      <span className="text-white/50">📝 {config.questionCount}</span>
-                      <span className="text-white/50">⏱️ {config.duration}</span>
-                      <span className="text-white/50">🎯 {config.accuracy}</span>
-                    </div>
-                    </div>
-                  </motion.button>
-                )
-              })}
+            <div className={`relative p-6 rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br ${modeConfigs[selectedMode].color} opacity-15`}>
+              <div className="relative z-10 flex items-center gap-4">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${modeConfigs[selectedMode].color} flex items-center justify-center shadow-lg`}>
+                  {selectedMode === 'normal' ? (
+                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-lg font-bold text-white">
+                      {modeConfigs[selectedMode].label}
+                    </span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      selectedMode === 'normal'
+                        ? 'bg-violet-500/20 text-violet-400'
+                        : 'bg-amber-500/20 text-amber-400'
+                    }`}>
+                      {modeConfigs[selectedMode].sublabel}
+                    </span>
+                  </div>
+                  <p className="text-white/70 text-sm">{modeConfigs[selectedMode].description}</p>
+                </div>
+              </div>
             </div>
           </motion.div>
 
@@ -285,6 +262,6 @@ export default function AssessmentConfirm() {
           </motion.div>
         )}
       </div>
-    </div>
+    </PageWrapper>
   )
 }

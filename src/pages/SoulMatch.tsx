@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Heart, Users, Briefcase, Search, MapPin, Sparkles, RefreshCw, ArrowRight } from 'lucide-react'
 import { useSoulMatch } from '@hooks/useSoulMatch'
 import { GlowCard } from '@components/animations'
-import ParticleBackground from '@components/ParticleBackground'
-import { usePageTransition } from '@components/animations/PageTransitionController'
+import { PageWrapper } from '@components/layout'
 
 const mockUserDimensions = {
   darkTriad: 62,
@@ -14,16 +14,13 @@ const mockUserDimensions = {
 }
 
 export default function SoulMatch() {
-  const { navigateWithTransition } = usePageTransition()
+  const navigate = useNavigate()
   const [scanning, setScanning] = useState(true)
   const [selectedMatch, setSelectedMatch] = useState<string | null>(null)
   const { matches, loading, getMatchLevel } = useSoulMatch(mockUserDimensions)
 
   const handleNavigate = (path: string) => {
-    navigateWithTransition(path, {
-      preset: 'page',
-      loadingText: '正在加载...',
-    })
+    navigate(path)
   }
 
   useEffect(() => {
@@ -36,9 +33,12 @@ export default function SoulMatch() {
 
   if (scanning || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-violet-950 via-slate-950 to-fuchsia-950 flex items-center justify-center relative overflow-hidden">
-        <ParticleBackground variant="mixed" />
-        <div className="text-center">
+      <PageWrapper type="standard" background="gradient" centered>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center z-10"
+        >
           <motion.div
             animate={{
               scale: [1, 1.1, 1],
@@ -70,14 +70,13 @@ export default function SoulMatch() {
             transition={{ duration: 2 }}
             className="h-1 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 rounded-full mt-6 max-w-xs mx-auto"
           />
-        </div>
-      </div>
+        </motion.div>
+      </PageWrapper>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-950 via-slate-950 to-fuchsia-950 pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      <ParticleBackground variant="stars" />
+    <PageWrapper type="fluid" background="gradient">
 
       <div className="max-w-4xl mx-auto relative z-10">
         <motion.div
@@ -304,6 +303,6 @@ export default function SoulMatch() {
           </button>
         </motion.div>
       </div>
-    </div>
+    </PageWrapper>
   )
 }

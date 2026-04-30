@@ -88,6 +88,81 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Mobile Safe Area Insets - 小程序刘海屏/手势条安全区 */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+.pt-safe {
+  padding-top: var(--sat);
+}
+.pb-safe {
+  padding-bottom: var(--sab);
+}
+.pl-safe {
+  padding-left: var(--sal);
+}
+.pr-safe {
+  padding-right: var(--sar);
+}
+.p-safe {
+  padding: var(--sat) var(--sar) var(--sab) var(--sal);
+}
+
+/* 小程序专用优化 - 防止双击放大/长按选择 */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+/* 输入框允许选择 */
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* 移动端按钮点击优化 */
+button, [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* 小程序字体渲染优化 */
+body {
+  -webkit-font-smoothing: subpixel-antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 移动端适配 - 基础响应式容器 */
+.mobile-container {
+  width: 100%;
+  max-width: 100%;
+  padding-left: max(16px, env(safe-area-inset-left, 16px));
+  padding-right: max(16px, env(safe-area-inset-right, 16px));
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: clamp(1.5rem, 5vw, 2.5rem) !important;
+  }
+  h2 {
+    font-size: clamp(1.25rem, 4vw, 2rem) !important;
+  }
+  h3 {
+    font-size: clamp(1.1rem, 3.5vw, 1.5rem) !important;
+  }
+  p {
+    font-size: clamp(0.875rem, 3vw, 1rem) !important;
+    line-height: 1.6 !important;
+  }
+}
+
 /* Hide scrollbar but keep functionality */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;

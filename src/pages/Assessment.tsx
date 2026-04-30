@@ -19,6 +19,8 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, Home, CheckCircle2, Cloud, CloudOff, RefreshCw } from 'lucide-react'
+import LegacyHeader from '../app/components/LegacyHeader'
+import { useResponsive } from '../app/hooks/useResponsive'
 import { getAssessmentById } from '@data/assessments'
 import { LoadingState, ErrorState } from '@components/ui/LoadingState'
 import { useAppStore } from '../store'
@@ -126,7 +128,7 @@ export default function Assessment() {
 
   useEffect(() => {
     if (!assessment) {
-      navigate('/')
+      navigate('/assessments')
       return
     }
 
@@ -339,7 +341,7 @@ export default function Assessment() {
       localStorage.removeItem(storageKey)
 
       setCalculating(false)
-      navigate(`/loading/${recordId}`, {
+      navigate(`/legacy/loading/${recordId}`, {
         state: { calculationSource: adaptedResult.source, calculationResult: adaptedResult }
       })
     }, 800)
@@ -375,6 +377,7 @@ export default function Assessment() {
   const answeredCount = answers.length
   const allAnswered = answeredCount === questions.length
   const currentQ = questions[currentQuestion]
+  const { isDesktop } = useResponsive()
   
   const estimatedTimeRemaining = useMemo(() => {
     const remaining = questions.length - currentQuestion - 1
@@ -439,17 +442,56 @@ export default function Assessment() {
   const showDraftRecovery = answeredCount > 0 && answeredCount < questions.length && currentQuestion > 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-slate-950 flex flex-col overflow-hidden relative pt-safe pb-safe pl-safe pr-safe">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <motion.div
-          className="absolute top-20 right-20 w-32 h-32 opacity-5"
+          className="absolute -top-20 -left-20 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-3xl"
           animate={{
-            rotate: 360,
-            scale: [1, 1.1, 1],
+            x: [0, 30, 0],
+            y: [0, -20, 0],
           }}
           transition={{
-            rotate: { duration: 20, repeat: Infinity, ease: 'linear' },
-            scale: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
+            duration: 15,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+        <motion.div
+          className="absolute -bottom-32 -right-32 w-[600px] h-[600px] bg-pink-600/8 rounded-full blur-3xl"
+          animate={{
+            x: [0, -20, 0],
+            y: [0, 20, 0],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 2,
+          }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 4,
+          }}
+        />
+        
+        <motion.div
+          className="absolute top-20 right-20 w-32 h-32 opacity-[0.03]"
+          animate={{
+            rotate: 360,
+            scale: [1, 1.15, 1],
+          }}
+          transition={{
+            rotate: { duration: 40, repeat: Infinity, ease: 'linear' },
+            scale: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
           }}
         >
           <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full text-violet-400">
@@ -457,36 +499,24 @@ export default function Assessment() {
           </svg>
         </motion.div>
         <motion.div
-          className="absolute bottom-32 left-16 w-24 h-24 opacity-5"
+          className="absolute bottom-32 left-16 w-24 h-24 opacity-[0.03]"
           animate={{
             rotate: -360,
             scale: [1, 0.9, 1],
           }}
           transition={{
-            rotate: { duration: 25, repeat: Infinity, ease: 'linear' },
-            scale: { duration: 5, repeat: Infinity, ease: 'easeInOut' },
+            rotate: { duration: 50, repeat: Infinity, ease: 'linear' },
+            scale: { duration: 10, repeat: Infinity, ease: 'easeInOut' },
           }}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-full h-full text-pink-400">
             <path d="M19 3L5 12l14 9V3z" />
           </svg>
         </motion.div>
-        <motion.div
-          className="absolute top-1/3 left-1/4 w-16 h-16 opacity-3"
-          animate={{
-            y: [0, -15, 0],
-            rotate: [0, 10, -10, 0],
-          }}
-          transition={{
-            y: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-            rotate: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
-          }}
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full text-amber-400">
-            <circle cx="12" cy="12" r="10" />
-          </svg>
-        </motion.div>
       </div>
+      
+      <LegacyHeader title={(assessment as any)?.title || '答题中'} />
+
       {showDraftRecovery && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -560,11 +590,23 @@ export default function Assessment() {
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-violet-500 to-pink-500"
+              className="h-full bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500 relative"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.3 }}
-            />
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                animate={{
+                  x: ['-100%', '200%'],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+              />
+            </motion.div>
           </div>
         </div>
 
@@ -596,27 +638,27 @@ export default function Assessment() {
 
 
 
-      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 pb-4">
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 md:px-8 pb-4">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestion}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.2 }}
-            className="w-full max-w-3xl"
+            initial={{ opacity: 0, x: 80, scale: 0.98 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -80, scale: 0.98 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="w-full max-w-md md:max-w-xl lg:max-w-2xl mx-auto"
           >
-            <div className="glass rounded-3xl p-6 sm:p-10">
+            <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-5 sm:p-8 border border-white/10 shadow-2xl shadow-black/20">
               <motion.h2
-                className="text-xl sm:text-2xl font-semibold text-white mb-8 text-center leading-relaxed"
-                initial={{ opacity: 0, y: 10 }}
+                className="text-lg sm:text-xl md:text-2xl font-semibold text-white mb-6 sm:mb-8 text-center leading-relaxed"
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
               >
                 {currentQ.text}
               </motion.h2>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3">
                 {currentQ.options.map((option, index) => (
                   <AssessmentOption
                     key={option.id || index}
@@ -633,41 +675,41 @@ export default function Assessment() {
         </AnimatePresence>
       </div>
 
-      <div className="flex items-center justify-between p-4 sm:p-6 pb-safe">
+      <div className="flex items-center justify-between p-4 sm:p-6 md:px-8 pb-safe">
         <motion.button
           onClick={handlePrevious}
           disabled={currentQuestion === 0}
-          className="flex items-center gap-2 px-4 py-3 rounded-xl glass text-white/60 hover:text-white hover:bg-white/10 transition-all disabled:opacity-30"
-          whileHover={{ scale: currentQuestion === 0 ? 1 : 1.05 }}
-          whileTap={{ scale: currentQuestion === 0 ? 1 : 0.95 }}
+          className="flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all disabled:opacity-30 border border-white/5"
+          whileHover={{ scale: currentQuestion === 0 ? 1 : 1.03 }}
+          whileTap={{ scale: currentQuestion === 0 ? 1 : 0.97 }}
           type="button"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-4 sm:w-5 h-4 sm:h-5" />
           <span className="hidden sm:inline">上一题</span>
         </motion.button>
 
         {currentQuestion === questions.length - 1 ? (
           <motion.button
             onClick={handleSubmit}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold shadow-lg shadow-violet-500/30"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500 text-white font-semibold shadow-xl shadow-violet-500/30 bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500"
+            whileHover={{ scale: 1.03, y: -1 }}
+            whileTap={{ scale: 0.97, y: 1 }}
             type="button"
           >
             提交答案
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
           </motion.button>
         ) : (
           <motion.button
             onClick={handleNext}
             disabled={selectedOption === null}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-semibold shadow-lg shadow-violet-500/30 disabled:opacity-30"
-            whileHover={{ scale: selectedOption === null ? 1 : 1.05 }}
-            whileTap={{ scale: selectedOption === null ? 1 : 0.95 }}
+            className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500 text-white font-semibold shadow-xl shadow-violet-500/30 bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 disabled:opacity-30 disabled:pointer-events-none"
+            whileHover={{ scale: selectedOption === null ? 1 : 1.03, y: selectedOption === null ? 0 : -1 }}
+            whileTap={{ scale: selectedOption === null ? 1 : 0.97, y: selectedOption === null ? 0 : 1 }}
             type="button"
           >
             <span className="hidden sm:inline">下一题</span>
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
           </motion.button>
         )}
       </div>

@@ -24,6 +24,7 @@ import { motion } from 'framer-motion'
 import { Award, TrendingUp, Lightbulb, Briefcase, Target, Heart, Brain, User, Users, Shield, Compass, Zap, Activity, AlertTriangle, CheckCircle, Clock, BarChart3 } from 'lucide-react'
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, CartesianGrid, ScatterChart, Scatter, Legend, AreaChart, Area } from 'recharts'
 import type { SASResult, ECRResult, HollandResult } from '../utils/calculators'
+import { getAssessmentById } from '../data/assessments'
 
 // ==============================================
 // 🎨 配色系统 - 每个测评有专属的色彩体系
@@ -94,6 +95,14 @@ interface ReportTemplateProps {
  * 按照匹配优先级从上到下依次判断
  */
 export default function ReportTemplate({ result, assessmentType }: ReportTemplateProps) {
+  // ========== 🔄 通用增强模板引擎 - 优先渲染 ==========
+  // 如果测评定义了 resultInterpretation.templateType = 'enhanced'
+  // 就使用通用模板渲染，无需为每个测评写独立组件
+  const assessment = getAssessmentById(assessmentType)
+  if (assessment?.resultInterpretation?.templateType === 'enhanced') {
+    return <EnhancedReportTemplate result={result} assessment={assessment} />
+  }
+
   // ---------- 专业心理测评系列 ----------
   if (assessmentType === 'sas-standard') {
     return <SASReport result={result as SASResult} />
@@ -3511,4 +3520,99 @@ const HOLLAND_CODES: Record<string, string> = {
   S: '#10b981',
   E: '#f59e0b',
   C: '#06b6d4'
+}
+
+// ==============================================
+// 🚀 EnhancedReportTemplate - 通用报告模板引擎
+// ==============================================
+// 【功能】统一渲染所有使用 resultInterpretation 定义的测评报告
+// 【优势】一次编写，所有测评共用，无需重复开发
+// 【支持】cover-card, data-visualization, analysis-section 等模块
+// ==============================================
+
+interface EnhancedReportSection {
+  id: string
+  title: string
+  type: 'cover-card' | 'data-visualization' | 'analysis-section'
+  variant?: string
+  chartType?: 'radar' | 'bar' | 'gauge'
+  content?: string
+  dimensions?: string[]
+  dimensionNames?: Record<string, string>
+}
+
+interface EnhancedReportProps {
+  result: any
+  assessment: {
+    resultInterpretation?: {
+      templateType: string
+      sections: EnhancedReportSection[]
+    }
+  }
+}
+
+function EnhancedReportTemplate({ result, assessment }: EnhancedReportProps) {
+  const sections = assessment?.resultInterpretation?.sections || []
+
+  const renderContent = (content: string) => {
+    try {
+      const evalInContext = (str: string, ctx: any) => {
+        return new Function('result', `return \`${str}\``)(ctx)
+      }
+      const rendered = evalInContext(content, result)
+      return <div dangerouslySetInnerHTML={{ __html: rendered }} />
+    } catch (e) {
+      return <div dangerouslySetInnerHTML={{ __html: content }} />
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {sections.map((section, index) => (
+        <motion.div
+          key={section.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1 }}
+        >
+          {section.type === 'cover-card' && (
+            <div className="mb-6">
+              {renderContent(section.content || '')}
+            </div>
+          )}
+
+          {section.type === 'data-visualization' && (
+            <div className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-6">{section.title}</h3>
+              
+              {section.chartType === 'radar' && result.dimensionResults && (
+                <div className="h-72 mb-6">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart data={Object.entries(result.dimensionResults || {}).map(([key, val]: [string, any]) => ({
+                      dimension: section.dimensionNames?.[key] || key,
+                      score: val.score || 50
+                    }))}>
+                      <PolarGrid stroke="#475569" />
+                      <PolarAngleAxis dataKey="dimension" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                      <PolarRadiusAxis domain={[0, 100]} tick={{ fill: '#64748b', fontSize: 10 }} />
+                      <Radar name="得分" dataKey="score" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.4} strokeWidth={2} />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+              
+              {renderContent(section.content || '')}
+            </div>
+          )}
+
+          {section.type === 'analysis-section' && (
+            <div className="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-6">{section.title}</h3>
+              {renderContent(section.content || '')}
+            </div>
+          )}
+        </motion.div>
+      ))}
+    </div>
+  )
 }

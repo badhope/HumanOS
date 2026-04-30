@@ -3,7 +3,7 @@ export * from './kolb-calculator'
 export * from './kolb-common'
 
 import { kolbNormalQuestions } from './kolb-normal'
-import { kolbAdvancedQuestions } from './kolb-advanced'
+import { kolbAdvancedQuestions } from '../kolb-advanced'
 import { kolbProfessionalQuestions } from './kolb-professional'
 
 export { kolbNormalQuestions, kolbAdvancedQuestions, kolbProfessionalQuestions }

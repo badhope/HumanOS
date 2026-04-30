@@ -1,0 +1,12 @@
+{
+  "summary": {
+    "total": 5,
+    "passed": 3,
+    "failed": 1,
+    "errors": 1,
+    "pass_rate": "60.0%",
+    "duration": "0.57s"
+  },
+  "fixes_applied": [],
+  "generated_at": "2026-04-30T13:56:02.531739"
+}

@@ -16,7 +16,7 @@ import {
   Sun,
   Moon
 } from 'lucide-react'
-import { AdvancedRadarChart, AdvancedBarChart } from '../charts'
+import { ComprehensiveChartSystem } from '../charts'
 import { MBTI_DIMENSION_NAMES, MBTI_TYPES, MBTI_DIMENSION_BANDS, EXTENDED_MBTI_TYPES } from '@data/professional/mbti/mbti-common'
 import type { AssessmentResult } from '../../types'
 
@@ -226,14 +226,16 @@ export default function MBTIProfessionalReport({ result, mode = 'normal' }: MBTI
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <AdvancedRadarChart
+        <ComprehensiveChartSystem
           dimensions={dimensions.map(d => ({
             name: MBTI_DIMENSION_NAMES[d.name] || d.name,
             score: d.score,
             maxScore: 100,
             description: d.description,
           }))}
-          animated
+          overallScore={result.score || 75}
+          assessmentType="mbti"
+          title="MBTI 四维度全景画像"
         />
       </motion.div>
 

@@ -381,5 +381,53 @@ export const puaResistanceAssessment: Assessment = {
       { id: '4', text: '被人养着好像也不错', value: 4 },
       { id: '5', text: '我一定会乖乖听你的话', value: 5 },
     ]},
-  ]
+  ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '🛡️ PUA抗性诊断报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-slate-950 via-blue-900 to-cyan-800">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">🧠</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.levelName || 'PUA抗性诊断'}</h2>
+              <p className="text-cyan-200/80 text-lg mb-4">反洗脑免疫系统检测</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-cyan-400/30">
+                <span className="text-white">抗性指数</span>
+                <span className="text-4xl font-black text-cyan-300">\${result.totalScore || 50}</span>
+                <span className="text-white/60">分</span>
+              </div>
+              
+              <p className="text-cyan-200 mt-6 text-sm italic">
+                " 恋爱脑重症患者 / 人间清醒大师 "
+              </p>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 反PUA五维雷达图',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['realityTesting', 'boundaryAwareness', 'selfEsteem', 'gaslightResistance', 'emotionalIndependence'],
+        dimensionNames: {
+          realityTesting: '现实检验力',
+          boundaryAwareness: '边界意识',
+          selfEsteem: '自尊水平',
+          gaslightResistance: '煤气灯抗性',
+          emotionalIndependence: '情感独立'
+        }
+      }
+    ]
+  }
 }

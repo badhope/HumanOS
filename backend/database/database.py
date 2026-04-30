@@ -8,7 +8,7 @@ import os
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///humanos_assessments.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///MindMirror_assessments.db")
 
 engine = create_async_engine(
     DATABASE_URL,

@@ -70,9 +70,13 @@ class Ideology9SquareCalculator(BaseCalculator):
             interpretation={
                 "description": self._get_description(sector),
                 "compatible_sectors": self._get_compatible(sector),
+                "critical_thinking_advice": [
+                    "意识形态只是理解世界的简化模型，不是现实本身",
+                    "任何极端意识形态都有其内在的逻辑缺陷",
+                    "主动理解你反对的立场，才是真正的思考",
+                ],
             },
             development_advice=self._get_advice(sector),
-            career_suggestions=self._get_career_suggestions(sector),
         )
     
     def _normalize_answers(self, answers: Dict[str, int]) -> Dict[int, int]:
@@ -163,14 +167,6 @@ class Ideology9SquareCalculator(BaseCalculator):
             "libertarian": ["conservative", "anarchist"],
         }
         return compatibility.get(sector, [])
-    
-    def _get_career_suggestions(self, sector: str) -> List[str]:
-        suggestions = {
-            "socialist": ["劳工律师", "NGO工作者", "社会政策研究"],
-            "libertarian": ["企业家", "风险投资", "技术创业者"],
-            "statist": ["公务员", "智库研究员", "国防工业"],
-        }
-        return suggestions.get(sector, ["学者", "记者", "政策分析"])
     
     def _get_advice(self, sector: str) -> List[str]:
         advice = [

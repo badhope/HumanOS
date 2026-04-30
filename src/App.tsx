@@ -1,11 +1,9 @@
 import { lazy, Suspense, useState, useEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PageSkeleton } from './components/Loading'
 import SplashScreen from './components/animations/SplashScreen'
-import SettingsButton from './components/SettingsButton'
-import ProfileButton from './components/ProfileButton'
-import AdButton from './components/AdButton'
+import GlobalMenu from './components/GlobalMenu'
 import { I18nProvider } from './i18n'
 import { useAppStore } from './store'
 import visitorService from './services/visitorIdentity'
@@ -17,11 +15,18 @@ import ShortcutInitializer from './components/ShortcutInitializer'
 import { ToastProvider } from './components/ui/Toast'
 import { ShortcutProvider } from './components/ShortcutProvider'
 
+import AppLayout from './app/layout/AppLayout'
+import Daily from './app/pages/Daily'
+import Training from './app/pages/Training'
+import Progress from './app/pages/Progress'
+import Discover from './app/pages/Discover'
+import Settings from './components/Settings'
+import GrowthDashboard from './app/pages/GrowthDashboard'
+import UniversalTraining from './app/pages/training/UniversalTraining'
+
 const Home = lazy(() => import('./pages/Home'))
-const CategorySelect = lazy(() => import('./pages/CategorySelect'))
 const AssessmentSelect = lazy(() => import('./pages/AssessmentSelect'))
 const ModeSelect = lazy(() => import('./pages/ModeSelect'))
-const SimulatedWorld = lazy(() => import('./pages/SimulatedWorld'))
 const AssessmentConfirm = lazy(() => import('./pages/AssessmentConfirm'))
 const Assessment = lazy(() => import('./pages/Assessment'))
 const Loading = lazy(() => import('./pages/Loading'))
@@ -34,15 +39,7 @@ const PsychologyHistoryPage = lazy(() => import('./pages/PsychologyHistoryPage')
 const IdeologyHistoryPage = lazy(() => import('./pages/IdeologyHistoryPage'))
 const IsmsPage = lazy(() => import('./pages/IsmsPage'))
 const PlatformStoryPage = lazy(() => import('./pages/PlatformStoryPage'))
-const WorldHall = lazy(() => import('./pages/WorldHall'))
-const WorldPlay = lazy(() => import('./pages/WorldPlay'))
-const WorldPlayV2 = lazy(() => import('./pages/WorldPlayV2'))
-const ScenarioSelect = lazy(() => import('./pages/ScenarioSelect'))
-const ScenarioPlay = lazy(() => import('./pages/ScenarioPlay'))
 const OnePieceModeSelect = lazy(() => import('./pages/OnePieceModeSelect'))
-const EconomyDashboard = lazy(() => import('./components/economy/EconomyDashboardHoi4'))
-const XianxiaDashboard = lazy(() => import('./pages/XianxiaDashboard'))
-const XianxiaGame = lazy(() => import('./pages/XianxiaGame'))
 const QuestionOptimizer = lazy(() => import('./pages/QuestionOptimizer'))
 const ThemeAnalysisDemo = lazy(() => import('./pages/ThemeAnalysisDemo'))
 const ChartShowcase = lazy(() => import('./pages/ChartShowcase'))
@@ -57,13 +54,9 @@ export default function App() {
   const location = useLocation()
   
   const isFullscreenGame = 
-    location.pathname.includes('/simulated-world') ||
-    location.pathname.includes('/simulation/') ||
-    location.pathname.includes('/assessment') ||
-    location.pathname.includes('/world/play') ||
-    location.pathname.includes('/scenario/') ||
-    location.pathname.includes('/economy') ||
-    location.pathname.includes('/xianxia')
+    location.pathname.includes('/assessment')
+
+  const isNewApp = location.pathname.startsWith('/app')
 
   useEffect(() => {
     visitorService.getVisitorId()
@@ -88,19 +81,14 @@ export default function App() {
             <PageTransitionController useThemeTransition={true} defaultPreset="page">
               <>
                 <ShortcutInitializer />
-                {showSplash && (
+                
+                {!isNewApp && showSplash && (
                   <SplashScreen onComplete={handleSplashComplete} minDuration={4500} />
                 )}
 
-                {!isFullscreenGame && (
-                  <>
-                    <ProfileButton />
-                    <SettingsButton />
-                    <AdButton />
-                  </>
-                )}
-                <QuickSearchModal />
-                <KeyboardShortcutsHelp />
+                {!isNewApp && <GlobalMenu />}
+                {!isNewApp && <QuickSearchModal />}
+                {!isNewApp && <KeyboardShortcutsHelp />}
 
           <motion.div
             initial={{ opacity: 0 }}
@@ -109,40 +97,50 @@ export default function App() {
           >
             <Suspense fallback={<PageSkeleton />}>
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/categories" element={<CategorySelect />} />
-                <Route path="/assessments" element={<AssessmentSelect />} />
-                <Route path="/mode-select/:id" element={<ModeSelect />} />
-                <Route path="/mode-select/onepiece/:id" element={<OnePieceModeSelect />} />
-                <Route path="/simulated-world" element={<SimulatedWorld />} />
-                <Route path="/world" element={<WorldHall />} />
-                <Route path="/world/scenarios" element={<ScenarioSelect />} />
-                <Route path="/world/scenario/:scenarioId" element={<ScenarioPlay />} />
-                <Route path="/world/play/:scenarioId" element={<WorldPlay />} />
-                <Route path="/world/v2" element={<WorldPlayV2 />} />
-                <Route path="/simulation/country" element={<EconomyDashboard />} />
-                <Route path="/simulation/xianxia" element={<XianxiaDashboard />} />
-                <Route path="/simulation/xianxia/game" element={<XianxiaGame />} />
-                <Route path="/confirm/:id" element={<AssessmentConfirm />} />
-                <Route path="/assessment/:id" element={<Assessment />} />
-                <Route path="/loading/:id" element={<Loading />} />
-                <Route path="/results/:id" element={<Results />} />
-                <Route path="/result/:hash" element={<Results />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/theory/:theoryId" element={<TheoryDetail />} />
-                <Route path="/history/philosophy" element={<PhilosophyHistoryPage />} />
-                <Route path="/history/psychology" element={<PsychologyHistoryPage />} />
-                <Route path="/history/ideology" element={<IdeologyHistoryPage />} />
-                <Route path="/isms" element={<IsmsPage />} />
-                <Route path="/story" element={<PlatformStoryPage />} />
-                <Route path="/tools/question-optimizer" element={<QuestionOptimizer />} />
-                <Route path="/demos/theme-analysis" element={<ThemeAnalysisDemo />} />
-                <Route path="/demos/charts" element={<ChartShowcase />} />
-                <Route path="/leaderboard" element={<Leaderboard />} />
-                <Route path="/soul-match" element={<SoulMatch />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="*" element={<NotFound />} />
+                {/* 默认首页：直接进入新架构 */}
+                <Route path="/" element={<Navigate to="/app/daily" replace />} />
+
+                {/* 新架构 - 心灵健身房 */}
+                <Route path="/app" element={<AppLayout title="心镜 MindMirror" />}>
+                  <Route path="daily" element={<Daily />} />
+                  <Route path="training" element={<Training />} />
+                  <Route path="progress" element={<Progress />} />
+                  <Route path="discover" element={<Discover />} />
+                  <Route path="settings" element={<Settings />} />
+                </Route>
+
+                {/* 独立训练页面 - 全屏沉浸式 */}
+                <Route path="/app/training/:programId" element={<UniversalTraining />} />
+                <Route path="/app/growth" element={<GrowthDashboard />} />
+
+                {/* 统一入口：新旧路径全部重定向到测评列表 */}
+                <Route path="/assessments" element={<Navigate to="/legacy/assessments" replace />} />
+                <Route path="/categories" element={<Navigate to="/legacy/assessments" replace />} />
+                <Route path="/legacy/home" element={<Home />} />
+                <Route path="/legacy/categories" element={<Navigate to="/legacy/assessments" replace />} />
+                <Route path="/legacy/assessments" element={<AssessmentSelect />} />
+                <Route path="/legacy/mode-select/:id" element={<ModeSelect />} />
+                <Route path="/legacy/mode-select/onepiece/:id" element={<OnePieceModeSelect />} />
+                <Route path="/legacy/confirm/:id" element={<AssessmentConfirm />} />
+                <Route path="/legacy/assessment/:id" element={<Assessment />} />
+                <Route path="/legacy/loading/:id" element={<Loading />} />
+                <Route path="/legacy/results/:id" element={<Results />} />
+                <Route path="/legacy/result/:hash" element={<Results />} />
+                <Route path="/legacy/dashboard" element={<Dashboard />} />
+                <Route path="/legacy/about" element={<About />} />
+                <Route path="/legacy/theory/:theoryId" element={<TheoryDetail />} />
+                <Route path="/legacy/history/philosophy" element={<PhilosophyHistoryPage />} />
+                <Route path="/legacy/history/psychology" element={<PsychologyHistoryPage />} />
+                <Route path="/legacy/history/ideology" element={<IdeologyHistoryPage />} />
+                <Route path="/legacy/isms" element={<IsmsPage />} />
+                <Route path="/legacy/story" element={<PlatformStoryPage />} />
+                <Route path="/legacy/tools/question-optimizer" element={<QuestionOptimizer />} />
+                <Route path="/legacy/demos/theme-analysis" element={<ThemeAnalysisDemo />} />
+                <Route path="/legacy/demos/charts" element={<ChartShowcase />} />
+                <Route path="/legacy/leaderboard" element={<Leaderboard />} />
+                <Route path="/legacy/soul-match" element={<SoulMatch />} />
+                <Route path="/legacy/profile" element={<Profile />} />
+                <Route path="*" element={<Navigate to="/app/daily" replace />} />
               </Routes>
             </Suspense>
           </motion.div>

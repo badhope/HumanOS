@@ -1,13 +1,13 @@
 import type { Assessment } from '../../types'
-import { calculateMindset } from '../../utils/calculators/mindset-calculator'
+import { calculateMindset } from '../../utils/calculators/professional-calculators-factory'
 
 export const mindsetStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'mindset-standard',
   title: 'Dweck 思维模式量表',
   description: '斯坦福心理学经典 | 成长型思维 vs 固定型思维 科学诊断',
   icon: '🧠',
-  category: '人格',
-  subcategory: '认知模式',
+  category: '经典心理学',
+  subcategory: '心智成熟度',
   difficulty: 'standard',
   duration: 5,
   quality: '经典',
@@ -153,5 +153,52 @@ export const mindsetStandardAssessment: Omit<Assessment, 'id'> & { id: string } 
       { id: '4', text: '🟢 比较同意', value: 4 },
       { id: '5', text: '✅ 完全同意', value: 5 },
     ]},
-  ]
+  ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '🌱 成长型思维量表报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-green-950 via-emerald-800 to-teal-700">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-green-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">🌱</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.mindsetType || '思维模式评估'}</h2>
+              <p className="text-emerald-200/80 text-lg mb-4">Growth Mindset Scale</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-emerald-400/30">
+                <span className="text-white">思维模式</span>
+                <span className="text-2xl font-black text-emerald-300">\${result.mindsetType || '成长型'}</span>
+              </div>
+              
+              <p className="text-emerald-200 mt-6 text-sm">
+                挑战 · 障碍 · 努力 · 批评 · 成功
+              </p>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 五维思维模式',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['challenge', 'obstacle', 'effort', 'criticism', 'success'],
+        dimensionNames: {
+          challenge: '面对挑战',
+          obstacle: '面对障碍',
+          effort: '面对努力',
+          criticism: '面对批评',
+          success: '面对他人成功'
+        }
+      }
+    ]
+  }
 }

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Skull, Shield, Zap, Eye, Crown, Award, AlertTriangle, TrendingUp, Users, Heart } from 'lucide-react'
-import { AdvancedBarChart, CircularProgressChart } from '../charts'
+import { ComprehensiveChartSystem, CircularProgressChart } from '../charts'
 import type { AssessmentResult } from '../../types'
 
 interface DarkTriadReportProps {
@@ -160,16 +160,16 @@ export default function DarkTriadProfessionalReport({ result, mode = 'normal' }:
             )
           })}
         </div>
-        <AdvancedBarChart
+        <ComprehensiveChartSystem
           dimensions={dimensions.map(d => ({
             name: DARK_TRIAD_DIMENSIONS[d.name as keyof typeof DARK_TRIAD_DIMENSIONS]?.name || d.name,
             score: d.score,
             maxScore: 100,
             description: d.description,
           }))}
-          height={300}
-          colorScheme="gradient"
-          animated
+          overallScore={totalScore}
+          assessmentType="darktriad"
+          title="黑暗人格三维度全景"
         />
       </motion.div>
 

@@ -1,5 +1,5 @@
 import type { Assessment } from '../../types'
-import { calculateHardiness } from '../../utils/calculators/hardiness-calculator'
+import { calculateHardiness } from '../../utils/calculators/professional-calculators-factory'
 
 export const hardinessStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'hardiness-standard',
@@ -139,5 +139,51 @@ export const hardinessStandardAssessment: Omit<Assessment, 'id'> & { id: string 
       { id: '4', text: '🟢 经常', value: 4 },
       { id: '5', text: '✅ 几乎总是', value: 5 },
     ]},
-  ]
+  ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '🗿 人格坚韧性量表报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-stone-950 via-neutral-800 to-zinc-700">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-amber-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-stone-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">🏔️</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.hardinessLevel || '坚韧性评估'}</h2>
+              <p className="text-stone-200/80 text-lg mb-4">Hardiness Scale</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-stone-400/30">
+                <span className="text-white">坚韧指数</span>
+                <span className="text-2xl font-black text-stone-300">\${result.totalScore || 75}</span>
+                <span className="text-white/60">分</span>
+              </div>
+              
+              <p className="text-stone-200 mt-6 text-sm">
+                承诺 · 控制 · 挑战
+              </p>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 坚韧人格三维度',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['commitment', 'control', 'challenge'],
+        dimensionNames: {
+          commitment: '承诺',
+          control: '控制',
+          challenge: '挑战'
+        }
+      }
+    ]
+  }
 }

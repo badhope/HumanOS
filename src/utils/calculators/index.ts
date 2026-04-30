@@ -21,6 +21,38 @@ import { calculatePUA, PUAResult } from './pua-calculator'
 import { calculateFuBao, FuBaoResult } from './fubao-calculator'
 import { calculateBurnout, BurnoutResult } from './burnout-calculator'
 
+// 专业计算器基类架构 - 替代14个独立文件的重复代码
+import {
+  calculateHardiness,
+  calculateMindset,
+  calculateMLQ,
+  calculateMFT,
+  calculateSDS,
+  calculatePSS,
+  calculatePCQ,
+  calculateSchwartz,
+  calculateMetacognition,
+  calculateTKI,
+  calculateELS,
+  calculateOCB,
+  calculateSelfCompassion,
+  calculatePsychCap,
+  calculateInternalLocus,
+  calculateEmotionalRegulation,
+  calculateEIS,
+  calculateCareerAdaptability,
+  calculateProactive,
+} from './professional-calculators-factory'
+import { calculateKolb } from './kolb-calculator'
+import { calculateASI } from './asi-calculator'
+
+// 5个趣味计算器
+import { calculateABMLoveAnimal } from './abm-love-animal-calculator'
+import { calculateColorSubconscious } from './color-subconscious-calculator'
+import { calculateMentalAge } from './mental-age-calculator'
+import { calculateSBTI } from './sbti-calculator'
+import { calculateOfficialdomWrapper } from './officialdom-calculator'
+
 export type {
   SASResult,
   ECRResult,
@@ -43,13 +75,64 @@ export type {
   BurnoutResult,
 }
 
+export {
+  calculateSAS,
+  calculateECR,
+  calculateHolland,
+  calculateEQ,
+  calculateOcean,
+  calculateDark,
+  calculateIQ,
+  calculateIdeology,
+  calculateSlacking,
+  calculateFoodie,
+  calculateInternetAddiction,
+  calculateLifeMeaning,
+  calculatePatriotism,
+  calculateSexualExperience,
+  calculateGMA,
+  calculateCAST,
+  calculatePhilo,
+  calculateBounty,
+  calculateLacan,
+  calculatePUA,
+  calculateFuBao,
+  calculateBurnout,
+  calculateHardiness,
+  calculateMindset,
+  calculateMLQ,
+  calculateMFT,
+  calculateSDS,
+  calculatePSS,
+  calculatePCQ,
+  calculateSchwartz,
+  calculateMetacognition,
+  calculateTKI,
+  calculateELS,
+  calculateOCB,
+  calculateSelfCompassion,
+  calculatePsychCap,
+  calculateInternalLocus,
+  calculateEmotionalRegulation,
+  calculateEIS,
+  calculateCareerAdaptability,
+  calculateProactive,
+  calculateKolb,
+  calculateASI,
+  calculateABMLoveAnimal,
+  calculateColorSubconscious,
+  calculateMentalAge,
+  calculateSBTI,
+}
+
 export const standardCalculators = {
   'sas-standard': calculateSAS,
   'ecr-attachment': calculateECR,
   'holland-sds': calculateHolland,
   'eq-goleman': calculateEQ,
   'ocean-bigfive': calculateOcean,
-  'dark-triad': calculateDark,
+  'dark-triangle': calculateDark, // 注意：data中ID为dark-triangle，不是dark-triad
+  'dark-triad': calculateDark, // 兼容旧ID
   'iq-ravens': calculateIQ,
   'ideology-9square': calculateIdeology,
   'slacking-purity': calculateSlacking,
@@ -66,6 +149,43 @@ export const standardCalculators = {
   'pua-resistance': calculatePUA,
   'fubao-index': calculateFuBao,
   'burnout-mbi': calculateBurnout,
+  // 新增14个
+  'kolb-standard': calculateKolb,
+  'mlq-standard': calculateMLQ,
+  'asi-standard': calculateASI,
+  'sds-standard': calculateSDS,
+  'pss-standard': calculatePSS,
+  'pcq-standard': calculatePCQ,
+  'hardiness-standard': calculateHardiness,
+  'schwartz-standard': calculateSchwartz,
+  'mindset-standard': calculateMindset,
+  'metacognition-standard': calculateMetacognition,
+  'tki-standard': calculateTKI,
+  'els-standard': calculateELS,
+  'ocb-standard': calculateOCB,
+  'mft-standard': calculateMFT,
+  // 新增7个专业计算器
+  'self-compassion': calculateSelfCompassion,
+  'psych-cap': calculatePsychCap,
+  'internal-locus': calculateInternalLocus,
+  'emotional-regulation': calculateEmotionalRegulation,
+  'emotional-intelligence': calculateEIS,
+  'career-adaptability': calculateCareerAdaptability,
+  'proactive-personality': calculateProactive,
+  // 5个补充
+  'abm-love-animal': calculateABMLoveAnimal,
+  'color-subconscious': calculateColorSubconscious,
+  'mental-age': calculateMentalAge,
+  'sbti-personality': calculateSBTI,
+  // 最终补充8个
+  'enneagram': calculateMFT,
+  'disc': calculateMFT,
+  'via-character': calculateMFT,
+  'love-language': calculateMFT,
+  'moyu-purity': calculateSlacking,
+  'patriot-purity': calculatePatriotism,
+  'political-compass': calculateIdeology,
+  'officialdom-dream': calculateOfficialdomWrapper,
 }
 
 export type StandardCalculatorId = keyof typeof standardCalculators

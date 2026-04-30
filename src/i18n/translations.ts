@@ -1,7 +1,7 @@
 export const translations = {
   zh: {
     app: {
-      name: 'HumanOS',
+      name: 'MindMirror',
       tagline: '全面的人类潜能评估系统',
       subtitle: '探索你的无限可能',
     },
@@ -121,7 +121,7 @@ export const translations = {
       sharing: {
         title: '分享应用',
         description: '分享给朋友或社交媒体',
-        shareText: (count) => `我在HumanOS完成了${count}个测评！快来试试吧！`,
+        shareText: (count) => `我在MindMirror完成了${count}个测评！快来试试吧！`,
         copied: '已复制到剪贴板！',
         shareFailed: '分享失败，请重试',
       },
@@ -234,7 +234,7 @@ export const translations = {
       notAvailable: '暂无数据',
       comingSoon: '即将推出',
       version: '版本',
-      poweredBy: '由 HumanOS 提供支持',
+      poweredBy: '由 MindMirror 提供支持',
     },
     errors: {
       networkError: '网络连接错误，请检查网络后重试',
@@ -249,7 +249,7 @@ export const translations = {
   },
   en: {
     app: {
-      name: 'HumanOS',
+      name: 'MindMirror',
       tagline: 'Comprehensive Human Potential Assessment System',
       subtitle: 'Explore Your Infinite Possibilities',
     },
@@ -369,7 +369,7 @@ export const translations = {
       sharing: {
         title: 'Share App',
         description: 'Share with friends or on social media',
-        shareText: (count) => `I completed ${count} assessments on HumanOS! Try it out!`,
+        shareText: (count) => `I completed ${count} assessments on MindMirror! Try it out!`,
         copied: 'Copied to clipboard!',
         shareFailed: 'Share failed, please try again',
       },
@@ -482,7 +482,7 @@ export const translations = {
       notAvailable: 'No Data Available',
       comingSoon: 'Coming Soon',
       version: 'Version',
-      poweredBy: 'Powered by HumanOS',
+      poweredBy: 'Powered by MindMirror',
     },
     errors: {
       networkError: 'Network connection error, please check your network and try again',

@@ -70,7 +70,7 @@ export default function ResultExportButton({ resultId, title, resultData, result
     try {
       toast.info('☁️  云端正在生成高质量 PDF...', 4000)
       const pdfBlob = await apiClient.exportToPDF(resultId, effectiveHash)
-      triggerDownload(pdfBlob, `HumanOS-${title}-${effectiveHash.slice(0, 8)}.pdf`)
+      triggerDownload(pdfBlob, `MindMirror-${title}-${effectiveHash.slice(0, 8)}.pdf`)
       toast.success('✅ 云端 PDF 生成成功！', 2500)
     } catch (e) {
       toast.error('❌ 云端导出失败，请使用本地导出', 2500)
@@ -86,7 +86,7 @@ export default function ResultExportButton({ resultId, title, resultData, result
     try {
       toast.info('☁️  云端正在生成高清图片...', 4000)
       const imageBlob = await apiClient.exportToImage(resultId, effectiveHash)
-      triggerDownload(imageBlob, `HumanOS-${title}-${effectiveHash.slice(0, 8)}.png`)
+      triggerDownload(imageBlob, `MindMirror-${title}-${effectiveHash.slice(0, 8)}.png`)
       toast.success('✅ 云端高清图片生成成功！', 2500)
     } catch (e) {
       toast.error('❌ 云端导出失败，请使用本地导出', 2500)
@@ -123,7 +123,7 @@ export default function ResultExportButton({ resultId, title, resultData, result
   const handleShare = async () => {
     const success = await shareResult(
       `我的 ${title} 测评结果`,
-      `我在 HumanOS 完成了 ${title}，快来看看你的结果吧！`,
+      `我在 心镜 MindMirror 完成了 ${title}，快来看看你的结果吧！`,
       window.location.href
     )
     setIsOpen(false)

@@ -11,10 +11,11 @@ import './index.css'
 // 检测运行环境，选择适合的路由模式
 const getRouterMode = () => {
   const isGitHubPages = window.location.hostname.includes('github.io')
+  const isCustomDomain = window.location.hostname === 'humanitysos.dpdns.org'
   const isProduction = import.meta.env.PROD
   
-  // GitHub Pages 使用 HashRouter，其他环境使用 BrowserRouter
-  if (isGitHubPages || (isProduction && !import.meta.env.VITE_USE_BROWSER_ROUTER)) {
+  // GitHub Pages（包括自定义域名）使用 HashRouter，Docker部署可使用BrowserRouter
+  if (isGitHubPages || isCustomDomain || (isProduction && !import.meta.env.VITE_USE_BROWSER_ROUTER)) {
     return HashRouter
   }
   return BrowserRouter

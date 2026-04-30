@@ -7,6 +7,7 @@ interface ErrorBoundaryProps {
   children: ReactNode
   fallback?: ReactNode
   onReset?: () => void
+  componentName?: string
 }
 
 interface ErrorBoundaryState {

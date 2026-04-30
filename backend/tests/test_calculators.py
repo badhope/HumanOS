@@ -58,7 +58,7 @@ class TestCalculators:
         """测试焦虑计算器"""
         calc = get_calculator("sas-standard")
         
-        answers = {str(i): 2 for i in range(1, 21)}
+        answers = {str(i): 2 for i in range(1, 51)}
         result = calc(answers)
         
         assert result.overall_score is not None

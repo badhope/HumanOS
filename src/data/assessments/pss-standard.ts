@@ -1,5 +1,5 @@
 import type { Assessment } from '../../types'
-import { calculatePSS } from '../../utils/calculators/pss-calculator'
+import { calculatePSS } from '../../utils/calculators/professional-calculators-factory'
 
 export const pssStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'pss-standard',

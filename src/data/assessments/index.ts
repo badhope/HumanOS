@@ -61,7 +61,7 @@ export const standardAssessments = {
   'ideology-9square': ideologyAssessment,
   'iq-ravens': iqAssessment,
   'eq-goleman': eqAssessment,
-  'dark-triangle': darkAssessment,
+  'dark-triad': darkAssessment,
   'ocean-bigfive': oceanAssessment,
   'slacking-purity': slackingPurityAssessment,
   'foodie-level': foodieLevelAssessment,
@@ -90,7 +90,125 @@ export const getStandardAssessment = (id: StandardAssessmentId) => {
   return standardAssessments[id]
 }
 
-export const standardAssessmentList = Object.values(standardAssessments)
+export const standardAssessmentList = Object.values(standardAssessments).map(assessment => {
+  const questionCount = assessment.questions?.length || 24
+  const accurateDuration = Math.max(1, Math.ceil(questionCount / 7))
+  return {
+    ...assessment,
+    questionCount,
+    duration: accurateDuration,
+  }
+})
+
+export const assessments = standardAssessmentList
+
+const assessmentIdAliases: Record<string, string> = {
+  'mbti': 'sbti-personality',
+  'mbti-standard': 'sbti-personality',
+  'big-five': 'ocean-bigfive',
+  'bigfive': 'ocean-bigfive',
+  'big5': 'ocean-bigfive',
+  'dark-triangle': 'dark-triad',
+  'dark': 'dark-triad',
+  'anxiety': 'sas-standard',
+  'sas': 'sas-standard',
+  'eq': 'eq-goleman',
+  'emotional-intelligence': 'eq-goleman',
+  'iq': 'iq-ravens',
+  'iq-test': 'iq-ravens',
+  'holland': 'holland-sds',
+  'career-interest': 'holland-sds',
+  'attachment': 'ecr-attachment',
+  'attachment-style': 'ecr-attachment',
+  'ecr': 'ecr-attachment',
+  'political': 'ideology-9square',
+  'political-ideology': 'ideology-9square',
+  'political-compass': 'ideology-9square',
+  'depression': 'sds-standard',
+  'sds-depression': 'sds-standard',
+  'sds': 'sds-standard',
+  'stress': 'pss-standard',
+  'pss': 'pss-standard',
+  'psychological-capital': 'pcq-standard',
+  'pcq': 'pcq-standard',
+  'values': 'schwartz-standard',
+  'schwartz': 'schwartz-standard',
+  'moral-foundations': 'mft-standard',
+  'mft': 'mft-standard',
+  'conflict-style': 'tki-standard',
+  'tki': 'tki-standard',
+  'emotional-labor': 'els-standard',
+  'els': 'els-standard',
+  'organizational-citizenship': 'ocb-standard',
+  'ocb': 'ocb-standard',
+  'growth-mindset': 'mindset-standard',
+  'mindset': 'mindset-standard',
+  'meta-cognitive': 'metacognition-standard',
+  'metacognition': 'metacognition-standard',
+  'learning-style': 'kolb-standard',
+  'kolb': 'kolb-standard',
+  'meaning-in-life': 'mlq-standard',
+  'mlq': 'mlq-standard',
+  'authoritarian': 'asi-standard',
+  'asi': 'asi-standard',
+  'psychological-hardiness': 'hardiness-standard',
+  'hardiness': 'hardiness-standard',
+  'slack-off': 'slacking-purity',
+  'slacking': 'slacking-purity',
+  'moyu': 'slacking-purity',
+  'moyu-purity': 'slacking-purity',
+  'internet-addiction': 'internet-addiction',
+  'foodie': 'foodie-level',
+  'patriotism': 'patriotism-purity',
+  'patriot-purity': 'patriotism-purity',
+  'general-mental-ability': 'gma-maturity',
+  'gma': 'gma-maturity',
+  'cast': 'cast-parenting',
+  'philosophy': 'philo-spectrum',
+  'philo': 'philo-spectrum',
+  'bounty': 'onepiece-bounty',
+  'onepiece': 'onepiece-bounty',
+  'lacan': 'lacan-diagnosis',
+  'pua': 'pua-resistance',
+  'pua-resistance': 'pua-resistance',
+  'fubao': 'fubao-index',
+  'job-burnout': 'burnout-mbi',
+  'burnout': 'burnout-mbi',
+  'life-meaning': 'life-meaning',
+  'sexual-experience': 'sexual-experience',
+  'color-subconscious': 'color-subconscious',
+  'love-animal': 'abm-love-animal',
+  'abm-love-animal': 'abm-love-animal',
+  'mental-age': 'mental-age',
+  'sbti': 'sbti-personality',
+  'officialdom': 'officialdom-dream',
+  'disc': 'mft-standard',
+  'enneagram': 'mft-standard',
+  'love-language': 'mft-standard',
+  'via-character': 'mft-standard',
+}
+
+export function getAssessmentById(id: string) {
+  const normalizedId = id.toLowerCase().trim()
+  const targetId = assessmentIdAliases[normalizedId] || normalizedId
+  let match = standardAssessmentList.find(a => a.id === targetId)
+  if (!match) {
+    match = standardAssessmentList.find(a => 
+      a.id.toLowerCase().includes(normalizedId) || 
+      normalizedId.includes(a.id.toLowerCase().split('-')[0])
+    )
+  }
+  if (!match) return undefined
+  
+  const questionCount = match.questions?.length || 24
+  const accurateDuration = Math.max(1, Math.ceil(questionCount / 7))
+  
+  return {
+    ...match,
+    questionCount,
+    duration: accurateDuration,
+  }
+}
 
 export function getAllCategories(): string[] {
   return Array.from(new Set(standardAssessmentList.map(a => a.category))).sort()

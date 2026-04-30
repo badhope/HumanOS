@@ -153,13 +153,19 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
                 className="text-4xl font-bold text-white"
                 variants={introTextVariants}
               >
-                HumanOS
+                humanitysOS
               </motion.h1>
               <motion.p
-                className="mt-2 text-white/60"
+                className="mt-2 text-violet-400/80"
                 variants={introTextVariants}
               >
-                探索内心的旅程
+                心镜 MindMirror
+              </motion.p>
+              <motion.p
+                className="mt-1 text-white/50 text-sm"
+                variants={introTextVariants}
+              >
+                观照内心，自成一界
               </motion.p>
             </motion.div>
           </motion.div>
@@ -271,7 +277,7 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
       >
-        <p>© 2024 HumanOS. 探索自我，发现潜能。</p>
+        <p>© 2024 心镜 MindMirror. 照见自己，成为更好的自己。</p>
       </motion.div>
     </motion.div>
   )

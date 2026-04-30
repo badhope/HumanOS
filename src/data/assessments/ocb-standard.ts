@@ -1,13 +1,13 @@
 import type { Assessment } from '../../types'
-import { calculateOCB } from '../../utils/calculators/ocb-calculator'
+import { calculateOCB } from '../../utils/calculators/professional-calculators-factory'
 
 export const ocbStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'ocb-standard',
   title: 'OCB 组织公民行为量表',
   description: '组织行为学经典 | KPI之外的隐性绩效测评：你是老板心中的好员工吗？',
   icon: '🤝',
-  category: '职场',
-  subcategory: '组织行为',
+  category: '职业发展',
+  subcategory: '企业文化',
   difficulty: 'standard',
   duration: 6,
   quality: '专业',
@@ -181,5 +181,49 @@ export const ocbStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
       { id: '4', text: '🟢 比较符合', value: 4 },
       { id: '5', text: '✅ 完全符合', value: 5 },
     ]},
-  ]
+  ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '🤝 组织公民行为量表报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-sky-950 via-blue-800 to-indigo-700">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-sky-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">💙</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.ocbLevel || '组织公民行为评估'}</h2>
+              <p className="text-sky-200/80 text-lg mb-4">Organizational Citizenship Behavior</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-sky-400/30">
+                <span className="text-white">OCB 指数</span>
+                <span className="text-2xl font-black text-sky-300">\${result.totalScore || 90}</span>
+                <span className="text-white/60">分</span>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 五维组织公民行为',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['altruism', 'courtesy', 'sportsmanship', 'conscientiousness', 'civic-virtue'],
+        dimensionNames: {
+          altruism: '利他主义',
+          courtesy: '礼貌礼仪',
+          sportsmanship: '运动员精神',
+          conscientiousness: '尽职敬业',
+          'civic-virtue': '公民美德'
+        }
+      }
+    ]
+  }
 }

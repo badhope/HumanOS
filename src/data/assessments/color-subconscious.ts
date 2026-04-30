@@ -1,4 +1,5 @@
 import type { Assessment } from '../../types'
+import { calculateColorSubconscious } from '../../utils/calculators/color-subconscious-calculator'
 
 const NINE_SOUL_COLORS = [
   { type: 'red', name: '火山橙灵魂', hex: '#F97316', emoji: '🔥', desc: '炽热奔放，永远年轻永远热泪盈眶' },
@@ -136,57 +137,5 @@ export const colorSubconsciousAssessment: Assessment = {
       { id: '5', value: 5, text: '透明色，我选择不存在' },
     ]},
   ],
-  resultCalculator: (answers: any[]) => {
-    const dimensionScores: Record<string, number[]> = {
-      extraversion: [],
-      emotional: [],
-      idealism: [],
-      rebellion: [],
-      spirituality: [],
-    }
-    const dimensionMap: Record<string, string> = {
-      'color-1': 'extraversion', 'color-4': 'extraversion', 'color-12': 'extraversion',
-      'color-2': 'emotional', 'color-3': 'emotional', 'color-14': 'emotional', 'color-15': 'emotional',
-      'color-5': 'idealism', 'color-8': 'idealism', 'color-13': 'idealism',
-      'color-6': 'rebellion', 'color-10': 'rebellion',
-      'color-7': 'spirituality', 'color-9': 'spirituality', 'color-11': 'spirituality', 'color-16': 'spirituality',
-    }
-
-    answers.forEach((answer: any) => {
-      const qid = answer.questionId
-      const dim = dimensionMap[qid] || 'spirituality'
-      const v = typeof answer.value === 'number' ? answer.value : parseInt(String(answer.value || 3))
-      dimensionScores[dim].push(v)
-    })
-
-    const scores: Record<string, number> = {}
-    Object.keys(dimensionScores).forEach(key => {
-      const arr = dimensionScores[key]
-      const avg = arr.reduce((a, b) => a + b, 0) / Math.max(1, arr.length)
-      scores[key] = Math.round(avg * 20)
-    })
-
-    const signature = scores.extraversion * 10000 + scores.emotional * 1000 + 
-      scores.idealism * 100 + scores.rebellion * 10 + scores.spirituality
-    
-    const matchedColor = NINE_SOUL_COLORS[signature % 9]
-
-    return {
-      type: matchedColor.type,
-      name: matchedColor.name,
-      emoji: matchedColor.emoji,
-      hex: matchedColor.hex,
-      desc: matchedColor.desc,
-      dimensionScores: scores,
-      dimensions: [
-        { name: '外向能量', score: scores.extraversion, color: '#F97316' },
-        { name: '情感浓度', score: scores.emotional, color: '#8B5CF6' },
-        { name: '理想主义', score: scores.idealism, color: '#EC4899' },
-        { name: '反叛精神', score: scores.rebellion, color: '#0EA5E9' },
-        { name: '灵性深度', score: scores.spirituality, color: '#10B981' },
-      ],
-      overall: matchedColor.name,
-      allColors: NINE_SOUL_COLORS,
-    }
-  },
+  resultCalculator: calculateColorSubconscious,
 }

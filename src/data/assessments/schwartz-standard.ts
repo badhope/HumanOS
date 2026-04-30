@@ -1,13 +1,13 @@
 import type { Assessment } from '../../types'
-import { calculateSchwartz } from '../../utils/calculators/schwartz-calculator'
+import { calculateSchwartz } from '../../utils/calculators/professional-calculators-factory'
 
 export const schwartzStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'schwartz-standard',
   title: 'SVS 施瓦茨价值观量表',
   description: '跨文化验证的人类价值观模型 | 10大核心价值观+4高阶维度全景画像',
   icon: '🌍',
-  category: '人格',
-  subcategory: '价值观',
+  category: '意识形态',
+  subcategory: '哲学立场',
   difficulty: 'standard',
   duration: 8,
   quality: '学术级',
@@ -153,5 +153,53 @@ export const schwartzStandardAssessment: Omit<Assessment, 'id'> & { id: string }
       { id: '4', text: '🟢 比较符合', value: 4 },
       { id: '5', text: '✅ 完全符合', value: 5 },
     ]},
-  ]
+  ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '🌈 Schwartz基本价值观量表报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-rose-950 via-pink-800 to-red-700">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-rose-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-pink-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">🎭</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.dominantValue || '价值观画像'}</h2>
+              <p className="text-rose-200/80 text-lg mb-4">Schwartz Values Theory</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-rose-400/30">
+                <span className="text-white">核心价值观</span>
+                <span className="text-2xl font-black text-rose-300">\${result.dominantValue || '成就型'}</span>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 十大基本价值观',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['power', 'achievement', 'hedonism', 'stimulation', 'selfDirection', 'universalism', 'benevolence', 'tradition', 'conformity', 'security'],
+        dimensionNames: {
+          power: '权力',
+          achievement: '成就',
+          hedonism: '享乐',
+          stimulation: '刺激',
+          selfDirection: '自主',
+          universalism: '普世',
+          benevolence: '慈善',
+          tradition: '传统',
+          conformity: '遵从',
+          security: '安全'
+        }
+      }
+    ]
+  }
 }

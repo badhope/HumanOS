@@ -1,13 +1,13 @@
 import type { Assessment } from '../../types'
-import { calculateMFT } from '../../utils/calculators/mft-calculator'
+import { calculateMFT } from '../../utils/calculators/professional-calculators-factory'
 
 export const mftStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'mft-standard',
   title: 'MFT 道德基础量表',
   description: 'Haidt 政治心理学 | 为什么左派右派永远说不到一起？5大道德基因解密',
   icon: '⚖️',
-  category: '社会',
-  subcategory: '道德心理',
+  category: '意识形态',
+  subcategory: '哲学立场',
   difficulty: 'standard',
   duration: 8,
   quality: '学术级',
@@ -223,5 +223,52 @@ export const mftStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
       { id: '4', text: '🟢 比较同意', value: 4 },
       { id: '5', text: '✅ 完全同意', value: 5 },
     ]},
-  ]
+  ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '⚖️ 道德基础理论量表报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-amber-950 via-yellow-800 to-lime-700">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-amber-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-yellow-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">⚖️</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.moralFoundation || '道德基础画像'}</h2>
+              <p className="text-amber-200/80 text-lg mb-4">Moral Foundations Theory</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-amber-400/30">
+                <span className="text-white">核心道德</span>
+                <span className="text-2xl font-black text-amber-300">\${result.dominant || '关爱/伤害'}</span>
+              </div>
+              
+              <p className="text-amber-200 mt-6 text-sm">
+                关爱 · 公平 · 忠诚 · 权威 · 圣洁
+              </p>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 道德五基础模型',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['care', 'fairness', 'loyalty', 'authority', 'sanctity'],
+        dimensionNames: {
+          care: '关爱/伤害',
+          fairness: '公平/欺骗',
+          loyalty: '忠诚/背叛',
+          authority: '权威/颠覆',
+          sanctity: '圣洁/堕落'
+        }
+      }
+    ]
+  }
 }

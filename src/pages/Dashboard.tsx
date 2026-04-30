@@ -319,7 +319,7 @@ export default function Dashboard() {
                 <RippleButton
                   variant="primary"
                   className="mt-4"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate('/assessments')}
                 >
                   开始测评
                 </RippleButton>
@@ -337,7 +337,7 @@ export default function Dashboard() {
                     <GlowCard
                       className="glass rounded-xl p-4 flex items-center justify-between cursor-pointer"
                       glowColor="rgba(139, 92, 246, 0.2)"
-                      onClick={() => navigate(`/results/${record.id}`)}
+                      onClick={() => navigate(`/legacy/results/${record.id}`)}
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg bg-violet-500/20 flex items-center justify-center">
@@ -438,7 +438,7 @@ export default function Dashboard() {
               <RippleButton
                 variant="primary"
                 size="lg"
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/assessments')}
               >
                 开始测评
               </RippleButton>
@@ -491,7 +491,7 @@ export default function Dashboard() {
                       <div className="flex items-center gap-2">
                         <RippleButton
                           variant="secondary"
-                          onClick={() => navigate(`/results/${assessment.id}`)}
+                          onClick={() => navigate(`/legacy/results/${assessment.id}`)}
                         >
                           查看结果
                           <ChevronRight className="w-4 h-4 ml-1" />

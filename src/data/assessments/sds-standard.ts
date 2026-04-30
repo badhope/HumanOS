@@ -1,5 +1,5 @@
 import type { Assessment } from '../../types'
-import { calculateSDS } from '../../utils/calculators/sds-calculator'
+import { calculateSDS } from '../../utils/calculators/professional-calculators-factory'
 
 export const sdsStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'sds-standard',

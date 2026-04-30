@@ -78,7 +78,7 @@ class RedisCache:
     def __init__(
         self,
         url: str = "redis://localhost:6379/0",
-        prefix: str = "humanos:",
+        prefix: str = "MindMirror:",
         default_ttl: int = 3600,
     ):
         self.prefix = prefix

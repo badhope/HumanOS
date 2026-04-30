@@ -296,7 +296,7 @@ export function ThemeTransitionOverlay({
           animate={{ opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          HumanOS · 专业测评引擎启动中
+          MindMirror · 专业测评引擎启动中
         </motion.div>
       </div>
 

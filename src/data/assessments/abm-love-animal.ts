@@ -1,4 +1,5 @@
 import type { Assessment } from '../../types'
+import { calculateABMLoveAnimal } from '../../utils/calculators/abm-love-animal-calculator'
 
 const TWELVE_LOVE_ANIMALS = [
   { type: 'dog', name: '金毛修勾', emoji: '🐕', desc: '忠诚粘人，给你全部的爱' },
@@ -139,56 +140,5 @@ export const abmLoveAnimalAssessment: Assessment = {
       { id: '5', value: 5, text: '太好了！终于解放了！' },
     ]},
   ],
-  resultCalculator: (answers: any[]) => {
-    const dimensionScores: Record<string, number[]> = {
-      dependency: [],
-      initiative: [],
-      passion: [],
-      emotional: [],
-      idealism: [],
-    }
-    const dimensionMap: Record<string, string> = {
-      'abm-1': 'dependency', 'abm-2': 'dependency', 'abm-3': 'dependency',
-      'abm-4': 'initiative', 'abm-5': 'initiative', 'abm-6': 'initiative',
-      'abm-7': 'passion', 'abm-8': 'passion', 'abm-9': 'passion',
-      'abm-10': 'emotional', 'abm-11': 'emotional', 'abm-12': 'emotional',
-      'abm-13': 'idealism', 'abm-14': 'idealism', 'abm-15': 'idealism', 'abm-16': 'idealism',
-    }
-
-    answers.forEach((answer: any) => {
-      const qid = answer.questionId
-      const dim = dimensionMap[qid] || 'dependency'
-      const v = typeof answer.value === 'number' ? answer.value : parseInt(String(answer.value || 3))
-      dimensionScores[dim].push(v)
-    })
-
-    const scores: Record<string, number> = {}
-    Object.keys(dimensionScores).forEach(key => {
-      const arr = dimensionScores[key]
-      const avg = arr.reduce((a, b) => a + b, 0) / Math.max(1, arr.length)
-      scores[key] = Math.round(avg * 20)
-    })
-
-    const signature = scores.dependency * 10000 + scores.initiative * 1000 + 
-      scores.passion * 100 + scores.emotional * 10 + scores.idealism
-    
-    const matchedAnimal = TWELVE_LOVE_ANIMALS[signature % 12]
-
-    return {
-      type: matchedAnimal.type,
-      name: matchedAnimal.name,
-      emoji: matchedAnimal.emoji,
-      desc: matchedAnimal.desc,
-      dimensionScores: scores,
-      dimensions: [
-        { name: '依赖度', score: scores.dependency, color: '#F59E0B' },
-        { name: '主动性', score: scores.initiative, color: '#8B5CF6' },
-        { name: '热情值', score: scores.passion, color: '#EC4899' },
-        { name: '感性度', score: scores.emotional, color: '#F97316' },
-        { name: '理想主义', score: scores.idealism, color: '#0EA5E9' },
-      ],
-      overall: matchedAnimal.name,
-      allAnimals: TWELVE_LOVE_ANIMALS,
-    }
-  },
+  resultCalculator: calculateABMLoveAnimal,
 }

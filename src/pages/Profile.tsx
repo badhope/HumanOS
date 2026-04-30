@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../store'
 import { getAssessmentById } from '@data/assessments'
 import { useToast } from '@hooks/useToast'
+import { PageWrapper } from '@components/layout'
 
 export default function Profile() {
   const navigate = useNavigate()
@@ -36,7 +37,7 @@ export default function Profile() {
         createdAt: new Date(),
         assessments: [],
       })
-      toast.success('👋 欢迎来到 HumanOS！', 2500)
+      toast.success('👋 欢迎来到 心镜 MindMirror！', 2500)
     }
   }, [user, setUser, toast])
 
@@ -90,7 +91,7 @@ export default function Profile() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `humanos-profile-${Date.now()}.json`
+    a.download = `mindmirror-profile-${Date.now()}.json`
     a.click()
     URL.revokeObjectURL(url)
     toast.success('📦 所有数据已导出', 2500)
@@ -131,8 +132,8 @@ export default function Profile() {
   )
 
   return (
-    <div className="min-h-screen bg-slate-950 pt-20 pb-32">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <PageWrapper type="wide" background="plain">
+      <div className="py-8">
         {/* ===== 头部个人信息卡片 ===== */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -178,7 +179,7 @@ export default function Profile() {
                     </button>
                   </div>
                 )}
-                <p className="text-slate-400 mt-1">HumanOS 人格探索者 · Lv.{Math.floor(stats.total / 5) + 1}</p>
+                <p className="text-slate-400 mt-1">心镜 心灵探索者 · Lv.{Math.floor(stats.total / 5) + 1}</p>
               </div>
 
               {/* 操作按钮 */}
@@ -271,7 +272,7 @@ export default function Profile() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.03 }}
                     className="group glass rounded-2xl p-4 border border-white/10 hover:border-violet-500/30 transition-all cursor-pointer"
-                    onClick={() => navigate(`/results/${record.id}`)}
+                    onClick={() => navigate(`/legacy/results/${record.id}`)}
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-pink-500/20 flex items-center justify-center text-2xl">
@@ -437,6 +438,6 @@ export default function Profile() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </PageWrapper>
   )
 }

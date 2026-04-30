@@ -21,6 +21,13 @@ export interface Achievement {
   target?: number
 }
 
+export interface MoodRecord {
+  date: string
+  mood: number
+  timestamp: number
+  note?: string
+}
+
 export interface UserStats {
   totalAssessments: number
   totalTime: number
@@ -92,6 +99,24 @@ interface AppStore {
   // UI
   isLoading: boolean
   setIsLoading: (loading: boolean) => void
+
+  // User Flags (merged from useUserStore)
+  hasCompletedAssessment: boolean
+  hasDismissedWelcome: boolean
+  hasDismissedAssessmentCard: boolean
+  markAssessmentCompleted: () => void
+  dismissWelcome: () => void
+  dismissAssessmentCard: () => void
+
+  // Mood Tracking
+  moodHistory: MoodRecord[]
+  recordMood: (mood: number, note?: string) => void
+  getMoodForDate: (date: string) => MoodRecord | undefined
+  getMoodTrend: (days: number) => MoodRecord[]
+
+  // Backward compatibility
+  assessmentHistory: CompletedAssessment[]
+  addAssessmentRecord: (record: any) => void
 }
 
 export const useAppStore = create<AppStore>()(
@@ -140,7 +165,7 @@ export const useAppStore = create<AppStore>()(
       completedAssessments: [],
       addCompletedAssessment: (assessment) => set((state) => ({
         completedAssessments: [
-          { id: assessment.id || crypto.randomUUID(), ...assessment },
+          assessment,
           ...state.completedAssessments,
         ],
       })),
@@ -221,6 +246,59 @@ export const useAppStore = create<AppStore>()(
       // UI
       isLoading: false,
       setIsLoading: (loading) => set({ isLoading: loading }),
+
+      // User Flags (merged from useUserStore)
+      hasCompletedAssessment: false,
+      hasDismissedWelcome: false,
+      hasDismissedAssessmentCard: false,
+      markAssessmentCompleted: () => set({ hasCompletedAssessment: true }),
+      dismissWelcome: () => set({ hasDismissedWelcome: true }),
+      dismissAssessmentCard: () => set({ hasDismissedAssessmentCard: true }),
+
+      // assessmentHistory alias & methods (backward compatible)
+      get assessmentHistory() { return get().completedAssessments },
+      addAssessmentRecord: (record) => set((state) => {
+        const existingIndex = state.completedAssessments.findIndex((r: any) => r.id === record.id)
+        if (existingIndex >= 0) {
+          const newHistory = [...state.completedAssessments]
+          newHistory[existingIndex] = record as any
+          return { completedAssessments: newHistory, hasCompletedAssessment: true }
+        }
+        return { completedAssessments: [record as any, ...state.completedAssessments], hasCompletedAssessment: true }
+      }),
+
+      // Mood Tracking System
+      moodHistory: [],
+      recordMood: (mood, note) => set((state) => {
+        const today = new Date().toISOString().split('T')[0]
+        const timestamp = Date.now()
+        
+        const existingIndex = state.moodHistory.findIndex(m => m.date === today)
+        const newRecord: MoodRecord = {
+          date: today,
+          mood,
+          timestamp,
+          note,
+        }
+
+        if (existingIndex >= 0) {
+          const newHistory = [...state.moodHistory]
+          newHistory[existingIndex] = newRecord
+          return { moodHistory: newHistory }
+        }
+
+        return {
+          moodHistory: [newRecord, ...state.moodHistory],
+        }
+      }),
+      getMoodForDate: (date) => get().moodHistory.find(m => m.date === date),
+      getMoodTrend: (days) => {
+        const history = get().moodHistory
+        return history
+          .sort((a, b) => b.timestamp - a.timestamp)
+          .slice(0, days)
+          .reverse()
+      },
     }),
     {
       name: 'human-os-unified', // 统一存储键

@@ -270,7 +270,7 @@ function ProfilePanel({ isOpen, onClose }: ProfilePanelProps) {
                           className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
                           onClick={() => {
                             onClose()
-                            navigate(`/results/${record.id}`)
+                            navigate(`/legacy/results/${record.id}`)
                           }}
                         >
                           <div className="flex items-center gap-3">

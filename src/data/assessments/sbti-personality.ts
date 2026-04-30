@@ -1,4 +1,5 @@
 import type { Assessment } from '../../types'
+import { calculateSBTI } from '../../utils/calculators/sbti-calculator'
 
 export const sbtiAssessment: Assessment = {
   id: 'sbti-personality',
@@ -56,35 +57,5 @@ export const sbtiAssessment: Assessment = {
       ],
     },
   ],
-  resultCalculator: (answers: any[]) => {
-    let S = 0, B = 0, T = 0, I = 0
-    answers.forEach((answer: any) => {
-      const v = typeof answer.value === 'number' ? answer.value : parseInt(String(answer.value || 2))
-      if (v === 1) S += 1
-      if (v === 2) B += 2
-      if (v === 3) T += 3
-      if (v === 4) I += 4
-    })
-
-    const max = Math.max(S, B, T, I)
-    let type = ''
-    let emoji = ''
-    if (S === max) { type = '职业吗喽'; emoji = '🙈' }
-    else if (B === max) { type = '摆烂之王'; emoji = '🦥' }
-    else if (T === max) { type = '顶级杠精'; emoji = '🦝' }
-    else { type = '无限社恐'; emoji = '🦔' }
-
-    return {
-      type,
-      name: type,
-      emoji,
-      dimensions: [
-        { name: '吗喽指数', score: S * 25, color: '#F59E0B' },
-        { name: '摆烂程度', score: B * 25, color: '#8B5CF6' },
-        { name: '抬杠能力', score: T * 25, color: '#EC4899' },
-        { name: '社恐等级', score: I * 25, color: '#06B6D4' },
-      ],
-      overall: type,
-    }
-  },
+  resultCalculator: calculateSBTI,
 }

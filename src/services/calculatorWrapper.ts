@@ -13,18 +13,57 @@ export type UnifiedCalculationResult = CalculationResponse & {
   accuracy: number
 }
 
+const BACKEND_CALCULATOR_IDS = [
+  'ocean-bigfive',
+  'burnout-mbi',
+  'sas-standard',
+  'holland-sds',
+  'ecr-attachment',
+  'dark-triangle',
+  'dark-triad',
+  'eq-goleman',
+  'iq-ravens',
+  'ideology-9square',
+  'slacking-purity',
+  'foodie-level',
+  'internet-addiction',
+  'life-meaning',
+  'patriotism-purity',
+  'sexual-experience',
+  'gma-maturity',
+  'cast-parenting',
+  'philo-spectrum',
+  'onepiece-bounty',
+  'lacan-diagnosis',
+  'pua-resistance',
+  'fubao-index',
+]
+
 class CalculatorService {
   private useBackend: boolean = true
   private fallbackToFrontend: boolean = true
   private backendAvailable: boolean | null = null
+  private lastBackendCheck: number = 0
+  private readonly CHECK_CACHE_MS = 60000
 
   constructor() {
-    this.checkBackendAvailability()
+    this.checkBackendAvailability(true)
   }
 
-  async checkBackendAvailability(): Promise<boolean> {
+  hasBackendCalculator(assessmentId: string): boolean {
+    return BACKEND_CALCULATOR_IDS.includes(assessmentId)
+  }
+
+  async checkBackendAvailability(force: boolean = false): Promise<boolean> {
+    const now = Date.now()
+    
+    if (!force && this.backendAvailable === true && (now - this.lastBackendCheck) < this.CHECK_CACHE_MS) {
+      return true
+    }
+    
     try {
       this.backendAvailable = await apiClient.healthCheck()
+      this.lastBackendCheck = now
       return this.backendAvailable
     } catch {
       this.backendAvailable = false
@@ -37,8 +76,14 @@ class CalculatorService {
     apiClient.toggleBackend(enabled)
   }
 
-  shouldUseBackend(): boolean {
-    return this.useBackend && this.backendAvailable === true
+  async shouldUseBackend(assessmentId?: string): Promise<boolean> {
+    if (!this.useBackend) return false
+    
+    if (assessmentId && this.hasBackendCalculator(assessmentId)) {
+      await this.checkBackendAvailability()
+    }
+    
+    return this.backendAvailable === true
   }
 
   getCalculationSource(): 'frontend' | 'backend' | 'auto' {
@@ -85,9 +130,12 @@ class CalculatorService {
   ): Promise<UnifiedCalculationResult> {
     const startTime = Date.now()
 
+    const hasBackend = this.hasBackendCalculator(assessmentId)
+    
     const useBackendCalc =
       !options.forceFrontend &&
-      (options.forceBackend || this.shouldUseBackend())
+      (options.forceBackend || hasBackend) &&
+      (await this.shouldUseBackend(assessmentId))
 
     const calculator = standardCalculators[assessmentId]
     let answerMap = Array.isArray(answers) ? buildAnswerMap(answers) : answers
@@ -97,29 +145,35 @@ class CalculatorService {
     const archiveOnce = () => apiClient.archiveResult(assessmentId, answerMap).catch(() => {})
 
     if (useBackendCalc) {
-      try {
-        const result = await apiClient.calculateAssessment(assessmentId, {
-          answers: answerMap,
-          user_id: options.userId,
-          session_id: visitorService.getVisitorId(),
-          include_norm: true,
-          include_interpretation: true,
-        })
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          if (attempt > 0) {
+            await new Promise((resolve) => setTimeout(resolve, 500 * attempt))
+          }
+          
+          const result = await apiClient.calculateAssessment(assessmentId, {
+            answers: answerMap,
+            user_id: options.userId,
+            session_id: visitorService.getVisitorId(),
+            include_norm: true,
+            include_interpretation: true,
+          })
 
-        archiveOnce()
+          archiveOnce()
 
-        const accuracy = this.calculateAccuracyScore(Object.keys(answerMap).length)
-        return {
-          ...result,
-          source: 'backend',
-          latency: Date.now() - startTime,
-          accuracy,
-        } as UnifiedCalculationResult
-      } catch (error) {
-        console.warn('[Calculator] 后端计算失败，回退到前端计算:', error)
+          const accuracy = this.calculateAccuracyScore(Object.keys(answerMap).length)
+          return {
+            ...result,
+            source: 'backend',
+            latency: Date.now() - startTime,
+            accuracy,
+          } as UnifiedCalculationResult
+        } catch (error) {
+          console.warn(`[Calculator] 后端计算 (尝试 ${attempt + 1}/2) 失败:`, error)
 
-        if (!this.fallbackToFrontend) {
-          throw error
+          if (attempt === 1 && !this.fallbackToFrontend) {
+            throw error
+          }
         }
       }
     }
@@ -243,17 +297,44 @@ class CalculatorService {
 
     if (result.dimensions && Array.isArray(result.dimensions)) {
       result.dimensions.forEach((dim: any) => {
-        const id = dim.id || dim.dimension || dim.key
+        const id = dim.dimension_id || dim.id || dim.dimension || dim.key
         if (id) {
           adapted[id] = dim.raw_score ?? dim.score ?? dim.value
         }
       })
+      
+      adapted.dimensions = result.dimensions.map((dim: any) => ({
+        name: dim.dimension_id || dim.id || dim.dimension || dim.key,
+        label: dim.name,
+        score: dim.raw_score ?? dim.score ?? dim.value,
+        percentile: dim.percentile,
+        level: dim.level,
+        z_score: dim.z_score,
+        t_score: dim.t_score,
+        stanine: dim.stanine,
+      }))
     }
 
     if (result.type_profile) {
       adapted.type = result.type_profile.type
       adapted.typeCode = result.type_profile.code
       adapted.code = result.type_profile.code
+      
+      if (result.type_profile.attachment_style) {
+        const styleMap: Record<string, string> = {
+          'secure': 'secure',
+          'preoccupied': 'anxious',
+          'dismissive': 'avoidant',
+          'fearful': 'fearful',
+        }
+        adapted.style = styleMap[result.type_profile.attachment_style] || result.type_profile.attachment_style
+      }
+      
+      Object.entries(result.type_profile).forEach(([key, value]) => {
+        if (!(key in adapted)) {
+          adapted[key] = value
+        }
+      })
     }
 
     if (result.interpretation) {

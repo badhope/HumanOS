@@ -14,7 +14,7 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined)
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('humanos-language') as Language
+      const saved = localStorage.getItem('MindMirror-language') as Language
       if (saved && translations[saved]) return saved
     }
     return 'zh'
@@ -23,7 +23,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang)
     if (typeof window !== 'undefined') {
-      localStorage.setItem('humanos-language', lang)
+      localStorage.setItem('MindMirror-language', lang)
       document.documentElement.lang = lang
       document.documentElement.dir = 'ltr'
     }

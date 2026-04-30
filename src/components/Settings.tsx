@@ -28,13 +28,18 @@ import { cn } from '@utils/cn'
 import { useI18n } from '../i18n'
 
 interface SettingsProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen?: boolean
+  onClose?: () => void
 }
 
-export default function Settings({ isOpen, onClose }: SettingsProps) {
+export default function Settings({ isOpen = true, onClose }: SettingsProps) {
   const navigate = useNavigate()
   const toast = useToast()
+  
+  const handleClose = () => {
+    if (onClose) onClose()
+    else navigate('/app/daily')
+  }
   const { t, language, setLanguage } = useI18n()
   const {
     theme,
@@ -50,15 +55,15 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
   } = useAppStore()
 
   const [animationsEnabled, setAnimationsEnabled] = useState(
-    () => localStorage.getItem('humanos-animations') !== 'false'
+    () => localStorage.getItem('mindmirror-animations') !== 'false'
   )
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<{ id: string } | null>(null)
   const [notificationsEnabled, setNotificationsEnabled] = useState(() =>
-    localStorage.getItem('humanos-notifications') !== 'false'
+    localStorage.getItem('mindmirror-notifications') !== 'false'
   )
   const [privacyMode, setPrivacyMode] = useState<'public' | 'private'>(() =>
-    (localStorage.getItem('humanos-privacy') as 'public' | 'private') || 'private'
+    (localStorage.getItem('mindmirror-privacy') as 'public' | 'private') || 'private'
   )
 
   const [editingProfile, setEditingProfile] = useState(false)
@@ -70,7 +75,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
   const handleAnimationToggle = () => {
     const newValue = !animationsEnabled
     setAnimationsEnabled(newValue)
-    localStorage.setItem('humanos-animations', String(newValue))
+    localStorage.setItem('mindmirror-animations', String(newValue))
   }
 
   const handleLanguageChange = (lang: string) => {
@@ -80,7 +85,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
   const handleNotificationToggle = () => {
     const newValue = !notificationsEnabled
     setNotificationsEnabled(newValue)
-    localStorage.setItem('humanos-notifications', String(newValue))
+    localStorage.setItem('mindmirror-notifications', String(newValue))
     if (newValue && Notification.permission === 'default') {
       Notification.requestPermission()
     }
@@ -89,7 +94,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
   const handlePrivacyToggle = () => {
     const newValue = privacyMode === 'public' ? 'private' : 'public'
     setPrivacyMode(newValue)
-    localStorage.setItem('humanos-privacy', newValue)
+    localStorage.setItem('mindmirror-privacy', newValue)
   }
 
   const handleSaveProfile = () => {
@@ -146,13 +151,13 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
         completedAt: toDate(a.completedAt).toISOString(),
       })),
       achievements,
-      exportedFrom: 'HumanOS',
+      exportedFrom: 'MindMirror',
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `humanos-backup-${new Date().toISOString().split('T')[0]}.json`
+    a.download = `mindmirror-backup-${new Date().toISOString().split('T')[0]}.json`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -191,8 +196,8 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
 
   const shareResults = async () => {
     const shareData = {
-      title: '我的HumanOS测评结果',
-      text: `我在HumanOS完成了${completedAssessments.length}个测评！快来试试吧！`,
+      title: '我的心镜测评结果',
+      text: `我在心镜 MindMirror 完成了${completedAssessments.length}个测评！快来试试吧！`,
       url: window.location.href,
     }
 
@@ -295,7 +300,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-          onClick={onClose}
+          onClick={handleClose}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -489,7 +494,7 @@ export default function Settings({ isOpen, onClose }: SettingsProps) {
                       exit={{ opacity: 0, x: -100 }}
                       className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors group"
                     >
-                      <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={() => navigate(`/results/${record.id}`)}>
+                      <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={() => navigate(`/legacy/results/${record.id}`)}>
                         <Calendar className="w-4 h-4 text-white/40 shrink-0" />
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-white truncate">

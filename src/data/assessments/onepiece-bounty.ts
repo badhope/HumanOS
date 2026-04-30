@@ -63,4 +63,105 @@ export const bountyAssessment: Assessment = {
     { id: 'berry-49', type: 'likert-5', dimension: 'potential', text: 'D之一族的血脉在我体内流淌', options: [{ id: '1', text: '完全不可能', value: 1 }, { id: '2', text: '不太可能', value: 2 }, { id: '3', text: '说不定', value: 3 }, { id: '4', text: '应该可以', value: 4 }, { id: '5', text: '绝对没问题', value: 5 }] },
     { id: 'berry-50', type: 'likert-5', dimension: 'potential', text: '我就是那个被选中的乔伊波伊', options: [{ id: '1', text: '完全不可能', value: 1 }, { id: '2', text: '不太可能', value: 2 }, { id: '3', text: '说不定', value: 3 }, { id: '4', text: '应该可以', value: 4 }, { id: '5', text: '绝对没问题', value: 5 }] },
   ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '🏴‍☠️ 海军本部悬赏令',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-amber-950 via-orange-900 to-yellow-800">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-yellow-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-red-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="absolute inset-0 border-4 border-amber-400/30 rounded-2xl pointer-events-none" />
+              <div className="text-6xl mb-4">☠️</div>
+              <h2 className="text-4xl font-black text-amber-100 mb-2">\${result.rank || 'D级海贼'}</h2>
+              <p className="text-amber-200/80 text-lg mb-4">\${result.title || '东海新人'}</p>
+              
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-900/80 to-amber-800/80 backdrop-blur rounded-full px-8 py-4 border-2 border-amber-400/50">
+                <span className="text-amber-200">悬赏金额</span>
+                <span className="text-4xl font-black text-yellow-200">\${result.bounty || 5000000}</span>
+                <span className="text-amber-200">贝利</span>
+              </div>
+              
+              <p className="text-amber-200 mt-6 text-lg italic">
+                " \${(result.bounty || 5000000) >= 3000000000 ? '海军本部最高级别通缉！' : 
+                  (result.bounty || 5000000) >= 1000000000 ? '将星/灾害级威胁！' :
+                  (result.bounty || 5000000) >= 300000000 ? '超新星级别！' :
+                  (result.bounty || 5000000) >= 100000000 ? '值得关注的新人' :
+                  '东海的小角色'
+                } "
+              </p>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '⚔️ 五维战力雷达',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['combatPower', 'influence', 'threatLevel', 'notoriety', 'potential'],
+        dimensionNames: {
+          combatPower: '战斗力',
+          influence: '势力值',
+          threatLevel: '威胁度',
+          notoriety: '知名度',
+          potential: '成长性'
+        },
+        content: `
+          <div className="space-y-4 mt-6">
+            <div className="grid grid-cols-5 gap-2">
+              <div className="text-center p-3 bg-red-900/30 rounded-lg">
+                <div className="text-2xl">⚔️</div>
+                <div className="text-white font-bold">\${result.dimensions?.combatPower || 50}</div>
+                <div className="text-gray-400 text-xs">战斗力</div>
+              </div>
+              <div className="text-center p-3 bg-blue-900/30 rounded-lg">
+                <div className="text-2xl">👥</div>
+                <div className="text-white font-bold">\${result.dimensions?.influence || 50}</div>
+                <div className="text-gray-400 text-xs">势力值</div>
+              </div>
+              <div className="text-center p-3 bg-orange-900/30 rounded-lg">
+                <div className="text-2xl">💥</div>
+                <div className="text-white font-bold">\${result.dimensions?.threatLevel || 50}</div>
+                <div className="text-gray-400 text-xs">威胁度</div>
+              </div>
+              <div className="text-center p-3 bg-purple-900/30 rounded-lg">
+                <div className="text-2xl">📢</div>
+                <div className="text-white font-bold">\${result.dimensions?.notoriety || 50}</div>
+                <div className="text-gray-400 text-xs">知名度</div>
+              </div>
+              <div className="text-center p-3 bg-green-900/30 rounded-lg">
+                <div className="text-2xl">⭐</div>
+                <div className="text-white font-bold">\${result.dimensions?.potential || 50}</div>
+                <div className="text-gray-400 text-xs">成长性</div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'tier',
+        title: '🏆 海贼评级认定',
+        type: 'analysis-section',
+        content: ''
+      }
+    ],
+
+    levelDescriptions: {
+      SSS: { title: '海上皇帝', advice: '就是你把海军本部掀了？' },
+      SS: { title: '皇团干部', advice: '大将以下，众生平等' },
+      S: { title: '超新星', advice: '极恶世代，未来可期' },
+      A: { title: '七武海', advice: '合法海贼，持证上船' },
+      B: { title: '新人海贼', advice: '海贼王的路还很长' },
+      C: { title: '杂鱼', advice: '先活过伟大航路再说吧' }
+    }
+  }
 }

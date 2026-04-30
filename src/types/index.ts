@@ -1,3 +1,20 @@
+export interface ResultInterpretationSection {
+  id: string
+  title: string
+  type: 'cover-card' | 'data-visualization' | 'analysis-section'
+  variant?: string
+  chartType?: 'radar' | 'bar' | 'gauge'
+  content?: string
+  dimensions?: string[]
+  dimensionNames?: Record<string, string>
+}
+
+export interface ResultInterpretation {
+  templateType: 'standard' | 'enhanced'
+  sections: ResultInterpretationSection[]
+  levelDescriptions?: Record<string, { title: string; advice: string }>
+}
+
 export interface Assessment {
   id: string
   title: string
@@ -15,6 +32,7 @@ export interface Assessment {
   cardStyle?: 'default' | 'flip' | 'glow'
   professionalQuestions?: ProfessionalQuestionSet
   professionalCalculator?: (answers: Answer[], mode: string) => Record<string, any> | ProfessionalAssessmentResult
+  resultInterpretation?: ResultInterpretation
 }
 
 export interface ProfessionalQuestionSet {
@@ -138,6 +156,31 @@ export interface Answer {
   isCorrect?: boolean
 }
 
+export interface IsomerAnalysis {
+  extremity: number
+  midpointAvoidance: number
+  uniquenessPercentile: number
+  archetype: string
+  archetypeDescription: string
+  responsePathSignature: string
+}
+
+export interface DemographicSegment {
+  group: string
+  percentage: string
+  coordinates: { x: number; y: number }
+  clusters: { name: string; x: number; y: number }[]
+  peerComparison?: Record<string, number>
+}
+
+export interface ThemeRelevance {
+  [theme: string]: {
+    weight: number
+    description: string
+    contributionScore: number
+  }
+}
+
 export interface AssessmentResult {
   [key: string]: any
   type?: string
@@ -217,17 +260,23 @@ export interface AssessmentResult {
     [key: string]: unknown
   }
   scores?: Record<string, number>
+  
+  isomerAnalysis?: IsomerAnalysis
+  demographicSegment?: DemographicSegment
+  themeRelevance?: ThemeRelevance
 }
 
 export interface Dimension {
   name: string
+  dimensionId?: string
   score: number
+  rawScore?: number
+  percentile?: number
   maxScore?: number
   description?: string
   clarity?: number
   tScore?: number
   level?: string
-  percentile?: number
   confidenceInterval?: {
     lower: number
     upper: number
@@ -259,7 +308,7 @@ export interface UserProfile {
 }
 
 export interface CompletedAssessment {
-  id?: string
+  id: string
   assessmentId: string
   completedAt: Date
   result: any

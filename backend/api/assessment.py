@@ -218,7 +218,7 @@ async def export_report_pdf(
                         content=pdf_bytes,
                         media_type="application/pdf",
                         headers={
-                            "Content-Disposition": f"attachment; filename=HumanOS-Report-{result_hash[:8]}.pdf"
+                            "Content-Disposition": f"attachment; filename=MindMirror-Report-{result_hash[:8]}.pdf"
                         }
                     )
                     
@@ -287,7 +287,7 @@ async def export_report_image(
                         content=screenshot_bytes,
                         media_type="image/png",
                         headers={
-                            "Content-Disposition": f"attachment; filename=HumanOS-Report-{result_hash[:8]}.png"
+                            "Content-Disposition": f"attachment; filename=MindMirror-Report-{result_hash[:8]}.png"
                         }
                     )
                     

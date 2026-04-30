@@ -53,8 +53,6 @@ const MODE_BADGE_STYLES: Partial<Record<AssessmentMode, { gradient: string; icon
   normal: { gradient: 'from-blue-500 to-cyan-500', icon: <Layers size={14} /> },
   advanced: { gradient: 'from-purple-500 to-pink-500', icon: <Zap size={14} /> },
   professional: { gradient: 'from-amber-500 to-orange-500', icon: <Gauge size={14} /> },
-  'historical-scenario': { gradient: 'from-emerald-500 to-teal-500', icon: <BookOpen size={14} /> },
-  'life-simulation': { gradient: 'from-indigo-500 to-blue-500', icon: <Activity size={14} /> },
 }
 
 function PoliticalIdeologySpectrum({

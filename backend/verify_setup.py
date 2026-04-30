@@ -27,7 +27,7 @@ def run_check(name: str, check_fn) -> bool:
 
 def main():
     color_print("\n" + "="*60, "blue")
-    color_print("  🧪 HumanOS 后端全面验证套件", "blue")
+    color_print("  🧪 MindMirror 后端全面验证套件", "blue")
     color_print("="*60 + "\n", "blue")
 
     all_passed = True

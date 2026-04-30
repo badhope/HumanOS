@@ -16,7 +16,7 @@
  */
 
 import { useEffect, useState, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, QrCode, Home, Trophy, Clock, Link2 } from 'lucide-react'
 import confetti from 'canvas-confetti'
@@ -25,16 +25,20 @@ import { useAppStore } from '../store'
 import { getAssessmentById } from '@data/assessments'
 import ReportRouter from '@components/reports/lazy'
 import ResultExportButton from '@components/ResultExportButton'
+import { KnowledgeInjector } from '@components/reports/KnowledgePanel'
 import { apiClient } from '@services/apiClient'
 
 export default function Results() {
   const { id, hash } = useParams<{ id: string; hash: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+  const stateResult = location.state as any
   const completedAssessments = useAppStore((state) => state.completedAssessments)
   const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment)
   const [showQRCode, setShowQRCode] = useState(false)
   const [restoring, setRestoring] = useState(false)
   const [restoreError, setRestoreError] = useState<string | null>(null)
+  const [, forceUpdate] = useState({})
   const reportRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -62,7 +66,7 @@ export default function Results() {
           completedAt: new Date(),
         })
 
-        navigate(`/results/${recordId}`, { replace: true })
+        navigate(`/legacy/results/${recordId}`, { replace: true })
       })
       .catch((e) => {
         const message = controller.signal.aborted 
@@ -84,19 +88,77 @@ export default function Results() {
   const resultRecord = completedAssessments.find((a) => a.id === id)
 
   const assessment = resultRecord ? getAssessmentById(resultRecord.assessmentId) : undefined
+  const [recordFound, setRecordFound] = useState(!!resultRecord || !!stateResult)
 
   useEffect(() => {
     if (!id && !hash) {
-      navigate('/')
+      navigate('/assessments')
       return
     }
 
     if (hash || restoring) return
 
-    if (!resultRecord) {
-      navigate('/')
+    if (stateResult && !resultRecord) {
+      addCompletedAssessment({
+        id: id!,
+        assessmentId: stateResult.assessment_id || stateResult.assessmentId || id!,
+        answers: [],
+        result: stateResult,
+        completedAt: new Date(),
+      })
+      console.log('✅ 结果已自动持久化到Store')
+    }
+
+    if (resultRecord || stateResult) {
+      setRecordFound(true)
       return
     }
+
+    let attempts = 0
+    const maxAttempts = 50
+    
+    const retryInterval = setInterval(() => {
+      attempts++
+      const latestRecord = useAppStore.getState().completedAssessments.find((a) => a.id === id)
+      
+      if (latestRecord) {
+        clearInterval(retryInterval)
+        console.log(`✅ 测评记录找到，用时 ${attempts * 100}ms`)
+        setRecordFound(true)
+        return
+      }
+      
+      if (attempts >= maxAttempts) {
+        clearInterval(retryInterval)
+        console.log(`❌ 未找到测评记录，重试了 ${attempts} 次`)
+        navigate('/assessments')
+      }
+    }, 100)
+    
+    return () => clearInterval(retryInterval)
+  }, [id, hash, restoring, resultRecord, stateResult, navigate, addCompletedAssessment])
+
+  if (!recordFound && !resultRecord && !stateResult) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
+          <h2 className="text-2xl font-bold text-white mb-2">正在加载测评结果...</h2>
+          <p className="text-white/60 mb-6">请稍候，正在同步数据</p>
+          <button
+            onClick={() => navigate('/assessments')}
+            className="px-6 py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+            type="button"
+          >
+            返回测评列表
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  useEffect(() => {
+    if (!resultRecord && !stateResult) return
 
     const duration = 3 * 1000
     const animationEnd = Date.now() + duration
@@ -245,6 +307,11 @@ export default function Results() {
             mode={(resultRecord.mode as 'normal' | 'advanced' | 'professional') || 'normal'}
           />
         </div>
+
+        <KnowledgeInjector
+          assessmentId={assessment.id}
+          result={resultRecord.result as Record<string, any>}
+        />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

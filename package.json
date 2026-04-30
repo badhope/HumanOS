@@ -1,10 +1,10 @@
 {
-  "name": "humanos",
-  "version": "2.5.0",
-  "description": "HumanOS - Hearts of Iron风格政治经济模拟器 + 开源专业测评平台，钢铁雄心级大战略游戏",
+  "name": "mindmirror",
+  "version": "3.0.0",
+  "description": "心镜 MindMirror - 照见自己，成为更好的自己。开源专业心理测评与成长平台，专业测评 + 训练系统 + 成长追踪",
   "author": {
-    "name": "HumanOS Team",
-    "email": "contact@humanos.dev",
+    "name": "观心界团队",
+    "email": "contact@guanxinjie.dev",
     "url": "https://github.com/badhope"
   },
   "main": "dist/index.html",
@@ -43,16 +43,12 @@
     "eq-test",
     "iq-test",
     "psychological-test",
-    "skill-assessment",
     "online-quiz",
     "mbti",
     "big-five",
     "ocean",
     "ideology",
     "political-compass",
-    "parenting-assessment",
-    "career-planning",
-    "ability-test",
     "personality-analysis",
     "psychological-assessment",
     "react",
@@ -62,11 +58,10 @@
     "web-app",
     "open-source",
     "测评平台",
-    "情商测评",
-    "人格测试",
+    "人形图鉴",
     "心理测评",
-    "职业测评",
-    "技能评估"
+    "人格测试",
+    "职业测评"
   ],
   "engines": {
     "node": ">=18.0.0",
@@ -145,6 +140,7 @@
     "tailwindcss": "^3.3.6",
     "terser": "^5.46.1",
     "typescript": "^5.2.2",
+    "typescript-eslint": "^8.59.0",
     "vite": "^5.0.0",
     "vite-plugin-pwa": "^1.2.0"
   },

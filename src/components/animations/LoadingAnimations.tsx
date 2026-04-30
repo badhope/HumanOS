@@ -786,7 +786,7 @@ export function PageLoadingOverlay({
               className="flex flex-col items-center gap-4"
             >
               <p className="text-white/95 text-3xl font-bold tracking-[0.2em]">
-                HumanOS
+                MindMirror
               </p>
               <p className="text-white/65 text-xl">
                 {text}

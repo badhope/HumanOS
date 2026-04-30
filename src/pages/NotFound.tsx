@@ -1,17 +1,18 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Home, ArrowLeft, Search } from 'lucide-react'
+import { PageWrapper } from '@components/layout'
 
 export default function NotFound() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+    <PageWrapper type="standard" background="gradient" centered>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-center max-w-2xl"
+        className="text-center"
       >
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
@@ -87,6 +88,6 @@ export default function NotFound() {
           </p>
         </motion.div>
       </motion.div>
-    </div>
+    </PageWrapper>
   )
 }

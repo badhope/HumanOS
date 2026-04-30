@@ -3,27 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HumanOS - 重定向中...</title>
+  <title>观心界 - 重定向中...</title>
   <script type="text/javascript">
-    // 单页应用路由处理
+    // GitHub Pages SPA 404 重定向处理
     (function() {
       var redirect = function() {
         var path = window.location.pathname;
         var search = window.location.search;
         var hash = window.location.hash;
         
-        // 获取仓库名称（从 base 路径）
-        var repoName = 'HumanOS';
-        
-        // 如果是 GitHub Pages
-        if (window.location.hostname.includes('github.io')) {
-          // 将路径转换为 hash 路由
-          var cleanPath = path.replace('/' + repoName, '') || '/';
-          window.location.replace(window.location.origin + '/' + repoName + '/#' + cleanPath + search + hash);
-        } else {
-          // 其他环境，重定向到根路径
-          window.location.replace(window.location.origin + '/#' + path + search + hash);
+        // 如果已经是 hash 路由，不处理
+        if (path === '/' && hash.startsWith('#/')) {
+          return;
         }
+        
+        // 清理路径，移除首尾斜杠
+        var cleanPath = path.replace(/^\/+|\/+$/g, '') || '';
+        var fullPath = cleanPath ? '/' + cleanPath : '/';
+        
+        // 重定向到 HashRouter 格式
+        window.location.replace(window.location.origin + '/#' + fullPath + search + hash);
       };
       
       redirect();

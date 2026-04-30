@@ -48,7 +48,7 @@ export default function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center">
                 <User className="w-10 h-10 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-white mb-4">欢迎来到 HumanOS</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">欢迎来到 心镜 MindMirror</h2>
               <p className="text-white/60 mb-8">创建你的个人资料，开始探索自我之旅</p>
               <motion.button
                 whileHover={{ scale: 1.05 }}

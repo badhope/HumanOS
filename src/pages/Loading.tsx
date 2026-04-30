@@ -3,6 +3,8 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Brain, Sparkles, BarChart3, FileText, Cloud, CloudOff, Server } from 'lucide-react'
 import type { CalculationResponse as UnifiedCalculationResult } from '@services/apiClient'
+import { PageWrapper } from '@components/layout'
+import { useAppStore } from '../store'
 
 const loadingSteps = [
   { icon: Brain, text: '分析答题数据...', delay: 0 },
@@ -21,6 +23,7 @@ export default function Loading() {
   const navigate = useNavigate()
   const location = useLocation()
   const state = location.state as LoadingState
+  const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment)
 
   const calculationInfo = useMemo(() => {
     if (state?.calculationSource === 'backend') {
@@ -56,17 +59,27 @@ export default function Loading() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate(`/results/${id}`, { state: state?.calculationResult })
+      if (state?.calculationResult) {
+        addCompletedAssessment({
+          id: id!,
+          assessmentId: state.calculationResult.assessment_id || id!,
+          answers: [],
+          result: state.calculationResult,
+          completedAt: new Date(),
+        })
+      }
+      
+      navigate(`/legacy/results/${id}`, { state: state?.calculationResult })
     }, loadTime)
 
     return () => clearTimeout(timer)
-  }, [id, navigate, loadTime, state])
+  }, [id, navigate, loadTime, state, addCompletedAssessment])
 
   const InfoIcon = calculationInfo.icon
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 flex items-center justify-center">
-      <div className="text-center px-4">
+    <PageWrapper type="standard" background="gradient" centered>
+      <div className="text-center">
         <motion.div
           className="relative w-32 h-32 mx-auto mb-8"
           initial={{ opacity: 0, scale: 0.8 }}
@@ -178,6 +191,6 @@ export default function Loading() {
           ))}
         </motion.div>
       </div>
-    </div>
+    </PageWrapper>
   )
 }

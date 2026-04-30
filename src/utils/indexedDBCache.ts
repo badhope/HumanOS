@@ -1,4 +1,4 @@
-const DB_NAME = 'HumanOS-Cache'
+const DB_NAME = 'MindMirror-Cache'
 const DB_VERSION = 1
 const STORE_ASSESSMENTS = 'assessments'
 const STORE_CALCULATIONS = 'calculations'

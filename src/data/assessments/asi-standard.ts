@@ -7,7 +7,7 @@ export const asiStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   description: '塞利格曼习得性无助 | 你的逆商有多高？逆境时你如何解释决定了你的人生',
   icon: '🌊',
   category: '心理健康',
-  subcategory: '抗逆力',
+  subcategory: '积极心理学',
   difficulty: 'standard',
   duration: 6,
   quality: '学术级',
@@ -181,5 +181,48 @@ export const asiStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
       { id: '4', text: '🟢 比较同意', value: 4 },
       { id: '5', text: '✅ 完全同意', value: 5 },
     ]},
-  ]
+  ],
+
+  resultInterpretation: {
+    templateType: 'enhanced',
+    sections: [
+      {
+        id: 'cover',
+        title: '💫 ASI焦虑敏感指数量表报告',
+        type: 'cover-card',
+        content: `
+          <div className="relative overflow-hidden rounded-2xl p-8 bg-gradient-to-br from-cyan-950 via-sky-800 to-blue-700">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-sky-400/10 rounded-full -translate-y-24 translate-x-24 blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-cyan-500/15 rounded-full translate-y-20 -translate-x-20 blur-xl" />
+            
+            <div className="relative z-10 text-center">
+              <div className="text-7xl mb-4">🌊</div>
+              <h2 className="text-3xl font-black text-white mb-2">\${result.anxietyLevel || '焦虑敏感度评估'}</h2>
+              <p className="text-cyan-200/80 text-lg mb-4">Anxiety Sensitivity Index</p>
+              
+              <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur rounded-full px-8 py-4 border border-cyan-400/30">
+                <span className="text-white">ASI 指数</span>
+                <span className="text-2xl font-black text-cyan-300">\${result.totalScore || 30}</span>
+                <span className="text-white/60">分</span>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      {
+        id: 'dimensions',
+        title: '📊 归因风格三维度',
+        type: 'data-visualization',
+        chartType: 'radar',
+        dimensions: ['internality', 'stability', 'globality', 'control'],
+        dimensionNames: {
+          internality: '内在性',
+          stability: '稳定性',
+          globality: '普遍性',
+          control: '可控性'
+        }
+      }
+    ]
+  }
 }

@@ -1,5 +1,5 @@
 # =============================================================================
-#  HumanOS 测评系统后端主入口
+#  MindMirror 测评系统后端主入口
 # =============================================================================
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
@@ -16,7 +16,6 @@ from database.database import engine, Base
 from api.assessment import router as assessment_router
 from api.auth import router as auth_router
 from api.analytics import router as analytics_router
-from api.game import router as game_router
 
 # =============================================================================
 #  日志配置
@@ -38,7 +37,7 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("🚀 启动 HumanOS 测评系统后端服务...")
+    logger.info("🚀 启动 MindMirror 测评系统后端服务...")
     
     os.makedirs("./logs", exist_ok=True)
     os.makedirs("./data", exist_ok=True)
@@ -58,9 +57,9 @@ async def lifespan(app: FastAPI):
 #  FastAPI 应用配置
 # =============================================================================
 app = FastAPI(
-    title="HumanOS Assessment API",
+    title="MindMirror Assessment API",
     description="""
-    🧠 HumanOS 测评系统后端 API
+    🧠 MindMirror 测评系统后端 API
     
     ## 功能模块
     - ✅ 22种心理测评计算器
@@ -117,7 +116,6 @@ app.add_middleware(
 app.include_router(assessment_router, prefix="/api/v1/assessment", tags=["测评系统"])
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["用户认证"])
 app.include_router(analytics_router, prefix="/api/v1/analytics", tags=["数据分析"])
-app.include_router(game_router, prefix="/api/v1/game", tags=["国家模拟引擎"])
 
 # =============================================================================
 #  健康检查端点
@@ -126,7 +124,7 @@ app.include_router(game_router, prefix="/api/v1/game", tags=["国家模拟引擎
 async def health_check():
     return {
         "status": "healthy",
-        "service": "humanos-backend",
+        "service": "MindMirror-backend",
         "version": "2.5.0",
         "calculators": 22
     }
@@ -134,7 +132,7 @@ async def health_check():
 @app.get("/", summary="根路径信息")
 async def root():
     return {
-        "message": "🧠 HumanOS Assessment API",
+        "message": "🧠 MindMirror Assessment API",
         "docs": "/docs",
         "version": "2.5.0"
     }

@@ -47,10 +47,10 @@ export default function About() {
           className="text-center mb-16"
         >
           <h1 className="text-4xl sm:text-5xl font-bold text-gradient mb-6">
-            关于 HumanOS
+            关于 心镜 MindMirror
           </h1>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
-            HumanOS是一个专业的前端框架展示平台，演示现代Web开发的最佳实践，
+            心镜 MindMirror 是一个专业的心理测评与成长平台，演示现代Web开发的最佳实践，
             为企业客户和开发者提供参考实现。
           </p>
         </motion.div>
@@ -121,10 +121,10 @@ export default function About() {
           <Github className="w-12 h-12 text-white/40 mx-auto mb-4" />
           <h2 className="text-2xl font-semibold text-white mb-4">开源项目</h2>
           <p className="text-white/60 mb-6 max-w-xl mx-auto">
-            HumanOS是一个开源的前端框架展示项目，欢迎企业客户和开发者参考使用。
+            心镜 MindMirror 是一个开源的专业心理测评与成长项目，欢迎企业客户和开发者参考使用。
           </p>
           <a
-            href="https://github.com/badhope/HumanOS"
+            href="https://github.com/badhope/MindMirror"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-colors"
@@ -145,7 +145,7 @@ export default function About() {
             Made with <Heart className="w-4 h-4 text-pink-500" /> by badhope
           </p>
           <p className="text-white/30 text-sm mt-2">
-            © {new Date().getFullYear()} HumanOS. All rights reserved.
+            © {new Date().getFullYear()} 心镜 MindMirror. All rights reserved.
           </p>
         </motion.div>
       </div>

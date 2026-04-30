@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Heart, Users, Shield, Lock, AlertTriangle, Award, TrendingUp, Compass } from 'lucide-react'
-import { AdvancedRadarChart, CircularProgressChart } from '../charts'
+import { ComprehensiveChartSystem, CircularProgressChart } from '../charts'
 import type { AssessmentResult } from '../../types'
 
 interface AttachmentReportProps {
@@ -129,14 +129,16 @@ export default function AttachmentProfessionalReport({ result, mode = 'normal' }
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <AdvancedRadarChart
+        <ComprehensiveChartSystem
           dimensions={dimensions.map(d => ({
             name: d.name,
             score: d.score,
             maxScore: 100,
             description: d.description,
           }))}
-          animated
+          overallScore={result.score || 75}
+          assessmentType="attachment"
+          title="依恋类型四维度分析"
         />
       </motion.div>
 
