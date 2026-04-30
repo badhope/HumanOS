@@ -1,6 +1,6 @@
 version: '3.8'
 
-name: humanos
+name: mindmirror
 
 services:
   # Frontend - React + Nginx
@@ -8,14 +8,14 @@ services:
     build:
       context: ../
       dockerfile: deploy/client/Dockerfile
-    container_name: humanos-client
+    container_name: mindmirror-client
     restart: unless-stopped
     ports:
       - "80:80"
     depends_on:
       - server
     networks:
-      - humanos-network
+      - mindmirror-network
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
       interval: 30s
@@ -27,17 +27,17 @@ services:
     build:
       context: ../backend
       dockerfile: ../deploy/server/Dockerfile
-    container_name: humanos-server
+    container_name: mindmirror-server
     restart: unless-stopped
     expose:
       - "8000"
     environment:
-      - DATABASE_URL=sqlite:///data/humanos.db
+      - DATABASE_URL=sqlite:///data/mindmirror.db
       - ENVIRONMENT=production
     volumes:
-      - humanos-data:/app/data
+      - mindmirror-data:/app/data
     networks:
-      - humanos-network
+      - mindmirror-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
@@ -47,24 +47,24 @@ services:
   # Optional: Redis for caching
   redis:
     image: redis:7-alpine
-    container_name: humanos-redis
+    container_name: mindmirror-redis
     restart: unless-stopped
     expose:
       - "6379"
     volumes:
       - redis-data:/data
     networks:
-      - humanos-network
+      - mindmirror-network
     command: redis-server --appendonly yes
     profiles:
       - with-redis
 
 networks:
-  humanos-network:
+  mindmirror-network:
     driver: bridge
 
 volumes:
-  humanos-data:
+  mindmirror-data:
     driver: local
   redis-data:
     driver: local

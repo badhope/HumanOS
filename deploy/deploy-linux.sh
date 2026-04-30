@@ -2,7 +2,7 @@
 
 clear
 echo "========================================"
-echo "HumanOS - One-Click Deployment Script"
+echo "心镜 MindMirror - One-Click Deployment Script"
 echo "========================================"
 echo ""
 
