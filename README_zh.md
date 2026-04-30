@@ -1,4 +1,4 @@
-# HumanOS Reborn - 中文文档
+# MindMirror Reborn - 中文文档
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
@@ -9,8 +9,8 @@
 
 *[📖 English](./README.md) • [🌐 中文](./README_zh.md)*
 
-**[在线演示](https://badhope.github.io/HumanOS)** ·
-**[文档](https://github.com/badhope/HumanOS/wiki)** ·
+**[在线演示](https://badhope.github.io/MindMirror)** ·
+**[文档](https://github.com/badhope/MindMirror/wiki)** ·
 **[贡献指南](CONTRIBUTING.md)** ·
 **[更新日志](CHANGELOG.md)**
 
@@ -66,8 +66,8 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/badhope/HumanOS.git
-cd HumanOS
+git clone https://github.com/badhope/MindMirror.git
+cd MindMirror
 
 # 安装依赖
 npm install
@@ -94,7 +94,7 @@ npm run build
 ## 📖 项目结构
 
 ```
-HumanOS/
+MindMirror/
 ├── src/
 │   ├── components/       # 可复用UI组件
 │   ├── pages/            # 页面组件
@@ -164,7 +164,7 @@ HumanOS/
 ```bash
 # 1. Fork 仓库
 # 2. 克隆你的 fork
-git clone https://github.com/YOUR_USERNAME/HumanOS.git
+git clone https://github.com/YOUR_USERNAME/MindMirror.git
 
 # 3. 创建功能分支
 git checkout -b feature/amazing-feature
@@ -195,12 +195,13 @@ git push origin feature/amazing-feature
 - [Three.js](https://threejs.org/) - 3D 图形
 - [Tailwind CSS](https://tailwindcss.com/) - 样式
 - [Lucide](https://lucide.dev/) - 图标
-- 所有 [贡献者](https://github.com/badhope/HumanOS/graphs/contributors)
+- 所有 [贡献者](https://github.com/badhope/MindMirror/graphs/contributors)
 
 ---
 
 <div align="center">
 
-**由 HumanOS 团队用心打造 ❤️**
+**由 MindMirror 团队用心打造 ❤️**
 
 </div>
+

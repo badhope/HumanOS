@@ -437,6 +437,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <div align="center">
 
-**[View all releases](https://github.com/badhope/HumanOS/releases)**
+**[View all releases](https://github.com/badhope/MindMirror/releases)**
 
 </div>
+

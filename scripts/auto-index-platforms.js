@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 process.stdout.isTTY && process.stdout.setEncoding('utf8')
 process.stderr.isTTY && process.stderr.setEncoding('utf8')
-console.log('\n🌍 HumanOS 零注册收录平台大全')
+console.log('\n🌍 MindMirror 零注册收录平台大全')
 console.log('='.repeat(60))
 console.log('\n💯 这些平台 100% 不需要登录/注册！完全自动爬取GitHub')
 console.log('💡 你已经把代码推到GitHub了，剩下的交给时间...\n')
@@ -15,13 +15,13 @@ const PLATFORMS = [
   },
   {
     name: 'Libraries.io',
-    url: 'https://libraries.io/github/badhope/HumanOS',
+    url: 'https://libraries.io/github/badhope/MindMirror',
     time: '1-3天自动爬取',
     note: '全球最大的开源项目索引平台'
   },
   {
     name: 'Openbase.com',
-    url: 'https://openbase.com/search?q=humanos+assessment',
+    url: 'https://openbase.com/search?q=MindMirror+assessment',
     time: '1-7天自动爬取',
     note: '开发者找包对比平台'
   },
@@ -39,25 +39,25 @@ const PLATFORMS = [
   },
   {
     name: 'jsDelivr CDN',
-    url: 'https://cdn.jsdelivr.net/gh/badhope/HumanOS@main/',
+    url: 'https://cdn.jsdelivr.net/gh/badhope/MindMirror@main/',
     time: '即时生效！',
     note: '✅ 全球CDN，直接从GitHub拉取，无需发布！'
   },
   {
     name: 'Statically.io CDN',
-    url: 'https://cdn.statically.io/gh/badhope/HumanOS/main/',
+    url: 'https://cdn.statically.io/gh/badhope/MindMirror/main/',
     time: '即时生效！',
     note: '✅ 又一个直接从GitHub拉取的全球CDN'
   },
   {
     name: 'Githack.com',
-    url: 'https://raw.githack.com/badhope/HumanOS/main/',
+    url: 'https://raw.githack.com/badhope/MindMirror/main/',
     time: '即时生效！',
     note: '✅ GitHub CDN加速，国内可用'
   },
   {
     name: 'JSDelivr GH Pages',
-    url: 'https://badhope.github.io/HumanOS/',
+    url: 'https://badhope.github.io/MindMirror/',
     time: '已开启',
     note: '✅ GitHub Pages 全球访问'
   },
@@ -86,9 +86,9 @@ PLATFORMS.forEach((p, i) => {
 
 console.log('\n' + '='.repeat(60))
 console.log('\n🚀 三大CDN直接可用（现在就能打开！）：')
-console.log('\n   ✅ jsDelivr:  https://cdn.jsdelivr.net/gh/badhope/HumanOS@main/dist/index.html')
-console.log('   ✅ Statically: https://cdn.statically.io/gh/badhope/HumanOS/main/dist/index.html')
-console.log('   ✅ GitHack: https://raw.githack.com/badhope/HumanOS/main/dist/index.html')
+console.log('\n   ✅ jsDelivr:  https://cdn.jsdelivr.net/gh/badhope/MindMirror@main/dist/index.html')
+console.log('   ✅ Statically: https://cdn.statically.io/gh/badhope/MindMirror/main/dist/index.html')
+console.log('   ✅ GitHack: https://raw.githack.com/badhope/MindMirror/main/dist/index.html')
 console.log('\n💡 这三个CDN直接拉取你GitHub上的代码，连部署都省了！')
 
 console.log('\n🇨🇳 国内开发者友好方案：')
@@ -106,3 +106,4 @@ console.log('   ✅ Libraries.io 3天内会收录你')
 console.log('   ✅ GitHub搜索已经能搜到你的项目了')
 console.log('')
 console.log('🎉 躺着就能被全球开发者发现！\n')
+

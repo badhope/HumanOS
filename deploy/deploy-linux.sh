@@ -50,3 +50,4 @@ echo "Useful commands:"
 echo "  docker compose logs -f    (View logs)"
 echo "  docker compose down       (Stop services)"
 echo "========================================"
+

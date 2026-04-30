@@ -13,8 +13,8 @@
 ### 1️⃣ 克隆项目
 
 ```bash
-git clone https://github.com/badhope/HumanOS.git
-cd HumanOS
+git clone https://github.com/badhope/MindMirror.git
+cd MindMirror
 ```
 
 ### 2️⃣ 初始化项目
@@ -79,7 +79,7 @@ npm run template:personal
 ## 📁 项目结构
 
 ```
-HumanOS/
+MindMirror/
 ├── src/
 │   ├── components/        # 组件
 │   │   ├── animations/    # 动画组件
@@ -186,7 +186,7 @@ npm run build
 ## ❓ 遇到问题？
 
 - 📖 查看 [常见问题](./TEMPLATE_GUIDE.md#常见问题)
-- 💬 提交 [GitHub Issue](https://github.com/badhope/HumanOS/issues)
+- 💬 提交 [GitHub Issue](https://github.com/badhope/MindMirror/issues)
 - 📧 发送邮件到 support@example.com
 
 ## 📄 许可证
@@ -196,3 +196,4 @@ MIT License - 可自由使用、修改和分发
 ---
 
 **🎉 开始构建你的心理测评平台吧！**
+

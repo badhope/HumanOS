@@ -1,9 +1,9 @@
-# HumanOS - 前后端分离部署指南
+# MindMirror - 前后端分离部署指南
 
 ## 📁 标准项目结构
 
 ```
-HumanOS/
+MindMirror/
 ├── deploy/
 │   ├── docker-compose.yml      # Docker 编排文件
 │   ├── client/
@@ -71,7 +71,7 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 
 ```env
 # 后端
-DATABASE_URL=sqlite:///data/humanos.db
+DATABASE_URL=sqlite:///data/MindMirror.db
 ENVIRONMENT=production
 CORS_ORIGINS=https://your-domain.com
 
@@ -86,14 +86,14 @@ VITE_API_URL=/api
 ```nginx
 server {
     listen 443 ssl;
-    server_name humanos.your-domain.com;
+    server_name MindMirror.your-domain.com;
 
     ssl_certificate /path/to/cert.pem;
     ssl_certificate_key /path/to/key.pem;
 
     # 前端静态文件
     location / {
-        root /var/www/humanos;
+        root /var/www/MindMirror;
         try_files $uri $uri/ /index.html;
     }
 
@@ -135,3 +135,4 @@ server {
 3. 定期备份数据库
 4. 配置日志轮转
 5. 监控服务状态
+

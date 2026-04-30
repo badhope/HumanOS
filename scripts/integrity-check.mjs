@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const srcDir = path.resolve(__dirname, '..', 'src')
 
-console.log('🔍 HumanOS 完整性检查系统启动...\n')
+console.log('🔍 MindMirror 完整性检查系统启动...\n')
 
 let totalIssues = 0
 const reports = []
@@ -130,3 +130,4 @@ if (totalIssues > 0) {
   console.log(colorize('success', '✅ 所有核心完整性检查通过'))
   process.exit(0)
 }
+

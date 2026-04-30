@@ -13,7 +13,7 @@ We release patches for security vulnerabilities. Currently supported versions:
 
 ## Reporting a Vulnerability
 
-We take the security of HumanOS seriously. If you have discovered a security vulnerability, we appreciate your help in disclosing it to us in a responsible manner.
+We take the security of MindMirror seriously. If you have discovered a security vulnerability, we appreciate your help in disclosing it to us in a responsible manner.
 
 ### How to Report
 
@@ -22,12 +22,12 @@ We take the security of HumanOS seriously. If you have discovered a security vul
 Instead, please report them via:
 
 1. **GitHub Security Advisory** (Preferred)
-   - Go to the [Security Advisories](https://github.com/badhope/HumanOS/security/advisories) page
+   - Go to the [Security Advisories](https://github.com/badhope/MindMirror/security/advisories) page
    - Click "Report a vulnerability"
    - Fill out the form with details about the vulnerability
 
 2. **Email**
-   - Send an email to: security@humanos.dev
+   - Send an email to: security@MindMirror.dev
    - Include "SECURITY" in the subject line
    - Provide a detailed description of the vulnerability
 
@@ -65,7 +65,7 @@ We follow the principle of **Coordinated Vulnerability Disclosure**:
 
 ### Security Best Practices
 
-When using HumanOS, we recommend:
+When using MindMirror, we recommend:
 
 - **Keep Updated**: Always use the latest version
 - **Local Data**: Remember that all data is stored locally in your browser
@@ -75,7 +75,7 @@ When using HumanOS, we recommend:
 
 ### Security Features
 
-HumanOS implements several security measures:
+MindMirror implements several security measures:
 
 - **No Server Communication**: All data stays in your browser
 - **No Tracking**: Zero analytics or tracking code
@@ -99,21 +99,22 @@ HumanOS implements several security measures:
 
 Security updates will be announced through:
 
-- [GitHub Security Advisories](https://github.com/badhope/HumanOS/security/advisories)
-- [GitHub Releases](https://github.com/badhope/HumanOS/releases)
+- [GitHub Security Advisories](https://github.com/badhope/MindMirror/security/advisories)
+- [GitHub Releases](https://github.com/badhope/MindMirror/releases)
 - [CHANGELOG.md](./CHANGELOG.md)
 
 ## Contact
 
 For any security-related questions or concerns:
 
-- **Security Email**: security@humanos.dev
-- **GitHub Security**: [Security Advisories](https://github.com/badhope/HumanOS/security/advisories)
+- **Security Email**: security@MindMirror.dev
+- **GitHub Security**: [Security Advisories](https://github.com/badhope/MindMirror/security/advisories)
 
 ---
 
 <div align="center">
 
-**Thank you for helping keep HumanOS secure!**
+**Thank you for helping keep MindMirror secure!**
 
 </div>
+

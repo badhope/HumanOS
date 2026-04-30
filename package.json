@@ -23,13 +23,13 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "homepage": "https://humanos.dpdns.org",
+  "homepage": "https://mindmirror.dpdns.org",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/badhope/HumanOS.git"
+    "url": "git+https://github.com/badhope/MindMirror.git"
   },
   "bugs": {
-    "url": "https://github.com/badhope/HumanOS/issues"
+    "url": "https://github.com/badhope/MindMirror/issues"
   },
   "funding": {
     "type": "github",

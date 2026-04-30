@@ -1,4 +1,4 @@
-# 🌍 HumanOS 开源生态收录系统
+# 🌍 MindMirror 开源生态收录系统
 
 > 🎯 目标：让全球开发者看到你的项目！
 
@@ -51,11 +51,11 @@ npm publish # 一行命令发布！
 ```
 
 **发布后自动出现在：**
-✅ npmjs.com/package/humanos
-✅ jsdelivr.com/package/npm/humanos
-✅ unpkg.com/humanos
-✅ Libraries.io/npm/humanos
-✅ Openbase.com/npm/humanos
+✅ npmjs.com/package/MindMirror
+✅ jsdelivr.com/package/npm/MindMirror
+✅ unpkg.com/MindMirror
+✅ Libraries.io/npm/MindMirror
+✅ Openbase.com/npm/MindMirror
 ✅ 全球几十个包管理器自动爬取！
 
 ---
@@ -111,3 +111,4 @@ npm publish
 ```
 
 **做完这两步，全球 50+ 开源平台自动收录！**
+

@@ -1,6 +1,6 @@
 # 贡献指南 Contributing Guide
 
-欢迎参与 HumanOS 项目的开发！
+欢迎参与 MindMirror 项目的开发！
 
 ## 如何贡献
 
@@ -59,7 +59,7 @@ src/
 
 # English Version
 
-Welcome to contribute to the HumanOS project!
+Welcome to contribute to the MindMirror project!
 
 ## How to Contribute
 
@@ -81,3 +81,4 @@ To add new assessments, please follow the format in `src/data/assessments.ts`.
 ## License
 
 By contributing, you agree that your contributions will be licensed under CC BY-NC 4.0.
+

@@ -1,4 +1,4 @@
-# 🚀 HumanOS 全球多平台一键部署系统
+# 🚀 MindMirror 全球多平台一键部署系统
 
 > ✅ 全程命令行操作，无需点击网页！
 > ✅ 一次登录，永久自动分发！
@@ -89,7 +89,7 @@ npm run deploy
 ## 🎬 部署流程演示
 
 ```
-🚀 HumanOS 多平台自动分发系统
+🚀 MindMirror 多平台自动分发系统
 ==================================================
 
 📋 分发目标: 全部平台
@@ -103,22 +103,22 @@ npm run deploy
 ▲ ===== 部署到 Vercel =====
   ⏳ Vercel 部署...
   ✅ Vercel 部署 完成
-  🔗 https://humanos.vercel.app
+  🔗 https://MindMirror.vercel.app
 
 ◈ ===== 部署到 Netlify =====
   ⏳ Netlify 部署...
   ✅ Netlify 部署 完成
-  🔗 https://humanos.netlify.app
+  🔗 https://MindMirror.netlify.app
 
 ⚡ ===== 部署到 Cloudflare Pages =====
   ⏳ Cloudflare Pages 部署...
   ✅ Cloudflare Pages 部署 完成
-  🔗 https://humanos.pages.dev
+  🔗 https://MindMirror.pages.dev
 
 🌊 ===== 部署到 Surge.sh =====
   ⏳ Surge.sh 部署...
   ✅ Surge.sh 部署 完成
-  🔗 https://humanos.surge.sh
+  🔗 https://MindMirror.surge.sh
 
 ==================================================
 📊 分发结果汇总
@@ -203,3 +203,4 @@ npm install -g vercel netlify-cli wrangler surge `
 ```
 
 🎉 **你的网站已经可以被全世界访问了！**
+

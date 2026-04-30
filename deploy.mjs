@@ -32,7 +32,7 @@ const PLATFORMS = {
   },
 }
 
-console.log('\n🚀 HumanOS 多平台自动分发系统')
+console.log('\n🚀 MindMirror 多平台自动分发系统')
 console.log('='.repeat(50))
 
 function runCommand(cmd, description) {
@@ -79,12 +79,12 @@ async function main() {
 
   if (target === 'all' || target === 'cloudflare') {
     console.log(`\n${PLATFORMS.cloudflare.emoji} ===== 部署到 ${PLATFORMS.cloudflare.name} =====`)
-    results.cloudflare = runCommand('wrangler pages deploy dist --project-name=humanos', 'Cloudflare Pages 部署')
+    results.cloudflare = runCommand('wrangler pages deploy dist --project-name=MindMirror', 'Cloudflare Pages 部署')
   }
 
   if (target === 'all' || target === 'surge') {
     console.log(`\n${PLATFORMS.surge.emoji} ===== 部署到 ${PLATFORMS.surge.name} =====`)
-    results.surge = runCommand('surge dist humanos-demo.surge.sh', 'Surge.sh 部署')
+    results.surge = runCommand('surge dist MindMirror-demo.surge.sh', 'Surge.sh 部署')
   }
 
   console.log('\n' + '='.repeat(50))
@@ -110,3 +110,4 @@ async function main() {
 }
 
 main().catch(console.error)
+

@@ -1,7 +1,7 @@
 @echo off
 cls
 echo ========================================
-echo HumanOS - One-Click Deployment Script
+echo MindMirror - One-Click Deployment Script
 echo ========================================
 echo.
 
@@ -51,3 +51,4 @@ echo   docker compose logs -f    (View logs)
 echo   docker compose down       (Stop services)
 echo ========================================
 pause
+
