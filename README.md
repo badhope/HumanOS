@@ -2,6 +2,10 @@
 <!-- MindMirror - Professional Psychological Growth Platform -->
 
 <p align="center">
+  <img src="https://neeko-copilot.bytedance.net/api/text_to_image?prompt=MindMirror%20logo%20design%2C%20elegant%20minimalist%20mirror%20shape%20with%20golden%20gradient%2C%20clean%20white%20background%2C%20professional%20brand%20identity%2C%20symmetric%20geometric%20pattern%2C%20modern%20style&image_size=square" alt="MindMirror Logo" width="200">
+</p>
+
+<p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=45&duration=4000&pause=1000&color=8B5CF6&background=0F0F23&center=true&vCenter=true&multiline=true&width=900&height=100&lines=MindMirror+%F0%9F%AA%9E;See+Yourself%2C+Become+Your+Best+Self" alt="MindMirror">
 </p>
 
@@ -93,6 +97,7 @@ Track progress ← Complete training ← Personal growth program
 
 ### 🚀 Quick Start
 
+#### Web Version
 ```bash
 # Clone the repository
 git clone https://github.com/badhope/MindMirror.git
@@ -109,6 +114,31 @@ npm run dev
 # Production build
 npm run build
 ```
+
+#### Windows Desktop Version
+无需安装，直接运行：
+```bash
+# 进入Windows版本目录
+cd Windows-Release
+
+# 双击运行
+MindMirror.exe
+```
+
+或者直接从 `Windows-Release` 文件夹运行 `MindMirror.exe`。
+
+**注意**: Windows版本已预编译，包含完整的Chromium浏览器环境，可独立运行无需安装Node.js。
+
+### 📦 Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview production build |
+| `npm run build:win` | Build Windows portable app |
+| `npm run electron:dev` | Start Electron dev mode |
 
 ---
 

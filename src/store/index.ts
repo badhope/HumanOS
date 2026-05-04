@@ -2,6 +2,8 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { UserProfile, CompletedAssessment, Answer } from '../types'
 
+export type { UserProfile, CompletedAssessment, Answer }
+
 // ============ 类型定义 ============
 
 export interface AssessmentRecord {
@@ -26,6 +28,14 @@ export interface MoodRecord {
   mood: number
   timestamp: number
   note?: string
+}
+
+export interface TrainingRecord {
+  id: string
+  programId: string
+  completedAt: number
+  duration: number
+  category: string
 }
 
 export interface UserStats {
@@ -80,6 +90,10 @@ interface AppStore {
   records: AssessmentRecord[]
   addRecord: (record: AssessmentRecord) => void
 
+  // Results cache for training recommendations
+  results: Record<string, { data: Record<string, any> }> | null
+  setResults: (results: Record<string, { data: Record<string, any> }>) => void
+
   // Achievements
   achievements: Achievement[]
   unlockAchievement: (id: string) => void
@@ -113,6 +127,14 @@ interface AppStore {
   recordMood: (mood: number, note?: string) => void
   getMoodForDate: (date: string) => MoodRecord | undefined
   getMoodTrend: (days: number) => MoodRecord[]
+
+  // Training Records
+  trainingRecords: TrainingRecord[]
+  addTrainingRecord: (record: Omit<TrainingRecord, 'id'>) => void
+  getTrainingRecords: () => TrainingRecord[]
+  getTrainingRecordsByCategory: (category: string) => TrainingRecord[]
+  getTrainingRecordsCount: () => number
+  getTotalTrainingDuration: () => number
 
   // Backward compatibility
   assessmentHistory: CompletedAssessment[]
@@ -201,6 +223,10 @@ export const useAppStore = create<AppStore>()(
           achievements: updatedAchievements,
         }
       }),
+
+      // Results cache for training recommendations
+      results: null,
+      setResults: (results) => set({ results }),
 
       // Achievements
       achievements: [...defaultAchievements],
@@ -299,6 +325,24 @@ export const useAppStore = create<AppStore>()(
           .slice(0, days)
           .reverse()
       },
+
+      // Training Records System
+      trainingRecords: [],
+      addTrainingRecord: (record) => set((state) => {
+        const newRecord: TrainingRecord = {
+          ...record,
+          id: crypto.randomUUID(),
+        }
+        return {
+          trainingRecords: [newRecord, ...state.trainingRecords],
+        }
+      }),
+      getTrainingRecords: () => get().trainingRecords,
+      getTrainingRecordsByCategory: (category) => 
+        get().trainingRecords.filter(r => r.category === category),
+      getTrainingRecordsCount: () => get().trainingRecords.length,
+      getTotalTrainingDuration: () => 
+        get().trainingRecords.reduce((acc, r) => acc + r.duration, 0),
     }),
     {
       name: 'human-os-unified', // 统一存储键

@@ -36,7 +36,7 @@ export abstract class BaseProfessionalCalculator {
 
     dimensionKeys.forEach((dimKey, dimIndex) => {
       const questionIds = this.getDimensionQuestionIds(dimKey, dimIndex)
-      let score = questionIds.reduce((sum, qid) => {
+      const score = questionIds.reduce((sum, qid) => {
         let value = answerMap[`${questionPrefix}${qid}`] ?? 3
         if (reverseScored.includes(`${questionPrefix}${qid}`)) {
           value = 6 - value

@@ -16,6 +16,14 @@ const EQ_DIMENSIONS = {
   'empathy': { name: '同理心', icon: MessageCircle, color: 'from-emerald-500 to-teal-500', description: '共情和理解他人感受的能力' },
 }
 
+const EQ_NAME_MAP: Record<string, string> = {
+  '自我觉察': 'perception',
+  '自我管理': 'regulation',
+  '自我激励': 'utilization',
+  '共情能力': 'empathy',
+  '社交技巧': 'social',
+}
+
 const EQ_LEVELS = [
   { min: 130, level: '极高', title: '情商大师', description: '卓越的情绪智力，能够敏锐感知并娴熟运用情绪力量' },
   { min: 115, level: '优秀', title: '情绪达人', description: '出色的情绪管理能力，在人际关系中游刃有余' },
@@ -114,66 +122,85 @@ export default function EQProfessionalReport({ result, mode = 'normal' }: EQRepo
         transition={{ delay: 0.2 }}
       >
         <ComprehensiveChartSystem
-          dimensions={dimensions.map(d => ({
-            name: EQ_DIMENSIONS[d.name as keyof typeof EQ_DIMENSIONS]?.name || d.name,
-            score: d.score,
-            maxScore: 100,
-            description: EQ_DIMENSIONS[d.name as keyof typeof EQ_DIMENSIONS]?.description || d.description,
-          }))}
+          dimensions={dimensions.map(d => {
+            const key = EQ_NAME_MAP[d.name]
+            const dimInfo = key ? EQ_DIMENSIONS[key as keyof typeof EQ_DIMENSIONS] : null
+            return {
+              name: dimInfo?.name || d.name,
+              score: d.score,
+              maxScore: 100,
+              description: dimInfo?.description || d.description,
+            }
+          })}
           overallScore={totalScore / 1.5}
           assessmentType="eq"
           title="五维情绪智力模型"
         />
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="glass rounded-3xl p-8"
-      >
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Sparkles className="w-6 h-6 text-pink-400" />
-          情绪智力五维深度解析
-        </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {dimensions.map((dim, index) => {
-            const dimInfo = EQ_DIMENSIONS[dim.name as keyof typeof EQ_DIMENSIONS]
-            const Icon = dimInfo?.icon || Heart
-            const level = dim.score >= 80 ? '出色' : dim.score >= 60 ? '良好' : dim.score >= 40 ? '一般' : '待提升'
-            return (
-              <motion.div
-                key={dim.name}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 + index * 0.1 }}
-                className={`bg-gradient-to-br ${dimInfo?.color || 'from-slate-500 to-gray-500'}/15 rounded-xl p-6 border border-white/10`}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="text-white font-bold text-lg">{dimInfo?.name || dim.name}</div>
-                    <div className={`text-sm px-2 py-0.5 inline-block rounded-full mt-1 ${
-                      dim.score >= 70 ? 'bg-green-500/20 text-green-300' :
-                      dim.score >= 50 ? 'bg-blue-500/20 text-blue-300' :
-                      'bg-amber-500/20 text-amber-300'
-                    }`}>
-                      {level}
+      {dimensions.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8"
+        >
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Sparkles className="w-6 h-6 text-pink-400" />
+            情绪智力五维深度解析
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {dimensions.map((dim, index) => {
+              const key = EQ_NAME_MAP[dim.name]
+              const dimInfo = key ? EQ_DIMENSIONS[key as keyof typeof EQ_DIMENSIONS] : null
+              const Icon = dimInfo?.icon || Heart
+              const score = dim.score ?? 0
+              const level = score >= 80 ? '出色' : score >= 60 ? '良好' : score >= 40 ? '一般' : '待提升'
+              return (
+                <motion.div
+                  key={dim.name || index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 + index * 0.1 }}
+                  className={`bg-gradient-to-br ${dimInfo?.color || 'from-slate-500 to-gray-500'}/15 rounded-xl p-6 border border-white/10`}
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-white font-bold text-lg">{dimInfo?.name || dim.name || '未知维度'}</div>
+                      <div className={`text-sm px-2 py-0.5 inline-block rounded-full mt-1 ${
+                        score >= 70 ? 'bg-green-500/20 text-green-300' :
+                        score >= 50 ? 'bg-blue-500/20 text-blue-300' :
+                        'bg-amber-500/20 text-amber-300'
+                      }`}>
+                        {level}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="text-right mb-3">
-                  <span className="text-3xl font-black text-white">{dim.score}</span>
-                  <span className="text-white/50 text-sm ml-1">/100</span>
-                </div>
-                <p className="text-white/60 text-sm leading-relaxed">{dimInfo?.description}</p>
-              </motion.div>
-            )
-          })}
-        </div>
-      </motion.div>
+                  <div className="text-right mb-3">
+                    <span className="text-3xl font-black text-white">{score}</span>
+                    <span className="text-white/50 text-sm ml-1">/100</span>
+                  </div>
+                  <p className="text-white/60 text-sm leading-relaxed">{dimInfo?.description || '暂无描述'}</p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8 text-center"
+        >
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
 
       <div className="grid md:grid-cols-2 gap-6">
         <motion.div

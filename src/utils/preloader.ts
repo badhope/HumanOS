@@ -52,6 +52,7 @@ class Preloader {
         await import(module)
         this.loaded.add(module)
       } catch (e) {
+        console.warn('[Preloader] 预加载模块失败:', module, e)
       }
     }
 

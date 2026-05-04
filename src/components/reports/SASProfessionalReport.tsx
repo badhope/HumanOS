@@ -21,6 +21,13 @@ const SAS_FACTORS = {
   behavior: { name: '行为改变', icon: Users, description: '回避行为、坐立不安、社会功能受损' },
 }
 
+const SAS_NAME_MAP: Record<string, string> = {
+  'social_anxiety': 'behavior',
+  'somatic_anxiety': 'somatic',
+  'cognitive_anxiety': 'mental',
+  'sleep_anxiety': 'somatic',
+}
+
 function getSASLevel(score: number) {
   return SAS_LEVELS.find(l => score >= l.min) || SAS_LEVELS[3]
 }
@@ -114,7 +121,8 @@ export default function SASProfessionalReport({ result, mode = 'normal' }: SASRe
         </h3>
         <AdvancedBarChart
           dimensions={dimensions.length > 0 ? dimensions.map(d => {
-            const info = SAS_FACTORS[d.name as keyof typeof SAS_FACTORS]
+            const key = SAS_NAME_MAP[d.name] || d.name
+            const info = SAS_FACTORS[key as keyof typeof SAS_FACTORS]
             return {
               name: info?.name || d.name,
               score: d.score,

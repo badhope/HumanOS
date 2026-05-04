@@ -129,7 +129,7 @@ export const EMOTION_TRAININGS: TrainingProgram[] = [
     icon: '🔥',
     duration: '12分钟',
     level: 3,
-    levelLabel: '深度整合',
+    levelLabel: '深度内化',
     category: 'mindfulness',
     targetDimension: 'burnout_cynicism',
     targetScoreRange: [70, 100],

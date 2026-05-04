@@ -105,6 +105,7 @@ class IndexedDBCache {
         tx.oncomplete = () => resolve()
       })
     } catch (e) {
+      console.warn('[IndexedDB] 存储计算结果失败', e)
     }
   }
 
@@ -148,6 +149,7 @@ class IndexedDBCache {
         }
       }
     } catch (e) {
+      console.warn('[IndexedDB] 清理过期计算失败', e)
     }
   }
 

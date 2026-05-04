@@ -17,10 +17,10 @@ interface SearchResult {
 }
 
 const STATIC_PAGES: SearchResult[] = [
-  { id: 'home', type: 'page', title: '首页', description: '返回主页面', icon: <FileText className="w-4 h-4" />, path: '/', keywords: ['home', 'main', 'index', '主页', '首页'] },
-  { id: 'dashboard', type: 'page', title: '个人面板', description: '查看历史记录与统计', icon: <TrendingUp className="w-4 h-4" />, path: '/dashboard', keywords: ['dashboard', 'history', 'stats', '个人', '历史', '统计'] },
-  { id: 'category-pro', type: 'page', title: '专业测评', description: '专业心理测评集合', icon: <Sparkles className="w-4 h-4" />, path: '/category/professional', keywords: ['专业', '心理', 'professional', 'bigfive', 'personality'] },
-  { id: 'category-fun', type: 'page', title: '娱乐测评', description: '趣味娱乐测评集合', icon: <Sparkles className="w-4 h-4" />, path: '/category/entertainment', keywords: ['娱乐', '趣味', 'fun', 'entertainment', 'anime', 'game'] },
+  { id: 'home', type: 'page', title: '今日', description: '返回主页面', icon: <FileText className="w-4 h-4" />, path: '/app/daily', keywords: ['home', 'main', 'index', '主页', '首页', '今日'] },
+  { id: 'dashboard', type: 'page', title: '成长', description: '查看历史记录与统计', icon: <TrendingUp className="w-4 h-4" />, path: '/app/progress', keywords: ['dashboard', 'history', 'stats', '个人', '历史', '统计', '成长'] },
+  { id: 'discover', type: 'page', title: '探索', description: '发现测评与工具', icon: <Sparkles className="w-4 h-4" />, path: '/app/discover', keywords: ['专业', '心理', '测评', 'discover', 'bigfive', 'personality', '探索'] },
+  { id: 'training', type: 'page', title: '训练', description: '心理能力训练', icon: <Sparkles className="w-4 h-4" />, path: '/app/training', keywords: ['训练', '能力', 'training', '心理训练'] },
   { id: 'world-sim', type: 'page', title: '国家模拟器', description: '宏观经济政策模拟', icon: <Sparkles className="w-4 h-4" />, path: '/world', keywords: ['经济', '模拟', 'simulator', 'economy', '国家', 'policy'] },
 ]
 
@@ -48,7 +48,7 @@ export default function QuickSearchModal() {
       title: ass.title,
       description: `${ass.questionCount || 20}题 · 约 ${ass.duration} 分钟`,
       icon: <FileText className="w-4 h-4" />,
-      path: `/assessment/${ass.id}`,
+      path: `/legacy/mode-select/${ass.id}`,
       category: ass.category,
       keywords: [ass.title, ass.id, ass.category],
     }))

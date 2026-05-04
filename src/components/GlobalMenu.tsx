@@ -281,7 +281,7 @@ export default function GlobalMenu() {
                   <button
                     onClick={() => {
                       setProfileOpen(false)
-                      navigate('/categories')
+                      navigate('/app/discover')
                     }}
                     className="px-6 py-2 rounded-xl bg-violet-500/20 text-violet-300 hover:bg-violet-500/30 transition-colors"
                     type="button"

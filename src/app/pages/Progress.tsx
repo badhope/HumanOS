@@ -1,13 +1,23 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Calendar, Flame, Target, TrendingUp, ChevronRight, Brain, Clock, Award, Activity } from 'lucide-react'
-import { useAppStore } from '../../store'
+import { useAppStore, type MoodRecord, type TrainingRecord } from '../../store'
 import AdvancedRadarChart from '../../components/charts/AdvancedRadarChart'
+import AchievementsPanel from '../components/AchievementsPanel'
+import type { CompletedAssessment } from '../../types'
+
+const COLOR_MAP: Record<string, { bg: string; border: string; text: string }> = {
+  orange: { bg: 'rgba(251, 146, 60, 0.1)', border: 'rgba(251, 146, 60, 0.2)', text: '#fb923c' },
+  pink: { bg: 'rgba(236, 72, 153, 0.1)', border: 'rgba(236, 72, 153, 0.2)', text: '#ec4899' },
+  violet: { bg: 'rgba(139, 92, 246, 0.1)', border: 'rgba(139, 92, 246, 0.2)', text: '#8b5cf6' },
+  emerald: { bg: 'rgba(16, 185, 129, 0.1)', border: 'rgba(16, 185, 129, 0.2)', text: '#10b981' },
+}
 
 export default function Progress() {
-  const { moodHistory, completedAssessments } = useAppStore() as any
+  const { moodHistory, completedAssessments, trainingRecords: storeTrainingRecords } = useAppStore()
   const navigate = useNavigate()
-  const trainingRecords = JSON.parse(localStorage.getItem('training-records') || '[]')
+  const localStorageRecords = JSON.parse(localStorage.getItem('training-records') || '[]') as TrainingRecord[]
+  const trainingRecords: TrainingRecord[] = storeTrainingRecords.length > 0 ? storeTrainingRecords : localStorageRecords
 
   const last7Days = Array.from({ length: 7 }, (_, i) => {
     const date = new Date()
@@ -16,7 +26,7 @@ export default function Progress() {
   })
 
   const moodByDay = last7Days.map(date => {
-    const record = moodHistory.find((m: any) => m.date === date)
+    const record = moodHistory.find((m: MoodRecord) => m.date === date)
     return {
       date,
       shortDate: date.slice(5),
@@ -36,8 +46,8 @@ export default function Progress() {
       const date = new Date(today)
       date.setDate(date.getDate() - i)
       const dateStr = date.toISOString().split('T')[0]
-      const hasActivity = moodHistory.some((m: any) => m.date === dateStr) || 
-        trainingRecords.some((r: any) => new Date(r.completedAt).toISOString().split('T')[0] === dateStr)
+      const hasActivity = moodHistory.some((m: MoodRecord) => m.date === dateStr) || 
+        trainingRecords.some((r: TrainingRecord) => new Date(r.completedAt).toISOString().split('T')[0] === dateStr)
       if (hasActivity) streak++
       else if (i > 0) break
     }
@@ -48,7 +58,7 @@ export default function Progress() {
     const date = new Date()
     date.setDate(date.getDate() - (29 - i))
     const dateStr = date.toISOString().split('T')[0]
-    const record = moodHistory.find((m: any) => m.date === dateStr)
+    const record = moodHistory.find((m: MoodRecord) => m.date === dateStr)
     return {
       date: dateStr,
       day: date.getDate(),
@@ -57,7 +67,7 @@ export default function Progress() {
   })
 
   const trainingByCategory: Record<string, number> = {}
-  trainingRecords.forEach((r: any) => {
+  trainingRecords.forEach((r: TrainingRecord) => {
     trainingByCategory[r.category] = (trainingByCategory[r.category] || 0) + 1
   })
 
@@ -69,7 +79,7 @@ export default function Progress() {
     { name: '趣味', score: Math.min(100, (trainingByCategory['fun'] || 0) * 20), maxScore: 100 },
   ]
 
-  const totalMinutes = Math.floor(trainingRecords.reduce((s: number, r: any) => s + r.duration, 0) / 60)
+  const totalMinutes = Math.floor(trainingRecords.reduce((s: number, r: TrainingRecord) => s + r.duration, 0) / 60)
 
   return (
     <motion.div
@@ -97,21 +107,23 @@ export default function Progress() {
         className="grid grid-cols-4 gap-3"
       >
         {[
-          { label: '连续打卡', value: streakDays, unit: '天', icon: Flame, color: 'orange' },
-          { label: '心情记录', value: moodHistory.length, unit: '次', icon: Activity, color: 'pink' },
-          { label: '完成测评', value: completedAssessments.length, unit: '个', icon: Target, color: 'violet' },
-          { label: '训练时长', value: totalMinutes, unit: '分', icon: Clock, color: 'emerald' },
+          { label: '连续打卡', value: streakDays, unit: '天', icon: Flame, color: 'orange' as const },
+          { label: '心情记录', value: moodHistory.length, unit: '次', icon: Activity, color: 'pink' as const },
+          { label: '完成测评', value: completedAssessments.length, unit: '个', icon: Target, color: 'violet' as const },
+          { label: '训练时长', value: totalMinutes, unit: '分', icon: Clock, color: 'emerald' as const },
         ].map((stat, i) => {
           const Icon = stat.icon
+          const colors = COLOR_MAP[stat.color]
           return (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 + i * 0.05 }}
-              className={`bg-${stat.color}-500/10 rounded-2xl p-3 border border-${stat.color}-500/20 text-center`}
+              className="rounded-2xl p-3 border text-center"
+              style={{ backgroundColor: colors.bg, borderColor: colors.border }}
             >
-              <Icon size={16} className={`mx-auto mb-1 text-${stat.color}-400`} />
+              <Icon size={16} className="mx-auto mb-1" style={{ color: colors.text }} />
               <div className="text-xl font-bold">{stat.value}<span className="text-xs font-normal text-white/40">{stat.unit}</span></div>
               <div className="text-[10px] text-white/40">{stat.label}</div>
             </motion.div>
@@ -259,6 +271,8 @@ export default function Progress() {
           <span>多</span>
         </div>
       </motion.div>
+
+      <AchievementsPanel />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

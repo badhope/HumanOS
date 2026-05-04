@@ -239,42 +239,55 @@ export default function MBTIProfessionalReport({ result, mode = 'normal' }: MBTI
         />
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="glass rounded-3xl p-8"
-      >
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Compass className="w-6 h-6 text-violet-400" />
-          维度深度解析 · 5大倾向
-        </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {dimensions.map((dim, index) => {
-            const bandInfo = getDimensionBand(dim.name, dim.score)
-            return (
-              <motion.div
-                key={dim.name}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 + index * 0.08 }}
-                className="bg-gradient-to-br from-violet-500/10 to-purple-500/10 rounded-xl p-5 border border-violet-500/20"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-white font-semibold text-lg">{dim.name}</span>
-                  <span className="text-violet-300 text-2xl font-bold">{dim.score}%</span>
-                </div>
-                <div className="text-violet-200 text-sm font-medium mb-2">
-                  {bandInfo.band}
-                </div>
-                <p className="text-white/60 text-sm leading-relaxed">
-                  {bandInfo.description}
-                </p>
-              </motion.div>
-            )
-          })}
-        </div>
-      </motion.div>
+      {dimensions.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8"
+        >
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Compass className="w-6 h-6 text-violet-400" />
+            维度深度解析 · 5大倾向
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {dimensions.map((dim, index) => {
+              const bandInfo = getDimensionBand(dim.name, dim.score)
+              return (
+                <motion.div
+                  key={dim.name || index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 + index * 0.08 }}
+                  className="bg-gradient-to-br from-violet-500/10 to-purple-500/10 rounded-xl p-5 border border-violet-500/20"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-white font-semibold text-lg">{MBTI_DIMENSION_NAMES[dim.name] || dim.name || '未知维度'}</span>
+                    <span className="text-violet-300 text-2xl font-bold">{(dim.score ?? 0)}%</span>
+                  </div>
+                  <div className="text-violet-200 text-sm font-medium mb-2">
+                    {bandInfo?.band || '未知'}
+                  </div>
+                  <p className="text-white/60 text-sm leading-relaxed">
+                    {bandInfo?.description || '暂无描述'}
+                  </p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8 text-center"
+        >
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

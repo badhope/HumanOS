@@ -56,16 +56,24 @@ export default function LoveLanguageProfessionalReport({ result, mode = 'normal'
         </div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass rounded-3xl p-8">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Target className="w-6 h-6 text-pink-400" />
-          五种爱的语言雷达
-        </h3>
-        <AdvancedRadarChart dimensions={dimensions.map(d => {
-          const info = LOVE_LANGUAGES.find(l => l.id === d.name);
-          return { name: info?.name || d.name, score: d.score, maxScore: 100 };
-        })} animated />
-      </motion.div>
+      {dimensions.length > 0 ? (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass rounded-3xl p-8">
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Target className="w-6 h-6 text-pink-400" />
+            五种爱的语言雷达
+          </h3>
+          <AdvancedRadarChart dimensions={dimensions.map(d => {
+            const info = LOVE_LANGUAGES.find(l => l.id === d.name);
+            return { name: info?.name || d.name, score: d.score ?? 0, maxScore: 100 };
+          })} animated />
+        </motion.div>
+      ) : (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass rounded-3xl p-8 text-center">
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="glass rounded-3xl p-8">
         <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">

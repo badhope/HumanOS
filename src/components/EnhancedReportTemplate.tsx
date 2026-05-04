@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
 import { Award, TrendingUp, Lightbulb, Briefcase, Brain, BarChart3, GitBranch, Users, Target, Sparkles } from 'lucide-react'
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts'
-import type { AssessmentResult, ProfessionalAssessmentResult } from '../types'
+import { ComprehensiveChartSystem } from './charts'
+import type { AssessmentResult, ProfessionalAssessmentResult, Dimension } from '../types'
 
 function ScatterDistributionChart({
   userPosition,
@@ -101,27 +102,7 @@ function CircularProgressChart({
   )
 }
 
-function ComprehensiveChartSystem({
-  dimensions,
-  overallScore,
-  assessmentType,
-  ideologyScores,
-  primaryIdeology,
-  matchScore,
-  title = '多维度分析',
-}: {
-  dimensions: any[]
-  overallScore: number
-  assessmentType: string
-  ideologyScores?: Map<string, number>
-  primaryIdeology?: string
-  matchScore?: number
-  title?: string
-}) {
-  return <div className="glass rounded-3xl p-8">
-    <h3 className="text-xl font-bold text-white mb-6">{title}</h3>
-  </div>
-}
+
 
 interface EnhancedReportTemplateProps {
   result: AssessmentResult | ProfessionalAssessmentResult
@@ -198,21 +179,34 @@ export default function EnhancedReportTemplate({
         <p className="text-white/80 leading-relaxed">{safeResult.description}</p>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <ComprehensiveChartSystem
-          dimensions={safeResult.dimensions}
-          overallScore={safeResult.score}
-          assessmentType={assessmentType}
-          ideologyScores={isIdeologyTest ? ideologyScores : undefined}
-          primaryIdeology={isIdeologyTest ? primaryIdeology : undefined}
-          matchScore={isIdeologyTest ? matchScore : undefined}
-          title="数据可视化分析"
-        />
-      </motion.div>
+      {safeResult.dimensions.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <ComprehensiveChartSystem
+            dimensions={safeResult.dimensions as Dimension[]}
+            overallScore={safeResult.score}
+            assessmentType={assessmentType}
+            ideologyScores={isIdeologyTest ? ideologyScores : undefined}
+            primaryIdeology={isIdeologyTest ? primaryIdeology : undefined}
+            matchScore={isIdeologyTest ? matchScore : undefined}
+            title="数据可视化分析"
+          />
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="glass rounded-3xl p-8 text-center"
+        >
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
 
       {result.cognitiveProfile && (
         <motion.div

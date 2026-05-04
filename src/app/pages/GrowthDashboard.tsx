@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion'
-import { Brain, Heart, Users, Target, Zap, BookOpen, TrendingUp, Clock, Award } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { useMemo } from 'react'
+import { Brain, Heart, Users, Target, Zap, BookOpen, TrendingUp, Clock, Award, ArrowLeft } from 'lucide-react'
 import AdvancedRadarChart from '../../components/charts/AdvancedRadarChart'
-import { useAppStore } from '../../store'
+import { useAppStore, type TrainingRecord } from '../../store'
+import type { CompletedAssessment } from '../../types'
 
 const DIMENSIONS = [
   { key: 'emotion', name: '情绪稳定', icon: Heart, color: '#ec4899', desc: '应对焦虑、压力的能力' },
@@ -13,14 +16,46 @@ const DIMENSIONS = [
 ]
 
 export default function GrowthDashboard() {
-  const { completedAssessments, moodHistory } = useAppStore() as any
+  const navigate = useNavigate()
+  const { completedAssessments, moodHistory, trainingRecords: storeTrainingRecords, records } = useAppStore()
   
-  const trainingRecords = JSON.parse(localStorage.getItem('training-records') || '[]')
+  const trainingRecords: TrainingRecord[] = useMemo(() => {
+    try {
+      const localStorageRecords = JSON.parse(localStorage.getItem('training-records') || '[]') as TrainingRecord[]
+      return storeTrainingRecords.length > 0 ? storeTrainingRecords : localStorageRecords
+    } catch {
+      return storeTrainingRecords
+    }
+  }, [storeTrainingRecords])
   
-  const hasAnyData = completedAssessments.length > 0 || moodHistory.length > 0 || trainingRecords.length > 0
+  const allAssessments: CompletedAssessment[] = useMemo(() => {
+    if (completedAssessments.length > 0) return completedAssessments
+    
+    return records.map((r, index) => {
+      let completedAt: Date
+      try {
+        completedAt = new Date(r.completedAt)
+        if (isNaN(completedAt.getTime())) {
+          completedAt = new Date()
+        }
+      } catch {
+        completedAt = new Date()
+      }
+      
+      return {
+        id: `record-${index}-${r.assessmentId}`,
+        assessmentId: r.assessmentId,
+        answers: [],
+        result: r.result || {},
+        completedAt,
+      }
+    })
+  }, [completedAssessments, records])
+  
+  const hasAnyData = allAssessments.length > 0 || moodHistory.length > 0 || trainingRecords.length > 0
 
   const trainingByCategory: Record<string, number> = {}
-  trainingRecords.forEach((r: any) => {
+  trainingRecords.forEach((r: TrainingRecord) => {
     trainingByCategory[r.category] = (trainingByCategory[r.category] || 0) + 1
   })
 
@@ -31,8 +66,8 @@ export default function GrowthDashboard() {
       if (dim.key === 'emotion' && moodHistory.length > 0) {
         score = Math.min(100, moodHistory.length * 8)
       }
-      if (dim.key === 'cognition' && completedAssessments.length > 0) {
-        score = Math.min(100, completedAssessments.length * 12)
+      if (dim.key === 'cognition' && allAssessments.length > 0) {
+        score = Math.min(100, allAssessments.length * 12)
       }
       if (dim.key === 'social' && trainingByCategory['social']) {
         score = Math.min(100, trainingByCategory['social'] * 20)
@@ -40,8 +75,8 @@ export default function GrowthDashboard() {
       if (dim.key === 'behavior' && trainingByCategory['behavior']) {
         score = Math.min(100, trainingByCategory['behavior'] * 20)
       }
-      if (dim.key === 'values' && completedAssessments.length > 2) {
-        score = Math.min(100, (completedAssessments.length - 2) * 15)
+      if (dim.key === 'values' && allAssessments.length > 2) {
+        score = Math.min(100, (allAssessments.length - 2) * 15)
       }
       if (dim.key === 'fun' && trainingByCategory['fun']) {
         score = Math.min(100, trainingByCategory['fun'] * 25)
@@ -56,7 +91,7 @@ export default function GrowthDashboard() {
   }
 
   const growthScores = calculateGrowthScores()
-  const totalSeconds = trainingRecords.reduce((s: number, r: any) => s + r.duration, 0)
+  const totalSeconds = trainingRecords.reduce((s: number, r: TrainingRecord) => s + r.duration, 0)
   const totalMinutes = Math.floor(totalSeconds / 60)
 
   return (
@@ -67,6 +102,15 @@ export default function GrowthDashboard() {
       className="p-4 md:p-6 space-y-6"
     >
       <div className="py-4 md:hidden">
+        <motion.button
+          onClick={() => navigate('/app/progress')}
+          className="flex items-center gap-2 text-white/60 hover:text-white mb-4 transition-colors"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <ArrowLeft size={20} />
+          <span className="text-sm">返回</span>
+        </motion.button>
         <motion.h2 
           className="text-2xl md:text-3xl font-bold mb-2"
           initial={{ opacity: 0 }}
@@ -150,7 +194,7 @@ export default function GrowthDashboard() {
         className="grid grid-cols-2 gap-3"
       >
         {[
-          { label: '完成测评', value: completedAssessments.length, icon: '📝', color: 'violet' },
+          { label: '完成测评', value: allAssessments.length, icon: '📝', color: 'violet' },
           { label: '完成训练', value: trainingRecords.length, icon: '🏋️', color: 'pink' },
           { label: '心情打卡', value: moodHistory.length, icon: '😊', color: 'amber' },
           { label: '累计时长', value: totalMinutes + '分', icon: '⏱️', color: 'emerald' },

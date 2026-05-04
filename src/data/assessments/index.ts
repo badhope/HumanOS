@@ -182,10 +182,10 @@ const assessmentIdAliases: Record<string, string> = {
   'mental-age': 'mental-age',
   'sbti': 'sbti-personality',
   'officialdom': 'officialdom-dream',
-  'disc': 'mft-standard',
-  'enneagram': 'mft-standard',
-  'love-language': 'mft-standard',
-  'via-character': 'mft-standard',
+  'disc': 'ocean-bigfive',
+  'enneagram': 'ocean-bigfive',
+  'love-language': 'eq-goleman',
+  'via-character': 'eq-goleman',
 }
 
 export function getAssessmentById(id: string) {

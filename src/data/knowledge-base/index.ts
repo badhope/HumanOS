@@ -24,7 +24,7 @@ export function getKnowledgeForResult(
     const typeMatch = String(assessmentId).toLowerCase()
     
     if (typeMatch.includes('mbti') || typeMatch.includes('sbti') || typeMatch.includes('16personalities')) {
-      let typeCode = result.type || (result.dimension?.type)
+      const typeCode = result.type || (result.dimension?.type)
       if (typeCode) {
         const profile = getMBTITheory(typeCode)
         if (profile) {

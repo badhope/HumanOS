@@ -28,7 +28,7 @@ class VisitorIdentityService {
   }
 
   private init() {
-    let stored = localStorage.getItem(VISITOR_ID_KEY)
+    const stored = localStorage.getItem(VISITOR_ID_KEY)
     
     if (stored) {
       try {
@@ -116,7 +116,9 @@ class VisitorIdentityService {
     try {
       const cookieValue = btoa(JSON.stringify({ id: this.profile.id }))
       document.cookie = `${VISITOR_COOKIE_KEY}=${cookieValue}; max-age=31536000; path=/; SameSite=Lax`
-    } catch {}
+    } catch (e) {
+      console.warn('[VisitorIdentity] Cookie存储失败', e)
+    }
   }
 
   getVisitorId(): string {

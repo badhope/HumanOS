@@ -50,6 +50,20 @@ const DISC_WORK_STYLES = {
   C: '精准流程、充足时间、质量优先、数据说话',
 }
 
+const DISC_NAME_MAP: Record<string, string> = {
+  '支配型': 'D',
+  '影响型': 'I',
+  '稳健型': 'S',
+  '谨慎型': 'C',
+}
+
+const DISC_KEY_TO_NAME: Record<string, string> = {
+  'D': '支配型',
+  'I': '影响型',
+  'S': '稳健型',
+  'C': '谨慎型',
+}
+
 export default function DISCProfessionalReport({ result, mode = 'normal' }: DISCReportProps) {
   const dimensions = result.dimensions || []
   const primaryType = result.primaryType || 'D'
@@ -140,52 +154,70 @@ export default function DISCProfessionalReport({ result, mode = 'normal' }: DISC
           DISC 四维行为画像
         </h3>
         <ComprehensiveChartSystem
-          dimensions={dimensions.map(d => ({
-            name: DISC_TYPES[d.name as keyof typeof DISC_TYPES]?.name.split(' · ')[0] || d.name,
-            score: d.score,
-            maxScore: 100,
-            description: d.description,
-          }))}
+          dimensions={dimensions.map(d => {
+            const key = DISC_NAME_MAP[d.name]
+            const discType = key ? DISC_TYPES[key as keyof typeof DISC_TYPES] : null
+            return {
+              name: discType?.name.split(' · ')[0] || d.name,
+              score: d.score,
+              maxScore: 100,
+              description: d.description,
+            }
+          })}
           overallScore={result.score || 75}
           assessmentType="disc"
           title="DISC 行为风格画像"
         />
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"
-      >
-        {Object.entries(DISC_TYPES).map(([key, info], index) => {
-          const Icon = info.icon
-          const dimScore = dimensions.find(d => d.name === key)?.score || 0
-          return (
-            <motion.div
-              key={key}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 + index * 0.1 }}
-              className={`bg-gradient-to-br ${info.color}/15 rounded-xl p-6 border border-white/10`}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-                  <Icon className="w-6 h-6 text-white" />
+      {dimensions.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          {Object.entries(DISC_TYPES).map(([key, info], index) => {
+            const Icon = info.icon
+            const chineseName = DISC_KEY_TO_NAME[key]
+            const dimScore = dimensions.find(d => d.name === chineseName)?.score ?? 0
+            return (
+              <motion.div
+                key={key}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 + index * 0.1 }}
+                className={`bg-gradient-to-br ${info.color}/15 rounded-xl p-6 border border-white/10`}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <CircularProgressChart
+                    score={dimScore}
+                    size="small"
+                    colorScheme={key === 'D' ? 'red' : key === 'I' ? 'amber' : key === 'S' ? 'green' : 'blue'}
+                    showPercentage
+                  />
                 </div>
-                <CircularProgressChart
-                  score={dimScore}
-                  size="small"
-                  colorScheme={key === 'D' ? 'red' : key === 'I' ? 'amber' : key === 'S' ? 'green' : 'blue'}
-                  showPercentage
-                />
-              </div>
-              <div className="text-white font-bold mb-2">{info.name.split(' · ')[0]}</div>
-              <p className="text-white/60 text-sm">{DISC_WORK_STYLES[key as keyof typeof DISC_WORK_STYLES]}</p>
-            </motion.div>
-          )
-        })}
-      </motion.div>
+                <div className="text-white font-bold mb-2">{info.name.split(' · ')[0]}</div>
+                <p className="text-white/60 text-sm">{DISC_WORK_STYLES[key as keyof typeof DISC_WORK_STYLES] || '暂无描述'}</p>
+              </motion.div>
+            )
+          })}
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8 text-center"
+        >
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
 
       <div className="grid md:grid-cols-2 gap-6">
         <motion.div

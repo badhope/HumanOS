@@ -53,27 +53,37 @@ export default function MoralFoundationsProfessionalReport({ result, mode = 'nor
         </div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass rounded-3xl p-8">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Target className="w-6 h-6 text-pink-400" />
-          六项道德基础雷达图
-        </h3>
-        <AdvancedRadarChart dimensions={dimensions.map(d => {
-          const info = MORAL_FOUNDATIONS.find(f => f.id === d.name);
-          return { name: info?.name || d.name, score: d.score, maxScore: 100 };
-        })} animated />
-      </motion.div>
+      {dimensions.length > 0 ? (
+        <>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass rounded-3xl p-8">
+            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <Target className="w-6 h-6 text-pink-400" />
+              六项道德基础雷达图
+            </h3>
+            <AdvancedRadarChart dimensions={dimensions.map(d => {
+              const info = MORAL_FOUNDATIONS.find(f => f.id === d.name);
+              return { name: info?.name || d.name || '未知', score: d.score ?? 0, maxScore: 100 };
+            })} animated />
+          </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="glass rounded-3xl p-8">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <TrendingUp className="w-6 h-6 text-emerald-400" />
-          道德基础详细得分
-        </h3>
-        <AdvancedBarChart dimensions={dimensions.map(d => {
-          const info = MORAL_FOUNDATIONS.find(f => f.id === d.name);
-          return { name: info?.name || d.name, score: d.score, maxScore: 100, description: info?.desc };
-        })} colorScheme="gradient" animated />
-      </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="glass rounded-3xl p-8">
+            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <TrendingUp className="w-6 h-6 text-emerald-400" />
+              道德基础详细得分
+            </h3>
+            <AdvancedBarChart dimensions={dimensions.map(d => {
+              const info = MORAL_FOUNDATIONS.find(f => f.id === d.name);
+              return { name: info?.name || d.name || '未知', score: d.score ?? 0, maxScore: 100, description: info?.desc };
+            })} colorScheme="gradient" animated />
+          </motion.div>
+        </>
+      ) : (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass rounded-3xl p-8 text-center">
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
     </div>
   )
 }

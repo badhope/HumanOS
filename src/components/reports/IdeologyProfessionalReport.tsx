@@ -29,6 +29,13 @@ const IDEOLOGY_LABELS: Record<string, { name: string; color: string; description
   'conservative': { name: '保守主义者', color: 'from-violet-500 to-purple-600', description: '传统价值 + 经济自由' },
 }
 
+const IDEOLOGY_NAME_MAP: Record<string, string> = {
+  'economicScore': 'economic',
+  'socialScore': 'social',
+  'diplomaticScore': 'global',
+  'culturalScore': 'social',
+}
+
 function getIdeologyLabel(scores: Map<string, number> | undefined, primary: string | undefined) {
   if (primary && IDEOLOGY_LABELS[primary]) return IDEOLOGY_LABELS[primary]
   return IDEOLOGY_LABELS.centrist
@@ -114,10 +121,11 @@ export default function IdeologyProfessionalReport({ result, mode = 'normal', id
         </h3>
         <AdvancedBarChart
           dimensions={dimensions.length > 0 ? dimensions.map(d => {
-            const axisInfo = IDEOLOGY_AXES[d.name as keyof typeof IDEOLOGY_AXES]
+            const key = IDEOLOGY_NAME_MAP[d.name] || d.name
+            const axisInfo = IDEOLOGY_AXES[key as keyof typeof IDEOLOGY_AXES]
             return {
-              name: axisInfo?.name || d.name,
-              score: d.score,
+              name: axisInfo?.name || d.name || '未知',
+              score: d.score ?? 0,
               maxScore: d.maxScore || 100,
               description: `${axisInfo?.left || ''} ↔ ${axisInfo?.right || ''}`,
             }

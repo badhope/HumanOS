@@ -75,7 +75,7 @@ function calculateWeightedRawScores(
     const discrimination = question.meta.discrimination || 0.5
     const weight = discrimination * 1.5
 
-    let value = answer.value
+    const value = answer.value
     const socialDesirability = question.meta.socialDesirability || 0.5
     const sdCorrection = 1 - Math.abs(0.5 - socialDesirability) * 0.25
     const weightedValue = value * weight * sdCorrection
