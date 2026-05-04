@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Brain, Eye, Heart, Users, Sparkles, TrendingUp, Award, Compass, BookOpen, Infinity } from 'lucide-react'
+import { Brain, Eye, Heart, Users, Sparkles, TrendingUp, Award, Compass, BookOpen, Infinity as InfinityIcon } from 'lucide-react'
 import { AdvancedRadarChart, AdvancedBarChart } from '../charts'
 import type { AssessmentResult } from '../../types'
 import { safeDimensions, getScoreBand, selectByScore } from './utils'
@@ -32,7 +32,7 @@ const PHILO_DIMENSIONS = [
 export default function PhiloSpectrumProfessionalReport({ result, mode = 'normal' }: PhiloReportProps) {
   const dimensions = safeDimensions(result?.dimensions, ['realism', 'rationalism', 'freedom', 'individualism', 'optimism', 'worldliness'])
   const matchedSchool = selectByScore(dimensions, PHILO_SCHOOLS)
-  const SchoolIcon = Infinity
+  const SchoolIcon = InfinityIcon
   
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
@@ -81,18 +81,28 @@ export default function PhiloSpectrumProfessionalReport({ result, mode = 'normal
         transition={{ delay: 0.2 }}
         className="glass rounded-3xl p-8"
       >
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Compass className="w-6 h-6 text-violet-400" />
-          六维哲学光谱
-        </h3>
-        <AdvancedRadarChart
-          dimensions={dimensions.map((d, i) => ({
-            name: PHILO_DIMENSIONS[i]?.name || d.name,
-            score: d.score,
-            maxScore: 100,
-          }))}
-          animated
-        />
+        {dimensions.length > 0 ? (
+        <>
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Compass className="w-6 h-6 text-violet-400" />
+            六维哲学光谱
+          </h3>
+          <AdvancedRadarChart
+            dimensions={dimensions.map((d, i) => ({
+              name: PHILO_DIMENSIONS[i]?.name || d.name || '未知',
+              score: d.score ?? 0,
+              maxScore: 100,
+            }))}
+            animated
+          />
+        </>
+      ) : (
+        <div className="text-center py-8">
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </div>
+      )}
       </motion.div>
 
       <motion.div

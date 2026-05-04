@@ -25,6 +25,14 @@ const BIG_FIVE_FACETS = {
   N: ['焦虑', '愤怒敌意', '抑郁', '自我意识', '冲动性', '脆弱敏感'],
 }
 
+const BIG_FIVE_NAME_MAP: Record<string, string> = {
+  '神经质': 'N',
+  '外向性': 'E',
+  '开放性': 'O',
+  '宜人性': 'A',
+  '尽责性': 'C',
+}
+
 const getBigFiveInterpretation = (dimension: string, score: number) => {
   if (score >= 85) return { level: '非常高', description: '在人群中处于前15%，此特质表现极为突出' }
   if (score >= 70) return { level: '较高', description: '显著高于平均水平，此特质表现明显' }
@@ -107,70 +115,88 @@ const BigFiveProfessionalReport = memo(function BigFiveProfessionalReport({ resu
         transition={{ delay: 0.2 }}
       >
         <ComprehensiveChartSystem
-          dimensions={dimensions.map(d => ({
-            name: BIG_FIVE_DIMENSIONS[d.name as keyof typeof BIG_FIVE_DIMENSIONS]?.name || d.name,
-            score: d.score,
-            maxScore: 100,
-            description: BIG_FIVE_DIMENSIONS[d.name as keyof typeof BIG_FIVE_DIMENSIONS]?.description || d.description,
-          }))}
+          dimensions={dimensions.map(d => {
+            const key = BIG_FIVE_NAME_MAP[d.name]
+            const dimInfo = key ? BIG_FIVE_DIMENSIONS[key as keyof typeof BIG_FIVE_DIMENSIONS] : null
+            return {
+              name: dimInfo?.name || d.name,
+              score: d.score,
+              maxScore: 100,
+              description: dimInfo?.description || d.description,
+            }
+          })}
           overallScore={result.score || 0}
           assessmentType="bigfive"
           title="OCEAN 五维度全景画像"
         />
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="glass rounded-3xl p-8"
-      >
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Target className="w-6 h-6 text-violet-400" />
-          五维度深度解析
-        </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {dimensions.map((dim, index) => {
-            const dimInfo = BIG_FIVE_DIMENSIONS[dim.name as keyof typeof BIG_FIVE_DIMENSIONS]
-            const interpretation = getBigFiveInterpretation(dim.name, dim.score)
-            const Icon = dimInfo?.icon || Brain
-            return (
-              <motion.div
-                key={dim.name}
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 0.35 + index * 0.1 }}
-                className={`bg-gradient-to-br ${dimInfo?.color || 'from-slate-500 to-gray-500'}/15 rounded-xl p-6 border border-white/10`}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-                    <Icon className="w-6 h-6 text-white" />
+      {dimensions.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8"
+        >
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Target className="w-6 h-6 text-violet-400" />
+            五维度深度解析
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {dimensions.map((dim, index) => {
+              const key = BIG_FIVE_NAME_MAP[dim.name]
+              const dimInfo = key ? BIG_FIVE_DIMENSIONS[key as keyof typeof BIG_FIVE_DIMENSIONS] : null
+              const interpretation = getBigFiveInterpretation(dim.name, dim.score)
+              const Icon = dimInfo?.icon || Brain
+              return (
+                <motion.div
+                  key={dim.name || index}
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ delay: 0.35 + index * 0.1 }}
+                  className={`bg-gradient-to-br ${dimInfo?.color || 'from-slate-500 to-gray-500'}/15 rounded-xl p-6 border border-white/10`}
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-white font-bold text-lg">{dimInfo?.name || dim.name || '未知维度'}</div>
+                      <div className="text-white/60 text-sm">{dim.name} 维度</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-white font-bold text-lg">{dimInfo?.name || dim.name}</div>
-                    <div className="text-white/60 text-sm">{dim.name} 维度</div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-white/70 text-sm">得分</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl font-bold text-white">{dim.score ?? 0}</span>
+                      <span className={`text-sm px-2 py-0.5 rounded-full ${
+                        (dim.score ?? 0) >= 70 ? 'bg-green-500/20 text-green-300' :
+                        (dim.score ?? 0) >= 50 ? 'bg-blue-500/20 text-blue-300' :
+                        'bg-amber-500/20 text-amber-300'
+                      }`}>
+                        {interpretation.level}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-white/70 text-sm">得分</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-white">{dim.score}</span>
-                    <span className={`text-sm px-2 py-0.5 rounded-full ${
-                      dim.score >= 70 ? 'bg-green-500/20 text-green-300' :
-                      dim.score >= 50 ? 'bg-blue-500/20 text-blue-300' :
-                      'bg-amber-500/20 text-amber-300'
-                    }`}>
-                      {interpretation.level}
-                    </span>
-                  </div>
-                </div>
-                <p className="text-white/60 text-sm leading-relaxed mb-3">{dimInfo?.description}</p>
-                <p className="text-white/80 text-sm leading-relaxed">{interpretation.description}</p>
-              </motion.div>
-            )
-          })}
-        </div>
-      </motion.div>
+                  <p className="text-white/60 text-sm leading-relaxed mb-3">{dimInfo?.description || '暂无描述'}</p>
+                  <p className="text-white/80 text-sm leading-relaxed">{interpretation.description}</p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8 text-center"
+        >
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
 
       {mode === 'professional' && (
         <motion.div

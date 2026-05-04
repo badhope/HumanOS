@@ -23,6 +23,14 @@ const GMA_DIMENSIONS = {
   value: { name: '价值整合', icon: Layers, description: '价值观内化、道德发展、意义建构' },
 }
 
+const GMA_NAME_MAP: Record<string, string> = {
+  'tableManner': 'affect',
+  'speakingArt': 'cognition',
+  'giftGiving': 'relation',
+  'eyeContact': 'value',
+  'drinkingCulture': 'affect',
+}
+
 function getGMALevel(score: number) {
   return GMA_LEVELS.find(l => score >= l.min) || GMA_LEVELS[4]
 }
@@ -117,10 +125,11 @@ export default function GMAProfessionalReport({ result, mode = 'normal' }: GMARe
         </h3>
         <AdvancedBarChart
           dimensions={dimensions.length > 0 ? dimensions.map(d => {
-            const info = GMA_DIMENSIONS[d.name as keyof typeof GMA_DIMENSIONS]
+            const key = GMA_NAME_MAP[d.name] || d.name
+            const info = GMA_DIMENSIONS[key as keyof typeof GMA_DIMENSIONS]
             return {
-              name: info?.name || d.name,
-              score: d.score,
+              name: info?.name || d.name || '未知',
+              score: d.score ?? 0,
               maxScore: d.maxScore || 100,
               description: info?.description,
             }

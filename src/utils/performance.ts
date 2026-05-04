@@ -1,4 +1,4 @@
-import { memo, useMemo, useCallback, useEffect, useRef } from 'react'
+import { memo, useCallback, useEffect, useRef } from 'react'
 
 type AnyFunction = (...args: any[]) => any
 
@@ -57,8 +57,6 @@ export function useDeepMemo<T>(factory: () => T, deps: any[]): T {
   return ref.current.value
 }
 
-const TIMING_ENABLED = false
-
 export function withTiming<T extends AnyFunction>(
   fn: T,
   label: string
@@ -75,15 +73,14 @@ export function withTiming<T extends AnyFunction>(
 }
 
 export function useTiming(label: string, deps: any[] = []) {
-  if (!__TIMING_ENABLED) return
-
   useEffect(() => {
+    if (!__TIMING_ENABLED) return
     const start = performance.now()
     return () => {
       const end = performance.now()
       console.log(`[PERF] ${label} lifecycle: ${(end - start).toFixed(2)}ms`)
     }
-  }, deps)
+  }, [label, deps])
 }
 
 export class LRUCache<K, V> {

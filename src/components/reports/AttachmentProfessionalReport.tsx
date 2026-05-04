@@ -142,39 +142,52 @@ export default function AttachmentProfessionalReport({ result, mode = 'normal' }
         />
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="glass rounded-3xl p-8"
-      >
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Compass className="w-6 h-6 text-violet-400" />
-          四种依恋类型全景
-        </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {Object.entries(ATTACHMENT_STYLES).map(([key, info], index) => {
-            const Icon = info.icon
-            return (
-              <motion.div
-                key={key}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 + index * 0.1 }}
-                className={`bg-gradient-to-br ${info.color}/15 rounded-xl p-5 border border-white/10 ${style === key ? 'ring-2 ring-white/30' : ''}`}
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-white" />
+      {dimensions.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8"
+        >
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Compass className="w-6 h-6 text-violet-400" />
+            四种依恋类型全景
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {Object.entries(ATTACHMENT_STYLES).map(([key, info], index) => {
+              const Icon = info.icon
+              return (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 + index * 0.1 }}
+                  className={`bg-gradient-to-br ${info.color}/15 rounded-xl p-5 border border-white/10 ${style === key ? 'ring-2 ring-white/30' : ''}`}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-white font-bold text-sm">{info.name}</span>
                   </div>
-                  <span className="text-white font-bold text-sm">{info.name}</span>
-                </div>
-                <p className="text-white/60 text-xs leading-relaxed">{info.description}</p>
-              </motion.div>
-            )
-          })}
-        </div>
-      </motion.div>
+                  <p className="text-white/60 text-xs leading-relaxed">{info.description || '暂无描述'}</p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8 text-center"
+        >
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
 
       <div className="grid md:grid-cols-2 gap-6">
         <motion.div

@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,7 +10,7 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
 
   const handleStart = () => {
     onClose()
-    navigate('/legacy/categories')
+    navigate('/app/discover')
   }
 
   return (

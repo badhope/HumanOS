@@ -1,13 +1,8 @@
 import type { Answer, ProfessionalAssessmentResult, SubscaleScore } from '../types'
 import {
   calculateRawScore,
-  rawToTScore,
-  calculatePercentile,
-  interpretScoreLevel,
-  createSubscaleScore,
   createRiskAssessment,
   generateProfessionalResult,
-  STANDARD_NORMS,
 } from './professionalScoring'
 import {
   enhanceResultDifferentiation,
@@ -15,13 +10,10 @@ import {
 } from './resultDifferentiation'
 import {
   calculateTScore,
-  calculateZScore,
   calculatePercentileFromTScore,
   getScoreRange,
   calculateConfidenceInterval,
   calculateDimensionBalance,
-  SCORE_RANGES,
-  MATH_CONSTANTS,
   MBTI_MATH_SYSTEM,
   BIGFIVE_MATH_SYSTEM,
   SAS_MATH_SYSTEM,
@@ -31,11 +23,10 @@ import {
 } from './mathSystem'
 import { mbtiPersonalities } from '../data/mbti-data'
 import { bigFiveSubscaleNames } from '../data/professional/bigfive-professional'
-import { sasInterpretation, calculateSASIndex, interpretSASScore } from '../data/professional/sas-professional'
-import { eqSubscaleNames, eqDimensions } from '../data/professional/eq-professional'
+import { calculateSASIndex, interpretSASScore } from '../data/professional/sas-professional'
+import { eqDimensions } from '../data/professional/eq-professional'
 import { hollandTypes, calculateHollandCode } from '../data/professional/holland-professional'
 import { attachmentStyles, determineAttachmentStyle } from '../data/professional/attachment-professional'
-import { kolbLearningStyles } from '../data/professional/other-professional'
 import {
   calculateDark,
   calculateKolb,

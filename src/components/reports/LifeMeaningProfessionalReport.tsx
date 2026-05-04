@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Infinity, Heart, Brain, Users, Sparkles, Award, Compass, Target, Zap, Sun } from 'lucide-react'
+import { Infinity as InfinityIcon, Heart, Brain, Users, Sparkles, Award, Compass, Target, Zap, Sun } from 'lucide-react'
 import { AdvancedRadarChart, AdvancedBarChart } from '../charts'
 import type { AssessmentResult } from '../../types'
 import { safeDimensions, getScoreBand, selectByScore } from './utils'
@@ -13,7 +13,7 @@ const MEANING_SOURCES = [
   { id: 'selfrealization', name: '自我实现', icon: Brain, desc: '成为你想成为的那个人', color: 'from-violet-500 to-purple-600' },
   { id: 'connection', name: '深度连接', icon: Heart, desc: '人与人之间的真实羁绊', color: 'from-pink-500 to-rose-600' },
   { id: 'contribution', name: '奉献创造', icon: Users, desc: '留下一些什么，改变世界', color: 'from-emerald-500 to-teal-600' },
-  { id: 'transcendence', name: '超越体验', icon: Infinity, desc: '与更宏大的存在合一', color: 'from-blue-500 to-cyan-600' },
+  { id: 'transcendence', name: '超越体验', icon: InfinityIcon, desc: '与更宏大的存在合一', color: 'from-blue-500 to-cyan-600' },
   { id: 'experience', name: '体验当下', icon: Sun, desc: '每一个瞬间本身就是意义', color: 'from-amber-500 to-orange-600' },
   { id: 'power', name: '力量意志', icon: Zap, desc: '变得更强，看得更远', color: 'from-red-500 to-orange-600' },
 ]
@@ -54,7 +54,7 @@ export default function LifeMeaningProfessionalReport({ result, mode = 'normal' 
         <div className="relative p-10">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <Infinity className="w-8 h-8 text-white/80" />
+              <InfinityIcon className="w-8 h-8 text-white/80" />
               <span className="text-white/80 font-medium">人生意义测评 · 专业报告</span>
             </div>
             {mode === 'professional' && (
@@ -85,18 +85,28 @@ export default function LifeMeaningProfessionalReport({ result, mode = 'normal' 
         transition={{ delay: 0.2 }}
         className="glass rounded-3xl p-8"
       >
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Compass className="w-6 h-6 text-violet-400" />
-          意义来源五维雷达
-        </h3>
-        <AdvancedRadarChart
-          dimensions={dimensions.map((d, i) => ({
-            name: MEANING_SOURCES[i]?.name || d.name,
-            score: d.score,
-            maxScore: 100,
-          }))}
-          animated
-        />
+        {dimensions.length > 0 ? (
+        <>
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Compass className="w-6 h-6 text-violet-400" />
+            意义来源五维雷达
+          </h3>
+          <AdvancedRadarChart
+            dimensions={dimensions.map((d, i) => ({
+              name: MEANING_SOURCES[i]?.name || d.name || '未知',
+              score: d.score ?? 0,
+              maxScore: 100,
+            }))}
+            animated
+          />
+        </>
+      ) : (
+        <div className="text-center py-8">
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </div>
+      )}
       </motion.div>
 
       <motion.div

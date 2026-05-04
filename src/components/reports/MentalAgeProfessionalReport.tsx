@@ -51,6 +51,14 @@ const MENTAL_DIMENSIONS = {
   },
 }
 
+const MENTAL_AGE_NAME_MAP: Record<string, string> = {
+  '认知开放度': 'cognition',
+  '情绪稳定性': 'emotion',
+  '社交成熟度': 'social',
+  '责任感': 'responsibility',
+  '抗挫力': 'resilience',
+}
+
 export default function MentalAgeProfessionalReport({ result, mode = 'normal' }: MentalAgeReportProps) {
   const dimensions = safeDimensions(result?.dimensions, ['cognition', 'emotion', 'social', 'responsibility', 'resilience'])
   const mentalAgeScore = dimensions.reduce((s, d) => s + d.score, 0) / dimensions.length
@@ -117,11 +125,15 @@ export default function MentalAgeProfessionalReport({ result, mode = 'normal' }:
             心智五维成熟度
           </h3>
           <AdvancedBarChart
-            dimensions={dimensions.map(d => ({
-              name: MENTAL_DIMENSIONS[d.name as keyof typeof MENTAL_DIMENSIONS]?.name || d.name,
-              score: d.score,
-              maxScore: 100,
-            }))}
+            dimensions={dimensions.map(d => {
+              const key = MENTAL_AGE_NAME_MAP[d.name]
+              const dimInfo = key ? MENTAL_DIMENSIONS[key as keyof typeof MENTAL_DIMENSIONS] : null
+              return {
+                name: dimInfo?.name || d.name,
+                score: d.score,
+                maxScore: 100,
+              }
+            })}
             colorScheme="gradient"
             animated
           />
@@ -143,41 +155,55 @@ export default function MentalAgeProfessionalReport({ result, mode = 'normal' }:
         </div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="glass rounded-3xl p-8"
-      >
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Target className="w-6 h-6 text-emerald-400" />
-          深度维度解读
-        </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {dimensions.map((dim, index) => {
-            const dimInfo = MENTAL_DIMENSIONS[dim.name as keyof typeof MENTAL_DIMENSIONS]
-            const band = getScoreBand(dim.score)
-            const interpretation = getDimensionInterpretation(dim.name, dim.score, MENTAL_DIMENSIONS)
-            return (
-              <motion.div
-                key={dim.name}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 + index * 0.08 }}
-                className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-xl p-5 border border-emerald-500/20"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-white font-semibold">{dimInfo?.name || dim.name}</span>
-                  <span className={`${band.colorClass} font-bold`}>{band.band} · {dim.score}分</span>
-                </div>
-                <p className="text-white/60 text-sm leading-relaxed">
-                  {interpretation}
-                </p>
-              </motion.div>
-            )
-          })}
-        </div>
-      </motion.div>
+      {dimensions.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8"
+        >
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Target className="w-6 h-6 text-emerald-400" />
+            深度维度解读
+          </h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {dimensions.map((dim, index) => {
+              const dimInfo = MENTAL_DIMENSIONS[dim.name as keyof typeof MENTAL_DIMENSIONS]
+              const score = dim.score ?? 0
+              const band = getScoreBand(score)
+              const interpretation = getDimensionInterpretation(dim.name, score, MENTAL_DIMENSIONS)
+              return (
+                <motion.div
+                  key={dim.name || index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 + index * 0.08 }}
+                  className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-xl p-5 border border-emerald-500/20"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-white font-semibold">{dimInfo?.name || dim.name || '未知维度'}</span>
+                    <span className={`${band.colorClass} font-bold`}>{band.band} · {score}分</span>
+                  </div>
+                  <p className="text-white/60 text-sm leading-relaxed">
+                    {interpretation || '暂无解读'}
+                  </p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="glass rounded-3xl p-8 text-center"
+        >
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

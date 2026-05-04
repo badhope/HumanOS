@@ -123,6 +123,29 @@ export const FOUNDATION_TRAININGS: TrainingProgram[] = [
       { id: 'c7', title: '整合', instruction: '现在你对这件事的感觉是？', duration: 45, type: 'reflection' },
     ],
   },
+  {
+    id: 'gratitude',
+    title: '感恩三件事',
+    subtitle: '培养感恩心态，提升幸福感',
+    icon: '🙏',
+    duration: '3分钟',
+    level: 1,
+    levelLabel: '入门觉醒',
+    category: 'emotion',
+    benefits: [
+      '每天记录三件值得感恩的事',
+      '培养积极心态和正向思维',
+      '增强生活满意度和幸福感',
+    ],
+    exercises: [
+      { id: 'g1', title: '准备', instruction: '找一个安静的地方，闭上眼睛深呼吸', duration: 10, type: 'guided' },
+      { id: 'g2', title: '回想', instruction: '今天发生了什么让你感到开心或感激的事？', duration: 30, type: 'reflection' },
+      { id: 'g3', title: '记录第一件', instruction: '写下或默念第一件让你感恩的事', duration: 30, type: 'guided' },
+      { id: 'g4', title: '记录第二件', instruction: '写下或默念第二件让你感恩的事', duration: 30, type: 'guided' },
+      { id: 'g5', title: '记录第三件', instruction: '写下或默念第三件让你感恩的事', duration: 30, type: 'guided' },
+      { id: 'g6', title: '感受', instruction: '感受感恩带来的温暖和满足', duration: 20, type: 'rest' },
+    ],
+  },
 ]
 
 // ============================================
@@ -141,10 +164,148 @@ export const ATTACHMENT_TRAININGS_FULL = [...ATTACHMENT_TRAININGS]
 export const SOCIAL_TRAININGS_FULL = [...SOCIAL_TRAININGS]
 export const FUN_TRAININGS_FULL = [...FUN_TRAININGS, ...FUN_EXTENDED_TRAININGS]
 
-// 暂时开放：职业、价值观、正念轨道为占位
-export const CAREER_TRAININGS: TrainingProgram[] = []
-export const VALUES_TRAININGS: TrainingProgram[] = []
-export const MINDFULNESS_TRAININGS: TrainingProgram[] = []
+export const CAREER_TRAININGS: TrainingProgram[] = [
+  {
+    id: 'career-vision',
+    title: '职业愿景探索',
+    subtitle: '找到你真正热爱的事业',
+    icon: '🎯',
+    duration: '10分钟',
+    level: 1,
+    levelLabel: '入门觉醒',
+    category: 'career',
+    benefits: [
+      '明确职业方向和目标',
+      '识别核心职业价值观',
+      '制定可行的职业计划',
+    ],
+    exercises: [
+      { id: 'cv1', title: '准备', instruction: '找一个安静的地方，回想你的职业经历', duration: 15, type: 'guided' },
+      { id: 'cv2', title: '回忆高光时刻', instruction: '回想工作中最有成就感的三件事', duration: 90, type: 'reflection' },
+      { id: 'cv3', title: '识别模式', instruction: '这些事情有什么共同点？', duration: 60, type: 'reflection' },
+      { id: 'cv4', title: '休息', instruction: '深呼吸3次', duration: 20, type: 'rest' },
+      { id: 'cv5', title: '理想工作', instruction: '描述你理想中的工作是什么样的', duration: 60, type: 'guided' },
+      { id: 'cv6', title: '下一步', instruction: '明天可以做什么小行动？', duration: 45, type: 'guided' },
+    ],
+  },
+  {
+    id: 'skill-gap-analysis',
+    title: '技能差距分析',
+    subtitle: '清晰定位成长方向',
+    icon: '📈',
+    duration: '8分钟',
+    level: 2,
+    levelLabel: '刻意练习',
+    category: 'career',
+    benefits: [
+      '识别当前技能水平',
+      '明确目标技能要求',
+      '制定学习计划',
+    ],
+    exercises: [
+      { id: 'sg1', title: '准备', instruction: '列出当前职位需要的核心技能', duration: 30, type: 'guided' },
+      { id: 'sg2', title: '自评', instruction: '对每项技能评分（1-5分）', duration: 60, type: 'reflection' },
+      { id: 'sg3', title: '目标', instruction: '目标职位需要哪些技能？', duration: 60, type: 'guided' },
+      { id: 'sg4', title: '差距', instruction: '找出差距最大的3项技能', duration: 45, type: 'reflection' },
+      { id: 'sg5', title: '计划', instruction: '为每项技能制定学习路径', duration: 60, type: 'guided' },
+    ],
+  },
+]
+
+export const VALUES_TRAININGS: TrainingProgram[] = [
+  {
+    id: 'values-clarification',
+    title: '价值观澄清',
+    subtitle: '找到人生的指南针',
+    icon: '🧭',
+    duration: '12分钟',
+    level: 1,
+    levelLabel: '入门觉醒',
+    category: 'values',
+    benefits: [
+      '识别核心价值观',
+      '明确人生优先级',
+      '做出符合价值观的选择',
+    ],
+    exercises: [
+      { id: 'vc1', title: '准备', instruction: '放松身心，深呼吸', duration: 15, type: 'guided' },
+      { id: 'vc2', title: '价值清单', instruction: '从列表中选出10个最重要的价值观', duration: 90, type: 'guided' },
+      { id: 'vc3', title: '排序', instruction: '将10个价值观按重要性排序', duration: 60, type: 'reflection' },
+      { id: 'vc4', title: '休息', instruction: '闭上眼睛，感受内心', duration: 20, type: 'rest' },
+      { id: 'vc5', title: '前3名', instruction: '选出最重要的3个价值观', duration: 45, type: 'guided' },
+      { id: 'vc6', title: '检验', instruction: '最近的选择是否符合这些价值观？', duration: 60, type: 'reflection' },
+    ],
+  },
+  {
+    id: 'values-alignment',
+    title: '价值观对齐',
+    subtitle: '让生活与价值观一致',
+    icon: '🎯',
+    duration: '10分钟',
+    level: 2,
+    levelLabel: '刻意练习',
+    category: 'values',
+    benefits: [
+      '评估当前生活与价值观的契合度',
+      '找出需要调整的领域',
+      '制定行动方案',
+    ],
+    exercises: [
+      { id: 'va1', title: '准备', instruction: '回顾你最重要的3个价值观', duration: 15, type: 'guided' },
+      { id: 'va2', title: '评估', instruction: '在工作、家庭、健康、社交四个方面评分', duration: 60, type: 'reflection' },
+      { id: 'va3', title: '差距', instruction: '哪个领域差距最大？', duration: 30, type: 'reflection' },
+      { id: 'va4', title: '行动', instruction: '制定一个小行动来缩小差距', duration: 60, type: 'guided' },
+      { id: 'va5', title: '承诺', instruction: '承诺在本周内完成这个行动', duration: 30, type: 'guided' },
+    ],
+  },
+]
+
+export const MINDFULNESS_TRAININGS: TrainingProgram[] = [
+  {
+    id: 'mindful-breathing',
+    title: '正念呼吸',
+    subtitle: '活在当下的艺术',
+    icon: '🌬️',
+    duration: '10分钟',
+    level: 1,
+    levelLabel: '入门觉醒',
+    category: 'mindfulness',
+    benefits: [
+      '训练专注力和觉察力',
+      '减少焦虑和压力',
+      '培养平静的内心',
+    ],
+    exercises: [
+      { id: 'mb1', title: '准备', instruction: '找一个舒适的姿势坐下', duration: 15, type: 'guided' },
+      { id: 'mb2', title: '觉察呼吸', instruction: '把注意力集中在呼吸上', duration: 60, type: 'guided' },
+      { id: 'mb3', title: '走神觉察', instruction: '当思绪飘走时，温柔地拉回来', duration: 90, type: 'guided' },
+      { id: 'mb4', title: '扩展觉察', instruction: '觉察身体的感受', duration: 60, type: 'guided' },
+      { id: 'mb5', title: '结束', instruction: '慢慢睁开眼睛，感受当下', duration: 30, type: 'guided' },
+    ],
+  },
+  {
+    id: 'mindful-eating',
+    title: '正念饮食',
+    subtitle: '用心感受每一口',
+    icon: '🍎',
+    duration: '8分钟',
+    level: 2,
+    levelLabel: '刻意练习',
+    category: 'mindfulness',
+    benefits: [
+      '改善饮食习惯',
+      '增加饮食满足感',
+      '培养感恩之心',
+    ],
+    exercises: [
+      { id: 'me1', title: '准备', instruction: '准备一小口食物', duration: 10, type: 'guided' },
+      { id: 'me2', title: '观察', instruction: '观察食物的颜色、形状、气味', duration: 30, type: 'guided' },
+      { id: 'me3', title: '品尝', instruction: '放进嘴里，慢慢咀嚼', duration: 60, type: 'guided' },
+      { id: 'me4', title: '感受', instruction: '感受食物的味道和质地', duration: 60, type: 'guided' },
+      { id: 'me5', title: '感恩', instruction: '感谢食物带来的滋养', duration: 30, type: 'guided' },
+    ],
+  },
+]
 
 // ============================================
 // 📊 训练总库 - 目前共 41+ 个训练项目

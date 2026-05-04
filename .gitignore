@@ -85,6 +85,12 @@ Thumbs.db
 sw.js
 workbox-*.js
 
+# Build artifacts (DO NOT COMMIT)
+Windows-Release/
+electron-release/
+release/
+release-app/
+
 # Documentation (optional)
 # README_EN.md
 # TEMPLATE_GUIDE.md

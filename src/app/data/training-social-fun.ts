@@ -102,7 +102,7 @@ export const SOCIAL_TRAININGS: TrainingProgram[] = [
     icon: '🪞',
     duration: '12分钟',
     level: 3,
-    levelLabel: '深度整合',
+    levelLabel: '深度内化',
     category: 'social',
     targetDimension: 'dark_narcissism',
     targetScoreRange: [70, 100],

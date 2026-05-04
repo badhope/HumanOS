@@ -84,6 +84,7 @@ export default function OfficialdomDreamProfessionalReport({ result, mode = 'nor
         transition={{ delay: 0.2 }}
         className="grid md:grid-cols-2 gap-6"
       >
+        {dimensions.length > 0 ? (
         <div className="glass rounded-3xl p-8">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
             <TrendingUp className="w-6 h-6 text-amber-400" />
@@ -91,14 +92,21 @@ export default function OfficialdomDreamProfessionalReport({ result, mode = 'nor
           </h3>
           <AdvancedBarChart
             dimensions={dimensions.map((d, i) => ({
-              name: OFFICIAL_DIMENSIONS[i]?.name || d.name,
-              score: d.score,
+              name: OFFICIAL_DIMENSIONS[i]?.name || d.name || '未知',
+              score: d.score ?? 0,
               maxScore: 100,
             }))}
             colorScheme="gradient"
             animated
           />
         </div>
+      ) : (
+        <div className="glass rounded-3xl p-8 text-center">
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </div>
+      )}
         <div className="glass rounded-3xl p-8">
           <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
             <Star className="w-6 h-6 text-violet-400" />

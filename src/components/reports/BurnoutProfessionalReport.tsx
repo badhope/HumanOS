@@ -21,6 +21,12 @@ const BURNOUT_DIMENSIONS = {
   efficacy: { name: '成就感降低', icon: Target, description: '对自己工作价值和成就的评价下降' },
 }
 
+const BURNOUT_NAME_MAP: Record<string, string> = {
+  'emotionalExhaustion': 'exhaustion',
+  'depersonalization': 'cynicism',
+  'personalAccomplishment': 'efficacy',
+}
+
 function getBurnoutLevel(score: number) {
   return BURNOUT_LEVELS.find(l => score >= l.min) || BURNOUT_LEVELS[3]
 }
@@ -113,7 +119,8 @@ export default function BurnoutProfessionalReport({ result, mode = 'normal' }: B
         </h3>
         <AdvancedBarChart
           dimensions={dimensions.length > 0 ? dimensions.map(d => {
-            const info = BURNOUT_DIMENSIONS[d.name as keyof typeof BURNOUT_DIMENSIONS]
+            const key = BURNOUT_NAME_MAP[d.name] || d.name
+            const info = BURNOUT_DIMENSIONS[key as keyof typeof BURNOUT_DIMENSIONS]
             return {
               name: info?.name || d.name,
               score: d.score,

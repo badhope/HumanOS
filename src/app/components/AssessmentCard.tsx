@@ -39,7 +39,7 @@ export default function AssessmentCard({ onDismiss }: AssessmentCardProps) {
 
             <div className="flex gap-3">
               <button
-                onClick={() => navigate('/legacy/categories')}
+                onClick={() => navigate('/app/discover')}
                 className="px-5 py-2 rounded-lg bg-gradient-to-r from-violet-500 to-blue-500 text-white text-sm font-medium hover:opacity-90 transition-opacity"
               >
                 开始测评

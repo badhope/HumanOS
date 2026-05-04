@@ -30,7 +30,7 @@ export default function ModeSelect() {
     )
   }
 
-  const realQuestionCount = assessment.questions?.length || 0
+  const realQuestionCount = assessment.questionCount || assessment.questions?.length || 0
   const normalQuestionCount = Math.min(28, Math.ceil(realQuestionCount * 0.5) || 28)
   const normalDuration = Math.max(5, Math.ceil(normalQuestionCount * 10 / 60))
   const proDuration = Math.max(10, Math.ceil(realQuestionCount * 10 / 60))

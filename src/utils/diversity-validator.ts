@@ -1,4 +1,5 @@
 import { calculatePSS, calculateSDS, calculateMFT } from './calculators/professional-calculators-factory'
+import type { Answer, AssessmentResult } from '../types'
 
 export type AnswerPersonality = 
   | 'extreme-preferrer'      // 极端选项偏好者 - 只选1或5
@@ -57,14 +58,15 @@ class MonteCarloSimulator {
   }
 
   simulatePersonality(
-    calculator: Function,
+    calculator: (answers: Answer[]) => AssessmentResult,
     questionIds: string[],
     personality: AnswerPersonality,
     id: number
   ): SimulationResult {
-    const answers = questionIds.map(qid => ({
+    const answers: Answer[] = questionIds.map(qid => ({
       questionId: qid,
       value: this.generateAnswer(personality, qid),
+      selectedOptions: [],
     }))
 
     const result = calculator(answers)
@@ -92,7 +94,7 @@ class MonteCarloSimulator {
     return {
       simulationId: `${personality}-${id}`,
       personality,
-      totalScore: result.score || result.totalScore || 0,
+      totalScore: (result.score || result.totalScore || 0) as number,
       isomerAnalysis: result.isomerAnalysis,
       demographicSegment: result.demographicSegment,
       themeRelevance: result.themeRelevance,
@@ -102,7 +104,7 @@ class MonteCarloSimulator {
   }
 
   runBatch(
-    calculator: Function,
+    calculator: (answers: Answer[]) => AssessmentResult,
     questionIds: string[],
     simulationsPerPersonality: number = 20
   ): DiversityReport {

@@ -1,9 +1,10 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Sparkles } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import WelcomeModal from '../components/WelcomeModal'
 import AssessmentCard from '../components/AssessmentCard'
+import { DailyTaskList } from '../components/DailyTaskList'
 import { useAppStore } from '../../store'
 import { getDailyPsychology } from '../data/psychology-knowledge'
 
@@ -65,16 +66,18 @@ export default function Daily() {
         className="p-4 md:p-6 space-y-6"
       >
         <div className="py-2 md:py-0 md:mb-6 md:text-left">
-        <motion.h2 
-          className="text-2xl md:text-3xl font-bold mb-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          晚上好，小明 👋
-        </motion.h2>
-        <p className="text-white/50">今天感觉怎么样？</p>
-      </div>
+          <motion.h2 
+            className="text-2xl md:text-3xl font-bold mb-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            晚上好，小明 👋
+          </motion.h2>
+          <p className="text-white/60">今天感觉怎么样？</p>
+        </div>
+
+        <DailyTaskList />
 
         <AnimatePresence>
           {showAssessmentCard && (
@@ -153,7 +156,7 @@ export default function Daily() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 + i * 0.1 }}
-                    onClick={() => plan.id === 'emotion-anchoring' && navigate('/app/training/emotion-anchoring')}
+                    onClick={() => navigate(`/app/training/${plan.id}`)}
                     className="p-4 rounded-xl bg-gradient-to-r bg-white/5 border border-white/10 flex items-center gap-3 hover:border-violet-500/30 transition-all cursor-pointer group"
                   >
                     <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${plan.gradient} flex items-center justify-center`}>

@@ -24,6 +24,14 @@ const IQ_SUBSCORES = {
   spatial: { name: '空间旋转', icon: GraduationCap, description: '心理旋转和空间可视化能力' },
 }
 
+const IQ_NAME_MAP: Record<string, string> = {
+  'patternCompletion': 'matrix',
+  'analogicalReasoning': 'verbal',
+  'serialReasoning': 'series',
+  'logicalReasoning': 'spatial',
+  'advancedReasoning': 'spatial',
+}
+
 function getIQLevel(score: number) {
   return IQ_LEVELS.find(l => score >= l.min) || IQ_LEVELS[5]
 }
@@ -114,12 +122,16 @@ export default function IQProfessionalReport({ result, mode = 'normal' }: IQRepo
           智力子维度得分
         </h3>
         <AdvancedBarChart
-          dimensions={dimensions.length > 0 ? dimensions.map(d => ({
-            name: IQ_SUBSCORES[d.name as keyof typeof IQ_SUBSCORES]?.name || d.name,
-            score: d.score,
-            maxScore: d.maxScore || 100,
-            description: IQ_SUBSCORES[d.name as keyof typeof IQ_SUBSCORES]?.description,
-          })) : [
+          dimensions={dimensions.length > 0 ? dimensions.map(d => {
+            const key = IQ_NAME_MAP[d.name]
+            const subInfo = key ? IQ_SUBSCORES[key as keyof typeof IQ_SUBSCORES] : null
+            return {
+              name: subInfo?.name || d.name || '未知',
+              score: d.score ?? 0,
+              maxScore: d.maxScore || 100,
+              description: subInfo?.description,
+            }
+          }) : [
             { name: '矩阵推理', score: 78, maxScore: 100, description: '视觉空间推理和模式识别能力' },
             { name: '数字序列', score: 72, maxScore: 100, description: '逻辑思维和数字规律识别' },
             { name: '言语类比', score: 85, maxScore: 100, description: '语言理解和概念关系推理' },

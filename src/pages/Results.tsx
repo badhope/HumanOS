@@ -105,11 +105,14 @@ export default function Results() {
         answers: [],
         result: stateResult,
         completedAt: new Date(),
+        mode: (stateResult.mode as 'normal' | 'advanced' | 'professional') || 'normal',
       })
       console.log('✅ 结果已自动持久化到Store')
+      setRecordFound(true)
+      return
     }
 
-    if (resultRecord || stateResult) {
+    if (resultRecord) {
       setRecordFound(true)
       return
     }
@@ -137,25 +140,6 @@ export default function Results() {
     
     return () => clearInterval(retryInterval)
   }, [id, hash, restoring, resultRecord, stateResult, navigate, addCompletedAssessment])
-
-  if (!recordFound && !resultRecord && !stateResult) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
-          <h2 className="text-2xl font-bold text-white mb-2">正在加载测评结果...</h2>
-          <p className="text-white/60 mb-6">请稍候，正在同步数据</p>
-          <button
-            onClick={() => navigate('/assessments')}
-            className="px-6 py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors"
-            type="button"
-          >
-            返回测评列表
-          </button>
-        </div>
-      </div>
-    )
-  }
 
   useEffect(() => {
     if (!resultRecord && !stateResult) return
@@ -190,7 +174,24 @@ export default function Results() {
     return () => clearInterval(interval)
   }, [resultRecord, navigate])
 
-
+  if (!recordFound && !resultRecord && !stateResult) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
+          <h2 className="text-2xl font-bold text-white mb-2">正在加载测评结果...</h2>
+          <p className="text-white/60 mb-6">请稍候，正在同步数据</p>
+          <button
+            onClick={() => navigate('/assessments')}
+            className="px-6 py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+            type="button"
+          >
+            返回测评列表
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   if (restoring) {
     return (

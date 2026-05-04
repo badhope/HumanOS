@@ -126,13 +126,28 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
               className="relative"
             >
               <motion.div
-                className="w-32 h-32 rounded-3xl bg-gradient-to-br from-violet-500 to-pink-500 flex items-center justify-center"
+                className="w-32 h-32 rounded-3xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
               >
-                <span className="text-5xl font-bold text-white">H</span>
+                <svg viewBox="0 0 100 100" className="w-20 h-20">
+                  <path
+                    d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
+                    fill="none"
+                    stroke="url(#goldGradient)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+                  <defs>
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#d4af37" />
+                      <stop offset="50%" stopColor="#f5e6c8" />
+                      <stop offset="100%" stopColor="#d4af37" />
+                    </linearGradient>
+                  </defs>
+                </svg>
               </motion.div>
               <motion.div
-                className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-violet-500/20 to-pink-500/20 blur-xl"
+                className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 blur-xl"
                 animate={{
                   opacity: [0.5, 1, 0.5],
                   scale: [1, 1.1, 1],
@@ -181,7 +196,7 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
           >
             <div className="mb-8 text-center">
               <motion.div
-                className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-pink-500"
+                className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30"
                 animate={{
                   rotate: [0, 360],
                 }}
@@ -191,7 +206,22 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
                   ease: 'linear',
                 }}
               >
-                <span className="text-2xl font-bold text-white">H</span>
+                <svg viewBox="0 0 100 100" className="w-10 h-10">
+                  <path
+                    d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
+                    fill="none"
+                    stroke="url(#goldGradient2)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+                  <defs>
+                    <linearGradient id="goldGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#d4af37" />
+                      <stop offset="50%" stopColor="#f5e6c8" />
+                      <stop offset="100%" stopColor="#d4af37" />
+                    </linearGradient>
+                  </defs>
+                </svg>
               </motion.div>
             </div>
 

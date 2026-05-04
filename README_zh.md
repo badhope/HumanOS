@@ -2,6 +2,10 @@
 <!-- MindMirror - Professional Psychological Growth Platform -->
 
 <p align="center">
+  <img src="https://neeko-copilot.bytedance.net/api/text_to_image?prompt=MindMirror%20logo%20design%2C%20elegant%20minimalist%20mirror%20shape%20with%20golden%20gradient%2C%20clean%20white%20background%2C%20professional%20brand%20identity%2C%20symmetric%20geometric%20pattern%2C%20modern%20style&image_size=square" alt="MindMirror Logo" width="200">
+</p>
+
+<p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=45&duration=4000&pause=1000&color=8B5CF6&background=0F0F23&center=true&vCenter=true&multiline=true&width=900&height=100&lines=%E5%BF%83%E9%95%9C+MindMirror+%F0%9F%AA%9E;%E7%85%A7%E8%A7%81%E8%87%AA%E5%B7%B1%EF%BC%8C%E6%88%90%E4%B8%BA%E6%9B%B4%E5%A5%BD%E7%9A%84%E8%87%AA%E5%B7%B1" alt="心镜 MindMirror">
 </p>
 
@@ -109,6 +113,20 @@ npm run dev
 # 生产构建
 npm run build
 ```
+
+#### Windows 桌面版本
+无需安装，直接运行：
+```bash
+# 进入Windows版本目录
+cd Windows-Release
+
+# 双击运行
+MindMirror.exe
+```
+
+或者直接从 `Windows-Release` 文件夹运行 `MindMirror.exe`。
+
+**注意**: Windows版本已预编译，包含完整的Chromium浏览器环境，可独立运行无需安装Node.js。
 
 ---
 

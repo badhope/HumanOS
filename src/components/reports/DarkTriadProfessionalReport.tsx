@@ -14,6 +14,13 @@ const DARK_TRIAD_DIMENSIONS = {
   psychopathy: { name: '精神病态', icon: Skull, color: 'from-red-500 to-rose-600', description: '缺乏共情与愧疚，追求刺激与冒险' },
 }
 
+const DARK_TRIAD_NAME_MAP: Record<string, string> = {
+  '马基雅维利主义': 'machiavellianism',
+  '自恋': 'narcissism',
+  '精神病态': 'psychopathy',
+  '施虐倾向': 'sadism',
+}
+
 const DARK_LEVELS = [
   { min: 80, level: '极高黑暗特质', description: '黑暗人格特征非常显著，在群体中属于前10%', warning: '注意权力滥用风险' },
   { min: 65, level: '较高黑暗特质', description: '明显的黑暗人格倾向，具有较强的自我保护意识', warning: '注意同理心培养' },
@@ -113,65 +120,93 @@ export default function DarkTriadProfessionalReport({ result, mode = 'normal' }:
         </div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="glass rounded-3xl p-8"
-      >
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Zap className="w-6 h-6 text-amber-400" />
-          暗黑三角三维度解析
-        </h3>
-        <div className="grid md:grid-cols-3 gap-5 mb-6">
-          {dimensions.map((dim, index) => {
-            const dimInfo = DARK_TRIAD_DIMENSIONS[dim.name as keyof typeof DARK_TRIAD_DIMENSIONS]
-            const Icon = dimInfo?.icon || Shield
-            const level = dim.score >= 70 ? '高' : dim.score >= 40 ? '中' : '低'
-            return (
-              <motion.div
-                key={dim.name}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 + index * 0.1 }}
-                className={`bg-gradient-to-br ${dimInfo?.color || 'from-slate-500 to-gray-500'}/15 rounded-xl p-6 border border-white/10`}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="text-white font-bold text-lg">{dimInfo?.name || dim.name}</div>
-                    <div className={`text-sm px-2 py-0.5 inline-block rounded-full mt-1 ${
-                      dim.score >= 60 ? 'bg-red-500/20 text-red-300' :
-                      dim.score >= 40 ? 'bg-amber-500/20 text-amber-300' :
-                      'bg-green-500/20 text-green-300'
-                    }`}>
-                      {level} 倾向
+      {dimensions.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="glass rounded-3xl p-8"
+        >
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Zap className="w-6 h-6 text-amber-400" />
+            暗黑三角三维度解析
+          </h3>
+          <div className="grid md:grid-cols-3 gap-5 mb-6">
+            {dimensions.map((dim, index) => {
+              const key = DARK_TRIAD_NAME_MAP[dim.name]
+              const dimInfo = key ? DARK_TRIAD_DIMENSIONS[key as keyof typeof DARK_TRIAD_DIMENSIONS] : null
+              const Icon = dimInfo?.icon || Shield
+              const score = dim.score ?? 0
+              const level = score >= 70 ? '高' : score >= 40 ? '中' : '低'
+              return (
+                <motion.div
+                  key={dim.name || index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 + index * 0.1 }}
+                  className={`bg-gradient-to-br ${dimInfo?.color || 'from-slate-500 to-gray-500'}/15 rounded-xl p-6 border border-white/10`}
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-white font-bold text-lg">{dimInfo?.name || dim.name || '未知维度'}</div>
+                      <div className={`text-sm px-2 py-0.5 inline-block rounded-full mt-1 ${
+                        score >= 60 ? 'bg-red-500/20 text-red-300' :
+                        score >= 40 ? 'bg-amber-500/20 text-amber-300' :
+                        'bg-green-500/20 text-green-300'
+                      }`}>
+                        {level} 倾向
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="text-right mb-3">
-                  <span className="text-3xl font-black text-white">{dim.score}</span>
-                  <span className="text-white/50 text-sm ml-1">/100</span>
-                </div>
-                <p className="text-white/60 text-sm">{dimInfo?.description}</p>
-              </motion.div>
-            )
-          })}
-        </div>
-        <ComprehensiveChartSystem
-          dimensions={dimensions.map(d => ({
-            name: DARK_TRIAD_DIMENSIONS[d.name as keyof typeof DARK_TRIAD_DIMENSIONS]?.name || d.name,
-            score: d.score,
-            maxScore: 100,
-            description: d.description,
-          }))}
-          overallScore={totalScore}
-          assessmentType="darktriad"
-          title="黑暗人格三维度全景"
-        />
-      </motion.div>
+                  <div className="text-right mb-3">
+                    <span className="text-3xl font-black text-white">{score}</span>
+                    <span className="text-white/50 text-sm ml-1">/100</span>
+                  </div>
+                  <p className="text-white/60 text-sm">{dimInfo?.description || '暂无描述'}</p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="glass rounded-3xl p-8 text-center"
+        >
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
+
+      {dimensions.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <ComprehensiveChartSystem
+            dimensions={dimensions.map(d => {
+              const key = DARK_TRIAD_NAME_MAP[d.name]
+              const dimInfo = key ? DARK_TRIAD_DIMENSIONS[key as keyof typeof DARK_TRIAD_DIMENSIONS] : null
+              return {
+                name: dimInfo?.name || d.name,
+                score: d.score ?? 0,
+                maxScore: 100,
+                description: d.description,
+              }
+            })}
+            overallScore={totalScore}
+            assessmentType="darktriad"
+            title="黑暗人格三维度全景"
+          />
+        </motion.div>
+      )}
 
       <div className="grid md:grid-cols-2 gap-6">
         <motion.div

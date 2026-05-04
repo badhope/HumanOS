@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, createContext, useContext } from 'rea
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Play, Pause, SkipForward, Volume2, VolumeX, Check, Trophy, Timer, Heart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useAppStore } from '../../../store'
 
 type ExerciseType = 'breathing' | 'guided' | 'reflection' | 'rest' | 'countdown' | 'journal' | 'visualization' | 'affirmation'
 
@@ -24,7 +25,7 @@ type TrainingCategory =
   | 'mindfulness'  // 正念存在轨道
   | 'fun'          // 趣味娱乐轨道
 
-type TrainingLevel = 1 | 2 | 3 | 4
+type TrainingLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 
 interface UnlockCondition {
   type: 'assessment' | 'training_count' | 'streak' | 'dimension_score'
@@ -39,7 +40,7 @@ interface TrainingProgram {
   icon: string
   duration: string
   level: TrainingLevel
-  levelLabel: '入门觉醒' | '刻意练习' | '深度整合' | '大师精通'
+  levelLabel: '入门觉醒' | '刻意练习' | '深度内化' | '融会贯通' | '自成一派' | '大师之路' | '宗师境界' | '超凡入圣' | '返璞归真' | '天人合一'
   benefits: string[]
   exercises: Exercise[]
   category: TrainingCategory
@@ -125,22 +126,33 @@ export default function TrainingEngine({ program, onComplete }: TrainingEnginePr
     setIsPlaying(p => !p)
   }, [])
 
+  const { addTrainingRecord } = useAppStore()
+
   const handleComplete = useCallback(() => {
     setPhase('complete')
     setIsPlaying(false)
+    
+    const duration = Math.floor((Date.now() - startTime) / 1000)
+    
+    addTrainingRecord({
+      programId: program.id,
+      completedAt: Date.now(),
+      duration,
+      category: program.category,
+    })
     
     const existing = localStorage.getItem('training-records')
     const records = existing ? JSON.parse(existing) : []
     records.push({
       programId: program.id,
       completedAt: Date.now(),
-      duration: Math.floor((Date.now() - startTime) / 1000),
+      duration,
       category: program.category,
     })
     localStorage.setItem('training-records', JSON.stringify(records))
     
     onComplete?.()
-  }, [program, startTime, onComplete])
+  }, [program, startTime, onComplete, addTrainingRecord])
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)

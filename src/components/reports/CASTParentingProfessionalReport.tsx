@@ -56,8 +56,19 @@ const CAST_DIMENSIONS = {
   autonomy: '自主支持',
 }
 
+const CAST_NAME_MAP: Record<string, string> = {
+  'reportAnxiety': 'demanding',
+  'comparisonMania': 'control',
+  'classObsession': 'responsive',
+  'moralityKidnapping': 'warmth',
+}
+
 export default function CASTParentingProfessionalReport({ result, mode = 'normal' }: CASTReportProps) {
-  const dimensions = safeDimensions(result?.dimensions, ['demanding', 'responsive', 'control', 'warmth', 'autonomy'])
+  const rawDimensions = result?.dimensions || []
+  const dimensions = rawDimensions.map(d => ({
+    ...d,
+    name: CAST_NAME_MAP[d.name] || d.name,
+  }))
   
   const typeScores = {
     authoritative: (dimensions.find(d => d.name === 'demanding')?.score || 50) + (dimensions.find(d => d.name === 'responsive')?.score || 50),
@@ -130,18 +141,28 @@ export default function CASTParentingProfessionalReport({ result, mode = 'normal
         transition={{ delay: 0.2 }}
         className="glass rounded-3xl p-8"
       >
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Compass className="w-6 h-6 text-violet-400" />
-          教养四象限雷达
-        </h3>
-        <AdvancedRadarChart
-          dimensions={dimensions.map(d => ({
-            name: CAST_DIMENSIONS[d.name as keyof typeof CAST_DIMENSIONS] || d.name,
-            score: d.score,
-            maxScore: 100,
-          }))}
-          animated
-        />
+        {dimensions.length > 0 ? (
+        <>
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Compass className="w-6 h-6 text-violet-400" />
+            教养四象限雷达
+          </h3>
+          <AdvancedRadarChart
+            dimensions={dimensions.map(d => ({
+              name: CAST_DIMENSIONS[d.name as keyof typeof CAST_DIMENSIONS] || d.name || '未知',
+              score: d.score ?? 0,
+              maxScore: 100,
+            }))}
+            animated
+          />
+        </>
+      ) : (
+        <div className="text-center py-8">
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </div>
+      )}
       </motion.div>
 
       <motion.div

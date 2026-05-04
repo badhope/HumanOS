@@ -20,6 +20,15 @@ const LACAN_STRUCTURES = {
   perverse: { name: '倒错主体', description: '否认阉割、享乐的特殊机制', traits: ['暴露', '伪装', '挑战'] },
 }
 
+const LACAN_NAME_MAP: Record<string, string> = {
+  '想象界': 'imaginary',
+  '象征界': 'symbolic',
+  '实在界': 'real',
+  '神经症': 'imaginary',
+  '精神病': 'symbolic',
+  '倒错': 'real',
+}
+
 function getDominantOrder(dimensions: any[]) {
   if (!dimensions || dimensions.length === 0) return 'imaginary'
   const sorted = [...dimensions].sort((a, b) => b.score - a.score)
@@ -120,10 +129,11 @@ export default function LacanProfessionalReport({ result, mode = 'normal' }: Lac
         </h3>
         <AdvancedBarChart
           dimensions={dimensions.length > 0 ? dimensions.map(d => {
-            const info = LACAN_ORDERS[d.name as keyof typeof LACAN_ORDERS]
+            const key = LACAN_NAME_MAP[d.name] || d.name
+            const info = LACAN_ORDERS[key as keyof typeof LACAN_ORDERS]
             return {
-              name: info?.name || d.name,
-              score: d.score,
+              name: info?.name || d.name || '未知',
+              score: d.score ?? 0,
               maxScore: d.maxScore || 100,
               description: info?.description,
             }

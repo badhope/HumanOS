@@ -161,11 +161,11 @@ export default function HollandProfessionalReport({ result, mode = 'normal' }: H
         </h3>
         <AdvancedRadarChart
           dimensions={dimensions.length > 0 ? dimensions.map(d => {
-            const code = d.name.charAt(0).toUpperCase()
+            const code = d.name?.charAt(0).toUpperCase() || ''
             const info = HOLLAND_TYPES[code as keyof typeof HOLLAND_TYPES]
             return {
-              name: info?.name || d.name,
-              score: d.score,
+              name: info?.name || d.name || '未知',
+              score: d.score ?? 0,
               maxScore: d.maxScore || 100,
               description: info?.description,
             }
@@ -191,11 +191,11 @@ export default function HollandProfessionalReport({ result, mode = 'normal' }: H
         </h3>
         <AdvancedBarChart
           dimensions={dimensions.length > 0 ? dimensions.map(d => {
-            const code = d.name.charAt(0).toUpperCase()
+            const code = d.name?.charAt(0).toUpperCase() || ''
             const info = HOLLAND_TYPES[code as keyof typeof HOLLAND_TYPES]
             return {
-              name: info?.name || d.name,
-              score: d.score,
+              name: info?.name || d.name || '未知',
+              score: d.score ?? 0,
               maxScore: d.maxScore || 100,
               description: info?.description,
             }

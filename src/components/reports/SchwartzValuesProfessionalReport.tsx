@@ -71,16 +71,24 @@ export default function SchwartzValuesProfessionalReport({ result, mode = 'norma
         </div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass rounded-3xl p-8">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <Target className="w-6 h-6 text-violet-400" />
-          十项价值观全景
-        </h3>
-        <AdvancedBarChart height={320} dimensions={dimensions.map(d => {
-          const info = SCHWARTZ_VALUES.find(v => v.id === d.name);
-          return { name: info?.name || d.name, score: d.score, maxScore: 100, description: info?.desc };
-        })} colorScheme="gradient" animated />
-      </motion.div>
+      {dimensions.length > 0 ? (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass rounded-3xl p-8">
+          <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <Target className="w-6 h-6 text-violet-400" />
+            十项价值观全景
+          </h3>
+          <AdvancedBarChart height={320} dimensions={dimensions.map(d => {
+            const info = SCHWARTZ_VALUES.find(v => v.id === d.name);
+            return { name: info?.name || d.name || '未知', score: d.score ?? 0, maxScore: 100, description: info?.desc };
+          })} colorScheme="gradient" animated />
+        </motion.div>
+      ) : (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass rounded-3xl p-8 text-center">
+          <div className="text-4xl mb-4">📊</div>
+          <h3 className="text-xl font-bold text-white mb-2">暂无维度数据</h3>
+          <p className="text-white/60">该测评暂未提供详细的维度分析数据</p>
+        </motion.div>
+      )}
     </div>
   )
 }

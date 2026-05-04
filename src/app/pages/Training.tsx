@@ -1,9 +1,10 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Gem, Sun, Sparkles, Gamepad2 } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Gem, Sun, Sparkles, Gamepad2, Star, Zap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useAppStore } from '../../store'
-import { useResponsive } from '../hooks/useResponsive'
+import { useAppStore, type TrainingRecord, type MoodRecord } from '../../store'
+import { useResponsive } from '../../hooks/useResponsive'
+import type { CompletedAssessment } from '../../types'
 import {
   FOUNDATION_TRAININGS,
   COGNITION_TRAININGS_FULL,
@@ -14,6 +15,12 @@ import {
   ALL_TRAININGS,
   getRecommendedTrainings
 } from '../data/training-library'
+import {
+  ALL_TRAINING_TRACKS,
+  checkLevelUnlocked,
+  type UserProgress,
+  LEVEL_LABELS
+} from '../data/training-levels'
 
 type TabType = 'recommended' | 'emotion' | 'cognition' | 'attachment' | 'social' | 'career' | 'fun'
 
@@ -28,18 +35,40 @@ const TRACK_CONFIG = {
 }
 
 export default function Training() {
-  const { hasCompletedAssessment, completedAssessments: assessmentHistory, getMoodForDate, results } = useAppStore() as any
+  const { hasCompletedAssessment, completedAssessments: assessmentHistory, getMoodForDate, results, trainingRecords: storeTrainingRecords } = useAppStore()
   const { isDesktop } = useResponsive()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<TabType>('recommended')
+  const [selectedTrack, setSelectedTrack] = useState<string | null>(null)
 
-  const today = new Date().toISOString().split('T')[0]
+  const today = useMemo(() => new Date().toISOString().split('T')[0], [])
   const todayMood = getMoodForDate(today)
 
-  const trainingRecords = JSON.parse(localStorage.getItem('training-records') || '[]')
+  const trainingRecords = useMemo(() => {
+    try {
+      const localStorageRecords = JSON.parse(localStorage.getItem('training-records') || '[]') as TrainingRecord[]
+      return storeTrainingRecords.length > 0 ? storeTrainingRecords : localStorageRecords
+    } catch {
+      return storeTrainingRecords
+    }
+  }, [storeTrainingRecords])
+
   const lastTraining = trainingRecords[trainingRecords.length - 1]
 
-  const bigfiveResult = results['bigfive']?.data?.dimensions
+  const bigfiveResult = useMemo(() => {
+    try {
+      return results?.['bigfive']?.data?.dimensions
+    } catch {
+      return undefined
+    }
+  }, [results])
+
+  const userProgress: UserProgress = useMemo(() => ({
+    completedLevels: {},
+    completedTrainings: trainingRecords.map(r => r.programId),
+    completedAssessments: assessmentHistory.map(a => a.id)
+  }), [trainingRecords, assessmentHistory])
+  
   const recommendedTrainings = getRecommendedTrainings(todayMood?.mood, bigfiveResult)
 
   const displayTrainings = 
@@ -50,6 +79,21 @@ export default function Training() {
     activeTab === 'social' ? SOCIAL_TRAININGS_FULL :
     activeTab === 'career' ? FOUNDATION_TRAININGS.filter(t => t.category === 'career') :
     FUN_TRAININGS_FULL
+
+  const currentTrack = ALL_TRAINING_TRACKS.find(t => t.id === activeTab)
+
+  const isTrainingUnlocked = (trainingId: string): boolean => {
+    for (const track of ALL_TRAINING_TRACKS) {
+      for (const level of track.levels) {
+        if (checkLevelUnlocked(track.id, level.level, userProgress)) {
+          if (level.trainings.some(t => t.id === trainingId)) {
+            return true
+          }
+        }
+      }
+    }
+    return true
+  }
 
   return (
     <motion.div
@@ -155,55 +199,71 @@ export default function Training() {
         transition={{ delay: 0.3 }}
       >
         <div className={`grid gap-3 ${isDesktop ? 'grid-cols-2' : 'grid-cols-1'}`}>
-          {displayTrainings.map((plan, i) => (
-            <motion.div
-              key={plan.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 + i * 0.05 }}
-              onClick={() => navigate(`/app/training/${plan.id}`)}
-              className={`rounded-xl p-4 border cursor-pointer hover:scale-[1.01] transition-all group ${
-                plan.category === 'fun'
-                  ? 'bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-rose-500/10 border-amber-500/10 hover:border-amber-500/30'
-                  : 'bg-white/5 border-white/5 hover:border-violet-500/30'
-              }`}
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xl">{plan.icon}</span>
-                    <span className={`inline-block px-2 py-0.5 rounded text-xs ${
-                      plan.category === 'fun'
-                        ? 'bg-amber-500/20 text-amber-300'
-                        : plan.level === 1 ? 'bg-emerald-500/20 text-emerald-300'
-                        : plan.level === 2 ? 'bg-blue-500/20 text-blue-300'
-                        : plan.level === 3 ? 'bg-amber-500/20 text-amber-300'
-                        : 'bg-rose-500/20 text-rose-300'
-                    }`}>
-                      L{plan.level} {plan.levelLabel || ''} · {plan.duration}
-                    </span>
-                  </div>
-                  <h4 className="font-medium mb-1">{plan.title}</h4>
-                  <p className="text-xs text-white/50 mb-2 line-clamp-2">
-                    {plan.benefits[0]}
-                  </p>
-                  <div className="flex gap-1 flex-wrap">
-                    {plan.exercises.slice(0, 3).map((e, j) => (
-                      <span key={j} className="inline-block px-2 py-0.5 rounded text-[10px] bg-white/5 text-white/40">
-                        {e.title}
+          {displayTrainings.map((plan, i) => {
+            const unlocked = isTrainingUnlocked(plan.id)
+            return (
+              <motion.div
+                key={plan.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 + i * 0.05 }}
+                onClick={() => unlocked && navigate(`/app/training/${plan.id}`)}
+                className={`rounded-xl p-4 border transition-all ${
+                  unlocked 
+                    ? `cursor-pointer hover:scale-[1.01] group ${
+                        plan.category === 'fun'
+                          ? 'bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-rose-500/10 border-amber-500/10 hover:border-amber-500/30'
+                          : 'bg-white/5 border-white/5 hover:border-violet-500/30'
+                      }`
+                    : 'bg-white/5 border-white/5 opacity-60'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`text-xl ${!unlocked ? 'grayscale' : ''}`}>{plan.icon}</span>
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${
+                        plan.category === 'fun'
+                          ? 'bg-amber-500/20 text-amber-300'
+                          : plan.level === 1 ? 'bg-emerald-500/20 text-emerald-300'
+                          : plan.level === 2 ? 'bg-blue-500/20 text-blue-300'
+                          : plan.level === 3 ? 'bg-amber-500/20 text-amber-300'
+                          : plan.level === 4 ? 'bg-purple-500/20 text-purple-300'
+                          : 'bg-rose-500/20 text-rose-300'
+                      }`}>
+                        <Zap size={10} className={unlocked ? '' : 'opacity-0'} />
+                        L{plan.level} {plan.levelLabel || ''}
                       </span>
-                    ))}
-                    {plan.exercises.length > 3 && (
-                      <span className="inline-block px-2 py-0.5 rounded text-[10px] bg-white/5 text-white/40">
-                        +{plan.exercises.length - 3}
-                      </span>
+                      <span className="text-xs text-white/40">{plan.duration}</span>
+                    </div>
+                    <h4 className={`font-medium mb-1 ${!unlocked ? 'text-white/50' : ''}`}>{plan.title}</h4>
+                    <p className="text-xs text-white/50 mb-2 line-clamp-2">
+                      {unlocked ? plan.benefits[0] : '完成前置训练后解锁'}
+                    </p>
+                    {unlocked && (
+                      <div className="flex gap-1 flex-wrap">
+                        {plan.exercises.slice(0, 3).map((e, j) => (
+                          <span key={j} className="inline-block px-2 py-0.5 rounded text-[10px] bg-white/5 text-white/40">
+                            {e.title}
+                          </span>
+                        ))}
+                        {plan.exercises.length > 3 && (
+                          <span className="inline-block px-2 py-0.5 rounded text-[10px] bg-white/5 text-white/40">
+                            +{plan.exercises.length - 3}
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
+                  {unlocked ? (
+                    <ChevronRight size={20} className="text-white/30 group-hover:text-violet-400 group-hover:translate-x-1 transition-all shrink-0 mt-1" />
+                  ) : (
+                    <Lock size={16} className="text-white/30 shrink-0 mt-1" />
+                  )}
                 </div>
-                <ChevronRight size={20} className="text-white/30 group-hover:text-violet-400 group-hover:translate-x-1 transition-all shrink-0 mt-1" />
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            )
+          })}
         </div>
       </motion.div>
 

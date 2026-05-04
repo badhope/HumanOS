@@ -20,12 +20,12 @@ import Daily from './app/pages/Daily'
 import Training from './app/pages/Training'
 import Progress from './app/pages/Progress'
 import Discover from './app/pages/Discover'
-import Settings from './components/Settings'
+import SettingsPage from './app/pages/SettingsPage'
 import GrowthDashboard from './app/pages/GrowthDashboard'
+import GettingStarted from './app/pages/GettingStarted'
 import UniversalTraining from './app/pages/training/UniversalTraining'
 
-const Home = lazy(() => import('./pages/Home'))
-const AssessmentSelect = lazy(() => import('./pages/AssessmentSelect'))
+
 const ModeSelect = lazy(() => import('./pages/ModeSelect'))
 const AssessmentConfirm = lazy(() => import('./pages/AssessmentConfirm'))
 const Assessment = lazy(() => import('./pages/Assessment'))
@@ -46,16 +46,12 @@ const ChartShowcase = lazy(() => import('./pages/ChartShowcase'))
 const Leaderboard = lazy(() => import('./pages/Leaderboard'))
 const SoulMatch = lazy(() => import('./pages/SoulMatch'))
 const Profile = lazy(() => import('./pages/Profile'))
-const NotFound = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true)
   const theme = useAppStore((state) => state.theme)
   const location = useLocation()
   
-  const isFullscreenGame = 
-    location.pathname.includes('/assessment')
-
   const isNewApp = location.pathname.startsWith('/app')
 
   useEffect(() => {
@@ -106,19 +102,20 @@ export default function App() {
                   <Route path="training" element={<Training />} />
                   <Route path="progress" element={<Progress />} />
                   <Route path="discover" element={<Discover />} />
-                  <Route path="settings" element={<Settings />} />
+                  <Route path="settings" element={<SettingsPage />} />
+                  <Route path="getting-started" element={<GettingStarted />} />
                 </Route>
 
                 {/* 独立训练页面 - 全屏沉浸式 */}
                 <Route path="/app/training/:programId" element={<UniversalTraining />} />
                 <Route path="/app/growth" element={<GrowthDashboard />} />
 
-                {/* 统一入口：新旧路径全部重定向到测评列表 */}
-                <Route path="/assessments" element={<Navigate to="/legacy/assessments" replace />} />
-                <Route path="/categories" element={<Navigate to="/legacy/assessments" replace />} />
-                <Route path="/legacy/home" element={<Home />} />
-                <Route path="/legacy/categories" element={<Navigate to="/legacy/assessments" replace />} />
-                <Route path="/legacy/assessments" element={<AssessmentSelect />} />
+                {/* 统一入口：新旧路径全部重定向到新版测评列表 */}
+                <Route path="/assessments" element={<Navigate to="/app/discover" replace />} />
+                <Route path="/categories" element={<Navigate to="/app/discover" replace />} />
+                <Route path="/legacy/categories" element={<Navigate to="/app/discover" replace />} />
+                <Route path="/legacy/assessments" element={<Navigate to="/app/discover" replace />} />
+                <Route path="/legacy/home" element={<Navigate to="/app/daily" replace />} />
                 <Route path="/legacy/mode-select/:id" element={<ModeSelect />} />
                 <Route path="/legacy/mode-select/onepiece/:id" element={<OnePieceModeSelect />} />
                 <Route path="/legacy/confirm/:id" element={<AssessmentConfirm />} />

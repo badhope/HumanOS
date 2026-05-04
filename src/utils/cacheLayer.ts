@@ -44,6 +44,7 @@ class TieredCache {
         localStorage.removeItem(key)
       }
     } catch (e) {
+      console.warn('[Cache] L1获取失败', e)
     }
 
     return null
@@ -77,11 +78,15 @@ class TieredCache {
   delete(key: string): void {
     try {
       (this.l1 as any).cache.delete(key)
-    } catch {}
+    } catch (e) {
+      console.warn('[Cache] L1删除失败', e)
+    }
     this.pendingWrites.delete(key)
     try {
       localStorage.removeItem(key)
-    } catch {}
+    } catch (e) {
+      console.warn('[Cache] localStorage删除失败', e)
+    }
   }
 
   clear(pattern?: string): void {
@@ -97,7 +102,9 @@ class TieredCache {
       if (regex.test(keyStr)) {
         try {
           (this.l1 as any).cache.delete(k)
-        } catch {}
+        } catch (e) {
+          console.warn('[Cache] 模式清理失败', e)
+        }
       }
     })
   }
@@ -125,7 +132,9 @@ class TieredCache {
             })
           keys.slice(0, 20).forEach(k => localStorage.removeItem(k))
           localStorage.setItem(key, JSON.stringify(entry))
-        } catch {}
+        } catch (e) {
+          console.warn('[Cache] 紧急清理后写入仍然失败', e)
+        }
       }
     })
     this.pendingWrites.clear()
