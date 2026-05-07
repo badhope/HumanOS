@@ -61,10 +61,10 @@ def main():
     deps_ok = check_dependencies()
     
     print("\n" + "="*60)
-    print(f"📊 测评引擎数量: 4 (持续更新中...)")
-    print(f"💾 数据库: SQLite")
-    print(f"🔌 API端点: /api/v1")
-    print(f"📚 文档地址: http://localhost:8000/docs")
+    print("📊 测评引擎数量: 4 (持续更新中...)")
+    print("💾 数据库: SQLite")
+    print("🔌 API端点: /api/v1")
+    print("📚 文档地址: http://localhost:8000/docs")
     print("="*60)
     
     if deps_ok:

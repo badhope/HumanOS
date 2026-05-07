@@ -115,7 +115,9 @@ class VisitorIdentityService {
     
     try {
       const cookieValue = btoa(JSON.stringify({ id: this.profile.id }))
-      document.cookie = `${VISITOR_COOKIE_KEY}=${cookieValue}; max-age=31536000; path=/; SameSite=Lax`
+      const isSecure = window.location.protocol === 'https:'
+      const secureAttr = isSecure ? '; Secure' : ''
+      document.cookie = `${VISITOR_COOKIE_KEY}=${cookieValue}; max-age=31536000; path=/; SameSite=Lax${secureAttr}`
     } catch (e) {
       console.warn('[VisitorIdentity] Cookie存储失败', e)
     }

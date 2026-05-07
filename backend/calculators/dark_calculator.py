@@ -39,9 +39,6 @@ class DarkTriadCalculator(BaseCalculator):
         
         dimensions = []
         for dim, raw_score in dimension_scores.items():
-            max_score = 9 * 5
-            percentage = round((raw_score / max_score) * 100)
-            
             dimensions.append(DimensionResult(
                 dimension_id=dim,
                 name=self.DIMENSION_NAMES[dim],
@@ -77,7 +74,7 @@ class DarkTriadCalculator(BaseCalculator):
             else:
                 try:
                     idx = int(key)
-                except:
+                except (ValueError, TypeError):
                     continue
             normalized[idx] = val
         return normalized

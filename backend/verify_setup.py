@@ -4,7 +4,6 @@
 #  后端全面验证脚本
 # =============================================================================
 import sys
-from typing import List, Dict, Any
 
 def color_print(text: str, color: str = "white"):
     colors = {
@@ -36,14 +35,13 @@ def main():
     color_print("📦 模块导入测试", "yellow")
 
     def check_calculators():
-        from calculators import list_calculators, get_calculator
+        from calculators import list_calculators
         assert len(list_calculators()) >= 4, "计算器数量不足"
 
     results.append(run_check("计算器核心模块", check_calculators))
 
     def check_database():
-        from database import Base, engine, User, AssessmentResult
-        from database import AssessmentType, NormData, ItemAnalysis
+        from database import Base, engine
         assert Base is not None
         assert engine is not None
 
@@ -51,9 +49,6 @@ def main():
 
     def check_api():
         from api.assessment import router
-        from api.auth import router as auth_router
-        from api.analytics import router as analytics_router
-        from api.game import router as game_router
         assert len(router.routes) >= 3
 
     results.append(run_check("API路由模块", check_api))

@@ -67,7 +67,7 @@ class MLQMeaningInLifeCalculator(BaseCalculator):
             else:
                 try:
                     idx = int(key)
-                except:
+                except (ValueError, TypeError):
                     continue
             normalized[idx] = val
         return normalized

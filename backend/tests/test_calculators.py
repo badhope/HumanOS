@@ -8,7 +8,6 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from calculators import get_calculator, list_calculators
-import json
 
 class TestCalculators:
     """测评计算器测试套件"""

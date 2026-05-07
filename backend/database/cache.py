@@ -1,13 +1,13 @@
 # =============================================================================
 #  高性能缓存层 - 支持内存缓存 + Redis
 # =============================================================================
-from functools import lru_cache, wraps
+from functools import wraps
 from typing import Any, Callable, Optional
 import time
 import hashlib
 import json
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from collections import OrderedDict
 
 logger = logging.getLogger(__name__)

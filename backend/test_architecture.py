@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import requests
-import time
 
 BACKEND = 'http://localhost:8000'
 
@@ -44,7 +43,7 @@ print("\n4️⃣  批量请求验证限流+性能:")
 for i in range(5):
     r = requests.post(f'{BACKEND}/api/v1/assessment/calculate/sas-standard', json={'answers': {str(j): 2 for j in range(1, 51)}})
     assert r.status_code == 200
-print(f"   5次并发请求全部成功 ✅")
+print("   5次并发请求全部成功 ✅")
 
 r = requests.get(f'{BACKEND}/api/v1/assessment/metrics')
 metrics_after = r.json()

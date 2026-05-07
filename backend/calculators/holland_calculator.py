@@ -3,7 +3,6 @@
 # =============================================================================
 from typing import Dict, List
 from .base import BaseCalculator, CalculationResult, DimensionResult
-import numpy as np
 
 class HollandCalculator(BaseCalculator):
     assessment_id = "holland-sds"
@@ -86,7 +85,7 @@ class HollandCalculator(BaseCalculator):
             blind_spots=self._get_blind_spots(top3),
             development_advice=[
                 f"你的霍兰德代码是 {holland_code}",
-                f"建议从事与你TOP3兴趣类型匹配的职业",
+                "建议从事与你TOP3兴趣类型匹配的职业",
                 "职业满意度 = 兴趣 × 能力 × 价值观",
             ],
         )

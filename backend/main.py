@@ -1,21 +1,21 @@
 # =============================================================================
 #  MindMirror 测评系统后端主入口
 # =============================================================================
+import os
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from middleware.rate_limiter import RateLimiterMiddleware
 import logging
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
-
+from middleware.rate_limiter import RateLimiterMiddleware
 from database.database import engine, Base
 from api.assessment import router as assessment_router
 from api.auth import router as auth_router
 from api.analytics import router as analytics_router
+
+load_dotenv()
 
 # =============================================================================
 #  日志配置

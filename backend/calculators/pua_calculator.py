@@ -132,5 +132,5 @@ class PUAResistanceCalculator(BaseCalculator):
             "target": ["立刻下载国家反诈APP！", "你值得被好好对待", "不要在垃圾堆里找对象", "爱你的人不会让你怀疑自己"],
         }
         advice = base_advice[level]
-        advice.append(f"重点提升：" + self.DIMENSION_NAMES[weakest])
+        advice.append("重点提升：" + self.DIMENSION_NAMES[weakest])
         return advice

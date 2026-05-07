@@ -3,9 +3,7 @@
 # =============================================================================
 from abc import ABC, abstractmethod
 from typing import Dict, List, Any, Optional
-import numpy as np
 from dataclasses import dataclass
-from datetime import datetime
 
 @dataclass
 class DimensionResult:
@@ -117,7 +115,7 @@ class BaseCalculator(ABC):
             try:
                 idx = int(key)
                 normalized[idx] = val
-            except:
+            except (ValueError, TypeError):
                 continue
         return normalized
     

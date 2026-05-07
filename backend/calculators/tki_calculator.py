@@ -66,7 +66,7 @@ class TKICalculator(BaseCalculator):
             else:
                 try:
                     idx = int(key)
-                except:
+                except (ValueError, TypeError):
                     continue
             normalized[idx] = val
         return normalized
@@ -103,8 +103,8 @@ class TKICalculator(BaseCalculator):
     
     def _get_advice(self, style: str) -> List[str]:
         return [
-            f"⚖️ 根据具体情境灵活选择冲突处理模式",
-            f"📊 重要冲突：优先考虑合作/妥协",
-            f"⏰ 紧急情况：竞争/回避可能更合适",
-            f"🤝 长期关系：迁就/合作更有利于维护",
+            "⚖️ 根据具体情境灵活选择冲突处理模式",
+            "📊 重要冲突：优先考虑合作/妥协",
+            "⏰ 紧急情况：竞争/回避可能更合适",
+            "🤝 长期关系：迁就/合作更有利于维护",
         ]

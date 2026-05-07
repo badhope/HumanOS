@@ -11,7 +11,7 @@ from typing import List
 
 from database.database import get_db
 from database import models
-from schemas.assessment_schemas import CalculationResponse, AssessmentInfo
+from schemas.assessment_schemas import AssessmentInfo
 from middleware import (
     CalculationRequest,
     calculate_result_hash,
@@ -86,7 +86,7 @@ async def calculate_assessment(
 
     try:
         calculator = get_calculator(assessment_id)
-    except ValueError as e:
+    except ValueError:
         metrics.record_request((time.time() - start_time) * 1000, success=False)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -112,7 +112,7 @@ async def calculate_assessment(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"计算错误: {str(e)}",
         )
-    except Exception as e:
+    except Exception:
         metrics.record_request((time.time() - start_time) * 1000, success=False)
         logger.exception(f"[{request_id}] 未预期的错误")
         raise HTTPException(
@@ -229,13 +229,13 @@ async def export_report_pdf(
                 )
 
     except TimeoutError:
-        logger.error(f"[EXPORT] PDF生成超时")
+        logger.error("[EXPORT] PDF生成超时")
         raise HTTPException(
             status_code=status.HTTP_504_GATEWAY_TIMEOUT,
             detail="PDF生成超时，请重试或使用本地导出"
         )
     except Exception as e:
-        logger.exception(f"[EXPORT] PDF生成错误")
+        logger.exception("[EXPORT] PDF生成错误")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"PDF生成失败: {str(e)}"
@@ -298,20 +298,21 @@ async def export_report_image(
                 )
 
     except Exception as e:
-        logger.exception(f"[EXPORT] PNG生成错误")
+        logger.exception("[EXPORT] PNG生成错误")
         raise HTTPException(status_code=500, detail=f"生成失败: {str(e)}")
 
 
 @router.get("/export/status", summary="检查云端导出功能状态")
 async def check_export_status():
-    try:
-        import playwright
+    import importlib.util
+    playwright_available = importlib.util.find_spec("playwright") is not None
+    if playwright_available:
         return {
             "enabled": True,
             "engine": "Playwright + Chromium",
             "features": ["pdf", "png"],
         }
-    except ImportError:
+    else:
         return {
             "enabled": False,
             "engine": None,

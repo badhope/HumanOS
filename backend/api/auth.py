@@ -1,24 +1,24 @@
 # =============================================================================
 #  用户认证 API 路由
 # =============================================================================
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-from datetime import datetime, timedelta
-from pydantic import BaseModel
-from dotenv import load_dotenv
 import os
 import logging
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from pydantic import BaseModel
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
 from database.database import get_db
 from database import models
-
-load_dotenv()
 
 router = APIRouter()
 

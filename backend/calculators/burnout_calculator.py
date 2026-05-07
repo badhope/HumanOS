@@ -4,7 +4,6 @@
 # =============================================================================
 from typing import Dict, List
 from .base import BaseCalculator, CalculationResult, DimensionResult
-import numpy as np
 
 class BurnoutCalculator(BaseCalculator):
     assessment_id = "burnout-mbi"

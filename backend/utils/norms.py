@@ -1,10 +1,6 @@
 # =============================================================================
 #  常模数据更新工具
 # =============================================================================
-import json
-import numpy as np
-import pandas as pd
-from pathlib import Path
 from typing import Dict, Any
 
 NORM_DATA = {

@@ -6,7 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 import pandas as pd
 import numpy as np
-from typing import Dict, Any
 
 from database.database import get_db
 from database import models

@@ -25,6 +25,7 @@ import { Award, TrendingUp, Lightbulb, Briefcase, Target, Heart, Brain, User, Us
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, CartesianGrid, ScatterChart, Scatter, Legend, AreaChart, Area } from 'recharts'
 import type { SASResult, ECRResult, HollandResult } from '../utils/calculators'
 import { getAssessmentById } from '../data/assessments'
+import DOMPurify from 'dompurify'
 
 // ==============================================
 // 🎨 配色系统 - 每个测评有专属的色彩体系
@@ -3560,9 +3561,9 @@ function EnhancedReportTemplate({ result, assessment }: EnhancedReportProps) {
         return new Function('result', `return \`${str}\``)(ctx)
       }
       const rendered = evalInContext(content, result)
-      return <div dangerouslySetInnerHTML={{ __html: rendered }} />
+      return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(rendered, { USE_PROFILES: { html: true }, ALLOWED_TAGS: ['div', 'span', 'p', 'strong', 'em', 'b', 'i', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }) }} />
     } catch (e) {
-      return <div dangerouslySetInnerHTML={{ __html: content }} />
+      return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content, { USE_PROFILES: { html: true }, ALLOWED_TAGS: ['div', 'span', 'p', 'strong', 'em', 'b', 'i', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }) }} />
     }
   }
 
