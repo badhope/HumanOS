@@ -7,7 +7,6 @@
     "email": "contact@guanxinjie.dev",
     "url": "https://github.com/badhope"
   },
-  "main": "electron/main.ts",
   "module": "dist/index.html",
   "exports": {
     ".": "./dist/index.html"
@@ -92,13 +91,7 @@
     "platforms": "node scripts/auto-index-platforms.js",
     "analyze": "npx vite-bundle-visualizer",
     "check:integrity": "node scripts/integrity-check.mjs",
-    "quality": "npm run typecheck && npm run lint && npm run check:integrity",
-    "electron:dev": "npm run build && concurrently \"vite\" \"wait-on http://localhost:5173 && electron electron/main.ts\"",
-    "electron:build": "npm run build && electron-builder --config electron-builder.json",
-    "build:win": "npm run build && electron-builder --config electron-builder.json --win",
-    "build:mac": "npm run build && electron-builder --config electron-builder.json --mac",
-    "build:linux": "npm run build && electron-builder --config electron-builder.json --linux",
-    "build:all": "npm run build && electron-builder --config electron-builder.json --win --mac --linux"
+    "quality": "npm run typecheck && npm run lint && npm run check:integrity"
   },
   "dependencies": {
     "@react-three/drei": "^9.92.0",
@@ -137,9 +130,6 @@
     "@typescript-eslint/parser": "^8.58.0",
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.4.16",
-    "concurrently": "^8.2.2",
-    "electron": "^27.3.11",
-    "electron-builder": "^24.13.3",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.4",
@@ -153,8 +143,7 @@
     "typescript": "^5.2.2",
     "typescript-eslint": "^8.59.0",
     "vite": "^5.0.0",
-    "vite-plugin-pwa": "^1.2.0",
-    "wait-on": "^7.2.0"
+    "vite-plugin-pwa": "^1.2.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
