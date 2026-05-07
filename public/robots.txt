@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://mindmirror.dpdns.org/sitemap.xml
+
+# Disallow admin and private routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /test/
+
+# Allow search engines to crawl assessment pages
+Allow: /assessment/
+Allow: /training/
+Allow: /discover/
+Allow: /progress/
+Allow: /daily/
