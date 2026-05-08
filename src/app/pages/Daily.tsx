@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Sparkles } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import WelcomeModal from '../components/WelcomeModal'
 import AssessmentCard from '../components/AssessmentCard'
 import { DailyTaskList } from '../components/DailyTaskList'
 import { useAppStore } from '../../store'
@@ -14,16 +13,13 @@ const MOOD_LABELS = ['很糟糕', '不太好', '一般般', '还不错', '超棒
 export default function Daily() {
   const {
     hasCompletedAssessment,
-    hasDismissedWelcome,
     hasDismissedAssessmentCard,
-    dismissWelcome,
     dismissAssessmentCard,
     recordMood,
     getMoodForDate,
     moodHistory,
   } = useAppStore()
   const navigate = useNavigate()
-  const [showWelcome, setShowWelcome] = useState(false)
   const [selectedMood, setSelectedMood] = useState<number | null>(null)
 
   useEffect(() => {
@@ -39,32 +35,15 @@ export default function Daily() {
     recordMood(mood, MOOD_LABELS[mood])
   }
 
-  useEffect(() => {
-    if (!hasDismissedWelcome && !hasCompletedAssessment) {
-      const timer = setTimeout(() => setShowWelcome(true), 500)
-      return () => clearTimeout(timer)
-    }
-  }, [hasDismissedWelcome, hasCompletedAssessment])
-
-  const handleCloseWelcome = () => {
-    setShowWelcome(false)
-    dismissWelcome()
-  }
-
   const showAssessmentCard = !hasCompletedAssessment && !hasDismissedAssessmentCard
 
   return (
-    <>
-      <AnimatePresence>
-        {showWelcome && <WelcomeModal onClose={handleCloseWelcome} />}
-      </AnimatePresence>
-
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        className="p-4 md:p-6 space-y-6"
-      >
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      className="p-4 md:p-6 space-y-6"
+    >
         <div className="py-2 md:py-0 md:mb-6 md:text-left">
           <motion.h2 
             className="text-2xl md:text-3xl font-bold mb-2"
@@ -221,7 +200,6 @@ export default function Daily() {
             ✨ 每天自动更新3条心理学知识，陪伴你成长
           </p>
         </motion.div>
-      </motion.div>
-    </>
+    </motion.div>
   )
 }
