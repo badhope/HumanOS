@@ -7,18 +7,20 @@
  * - 答案实时保存
  * - 进度条显示
  * - 专业版/娱乐版双模式
+ * - 智能随机出题系统
  * 
  * 【核心机制】
  * - 防刷新：答案存在localStorage
  * - 防作弊：禁止题目回溯
  * - 自动保存：每题答完自动存
  * - 键盘快捷键：支持方向键答题
+ * - 智能随机化：题目和选项每次随机打乱
  */
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, Home, CheckCircle2, Cloud, CloudOff, RefreshCw } from 'lucide-react'
+import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, Home, CheckCircle2, Cloud, CloudOff, RefreshCw, Shuffle } from 'lucide-react'
 import LegacyHeader from '../app/components/LegacyHeader'
 import { useResponsive } from '../app/hooks/useResponsive'
 import { getAssessmentById } from '@data/assessments'
@@ -47,6 +49,14 @@ import {
   sdsProfessionalQuestions,
 } from '@data/professional'
 import { processAssessmentQuestions } from '@utils/questionQualityControl'
+import { 
+  smartRandomizeQuestions, 
+  type RandomizedQuestion,
+  getRandomizationInfo,
+  convertBackToOriginalAnswer,
+  generateSeed,
+  shuffleArray 
+} from '@utils/questionRandomizer'
 
 const QUESTION_TIME_LIMIT = 45
 const ANSWER_STORAGE_KEY = 'assessment-answers-draft'
@@ -59,7 +69,8 @@ export default function Assessment() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Answer[]>([])
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
-  const [questions, setQuestions] = useState<Question[]>([])
+  const [questions, setQuestions] = useState<RandomizedQuestion[]>([])
+  const [originalQuestions, setOriginalQuestions] = useState<Question[]>([])
   const [showAnswerSheet, setShowAnswerSheet] = useState(false)
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME_LIMIT)
   const [showExitConfirm, setShowExitConfirm] = useState(false)
@@ -68,6 +79,7 @@ export default function Assessment() {
   const [showSubmitSuccess, setShowSubmitSuccess] = useState(false)
   const [calculationSource, setCalculationSource] = useState<'auto' | 'frontend' | 'backend' | 'checking'>('checking')
   const [calculating, setCalculating] = useState(false)
+  const [randomizationSeed, setRandomizationSeed] = useState<string | null>(null)
   
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isInitializedRef = useRef(false)
@@ -152,35 +164,66 @@ export default function Assessment() {
       selectedQuestions = assessment.questions
     }
 
+    setOriginalQuestions(selectedQuestions)
+    
     const processedQuestions = processAssessmentQuestions(
       selectedQuestions,
       mode as any
     )
-    
-    setQuestions(processedQuestions)
-    
+
     const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
     const savedDraft = localStorage.getItem(storageKey)
+    
+    let finalQuestions: RandomizedQuestion[]
+    let currentQ = 0
+    let existingAnswers: Answer[] = []
     
     if (savedDraft) {
       try {
         const draft = JSON.parse(savedDraft)
-        if (draft.answers && draft.answers.length > 0) {
-          setAnswers(draft.answers)
-          setCurrentQuestion(Math.min(draft.answers.length, processedQuestions.length - 1))
+        if (draft.answers && draft.answers.length > 0 && draft.randomizationSeed) {
+          setRandomizationSeed(draft.randomizationSeed)
+          finalQuestions = smartRandomizeQuestions(processedQuestions, {
+            seed: draft.randomizationSeed,
+            shuffleQuestions: true,
+            shuffleOptions: true
+          })
+          existingAnswers = draft.answers
+          currentQ = Math.min(draft.lastQuestion || 0, finalQuestions.length - 1)
+        } else {
+          const seed = generateSeed()
+          setRandomizationSeed(seed)
+          finalQuestions = smartRandomizeQuestions(processedQuestions, {
+            seed,
+            shuffleQuestions: true,
+            shuffleOptions: true
+          })
         }
       } catch {
-        setCurrentQuestion(0)
-        setAnswers([])
+        const seed = generateSeed()
+        setRandomizationSeed(seed)
+        finalQuestions = smartRandomizeQuestions(processedQuestions, {
+          seed,
+          shuffleQuestions: true,
+          shuffleOptions: true
+        })
       }
     } else {
-      setCurrentQuestion(0)
-      setAnswers([])
+      const seed = generateSeed()
+      setRandomizationSeed(seed)
+      finalQuestions = smartRandomizeQuestions(processedQuestions, {
+        seed,
+        shuffleQuestions: true,
+        shuffleOptions: true
+      })
     }
     
+    setQuestions(finalQuestions)
+    setAnswers(existingAnswers)
+    setCurrentQuestion(currentQ)
     setSelectedOption(null)
     setTimeLeft(QUESTION_TIME_LIMIT)
-  }, [assessment, mode, navigate, getProfessionalQuestions, convertProfessionalToQuestion])
+  }, [assessment, mode, navigate, getProfessionalQuestions])
 
   useEffect(() => {
     if (questions.length === 0 || isTimeout) return
@@ -220,12 +263,12 @@ export default function Assessment() {
     }
   }, [answers, questions, currentQuestion])
 
-  const createAnswer = useCallback((questionId: string, optionId: string, question: Question): Answer => {
+  const createAnswer = useCallback((questionId: string, optionId: string, question: RandomizedQuestion): Answer => {
     const selectedOpt = question.options.find((o) => o.id === optionId)
     return {
       questionId,
       selectedOptions: [optionId],
-      value: selectedOpt?.value,
+      value: selectedOpt?.value ?? convertBackToOriginalAnswer(optionId, question),
       trait: selectedOpt?.trait,
     }
   }, [])
@@ -246,6 +289,7 @@ export default function Assessment() {
         localStorage.setItem(storageKey, JSON.stringify({
           answers: newAnswers,
           lastQuestion: currentQuestion,
+          randomizationSeed,
           savedAt: Date.now(),
         }))
       }
