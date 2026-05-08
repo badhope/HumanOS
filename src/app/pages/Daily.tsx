@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Sparkles } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import UsageGuide from '../components/UsageGuide'
 import AssessmentCard from '../components/AssessmentCard'
 import { DailyTaskList } from '../components/DailyTaskList'
 import { useAppStore } from '../../store'
@@ -55,6 +56,8 @@ export default function Daily() {
           </motion.h2>
           <p className="text-white/60">今天感觉怎么样？</p>
         </div>
+
+        <UsageGuide />
 
         <DailyTaskList />
 
