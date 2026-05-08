@@ -18,7 +18,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, QrCode, Home, Trophy, Clock, Link2 } from 'lucide-react'
+import { ArrowLeft, QrCode, Home, Trophy, Clock, Link2, Sparkles } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { QRCodeSVG } from 'qrcode.react'
 import { useAppStore } from '../store'
@@ -267,6 +267,17 @@ export default function Results() {
           >
             <ArrowLeft className="w-5 h-5" />
             返回测评列表
+          </motion.button>
+          <span className="text-white/30">|</span>
+          <motion.button
+            onClick={() => navigate('/app/training')}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-violet-500/25 transition-all"
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Trophy className="w-4 h-4" />
+            开启训练
           </motion.button>
         </motion.div>
 
