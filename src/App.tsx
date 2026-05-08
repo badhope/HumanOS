@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState, useEffect, createContext, useContext, useCallback } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { PageSkeleton } from './components/Loading'
-import SplashScreen from './components/animations/SplashScreen'
+import OnboardingScreen from './components/animations/OnboardingScreen'
 import GlobalMenu from './components/GlobalMenu'
 import { I18nProvider } from './i18n'
 import { useAppStore } from './store'
@@ -120,7 +120,7 @@ export default function App() {
                   <ShortcutInitializer />
                   
                   {!isNewApp && showSplash && (
-                    <SplashScreen onComplete={handleSplashComplete} minDuration={4500} />
+                    <OnboardingScreen onComplete={handleSplashComplete} />
                   )}
 
                   {!isNewApp && <GlobalMenu />}
