@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Gem, Sun, Sparkles, Gamepad2, Star, Zap } from 'lucide-react'
+import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Gem, Sun, Sparkles, Gamepad2, Star, Zap, Compass, AlertCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore, type TrainingRecord, type MoodRecord } from '../../store'
 import { useResponsive } from '../../hooks/useResponsive'
@@ -21,11 +21,13 @@ import {
   type UserProgress,
   LEVEL_LABELS
 } from '../data/training-levels'
+import TrainingGuide from '../components/training/TrainingGuide'
 
-type TabType = 'recommended' | 'emotion' | 'cognition' | 'attachment' | 'social' | 'career' | 'fun'
+type TabType = 'guide' | 'recommended' | 'emotion' | 'cognition' | 'attachment' | 'social' | 'career' | 'fun'
 
 const TRACK_CONFIG = {
-  recommended: { label: '为你推荐', icon: Sparkles, gradient: 'from-violet-500 to-pink-500' },
+  guide: { label: '智能推荐', icon: Compass, gradient: 'from-violet-500 to-purple-500' },
+  recommended: { label: '精选训练', icon: Sparkles, gradient: 'from-pink-500 to-rose-500' },
   emotion: { label: '情绪管理', icon: Sun, gradient: 'from-amber-500 to-rose-500' },
   cognition: { label: '思维认知', icon: Brain, gradient: 'from-blue-500 to-cyan-500' },
   attachment: { label: '亲密关系', icon: Heart, gradient: 'from-pink-500 to-rose-500' },
@@ -38,7 +40,7 @@ export default function Training() {
   const { hasCompletedAssessment, completedAssessments: assessmentHistory, getMoodForDate, results, trainingRecords: storeTrainingRecords } = useAppStore()
   const { isDesktop } = useResponsive()
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState<TabType>('recommended')
+  const [activeTab, setActiveTab] = useState<TabType>('guide')
   const [selectedTrack, setSelectedTrack] = useState<string | null>(null)
 
   const today = useMemo(() => new Date().toISOString().split('T')[0], [])
@@ -72,6 +74,7 @@ export default function Training() {
   const recommendedTrainings = getRecommendedTrainings(todayMood?.mood, bigfiveResult)
 
   const displayTrainings = 
+    activeTab === 'guide' ? [] :
     activeTab === 'recommended' ? recommendedTrainings :
     activeTab === 'emotion' ? EMOTION_TRAININGS_FULL :
     activeTab === 'cognition' ? COGNITION_TRAININGS_FULL :
@@ -93,6 +96,14 @@ export default function Training() {
       }
     }
     return true
+  }
+
+  if (activeTab === 'guide') {
+    return (
+      <div className="p-4 md:p-6">
+        <TrainingGuide />
+      </div>
+    )
   }
 
   return (
