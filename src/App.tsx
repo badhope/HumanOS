@@ -1,7 +1,6 @@
 import { lazy, Suspense, useState, useEffect, createContext, useContext, useCallback } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { PageSkeleton } from './components/Loading'
-import OnboardingScreen from './components/animations/OnboardingScreen'
 import GlobalMenu from './components/GlobalMenu'
 import { I18nProvider } from './i18n'
 import { useAppStore } from './store'
@@ -59,7 +58,6 @@ export function useGlobalLoading() {
 }
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true)
   const [isPageTransitioning, setIsPageTransitioning] = useState(false)
   const [transitionMessage, setTransitionMessage] = useState('')
   const [transitionProgress, setTransitionProgress] = useState(0)
@@ -105,10 +103,6 @@ export default function App() {
     root.setAttribute('data-theme', theme)
   }, [theme])
 
-  const handleSplashComplete = () => {
-    setShowSplash(false)
-  }
-
   return (
     <LoadingContext.Provider value={{ startLoading, stopLoading, updateProgress }}>
       <I18nProvider>
@@ -119,10 +113,6 @@ export default function App() {
                 <div className="min-h-screen bg-slate-900 text-white">
                   <ShortcutInitializer />
                   
-                  {!isNewApp && showSplash && (
-                    <OnboardingScreen onComplete={handleSplashComplete} />
-                  )}
-
                   {!isNewApp && <GlobalMenu />}
                   {!isNewApp && <QuickSearchModal />}
                   {!isNewApp && <KeyboardShortcutsHelp />}
