@@ -227,11 +227,12 @@ export default function UsageGuide({ onComplete }: UsageGuideProps) {
             <button
               onClick={handlePrev}
               disabled={isFirstStep}
+              aria-disabled={isFirstStep}
               className={cn(
                 'w-10 h-10 rounded-xl flex items-center justify-center transition-all',
                 isFirstStep
-                  ? 'bg-white/5 text-white/20 cursor-not-allowed'
-                  : 'bg-white/10 text-white/80 hover:bg-white/20'
+                  ? 'bg-white/5 text-white/20 cursor-not-allowed opacity-40'
+                  : 'bg-white/10 text-white/80 hover:bg-white/20 active:bg-white/30'
               )}
             >
               <ChevronLeft size={20} />

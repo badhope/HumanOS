@@ -3,10 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@hooks/useToast'
 import {
-  X,
   ChevronRight,
   AlertCircle,
-  Mail,
   Calendar,
   ArrowLeft,
   User,
@@ -17,13 +15,9 @@ import {
   Shield,
   Download,
   Upload,
-  Share2,
   Volume2,
   Clock,
-  Lock,
-  HelpCircle,
   Info,
-  Keyboard,
   Monitor,
   Zap,
   Eye,
@@ -32,16 +26,13 @@ import {
   Cloud,
   FileText,
   Sparkles,
+  Sparkle,
   Globe,
-  Settings,
   Check,
   Trash,
   RefreshCw,
   Save,
-  FileJson,
   Share,
-  ChevronDown,
-  Sparkle,
   Palette as ColorWheel,
 } from 'lucide-react'
 import { useAppStore } from '@store'
