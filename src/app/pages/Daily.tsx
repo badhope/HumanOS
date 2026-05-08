@@ -180,7 +180,7 @@ export default function Daily() {
                   <motion.button
                     key={i}
                     onClick={() => handleMoodSelect(i)}
-                    className={`flex-1 h-18 rounded-2xl flex flex-col items-center justify-center transition-all relative overflow-hidden ${selectedMood === i
+                    className={`flex-1 h-20 rounded-2xl flex flex-col items-center justify-center transition-all relative overflow-hidden ${selectedMood === i
                       ? 'bg-gradient-to-br from-violet-500/30 to-purple-500/30 border-2 border-violet-500/50 shadow-lg shadow-violet-500/20'
                       : 'bg-white/5 hover:bg-white/10 border border-transparent hover:border-white/10'}
                     `}
