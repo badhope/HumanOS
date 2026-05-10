@@ -1,81 +1,29 @@
-import { useEffect, useMemo } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Brain, Sparkles, BarChart3, FileText, Cloud, CloudOff, Server } from 'lucide-react'
-import type { CalculationResponse as UnifiedCalculationResult } from '@services/apiClient'
+import { Brain } from 'lucide-react'
 import { PageWrapper } from '@components/layout'
 import { useAppStore } from '../store'
 
 const loadingSteps = [
-  { icon: Brain, text: '分析答题数据...', delay: 0 },
-  { icon: BarChart3, text: '计算维度得分...', delay: 0.4 },
-  { icon: Sparkles, text: '生成个性画像...', delay: 0.8 },
-  { icon: FileText, text: '撰写专业报告...', delay: 1.2 },
+  { text: '分析答题数据', delay: 0 },
+  { text: '计算维度得分', delay: 0.4 },
+  { text: '生成个性画像', delay: 0.8 },
+  { text: '撰写专业报告', delay: 1.2 },
 ]
-
-interface LoadingState {
-  calculationSource?: 'frontend' | 'backend'
-  calculationResult?: UnifiedCalculationResult
-}
 
 export default function Loading() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const location = useLocation()
-  const state = location.state as LoadingState
   const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment)
-
-  const calculationInfo = useMemo(() => {
-    if (state?.calculationSource === 'backend') {
-      return {
-        icon: Cloud,
-        label: '云端引擎',
-        color: 'text-emerald-400',
-        bg: 'bg-emerald-500/20',
-        description: 'GPU集群加速计算中',
-      }
-    }
-    if (state?.calculationSource === 'frontend') {
-      return {
-        icon: CloudOff,
-        label: '本地引擎',
-        color: 'text-amber-400',
-        bg: 'bg-amber-500/20',
-        description: '浏览器本地加密计算',
-      }
-    }
-    return {
-      icon: Server,
-      label: '自动选择',
-      color: 'text-violet-400',
-      bg: 'bg-violet-500/20',
-      description: '最优计算节点分配中',
-    }
-  }, [state])
-
-  const loadTime = state?.calculationResult?.latency
-    ? Math.max(1500, 2500 - state.calculationResult.latency)
-    : 2500
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (state?.calculationResult) {
-        addCompletedAssessment({
-          id: id!,
-          assessmentId: state.calculationResult.assessment_id || id!,
-          answers: [],
-          result: state.calculationResult,
-          completedAt: new Date(),
-        })
-      }
-      
-      navigate(`/legacy/results/${id}`, { state: state?.calculationResult })
-    }, loadTime)
+      navigate(`/legacy/results/${id}`)
+    }, 2500)
 
     return () => clearTimeout(timer)
-  }, [id, navigate, loadTime, state, addCompletedAssessment])
-
-  const InfoIcon = calculationInfo.icon
+  }, [id, navigate])
 
   return (
     <PageWrapper type="standard" background="gradient" centered>
@@ -119,53 +67,24 @@ export default function Loading() {
           正在生成您的测评报告
         </motion.h1>
 
-        <motion.div
-          className="mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.25 }}
-        >
-          <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full ${calculationInfo.bg}`}>
-            <InfoIcon className={`w-4 h-4 ${calculationInfo.color}`} />
-            <span className={`text-sm ${calculationInfo.color} font-medium`}>
-              {calculationInfo.label}
-            </span>
-            <span className="text-white/40 text-xs">·</span>
-            <span className="text-white/60 text-sm">
-              {calculationInfo.description}
-            </span>
-            {state?.calculationResult?.latency && (
-              <>
-                <span className="text-white/40 text-xs">·</span>
-                <span className="text-white/60 text-sm">
-                  {state.calculationResult.latency}ms
-                </span>
-              </>
-            )}
-          </div>
-        </motion.div>
-
         <div className="space-y-3 max-w-md mx-auto">
-          {loadingSteps.map((step, index) => {
-            const Icon = step.icon
-            return (
+          {loadingSteps.map((step, index) => (
+            <motion.div
+              key={step.text}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: step.delay + 0.5 }}
+              className="flex items-center gap-3 glass rounded-xl px-4 py-3"
+            >
               <motion.div
-                key={step.text}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: step.delay + 0.5 }}
-                className="flex items-center gap-3 glass rounded-xl px-4 py-3"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear', delay: index * 0.2 }}
               >
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'linear', delay: index * 0.2 }}
-                >
-                  <Icon className="w-5 h-5 text-violet-400" />
-                </motion.div>
-                <span className="text-white/80 text-sm">{step.text}</span>
+                <Brain className="w-5 h-5 text-violet-400" />
               </motion.div>
-            )
-          })}
+              <span className="text-white/80 text-sm">{step.text}</span>
+            </motion.div>
+          ))}
         </div>
 
         <motion.div

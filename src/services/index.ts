@@ -1,30 +1,13 @@
-// =============================================================================
-//  后端服务模块索引
-// =============================================================================
-import { apiClient } from './apiClient'
-import { calculatorService } from './calculatorWrapper'
-import type {
-  CalculationRequest,
-  CalculationResponse,
-  DimensionScore,
-  AssessmentInfo,
-  ApiConfig,
-} from './apiClient'
-import type { UnifiedCalculationResult } from './calculatorWrapper'
+/**
+ * @file src/services/index.ts
+ * @description 前端服务模块索引
+ * @package MindMirror - 心镜心理测评平台
+ */
 
-export { apiClient, calculatorService }
-export type {
-  CalculationRequest,
-  CalculationResponse,
-  DimensionScore,
-  AssessmentInfo,
-  ApiConfig,
-  UnifiedCalculationResult,
+import visitorService from './visitorIdentity'
+
+export { visitorService }
+
+export default {
+  visitorService,
 }
-
-export const SERVICES = {
-  apiClient,
-  calculatorService,
-}
-
-export default SERVICES

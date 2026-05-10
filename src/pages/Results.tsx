@@ -18,7 +18,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, QrCode, Home, Trophy, Clock, Link2, Sparkles } from 'lucide-react'
+import { ArrowLeft, QrCode, Home, Trophy, Clock, Sparkles } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { QRCodeSVG } from 'qrcode.react'
 import { useAppStore } from '../store'
@@ -26,64 +26,17 @@ import { getAssessmentById } from '@data/assessments'
 import ReportRouter from '@components/reports/lazy'
 import ResultExportButton from '@components/ResultExportButton'
 import { KnowledgeInjector } from '@components/reports/KnowledgePanel'
-import { apiClient } from '@services/apiClient'
 
 export default function Results() {
-  const { id, hash } = useParams<{ id: string; hash: string }>()
+  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const location = useLocation()
   const stateResult = location.state as any
   const completedAssessments = useAppStore((state) => state.completedAssessments)
   const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment)
   const [showQRCode, setShowQRCode] = useState(false)
-  const [restoring, setRestoring] = useState(false)
-  const [restoreError, setRestoreError] = useState<string | null>(null)
   const [, forceUpdate] = useState({})
   const reportRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!hash) return
-
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 8000)
-
-    setRestoring(true)
-
-    apiClient.getArchivedResult(hash)
-      .then((archived) => {
-        const answersArray = Object.entries(archived.answers).map(([questionId, value]) => ({
-          questionId,
-          value: value as number,
-          selectedOptions: [],
-        }))
-
-        const recordId = crypto.randomUUID()
-        addCompletedAssessment({
-          id: recordId,
-          assessmentId: archived.assessment_id,
-          answers: answersArray,
-          result: archived.result,
-          completedAt: new Date(),
-        })
-
-        navigate(`/legacy/results/${recordId}`, { replace: true })
-      })
-      .catch((e) => {
-        const message = controller.signal.aborted 
-          ? '连接超时，请检查网络后重试'
-          : '此链接无效或已过期，请重新完成测评'
-        setRestoreError(message)
-      })
-      .finally(() => {
-        clearTimeout(timeoutId)
-        setRestoring(false)
-      })
-
-    return () => {
-      controller.abort()
-      clearTimeout(timeoutId)
-    }
-  }, [hash, addCompletedAssessment, navigate])
 
   const resultRecord = completedAssessments.find((a) => a.id === id)
 
@@ -91,12 +44,10 @@ export default function Results() {
   const [recordFound, setRecordFound] = useState(!!resultRecord || !!stateResult)
 
   useEffect(() => {
-    if (!id && !hash) {
+    if (!id) {
       navigate('/assessments')
       return
     }
-
-    if (hash || restoring) return
 
     if (stateResult && !resultRecord) {
       addCompletedAssessment({
@@ -139,7 +90,7 @@ export default function Results() {
     }, 100)
     
     return () => clearInterval(retryInterval)
-  }, [id, hash, restoring, resultRecord, stateResult, navigate, addCompletedAssessment])
+  }, [id, resultRecord, stateResult, navigate, addCompletedAssessment])
 
   useEffect(() => {
     if (!resultRecord && !stateResult) return
@@ -187,39 +138,6 @@ export default function Results() {
             type="button"
           >
             返回测评列表
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  if (restoring) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
-          <h2 className="text-2xl font-bold text-white mb-4">正在恢复测评结果...</h2>
-          <p className="text-white/60">永久链接加载中</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (restoreError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <div className="text-center">
-          <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-6">
-            <Link2 className="w-8 h-8 text-red-400" />
-          </div>
-          <h2 className="text-2xl font-bold text-white mb-4">链接无效</h2>
-          <p className="text-white/60 mb-6">{restoreError}</p>
-          <button
-            onClick={() => navigate('/assessments')}
-            className="px-6 py-3 rounded-xl bg-violet-500 text-white"
-            type="button"
-          >
-            开始测评
           </button>
         </div>
       </div>
