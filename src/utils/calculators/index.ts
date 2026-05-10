@@ -43,9 +43,12 @@ import {
   calculateEIS,
   calculateCareerAdaptability,
   calculateProactive,
+  calculatePSQI,
 } from './professional-calculators-factory'
 import { calculateKolb } from './kolb-calculator'
 import { calculateASI } from './asi-calculator'
+import { calculateSCL90 } from './scl90-calculator'
+import { calculatePSS10 } from './pss10-calculator'
 
 // 5个趣味计算器
 import { calculateABMLoveAnimal } from './abm-love-animal-calculator'
@@ -53,6 +56,7 @@ import { calculateColorSubconscious } from './color-subconscious-calculator'
 import { calculateMentalAge } from './mental-age-calculator'
 import { calculateSBTI } from './sbti-calculator'
 import { calculateOfficialdomWrapper } from './officialdom-calculator'
+import { calculateLoveLanguages } from '../../data/entertainment/love-languages/love-languages-calculator'
 
 export type {
   SASResult,
@@ -184,11 +188,15 @@ export const standardCalculators = {
   'enneagram': calculateOcean,
   'disc': calculateOcean,
   'via-character': calculateEQ,
-  'love-language': calculateEQ,
+  'love-language': calculateLoveLanguages,
+  'love-languages': calculateLoveLanguages,
   'moyu-purity': calculateSlacking,
   'patriot-purity': calculatePatriotism,
   'political-compass': calculateIdeology,
   'officialdom-dream': calculateOfficialdomWrapper,
+  'sleep-quality': calculatePSQI,
+  'scl90': calculateSCL90,
+  'pss-stress': calculatePSS10,
 }
 
 export type StandardCalculatorId = keyof typeof standardCalculators

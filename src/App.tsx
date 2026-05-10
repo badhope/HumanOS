@@ -13,6 +13,8 @@ import ShortcutInitializer from './components/ShortcutInitializer'
 import { ToastProvider } from './components/ui/Toast'
 import { ShortcutProvider } from './components/ShortcutProvider'
 import { LoadingProgress } from './components/ui/LoadingProgress'
+import SplashScreen from './components/animations/SplashScreen'
+import NotFound from './pages/NotFound'
 
 import AppLayout from './app/layout/AppLayout'
 import HomePage from './app/pages/HomePage'
@@ -60,6 +62,7 @@ export function useGlobalLoading() {
 
 export default function App() {
   const [isPageTransitioning, setIsPageTransitioning] = useState(false)
+  const [showSplash, setShowSplash] = useState(true)
   const [transitionMessage, setTransitionMessage] = useState('')
   const [transitionProgress, setTransitionProgress] = useState(0)
   const theme = useAppStore((state) => state.theme)
@@ -112,6 +115,7 @@ export default function App() {
             <ShortcutProvider>
               <PageTransitionController useThemeTransition={true} defaultPreset="page">
                 <div className="min-h-screen bg-slate-900 text-white">
+                  {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
                   <ShortcutInitializer />
                   
                   {!isNewApp && <GlobalMenu />}
@@ -124,7 +128,7 @@ export default function App() {
 
                       <Route path="/app" element={<AppLayout title="心镜" />}>
                         <Route path="home" element={<HomePage />} />
-                        <Route path="daily" element={<HomePage />} />
+                        <Route path="daily" element={<Daily />} />
                         <Route path="training" element={<Training />} />
                         <Route path="progress" element={<Progress />} />
                         <Route path="discover" element={<Discover />} />
@@ -161,7 +165,7 @@ export default function App() {
                       <Route path="/legacy/leaderboard" element={<Leaderboard />} />
                       <Route path="/legacy/soul-match" element={<SoulMatch />} />
                       <Route path="/legacy/profile" element={<Profile />} />
-                      <Route path="*" element={<Navigate to="/app/home" replace />} />
+                      <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Suspense>
 

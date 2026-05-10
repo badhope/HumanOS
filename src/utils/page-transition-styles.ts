@@ -567,11 +567,8 @@ export function getRandomLoadingAnimation() {
 }
 
 export {
-  baseDuration,
-  staggerDelay,
   standardEase,
   smoothEase,
-  bounceEase,
   isMobile,
   isTouchDevice,
   prefersReducedMotion,

@@ -254,7 +254,7 @@ export default function LazyReportRouter(props: ReportRouterProps) {
     case type.includes('officialdom') || type.includes('dream') || type.includes('官场') || type.includes('权力') || type.includes('官本位'):
       ReportComponent = OfficialdomDreamProfessionalReport
       break
-    case type.includes('animal') || type.includes('love') || type.includes('恋爱动物') || type.includes('爱情观'):
+    case type.includes('animal') || type.includes('love-animal') || type.includes('abm') || type.includes('恋爱动物') || type.includes('爱情观'):
       ReportComponent = LoveAnimalProfessionalReport
       break
     case type.includes('color') || type.includes('subconscious') || type.includes('色彩') || type.includes('潜意识'):
@@ -326,7 +326,7 @@ export default function LazyReportRouter(props: ReportRouterProps) {
     case type.includes('via') || type.includes('性格优势'):
       ReportComponent = VIACharacterStrengthsProfessionalReport
       break
-    case type.includes('love language') || type.includes('爱的语言') || type.includes('爱语'):
+    case type.includes('love-lang') || type.includes('love lang') || type.includes('爱的语言') || type.includes('爱语'):
       ReportComponent = LoveLanguageProfessionalReport
       break
     case type.includes('enneagram') || type.includes('九型人格'):
@@ -343,6 +343,21 @@ export default function LazyReportRouter(props: ReportRouterProps) {
       break
     case type.includes('bounty') || type.includes('onepiece') || type.includes('海贼') || type.includes('悬赏'):
       ReportComponent = OnePieceBountyProfessionalReport
+      break
+    case type.includes('sleep') || type.includes('psqi') || type.includes('睡眠'):
+      ReportComponent = EnhancedReportTemplate
+      extraProps.assessmentType = assessmentType
+      extraProps.matchScore = matchScore
+      break
+    case type.includes('scl90') || type.includes('scl-90') || type.includes('symptom') || type.includes('症状'):
+      ReportComponent = EnhancedReportTemplate
+      extraProps.assessmentType = assessmentType
+      extraProps.matchScore = matchScore
+      break
+    case type.includes('attention') || type.includes('focus') || type.includes('注意力'):
+      ReportComponent = EnhancedReportTemplate
+      extraProps.assessmentType = assessmentType
+      extraProps.matchScore = matchScore
       break
     default:
       ReportComponent = EnhancedReportTemplate
