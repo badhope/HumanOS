@@ -50,10 +50,8 @@ import { processAssessmentQuestions } from '@utils/questionQualityControl'
 import { 
   smartRandomizeQuestions, 
   type RandomizedQuestion,
-  getRandomizationInfo,
   convertBackToOriginalAnswer,
   generateSeed,
-  shuffleArray 
 } from '@utils/questionRandomizer'
 
 const QUESTION_TIME_LIMIT = 45
