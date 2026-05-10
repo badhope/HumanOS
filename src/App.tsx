@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useEffect, createContext, useContext, useCallback } from 'react'
+import { lazy, Suspense, useState, useEffect } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { PageSkeleton } from './components/Loading'
 import GlobalMenu from './components/GlobalMenu'
@@ -12,7 +12,6 @@ import KeyboardShortcutsHelp from './components/KeyboardShortcutsHelp'
 import ShortcutInitializer from './components/ShortcutInitializer'
 import { ToastProvider } from './components/ui/Toast'
 import { ShortcutProvider } from './components/ShortcutProvider'
-import { LoadingProgress } from './components/ui/LoadingProgress'
 import SplashScreen from './components/animations/SplashScreen'
 import NotFound from './pages/NotFound'
 
@@ -48,53 +47,12 @@ const Leaderboard = lazy(() => import('./pages/Leaderboard'))
 const SoulMatch = lazy(() => import('./pages/SoulMatch'))
 const Profile = lazy(() => import('./pages/Profile'))
 
-const LoadingContext = createContext<{
-  startLoading: (msg?: string, showProg?: boolean) => void
-  stopLoading: () => void
-  updateProgress: (p: number) => void
-} | undefined>(undefined)
-
-export function useGlobalLoading() {
-  const ctx = useContext(LoadingContext)
-  if (!ctx) return { startLoading: () => {}, stopLoading: () => {}, updateProgress: () => {} }
-  return ctx
-}
-
 export default function App() {
-  const [isPageTransitioning, setIsPageTransitioning] = useState(false)
   const [showSplash, setShowSplash] = useState(true)
-  const [transitionMessage, setTransitionMessage] = useState('')
-  const [transitionProgress, setTransitionProgress] = useState(0)
   const theme = useAppStore((state) => state.theme)
   const location = useLocation()
   
   const isNewApp = location.pathname.startsWith('/app')
-
-  const startLoading = useCallback((msg: string, _showProg: boolean = true) => {
-    setTransitionMessage(msg)
-    setTransitionProgress(0)
-    setIsPageTransitioning(true)
-    
-    let progress = 0
-    const interval = setInterval(() => {
-      progress += Math.random() * 20
-      if (progress >= 90) {
-        clearInterval(interval)
-      }
-      setTransitionProgress(Math.min(progress, 90))
-    }, 200)
-  }, [])
-
-  const stopLoading = useCallback(() => {
-    setTransitionProgress(100)
-    setTimeout(() => {
-      setIsPageTransitioning(false)
-    }, 300)
-  }, [])
-
-  const updateProgress = useCallback((p: number) => {
-    setTransitionProgress(Math.min(p, 90))
-  }, [])
 
   useEffect(() => {
     visitorService.getVisitorId()
@@ -108,79 +66,70 @@ export default function App() {
   }, [theme])
 
   return (
-    <LoadingContext.Provider value={{ startLoading, stopLoading, updateProgress }}>
-      <I18nProvider>
-        <ErrorBoundary>
-          <ToastProvider>
-            <ShortcutProvider>
-              <PageTransitionController useThemeTransition={true} defaultPreset="page">
-                <div className="min-h-screen bg-slate-900 text-white">
-                  {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
-                  <ShortcutInitializer />
-                  
-                  {!isNewApp && <GlobalMenu />}
-                  {!isNewApp && <QuickSearchModal />}
-                  {!isNewApp && <KeyboardShortcutsHelp />}
+    <I18nProvider>
+      <ErrorBoundary>
+        <ToastProvider>
+          <ShortcutProvider>
+            <PageTransitionController useThemeTransition={true} defaultPreset="page">
+              <div className="min-h-screen bg-slate-900 text-white">
+                {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+                <ShortcutInitializer />
+                
+                {!isNewApp && <GlobalMenu />}
+                {!isNewApp && <QuickSearchModal />}
+                {!isNewApp && <KeyboardShortcutsHelp />}
 
-                  <Suspense fallback={<PageSkeleton />}>
-                    <Routes>
-                      <Route path="/" element={<Navigate to="/app/home" replace />} />
+                <Suspense fallback={<PageSkeleton />}>
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/app/home" replace />} />
 
-                      <Route path="/app" element={<AppLayout title="心镜" />}>
-                        <Route path="home" element={<HomePage />} />
-                        <Route path="daily" element={<Daily />} />
-                        <Route path="training" element={<Training />} />
-                        <Route path="progress" element={<Progress />} />
-                        <Route path="discover" element={<Discover />} />
-                        <Route path="settings" element={<SettingsPage />} />
-                        <Route path="getting-started" element={<GettingStarted />} />
-                      </Route>
+                    <Route path="/app" element={<AppLayout title="心镜" />}>
+                      <Route path="home" element={<HomePage />} />
+                      <Route path="daily" element={<Daily />} />
+                      <Route path="training" element={<Training />} />
+                      <Route path="progress" element={<Progress />} />
+                      <Route path="discover" element={<Discover />} />
+                      <Route path="settings" element={<SettingsPage />} />
+                      <Route path="getting-started" element={<GettingStarted />} />
+                    </Route>
 
-                      <Route path="/app/training/:programId" element={<UniversalTraining />} />
-                      <Route path="/app/growth" element={<GrowthDashboard />} />
+                    <Route path="/app/training/:programId" element={<UniversalTraining />} />
+                    <Route path="/app/growth" element={<GrowthDashboard />} />
 
-                      <Route path="/assessments" element={<Navigate to="/app/discover" replace />} />
-                      <Route path="/categories" element={<Navigate to="/app/discover" replace />} />
-                      <Route path="/legacy/categories" element={<Navigate to="/app/discover" replace />} />
-                      <Route path="/legacy/assessments" element={<Navigate to="/app/discover" replace />} />
-                      <Route path="/legacy/home" element={<Navigate to="/app/daily" replace />} />
-                      <Route path="/legacy/mode-select/:id" element={<ModeSelect />} />
-                      <Route path="/legacy/mode-select/onepiece/:id" element={<OnePieceModeSelect />} />
-                      <Route path="/legacy/confirm/:id" element={<AssessmentConfirm />} />
-                      <Route path="/legacy/assessment/:id" element={<Assessment />} />
-                      <Route path="/legacy/loading/:id" element={<Loading />} />
-                      <Route path="/legacy/results/:id" element={<Results />} />
-                      <Route path="/legacy/result/:hash" element={<Results />} />
-                      <Route path="/legacy/dashboard" element={<Dashboard />} />
-                      <Route path="/legacy/about" element={<About />} />
-                      <Route path="/legacy/theory/:theoryId" element={<TheoryDetail />} />
-                      <Route path="/legacy/history/philosophy" element={<PhilosophyHistoryPage />} />
-                      <Route path="/legacy/history/psychology" element={<PsychologyHistoryPage />} />
-                      <Route path="/legacy/history/ideology" element={<IdeologyHistoryPage />} />
-                      <Route path="/legacy/isms" element={<IsmsPage />} />
-                      <Route path="/legacy/story" element={<PlatformStoryPage />} />
-                      <Route path="/legacy/tools/question-optimizer" element={<QuestionOptimizer />} />
-                      <Route path="/legacy/demos/theme-analysis" element={<ThemeAnalysisDemo />} />
-                      <Route path="/legacy/demos/charts" element={<ChartShowcase />} />
-                      <Route path="/legacy/leaderboard" element={<Leaderboard />} />
-                      <Route path="/legacy/soul-match" element={<SoulMatch />} />
-                      <Route path="/legacy/profile" element={<Profile />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </Suspense>
-
-                  <LoadingProgress
-                    isLoading={isPageTransitioning}
-                    message={transitionMessage}
-                    progress={transitionProgress}
-                    showProgress={true}
-                  />
-                </div>
-              </PageTransitionController>
-            </ShortcutProvider>
-          </ToastProvider>
-        </ErrorBoundary>
-      </I18nProvider>
-    </LoadingContext.Provider>
+                    <Route path="/assessments" element={<Navigate to="/app/discover" replace />} />
+                    <Route path="/categories" element={<Navigate to="/app/discover" replace />} />
+                    <Route path="/legacy/categories" element={<Navigate to="/app/discover" replace />} />
+                    <Route path="/legacy/assessments" element={<Navigate to="/app/discover" replace />} />
+                    <Route path="/legacy/home" element={<Navigate to="/app/daily" replace />} />
+                    <Route path="/legacy/mode-select/:id" element={<ModeSelect />} />
+                    <Route path="/legacy/mode-select/onepiece/:id" element={<OnePieceModeSelect />} />
+                    <Route path="/legacy/confirm/:id" element={<AssessmentConfirm />} />
+                    <Route path="/legacy/assessment/:id" element={<Assessment />} />
+                    <Route path="/legacy/loading/:id" element={<Loading />} />
+                    <Route path="/legacy/results/:id" element={<Results />} />
+                    <Route path="/legacy/result/:hash" element={<Results />} />
+                    <Route path="/legacy/dashboard" element={<Dashboard />} />
+                    <Route path="/legacy/about" element={<About />} />
+                    <Route path="/legacy/theory/:theoryId" element={<TheoryDetail />} />
+                    <Route path="/legacy/history/philosophy" element={<PhilosophyHistoryPage />} />
+                    <Route path="/legacy/history/psychology" element={<PsychologyHistoryPage />} />
+                    <Route path="/legacy/history/ideology" element={<IdeologyHistoryPage />} />
+                    <Route path="/legacy/isms" element={<IsmsPage />} />
+                    <Route path="/legacy/story" element={<PlatformStoryPage />} />
+                    <Route path="/legacy/tools/question-optimizer" element={<QuestionOptimizer />} />
+                    <Route path="/legacy/demos/theme-analysis" element={<ThemeAnalysisDemo />} />
+                    <Route path="/legacy/demos/charts" element={<ChartShowcase />} />
+                    <Route path="/legacy/leaderboard" element={<Leaderboard />} />
+                    <Route path="/legacy/soul-match" element={<SoulMatch />} />
+                    <Route path="/legacy/profile" element={<Profile />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </div>
+            </PageTransitionController>
+          </ShortcutProvider>
+        </ToastProvider>
+      </ErrorBoundary>
+    </I18nProvider>
   )
 }

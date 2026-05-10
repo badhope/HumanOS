@@ -65,8 +65,8 @@ export function calculatePSS10(answers: Answer[]): PSS10Result & AssessmentResul
   let stressLevel: PSS10Result['stressLevel']
   let levelName: string
   let summary: string
-  let warnings: string[] = []
-  let recommendations: string[] = []
+  const warnings: string[] = []
+  const recommendations: string[] = []
 
   if (rawScore < 14) {
     stressLevel = 'low'

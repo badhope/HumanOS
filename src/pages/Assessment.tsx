@@ -66,7 +66,6 @@ export default function Assessment() {
   const [answers, setAnswers] = useState<Answer[]>([])
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [questions, setQuestions] = useState<RandomizedQuestion[]>([])
-  const [originalQuestions, setOriginalQuestions] = useState<Question[]>([])
   const [showAnswerSheet, setShowAnswerSheet] = useState(false)
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME_LIMIT)
   const [showExitConfirm, setShowExitConfirm] = useState(false)
@@ -129,7 +128,7 @@ export default function Assessment() {
 
   useEffect(() => {
     if (!assessment) {
-      navigate('/assessments')
+      navigate('/app/discover')
       return
     }
 
@@ -153,8 +152,6 @@ export default function Assessment() {
       selectedQuestions = assessment.questions
     }
 
-    setOriginalQuestions(selectedQuestions)
-    
     const processedQuestions = processAssessmentQuestions(
       selectedQuestions,
       mode as any
@@ -274,13 +271,17 @@ export default function Assessment() {
       const newAnswers = [...filtered, newAnswer]
       
       if (assessment) {
-        const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
-        localStorage.setItem(storageKey, JSON.stringify({
-          answers: newAnswers,
-          lastQuestion: currentQuestion,
-          randomizationSeed,
-          savedAt: Date.now(),
-        }))
+        try {
+          const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
+          localStorage.setItem(storageKey, JSON.stringify({
+            answers: newAnswers,
+            lastQuestion: currentQuestion,
+            randomizationSeed,
+            savedAt: Date.now(),
+          }))
+        } catch (e) {
+          console.error('Failed to save answer to localStorage:', e)
+        }
       }
       
       return newAnswers
@@ -321,38 +322,53 @@ export default function Assessment() {
     setCalculating(true)
     setShowSubmitSuccess(true)
     
-    setTimeout(() => {
-      let rawResult
-      if (mode === 'professional') {
-        rawResult = calculateProfessionalResult(assessment.id, answers, mode)
-      } else {
-        rawResult = assessment.resultCalculator(answers)
-      }
-      
-      const adaptedResult = {
-        ...rawResult,
-        source: 'frontend',
-        calculated_at: new Date().toISOString(),
-      }
-      const recordId = crypto.randomUUID()
-      
-      addCompletedAssessment({
-        id: recordId,
-        assessmentId: assessment.id,
-        answers,
-        result: adaptedResult,
-        completedAt: new Date(),
-        mode,
-      })
+    try {
+      setTimeout(() => {
+        try {
+          let rawResult
+          if (mode === 'professional') {
+            rawResult = calculateProfessionalResult(assessment.id, answers, mode)
+          } else {
+            rawResult = assessment.resultCalculator(answers)
+          }
+          
+          const adaptedResult = {
+            ...rawResult,
+            source: 'frontend',
+            calculated_at: new Date().toISOString(),
+          }
+          const recordId = crypto.randomUUID()
+          
+          addCompletedAssessment({
+            id: recordId,
+            assessmentId: assessment.id,
+            answers,
+            result: adaptedResult,
+            completedAt: new Date(),
+            mode,
+          })
 
-      const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
-      localStorage.removeItem(storageKey)
+          try {
+            const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
+            localStorage.removeItem(storageKey)
+          } catch (e) {
+            console.error('Failed to clear localStorage:', e)
+          }
 
+          setCalculating(false)
+          navigate(`/legacy/results/${recordId}`, {
+            state: { calculationResult: adaptedResult }
+          })
+        } catch (error) {
+          console.error('Calculation error:', error)
+          setCalculating(false)
+        }
+      }, 800)
+    } catch (error) {
+      console.error('Submit assessment error:', error)
       setCalculating(false)
-      navigate(`/legacy/loading/${recordId}`, {
-        state: { calculationResult: adaptedResult }
-      })
-    }, 800)
+      setShowSubmitSuccess(false)
+    }
   }, [assessment, answers, addCompletedAssessment, mode, navigate])
 
   const handleSubmit = useCallback(() => {
@@ -371,7 +387,7 @@ export default function Assessment() {
     if (timerRef.current) {
       clearInterval(timerRef.current)
     }
-    navigate('/assessments')
+    navigate('/app/discover')
   }, [navigate])
 
   const goHome = useCallback(() => {
@@ -839,7 +855,7 @@ export default function Assessment() {
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2">答题超时</h3>
               <p className="text-white/60 text-sm sm:text-base mb-4 sm:mb-6">很抱歉，您未在规定时间内完成答题</p>
               <button
-                onClick={() => navigate('/assessments')}
+                onClick={() => navigate('/app/discover')}
                 className="w-full px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors text-sm sm:text-base"
                 type="button"
               >

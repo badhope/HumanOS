@@ -6,8 +6,8 @@ import LegacyHeader from '../app/components/LegacyHeader'
 import { PageWrapper } from '@components/layout'
 
 export default function ModeSelect() {
-  const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
   const assessment = id ? getAssessmentById(id) : undefined
 
   if (!assessment) {

@@ -35,7 +35,6 @@ export default function Results() {
   const completedAssessments = useAppStore((state) => state.completedAssessments)
   const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment)
   const [showQRCode, setShowQRCode] = useState(false)
-  const [, forceUpdate] = useState({})
   const reportRef = useRef<HTMLDivElement>(null)
 
   const resultRecord = completedAssessments.find((a) => a.id === id)
@@ -268,7 +267,7 @@ export default function Results() {
           </motion.button>
 
           <motion.button
-            onClick={() => navigate('/leaderboard')}
+            onClick={() => navigate('/legacy/leaderboard')}
             className="flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white text-sm sm:text-base font-semibold hover:shadow-lg hover:shadow-amber-500/25 transition-all"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -298,7 +297,13 @@ export default function Results() {
             <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white text-center mb-4 sm:mb-6">扫码分享</h3>
             <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-6 flex items-center justify-center">
               <QRCodeSVG
-                value={window.location.href}
+                value={(() => {
+                  try {
+                    return window.location.href
+                  } catch {
+                    return ''
+                  }
+                })()}
                 size={140}
                 level="H"
                 includeMargin
