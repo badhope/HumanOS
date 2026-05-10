@@ -1,16 +1,12 @@
-import { motion } from 'framer-motion'
-import { Brain, Loader2, RefreshCw, ArrowLeft } from 'lucide-react'
-import RippleButton from '../animations/RippleButton'
+import { Loader2, RefreshCw, ArrowLeft } from 'lucide-react'
 
 interface LoadingStateProps {
-  type?: 'spinner' | 'dots' | 'pulse' | 'neural'
   text?: string
   size?: 'sm' | 'md' | 'lg'
   fullScreen?: boolean
 }
 
 export function LoadingState({ 
-  type = 'neural', 
   text = '加载中...', 
   size = 'md',
   fullScreen = true 
@@ -25,72 +21,10 @@ export function LoadingState({
     ? 'min-h-screen flex flex-col items-center justify-center bg-slate-950'
     : 'flex flex-col items-center justify-center py-12'
 
-  const renderSpinner = () => {
-    switch (type) {
-      case 'neural':
-        return (
-          <div className="relative">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-              className={`${sizeClasses[size]} text-violet-500`}
-            >
-              <Brain className="w-full h-full" />
-            </motion.div>
-            <motion.div
-              animate={{ rotate: -360, scale: [1, 1.1, 1] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-              className={`absolute inset-0 ${sizeClasses[size]} text-pink-500/30`}
-            >
-              <Brain className="w-full h-full" />
-            </motion.div>
-          </div>
-        )
-      
-      case 'dots':
-        return (
-          <div className="flex gap-2">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                animate={{ y: [0, -8, 0] }}
-                transition={{ 
-                  duration: 0.6, 
-                  delay: i * 0.2, 
-                  repeat: Infinity 
-                }}
-                className="w-3 h-3 rounded-full bg-violet-500"
-              />
-            ))}
-          </div>
-        )
-      
-      case 'pulse':
-        return (
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className={`${sizeClasses[size]} rounded-full bg-gradient-to-r from-violet-500 to-pink-500`}
-          />
-        )
-      
-      default:
-        return (
-          <Loader2 className={`${sizeClasses[size]} animate-spin text-violet-500`} />
-        )
-    }
-  }
-
   return (
     <div className={containerClasses}>
-      {renderSpinner()}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="mt-4 text-white/60 text-sm"
-      >
-        {text}
-      </motion.p>
+      <Loader2 className={`${sizeClasses[size]} text-violet-500`} />
+      <p className="mt-4 text-white/60 text-sm">{text}</p>
     </div>
   )
 }
@@ -116,11 +50,7 @@ export function ErrorState({
 
   return (
     <div className={containerClasses}>
-      <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="text-center max-w-md"
-      >
+      <div className="text-center max-w-md">
         <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-red-500/20 flex items-center justify-center">
           <span className="text-4xl">😕</span>
         </div>
@@ -130,26 +60,26 @@ export function ErrorState({
         
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {onBack && (
-            <RippleButton
-              variant="secondary"
+            <button
               onClick={onBack}
-              icon={<ArrowLeft className="w-4 h-4" />}
+              className="px-4 py-2 rounded-lg bg-slate-800 text-white hover:bg-slate-700 flex items-center justify-center gap-2"
             >
+              <ArrowLeft className="w-4 h-4" />
               返回上页
-            </RippleButton>
+            </button>
           )}
           
           {onRetry && (
-            <RippleButton
-              variant="primary"
+            <button
               onClick={onRetry}
-              icon={<RefreshCw className="w-4 h-4" />}
+              className="px-4 py-2 rounded-lg bg-violet-600 text-white hover:bg-violet-700 flex items-center justify-center gap-2"
             >
+              <RefreshCw className="w-4 h-4" />
               重新加载
-            </RippleButton>
+            </button>
           )}
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }
@@ -166,20 +96,19 @@ export function EmptyState({
   action?: { label: string; onClick: () => void }
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center py-16 px-6 text-center"
-    >
+    <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
       <span className="text-5xl mb-4">{icon}</span>
       <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
       <p className="text-white/50 text-sm mb-6 max-w-xs">{message}</p>
       
       {action && (
-        <RippleButton variant="primary" onClick={action.onClick}>
+        <button 
+          onClick={action.onClick}
+          className="px-4 py-2 rounded-lg bg-violet-600 text-white hover:bg-violet-700"
+        >
           {action.label}
-        </RippleButton>
+        </button>
       )}
-    </motion.div>
+    </div>
   )
 }
