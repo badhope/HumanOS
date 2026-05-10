@@ -15,6 +15,7 @@ import { ShortcutProvider } from './components/ShortcutProvider'
 import { LoadingProgress } from './components/ui/LoadingProgress'
 
 import AppLayout from './app/layout/AppLayout'
+import HomePage from './app/pages/HomePage'
 import Daily from './app/pages/Daily'
 import Training from './app/pages/Training'
 import Progress from './app/pages/Progress'
