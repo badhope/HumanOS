@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   logoVariants,
   introTextVariants,
-  bootSequenceVariants,
   staggerContainer,
   staggerItem,
+  fadeVariants,
 } from '@utils/animation-config'
 
 interface SplashScreenProps {
@@ -74,7 +74,7 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: 0.6 }}
     >
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -193,7 +193,7 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
               className="mb-5 sm:mb-6 text-center"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.4 }}
             >
               <motion.div
                 className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/20"
@@ -201,7 +201,7 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
                   rotate: [0, 360],
                 }}
                 transition={{
-                  duration: 4,
+                  duration: 3,
                   repeat: Infinity,
                   ease: 'linear',
                 }}
@@ -227,7 +227,7 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
                 className="mt-3 text-sm sm:text-base font-semibold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.2 }}
               >
                 心镜 MindMirror
               </motion.h2>
@@ -238,17 +238,19 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
                 {bootMessages.slice(0, currentMessage + 1).map((msg, index) => (
                   <motion.div
                     key={msg.text}
-                    custom={index}
-                    variants={bootSequenceVariants}
-                    initial="initial"
-                    animate="enter"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ 
+                      delay: index * 0.1, 
+                      duration: 0.3 
+                    }}
                     className="flex items-center gap-2 sm:gap-3"
                   >
                     <motion.div
                       className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 flex-shrink-0"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: index * 0.1 + 0.05 }}
                     />
                     <span className="text-xs sm:text-sm text-white/80 font-mono truncate">{msg.text}</span>
                     {index === currentMessage && (
@@ -270,6 +272,7 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
                   className="space-y-2"
                 >
                   <div className="flex justify-between text-xs text-white/60 font-mono">
@@ -281,7 +284,7 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
                       className="h-full bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 rounded-full relative overflow-hidden"
                       initial={{ width: 0 }}
                       animate={{ width: `${progress}%` }}
-                      transition={{ duration: 0.1, ease: 'linear' }}
+                      transition={{ duration: 0.5, ease: 'linear' }}
                     >
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
@@ -308,13 +311,13 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
             className="relative z-10 text-center"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
           >
             <motion.div
               className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl glass"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.1 }}
             >
               <motion.div
                 className="w-3 h-3 rounded-full bg-emerald-400"
@@ -335,7 +338,7 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
               className="mt-4 text-xs text-white/40"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.3 }}
             >
               照见自己，成为更好的自己
             </motion.p>
