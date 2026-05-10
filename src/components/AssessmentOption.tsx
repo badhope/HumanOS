@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@utils/cn'
 import { Check } from 'lucide-react'
+import type { Variants } from 'framer-motion'
 
 interface AssessmentOptionProps {
   option: {
@@ -14,7 +15,7 @@ interface AssessmentOptionProps {
   index: number
   selected: boolean
   onClick: (optionId: string) => void
-  variants: Record<string, any>
+  variants: Variants
 }
 
 export const AssessmentOption = memo(function AssessmentOption({

@@ -230,7 +230,7 @@ export default function GrowthDashboard() {
           </div>
         ) : (
           <div className="space-y-2">
-            {trainingRecords.slice(-8).reverse().map((record: any, i: number) => {
+            {trainingRecords.slice(-8).reverse().map((record: TrainingRecord, i: number) => {
               const dim = DIMENSIONS.find(d => d.key === record.category)
               return (
                 <motion.div

@@ -34,7 +34,6 @@ function getPlatformInfo(): PlatformInfo {
 
   const ua = navigator.userAgent.toLowerCase()
   const width = window.innerWidth
-  const height = window.innerHeight
 
   const isIOS = /iphone|ipad|ipod/.test(ua)
   const isAndroid = /android/.test(ua)

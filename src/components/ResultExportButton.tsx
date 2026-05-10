@@ -1,18 +1,18 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Download, Image, FileJson, Copy, Check, Link2, Share2, QrCode } from 'lucide-react'
+import { Download, Image, FileJson, Check, Link2, Share2, QrCode } from 'lucide-react'
 import { useResultExport } from '@hooks/useKeyboardShortcuts'
 import { useToast } from '@hooks/useToast'
 
 interface ResultExportButtonProps {
   resultId: string
   title: string
-  resultData?: any
+  resultData?: Record<string, unknown>
   resultHash?: string
   onShowQRCode?: () => void
 }
 
-export default function ResultExportButton({ resultId, title, resultData, resultHash, onShowQRCode }: ResultExportButtonProps) {
+export default function ResultExportButton({ resultId, title, resultData, resultHash: _resultHash, onShowQRCode }: ResultExportButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [exporting, setExporting] = useState(false)

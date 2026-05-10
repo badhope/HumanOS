@@ -1,10 +1,9 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Calendar, Flame, Target, TrendingUp, ChevronRight, Brain, Clock, Award, Activity } from 'lucide-react'
+import { Calendar, Flame, Target, ChevronRight, Brain, Clock, Activity } from 'lucide-react'
 import { useAppStore, type MoodRecord, type TrainingRecord } from '../../store'
 import AdvancedRadarChart from '../../components/charts/AdvancedRadarChart'
 import AchievementsPanel from '../components/AchievementsPanel'
-import type { CompletedAssessment } from '../../types'
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string }> = {
   orange: { bg: 'rgba(251, 146, 60, 0.1)', border: 'rgba(251, 146, 60, 0.2)', text: '#fb923c' },
@@ -237,7 +236,7 @@ export default function Progress() {
         ) : (
           <div className="grid grid-cols-7 gap-1.5">
             {moodTrend30.map((day, i) => {
-              const trainingsThisDay = trainingRecords.filter((r: any) => 
+              const trainingsThisDay = trainingRecords.filter((r: TrainingRecord) => 
                 new Date(r.completedAt).toISOString().split('T')[0] === day.date
               ).length
               

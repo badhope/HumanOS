@@ -2,15 +2,12 @@ import React, { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import {
   themeAnalysisFramework,
-  type ThemeAnalysisModule,
-  type ThemeAnalysisResult,
   type ComprehensiveThemeReport,
-  type MetricResult
 } from '../utils/themeAnalysisFramework'
 
 interface ThemeAnalysisReportGeneratorProps {
   themeName: string
-  analysisData: any
+  analysisData: Record<string, unknown>
   onReportGenerated?: (report: ComprehensiveThemeReport) => void
 }
 

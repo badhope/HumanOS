@@ -182,7 +182,7 @@ export interface ThemeRelevance {
 }
 
 export interface AssessmentResult {
-  [key: string]: any
+  [key: string]: unknown
   type?: string
   typeCode?: string
   typeName?: string
@@ -197,7 +197,7 @@ export interface AssessmentResult {
   weaknesses?: string[]
   careers?: string[]
   suggestions?: string[]
-  meta?: Record<string, any>
+  meta?: Record<string, unknown>
   
   cognitiveFunctions?: {
     dominant: string
@@ -265,6 +265,8 @@ export interface AssessmentResult {
   demographicSegment?: DemographicSegment
   themeRelevance?: ThemeRelevance
 }
+
+export type ReportResult = Record<string, unknown> & Partial<AssessmentResult>
 
 export interface Dimension {
   name: string

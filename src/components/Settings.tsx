@@ -18,11 +18,9 @@ import {
   Share2,
   Check,
   AlertCircle,
-  Camera,
-  Mail,
   Calendar,
 } from 'lucide-react'
-import { useAppStore } from '@store'
+import { useAppStore, type CompletedAssessment } from '@store'
 import { getAssessmentById } from '@data/assessments'
 import { cn } from '@utils/cn'
 import { useI18n } from '../i18n'
@@ -174,12 +172,12 @@ export default function Settings({ isOpen = true, onClose }: SettingsProps) {
         const data = JSON.parse(e.target?.result as string)
         if (data.user) setUser(data.user)
         if (Array.isArray(data.completedAssessments)) {
-          data.completedAssessments.forEach((a: any) => {
+          data.completedAssessments.forEach((a: CompletedAssessment) => {
             addCompletedAssessment(a)
           })
           toast.success(`📦 成功导入 ${data.completedAssessments.length} 条测评记录`, 2500)
         } else if (Array.isArray(data.assessments)) {
-          data.assessments.forEach((a: any) => {
+          data.assessments.forEach((a: CompletedAssessment) => {
             addCompletedAssessment(a)
           })
           toast.success(`📦 成功导入 ${data.assessments.length} 条测评记录`, 2500)

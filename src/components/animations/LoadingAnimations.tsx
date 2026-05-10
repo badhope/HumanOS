@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Brain, Sparkles, Atom, Star, Circle } from 'lucide-react'
-import { loadingAnimations, getRandomLoadingAnimation, prefersReducedMotion } from '@utils/page-transition-styles'
+import { loadingAnimations, prefersReducedMotion } from '@utils/page-transition-styles'
 
 export type LoadingType = keyof typeof loadingAnimations | 'random' | 'auto'
 

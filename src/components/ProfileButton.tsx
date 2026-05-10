@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, X, BarChart3, TrendingUp, Target, Award, Brain, Heart, Sparkles, ChevronRight, Zap, Shield, Compass } from 'lucide-react'
 import { useAppStore } from '../store'
-import { useI18n } from '../i18n'
 import { useNavigate } from 'react-router-dom'
 import { getAssessmentById } from '../data/assessments'
 import {
@@ -17,7 +16,6 @@ interface ProfilePanelProps {
 }
 
 function ProfilePanel({ isOpen, onClose }: ProfilePanelProps) {
-  const { t, language } = useI18n()
   const { completedAssessments, user, achievements } = useAppStore()
   const navigate = useNavigate()
 

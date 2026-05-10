@@ -1,5 +1,4 @@
 import React from 'react'
-import * as Icons from 'lucide-react'
 import type { MatrixCell } from '../data/professional/iq/iq-common'
 
 interface ShapeProps {
