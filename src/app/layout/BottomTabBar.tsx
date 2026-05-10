@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Home, Dumbbell, TrendingUp, Compass, Settings } from 'lucide-react'
 import { clsx } from 'clsx'
-import { motionPresets, buttonPress, staggerContainer } from '../../utils/motionPresets'
+import { buttonPress, staggerContainer } from '../../utils/motionPresets'
 
 const tabs = [
   { path: '/app/daily', label: '今日', icon: Home, preset: 'slideUp' as const },

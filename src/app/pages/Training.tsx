@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Gem, Sun, Sparkles, Gamepad2, Star, Zap, Compass, AlertCircle } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Gem, Sun, Sparkles, Gamepad2, Zap, Compass, AlertCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore, type TrainingRecord, type MoodRecord } from '../../store'
 import { useResponsive } from '../../hooks/useResponsive'
@@ -37,7 +37,7 @@ const TRACK_CONFIG = {
 }
 
 export default function Training() {
-  const { hasCompletedAssessment, completedAssessments: assessmentHistory, getMoodForDate, results, trainingRecords: storeTrainingRecords } = useAppStore()
+  const { completedAssessments: assessmentHistory, getMoodForDate, results, trainingRecords: storeTrainingRecords } = useAppStore()
   const { isDesktop } = useResponsive()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<TabType>('guide')

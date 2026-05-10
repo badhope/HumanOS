@@ -11,7 +11,6 @@ import {
   Settings,
   ChevronRight,
   TrendingUp,
-  BookMarked,
 } from 'lucide-react'
 
 interface GuideModule {
