@@ -24,7 +24,7 @@ const bootMessages = [
   { text: '准备就绪', delay: 4.2 },
 ]
 
-export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashScreenProps) {
+export default function SplashScreen({ onComplete, minDuration = 3500 }: SplashScreenProps) {
   const [phase, setPhase] = useState<'logo' | 'boot' | 'ready'>('logo')
   const [currentMessage, setCurrentMessage] = useState(0)
   const [progress, setProgress] = useState(0)
@@ -34,7 +34,7 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
     const logoTimer = setTimeout(() => {
       setPhase('boot')
       setShowProgressBar(true)
-    }, 2000)
+    }, 1200)
 
     return () => clearTimeout(logoTimer)
   }, [])
@@ -44,22 +44,22 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
 
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
-        if (prev < 100) return prev + 1
+        if (prev < 100) return prev + 2
         return prev
       })
-    }, 45)
+    }, 40)
 
     const interval = setInterval(() => {
       setCurrentMessage((prev) => {
         if (prev < bootMessages.length - 1) return prev + 1
         return prev
       })
-    }, 600)
+    }, 450)
 
     const readyTimer = setTimeout(() => {
       setPhase('ready')
       setProgress(100)
-      setTimeout(onComplete, 800)
+      setTimeout(onComplete, 600)
     }, minDuration)
 
     return () => {
