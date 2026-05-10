@@ -165,23 +165,38 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
               className="mt-8 text-center"
             >
               <motion.h1
-                className="text-4xl font-bold text-white"
+                className="text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
                 variants={introTextVariants}
               >
                 心镜 MindMirror
               </motion.h1>
               <motion.p
-                className="mt-2 text-violet-400/80"
-                variants={introTextVariants}
-              >
-                心镜 MindMirror
-              </motion.p>
-              <motion.p
                 className="mt-1 text-white/50 text-sm"
                 variants={introTextVariants}
               >
-                观照内心，自成一界
+                轻松探索，遇见真实的自己
               </motion.p>
+            </motion.div>
+
+            <motion.div
+              variants={staggerItem}
+              className="mt-8 w-64"
+            >
+              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 rounded-full shadow-lg shadow-violet-500/50"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.1 }}
+                />
+              </div>
+              <motion.div
+                className="mt-2 text-center text-sm text-white/50 font-mono"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                加载中... {progress}%
+              </motion.div>
             </motion.div>
           </motion.div>
         )}
@@ -255,24 +270,6 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
                   </motion.div>
                 ))}
               </AnimatePresence>
-            </div>
-
-            <div className="relative">
-              <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-violet-500 to-pink-500 rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.1 }}
-                />
-              </div>
-              <motion.div
-                className="mt-2 text-right text-sm text-white/40 font-mono"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                {progress}%
-              </motion.div>
             </div>
           </motion.div>
         )}
