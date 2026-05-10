@@ -118,55 +118,53 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
         {phase === 'logo' && (
           <motion.div
             key="logo"
-            className="relative z-10 flex flex-col items-center text-center"
+            className="relative z-10 flex items-center justify-center text-center px-4"
             variants={staggerContainer}
             initial="initial"
             animate="enter"
           >
             <motion.div
               variants={logoVariants}
-              className="relative"
+              className="relative flex items-center gap-2 xs:gap-3 sm:gap-4"
             >
-              <div className="flex items-center gap-3 sm:gap-4">
-                <motion.div
-                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center"
-                  whileHover={{ scale: 1.05 }}
+              <motion.div
+                className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center flex-shrink-0"
+                whileHover={{ scale: 1.05 }}
+              >
+                <svg viewBox="0 0 100 100" className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8">
+                  <path
+                    d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
+                    fill="none"
+                    stroke="url(#goldGradient)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+                  <defs>
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#d4af37" />
+                      <stop offset="50%" stopColor="#f5e6c8" />
+                      <stop offset="100%" stopColor="#d4af37" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </motion.div>
+              <motion.div
+                variants={staggerItem}
+                className="flex flex-col text-left"
+              >
+                <motion.h1
+                  className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight whitespace-nowrap"
+                  variants={introTextVariants}
                 >
-                  <svg viewBox="0 0 100 100" className="w-9 h-9 sm:w-10 sm:h-10">
-                    <path
-                      d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
-                      fill="none"
-                      stroke="url(#goldGradient)"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                    />
-                    <defs>
-                      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#d4af37" />
-                        <stop offset="50%" stopColor="#f5e6c8" />
-                        <stop offset="100%" stopColor="#d4af37" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </motion.div>
-                <motion.div
-                  variants={staggerItem}
-                  className="flex flex-col"
+                  心镜 MindMirror
+                </motion.h1>
+                <motion.p
+                  className="mt-0.5 text-white/50 text-[10px] xs:text-xs sm:text-sm"
+                  variants={introTextVariants}
                 >
-                  <motion.h1
-                    className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight"
-                    variants={introTextVariants}
-                  >
-                    心镜 MindMirror
-                  </motion.h1>
-                  <motion.p
-                    className="mt-1 text-white/50 text-xs sm:text-sm"
-                    variants={introTextVariants}
-                  >
-                    轻松探索，遇见真实的自己
-                  </motion.p>
-                </motion.div>
-              </div>
+                  轻松探索，遇见真实的自己
+                </motion.p>
+              </motion.div>
               <motion.div
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 blur-xl"
                 animate={{
