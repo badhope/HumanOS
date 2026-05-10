@@ -22,11 +22,40 @@ export abstract class BaseProfessionalCalculator {
 
   protected buildAnswerMap(answers: Answer[]): Record<string, number> {
     const answerMap: Record<string, number> = {}
+    const { questionPrefix } = this.config
+    
     answers.forEach(a => {
-      const qid = a.questionId.replace(new RegExp(`^${this.config.questionPrefix}[n]?`), this.config.questionPrefix)
-      answerMap[qid] = this.normalizeAnswer(a)
+      const qid = a.questionId
+      const normalizedQid = this.normalizeQuestionId(qid, questionPrefix)
+      answerMap[normalizedQid] = this.normalizeAnswer(a)
     })
     return answerMap
+  }
+
+  protected normalizeQuestionId(qid: string, prefix: string): string {
+    const lowerQid = qid.toLowerCase()
+    const lowerPrefix = prefix.toLowerCase()
+    
+    if (lowerQid.startsWith(lowerPrefix)) {
+      const suffix = qid.slice(prefix.length)
+      const cleanSuffix = suffix.replace(/^_?n?/i, '')
+      if (/^\d+$/.test(cleanSuffix)) {
+        return `${prefix}${cleanSuffix}`
+      }
+    }
+    
+    const match = qid.match(/^([a-zA-Z]+)[-_]?n?(\d+)$/i)
+    if (match) {
+      const [, prefixPart, numPart] = match
+      const cleanPrefix = prefixPart.toLowerCase()
+      const cleanPrefixNormalized = lowerPrefix.replace(/[-_]/g, '')
+      
+      if (cleanPrefix.includes(cleanPrefixNormalized) || cleanPrefixNormalized.includes(cleanPrefix)) {
+        return `${prefix}${numPart}`
+      }
+    }
+    
+    return qid
   }
 
   protected calculateDimensions(answerMap: Record<string, number>): { dimensions: Dimension[]; scores: Record<string, number> } {
@@ -37,14 +66,29 @@ export abstract class BaseProfessionalCalculator {
     dimensionKeys.forEach((dimKey, dimIndex) => {
       const questionIds = this.getDimensionQuestionIds(dimKey, dimIndex)
       const score = questionIds.reduce((sum, qid) => {
-        let value = answerMap[`${questionPrefix}${qid}`] ?? 3
-        if (reverseScored.includes(`${questionPrefix}${qid}`)) {
-          value = 6 - value
+        const lookupKeys = [
+          `${questionPrefix}${qid}`,
+          `${questionPrefix}_${qid}`,
+          `${questionPrefix}n${qid}`,
+          qid,
+        ]
+        let value = 3
+        for (const key of lookupKeys) {
+          if (answerMap[key] !== undefined) {
+            value = answerMap[key]
+            break
+          }
+        }
+        
+        const reverseKey = `${questionPrefix}${qid}`
+        if (reverseScored.includes(reverseKey) || reverseScored.includes(qid)) {
+          const maxVal = 5
+          value = maxVal + 1 - value
         }
         return sum + value
       }, 0)
 
-      const normalizedScore = Math.min(100, Math.max(0, (((score / questionIds.length) - 1) / 4) * 100))
+      const normalizedScore = this.normalizeScore(score, questionIds.length)
       scores[dimKey] = Math.round(normalizedScore)
 
       dimensions.push({
@@ -55,6 +99,12 @@ export abstract class BaseProfessionalCalculator {
     })
 
     return { dimensions, scores }
+  }
+
+  protected normalizeScore(score: number, questionCount: number): number {
+    if (questionCount === 0) return 0
+    const average = score / questionCount
+    return Math.min(100, Math.max(0, ((average - 1) / 4) * 100))
   }
 
   protected getDimensionQuestionIds(_dimKey: string, dimIndex: number): string[] {

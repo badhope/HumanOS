@@ -1,5 +1,4 @@
 import type { Answer, AssessmentResult } from '../../types'
-import { buildAnswerMap } from './calculator-utils'
 
 export interface PSS10Result {
   overallScore: number
@@ -10,16 +9,30 @@ export interface PSS10Result {
     copingAbility: number
     overwhelm: number
   }
+  dimensions: Array<{ name: string; score: number; description: string }>
   interpretation: {
     summary: string
     levelName: string
     warnings: string[]
     recommendations: string[]
   }
+  type: string
 }
 
-export function calculatePSS10(answers: Answer[]): PSS10Result & AssessmentResult {
-  const answerMap = buildAnswerMap(answers, 10)
+function normalizeQuestionId(qid: string): string {
+  const match = qid.match(/^pss[-_]?n?(\d+)$/i)
+  if (match) {
+    return `pss-${match[1]}`
+  }
+  return qid
+}
+
+export function calculatePSS(answers: Answer[]): PSS10Result & AssessmentResult {
+  const answerMap: Record<string, number> = {}
+  answers.forEach(a => {
+    const normalizedId = normalizeQuestionId(a.questionId)
+    answerMap[normalizedId] = typeof a.value === 'number' ? a.value : parseInt(String(a.value || 0))
+  })
 
   const reverseItems = ['pss-4', 'pss-5', 'pss-7', 'pss-8']
   const perceivedStressItems = ['pss-1', 'pss-3', 'pss-9']
@@ -33,27 +46,26 @@ export function calculatePSS10(answers: Answer[]): PSS10Result & AssessmentResul
   let copingScore = 0
   let overwhelmScore = 0
 
-  answers.forEach((answer) => {
-    const questionId = answer.questionId
-    let value = answer.value || 0
+  Object.entries(answerMap).forEach(([questionId, value]) => {
+    let adjustedValue = value
 
     if (reverseItems.includes(questionId)) {
-      value = 4 - value
+      adjustedValue = 4 - value
     }
 
-    rawScore += value
+    rawScore += adjustedValue
 
     if (perceivedStressItems.includes(questionId)) {
-      perceivedStressScore += value
+      perceivedStressScore += adjustedValue
     }
     if (uncontrollabilityItems.includes(questionId)) {
-      uncontrollabilityScore += value
+      uncontrollabilityScore += adjustedValue
     }
     if (copingItems.includes(questionId)) {
-      copingScore += value
+      copingScore += adjustedValue
     }
     if (overwhelmItems.includes(questionId)) {
-      overwhelmScore += value
+      overwhelmScore += adjustedValue
     }
   })
 

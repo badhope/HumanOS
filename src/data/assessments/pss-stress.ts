@@ -12,7 +12,7 @@ export const pssStressAssessment: Omit<Assessment, 'id'> & { id: string } = {
   difficulty: 'easy',
   duration: 3,
   quality: '专业',
-  resultCalculator: calculatePSS10,
+  resultCalculator: calculatePSS,
   questions: [
     {
       id: 'pss-1',
