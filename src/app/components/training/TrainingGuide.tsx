@@ -2,9 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Brain, 
-  Heart, 
   Users, 
-  Briefcase, 
   Compass,
   Sparkles,
   ChevronRight,
@@ -13,13 +11,8 @@ import {
   ArrowRight,
   Zap,
   Shield,
-  Target,
-  Lightbulb,
   TrendingUp,
-  Sun,
   CloudRain,
-  MessageCircle,
-  UserCheck,
   Briefcase as CareerIcon,
   Gauge
 } from 'lucide-react'

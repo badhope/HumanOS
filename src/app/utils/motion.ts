@@ -105,12 +105,12 @@ function useReducedMotion(): boolean {
 }
 
 interface MotionProps {
-  initial?: any
-  animate?: any
-  exit?: any
-  transition?: any
-  whileHover?: any
-  whileTap?: any
+  initial?: boolean | object
+  animate?: boolean | object
+  exit?: boolean | object
+  transition?: Transition
+  whileHover?: boolean | object | Variants
+  whileTap?: boolean | object | Variants
 }
 
 export function useOptimizedMotion(): {

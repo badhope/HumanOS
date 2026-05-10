@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, createContext, useContext } from 'react'
+import { useState, useEffect, useCallback, useRef, createContext, useContext } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Play, Pause, SkipForward, Volume2, VolumeX, Check, Trophy, Timer, Heart } from 'lucide-react'
+import { ArrowLeft, Play, Pause, SkipForward, Volume2, VolumeX, Trophy, Timer, Heart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../../store'
 
@@ -12,7 +12,11 @@ interface Exercise {
   instruction: string
   duration: number
   type: ExerciseType
-  customRenderer?: (props: any) => JSX.Element
+  customRenderer?: (props: ExerciseRenderProps) => JSX.Element
+}
+
+interface ExerciseRenderProps {
+  [key: string]: unknown
 }
 
 type TrainingCategory = 
@@ -85,9 +89,10 @@ export default function TrainingEngine({ program, onComplete }: TrainingEnginePr
   const [phaseTimer, setPhaseTimer] = useState(0)
   const [totalTimer, setTotalTimer] = useState(0)
   const [startTime] = useState(Date.now())
+  const { addTrainingRecord } = useAppStore()
+  const handleCompleteRef = useRef<() => void>(() => {})
 
   const exercise = program.exercises[currentStep]
-  const progress = ((currentStep + 1) / program.exercises.length) * 100
 
   useEffect(() => {
     if (!isPlaying || phase !== 'training') return
@@ -107,10 +112,10 @@ export default function TrainingEngine({ program, onComplete }: TrainingEnginePr
         setCurrentStep(s => s + 1)
         setPhaseTimer(0)
       } else {
-        handleComplete()
+        handleCompleteRef.current()
       }
     }
-  }, [phaseTimer, currentStep, isPlaying, phase, program.exercises])
+  }, [phaseTimer, currentStep, isPlaying, phase, program.exercises.length])
 
   const goToNextStep = useCallback(() => {
     if (currentStep < program.exercises.length - 1) {
@@ -118,15 +123,13 @@ export default function TrainingEngine({ program, onComplete }: TrainingEnginePr
       setPhaseTimer(0)
       setIsPlaying(false)
     } else {
-      handleComplete()
+      handleCompleteRef.current()
     }
   }, [currentStep, program.exercises.length])
 
   const togglePlay = useCallback(() => {
     setIsPlaying(p => !p)
   }, [])
-
-  const { addTrainingRecord } = useAppStore()
 
   const handleComplete = useCallback(() => {
     setPhase('complete')
@@ -152,7 +155,11 @@ export default function TrainingEngine({ program, onComplete }: TrainingEnginePr
     localStorage.setItem('training-records', JSON.stringify(records))
     
     onComplete?.()
-  }, [program, startTime, onComplete, addTrainingRecord])
+  }, [program.id, program.category, startTime, onComplete, addTrainingRecord])
+
+  useEffect(() => {
+    handleCompleteRef.current = handleComplete
+  }, [handleComplete])
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)

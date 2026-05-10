@@ -1,5 +1,5 @@
 import { LucideIcon } from 'lucide-react'
-import { FileText, Heart, Brain, Shield, Lightbulb, Moon, Sparkles, BookOpen, Users, Briefcase, Target, Sun, CloudSun, Zap, Coffee, Music } from 'lucide-react'
+import { FileText, Heart, Brain, Shield, Lightbulb, Moon, Sparkles, BookOpen, Users, Target, CloudSun, Coffee } from 'lucide-react'
 
 export interface LibraryArticle {
   id: string

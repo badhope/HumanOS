@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Play, Pause, Volume2, VolumeX, Check, ChevronRight, Award, Star, Timer } from 'lucide-react'
+import { ArrowLeft, Play, Pause, Volume2, VolumeX, Check, ChevronRight, Award, Timer } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../../../store'
 

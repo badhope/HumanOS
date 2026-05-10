@@ -44,7 +44,7 @@ import { useI18n } from '../../i18n'
 export default function SettingsPage() {
   const navigate = useNavigate()
   const toast = useToast()
-  const { t, language, setLanguage } = useI18n()
+  const { language, setLanguage } = useI18n()
   const fileInputRef = useRef<HTMLInputElement>(null)
   
   const {
@@ -64,8 +64,6 @@ export default function SettingsPage() {
     toggleAnimations,
     accentColor,
     setAccentColor,
-    fontSize,
-    setFontSize,
     pushNotifications,
     togglePushNotifications,
     dailyReminder,

@@ -66,7 +66,7 @@ export default function App() {
   
   const isNewApp = location.pathname.startsWith('/app')
 
-  const startLoading = useCallback((msg: string, showProg: boolean = true) => {
+  const startLoading = useCallback((msg: string, _showProg: boolean = true) => {
     setTransitionMessage(msg)
     setTransitionProgress(0)
     setIsPageTransitioning(true)

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Home, Dumbbell, TrendingUp, Compass, User, Settings } from 'lucide-react'
 import { clsx } from 'clsx'
-import { motionPresets, buttonPress, cardHover, staggerContainer } from '../../utils/motionPresets'
+import { buttonPress, cardHover, staggerContainer } from '../../utils/motionPresets'
 
 const menuItems = [
   { path: '/app/daily', label: '今日', icon: Home, preset: 'slideRight' as const },

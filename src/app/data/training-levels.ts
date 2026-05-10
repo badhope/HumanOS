@@ -851,10 +851,7 @@ export function getUnlockedTrainings(userProgress: UserProgress): TrainingProgra
   return unlocked
 }
 
-export function getRecommendedTrainings(
-  mood?: string,
-  personality?: Record<string, number>
-): TrainingProgram[] {
+export function getRecommendedTrainings(): TrainingProgram[] {
   const unlockedTrainings = getUnlockedTrainings({
     completedLevels: {},
     completedTrainings: [],
