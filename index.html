@@ -57,38 +57,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-      /* Initial loading animation */
-      #root:empty::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        z-index: 9999;
-      }
-      
-      #root:empty::after {
-        content: '心镜 MindMirror';
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-family: 'Inter', sans-serif;
-        font-size: 2rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #8b5cf6, #ec4899, #f97316);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        animation: pulse 1.5s ease-in-out infinite;
-        z-index: 10000;
-      }
-      
-      @keyframes pulse {
-        0%, 100% { opacity: 0.5; }
-        50% { opacity: 1; }
+      /* Loading state - minimal, no animation */
+      #root:empty {
+        background: #0f172a;
       }
     </style>
   </head>
