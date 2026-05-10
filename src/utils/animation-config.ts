@@ -436,8 +436,8 @@ export const bootSequenceVariants: Variants = {
     opacity: 1,
     x: 0,
     transition: {
-      delay: i * 0.3,
-      duration: 0.5,
+      delay: i * 0.15,
+      duration: 0.3,
       ease: 'easeOut',
     },
   }),
