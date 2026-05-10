@@ -48,7 +48,7 @@ const SoulMatch = lazy(() => import('./pages/SoulMatch'))
 const Profile = lazy(() => import('./pages/Profile'))
 
 export default function App() {
-  const [showSplash, setShowSplash] = useState(true)
+  const [showSplash, setShowSplash] = useState(false) // Temporarily disabled for testing
   const theme = useAppStore((state) => state.theme)
   const location = useLocation()
   
