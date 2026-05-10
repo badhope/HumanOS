@@ -127,27 +127,46 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
               variants={logoVariants}
               className="relative"
             >
-              <motion.div
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center"
-                whileHover={{ scale: 1.05 }}
-              >
-                <svg viewBox="0 0 100 100" className="w-14 h-14 sm:w-16 sm:h-16">
-                  <path
-                    d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
-                    fill="none"
-                    stroke="url(#goldGradient)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                  <defs>
-                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#d4af37" />
-                      <stop offset="50%" stopColor="#f5e6c8" />
-                      <stop offset="100%" stopColor="#d4af37" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </motion.div>
+              <div className="flex items-center gap-3 sm:gap-4">
+                <motion.div
+                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <svg viewBox="0 0 100 100" className="w-9 h-9 sm:w-10 sm:h-10">
+                    <path
+                      d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
+                      fill="none"
+                      stroke="url(#goldGradient)"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                    <defs>
+                      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#d4af37" />
+                        <stop offset="50%" stopColor="#f5e6c8" />
+                        <stop offset="100%" stopColor="#d4af37" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </motion.div>
+                <motion.div
+                  variants={staggerItem}
+                  className="flex flex-col"
+                >
+                  <motion.h1
+                    className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight"
+                    variants={introTextVariants}
+                  >
+                    心镜 MindMirror
+                  </motion.h1>
+                  <motion.p
+                    className="mt-1 text-white/50 text-xs sm:text-sm"
+                    variants={introTextVariants}
+                  >
+                    轻松探索，遇见真实的自己
+                  </motion.p>
+                </motion.div>
+              </div>
               <motion.div
                 className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 blur-xl"
                 animate={{
@@ -160,24 +179,6 @@ export default function SplashScreen({ onComplete, minDuration = 5000 }: SplashS
                   ease: 'easeInOut',
                 }}
               />
-            </motion.div>
-
-            <motion.div
-              variants={staggerItem}
-              className="mt-6 sm:mt-8 text-center px-4"
-            >
-              <motion.h1
-                className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
-                variants={introTextVariants}
-              >
-                心镜 MindMirror
-              </motion.h1>
-              <motion.p
-                className="mt-2 text-white/50 text-xs sm:text-sm"
-                variants={introTextVariants}
-              >
-                轻松探索，遇见真实的自己
-              </motion.p>
             </motion.div>
           </motion.div>
         )}
