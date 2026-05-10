@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { Menu } from 'lucide-react'
 
 interface TopNavBarProps {
@@ -11,10 +10,8 @@ export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
     <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-violet-500/10 pt-safe">
       <div className="flex items-center justify-between h-12 sm:h-14 px-3 sm:px-4 max-w-md mx-auto">
         <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
-          <motion.div 
+          <div 
             className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30 flex items-center justify-center flex-shrink-0"
-            whileHover={{ scale: 1.05, rotate: 3 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
           >
             <svg viewBox="0 0 100 100" className="w-3.5 h-3.5 sm:w-4 sm:h-4">
               <path
@@ -32,15 +29,13 @@ export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
                 </linearGradient>
               </defs>
             </svg>
-          </motion.div>
+          </div>
           
-          <motion.h1 
+          <h1 
             className="text-sm sm:text-base font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-blue-400 bg-clip-text text-transparent truncate min-w-0"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
           >
             {title}
-          </motion.h1>
+          </h1>
         </div>
         
         {onMenuClick && (
