@@ -42,7 +42,7 @@ export function TabSlider({ tabs, activeTab, onTabChange }: TabSliderProps) {
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 200
+      const scrollAmount = 160
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -65,24 +65,24 @@ export function TabSlider({ tabs, activeTab, onTabChange }: TabSliderProps) {
   }
 
   return (
-    <div className="relative mb-6">
+    <div className="relative mb-4 sm:mb-6 -mx-3 sm:mx-0 px-3">
       {showLeftArrow && (
         <motion.button
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           onClick={() => scroll('left')}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-slate-900/90 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-slate-800/90 transition-all shadow-lg"
+          className="absolute left-3 sm:left-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-900/90 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-slate-800/90 transition-all shadow-lg"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          <ChevronLeft size={18} />
+          <ChevronLeft size={16} />
         </motion.button>
       )}
 
       <div
         ref={scrollRef}
-        className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide px-10"
+        className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-hide px-8 sm:px-10"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {visibleTabs.map((tab, index) => {
@@ -92,7 +92,7 @@ export function TabSlider({ tabs, activeTab, onTabChange }: TabSliderProps) {
             <motion.button
               key={tab.id}
               onClick={() => handleTabSelect(tab.id)}
-              className={`flex items-center gap-2.5 px-5 py-3 rounded-xl font-medium transition-all whitespace-nowrap min-w-max ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-medium transition-all whitespace-nowrap min-w-max text-xs sm:text-sm ${
                 isActive
                   ? 'bg-gradient-to-r from-violet-500 to-blue-500 text-white shadow-lg shadow-violet-500/30'
                   : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/5'
@@ -104,8 +104,8 @@ export function TabSlider({ tabs, activeTab, onTabChange }: TabSliderProps) {
               whileTap={{ scale: 0.97 }}
               layoutId={`tab-${tab.id}`}
             >
-              <tab.icon size={20} className={isActive ? 'drop-shadow-md' : ''} />
-              <span className="text-sm font-medium">{tab.name}</span>
+              <tab.icon size={14} className={isActive ? 'drop-shadow-md' : ''} />
+              <span className="font-medium">{tab.name}</span>
             </motion.button>
           )
         })}
@@ -114,15 +114,15 @@ export function TabSlider({ tabs, activeTab, onTabChange }: TabSliderProps) {
           <motion.button
             key="more"
             onClick={handleMoreClick}
-            className="flex items-center gap-2.5 px-4 py-3 rounded-xl font-medium transition-all whitespace-nowrap bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/5 min-w-max"
+            className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-medium transition-all whitespace-nowrap bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/5 min-w-max text-xs sm:text-sm"
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ delay: visibleTabs.length * 0.08, type: 'spring', stiffness: 300 }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
           >
-            <MoreHorizontal size={20} />
-            <span className="text-sm font-medium">更多</span>
+            <MoreHorizontal size={14} />
+            <span className="font-medium">更多</span>
           </motion.button>
         )}
       </div>
@@ -133,11 +133,11 @@ export function TabSlider({ tabs, activeTab, onTabChange }: TabSliderProps) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           onClick={() => scroll('right')}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-slate-900/90 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-slate-800/90 transition-all shadow-lg"
+          className="absolute right-3 sm:right-0 top-1/2 -translate-y-1/2 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-900/90 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-slate-800/90 transition-all shadow-lg"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          <ChevronRight size={18} />
+          <ChevronRight size={16} />
         </motion.button>
       )}
 
@@ -156,7 +156,7 @@ export function TabSlider({ tabs, activeTab, onTabChange }: TabSliderProps) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-              className="fixed z-50 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl p-2 min-w-[200px]"
+              className="fixed z-50 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl p-2 min-w-[160px] sm:min-w-[200px]"
               style={{ 
                 left: moreMenuPosition.x, 
                 top: moreMenuPosition.y,
@@ -164,13 +164,13 @@ export function TabSlider({ tabs, activeTab, onTabChange }: TabSliderProps) {
                 overflowY: 'auto'
               }}
             >
-              <div className="flex items-center justify-between px-3 py-2 border-b border-white/10 mb-2">
-                <span className="text-sm font-medium text-white/90">更多选项</span>
+              <div className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 border-b border-white/10 mb-1 sm:mb-2">
+                <span className="text-xs sm:text-sm font-medium text-white/90">更多选项</span>
                 <button 
                   onClick={() => setShowMoreMenu(false)}
-                  className="text-white/50 hover:text-white transition-colors"
+                  className="text-white/50 hover:text-white transition-colors p-1"
                 >
-                  <X size={16} />
+                  <X size={14} />
                 </button>
               </div>
               {hiddenTabs.map((tab) => {
@@ -179,17 +179,17 @@ export function TabSlider({ tabs, activeTab, onTabChange }: TabSliderProps) {
                   <motion.button
                     key={tab.id}
                     onClick={() => handleTabSelect(tab.id)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                    className={`w-full flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 rounded-lg text-left transition-all text-xs sm:text-sm ${
                       isActive
                         ? 'bg-violet-500/20 text-violet-400'
                         : 'text-white/70 hover:bg-white/5 hover:text-white'
                     }`}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    whileHover={{ x: 4 }}
+                    whileHover={{ x: 2 }}
                   >
-                    <tab.icon size={18} />
-                    <span className="text-sm font-medium">{tab.name}</span>
+                    <tab.icon size={14} />
+                    <span className="font-medium">{tab.name}</span>
                     {isActive && (
                       <motion.div 
                         className="ml-auto w-1.5 h-1.5 rounded-full bg-violet-400"

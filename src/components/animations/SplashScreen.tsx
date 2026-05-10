@@ -22,10 +22,9 @@ const bootMessages = [
   { text: '系统就绪', delay: 2 },
 ]
 
-export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashScreenProps) {
+export default function SplashScreen({ onComplete, minDuration = 3000 }: SplashScreenProps) {
   const [phase, setPhase] = useState<'logo' | 'boot' | 'ready'>('logo')
   const [currentMessage, setCurrentMessage] = useState(0)
-  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     const logoTimer = setTimeout(() => {
@@ -45,16 +44,6 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
       })
     }, 500)
 
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(progressInterval)
-          return 100
-        }
-        return prev + 2
-      })
-    }, 50)
-
     const readyTimer = setTimeout(() => {
       setPhase('ready')
       setTimeout(onComplete, 500)
@@ -62,14 +51,13 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
 
     return () => {
       clearInterval(interval)
-      clearInterval(progressInterval)
       clearTimeout(readyTimer)
     }
   }, [phase, minDuration, onComplete])
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
@@ -116,7 +104,7 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
         {phase === 'logo' && (
           <motion.div
             key="logo"
-            className="relative z-10 flex flex-col items-center"
+            className="relative z-10 flex flex-col items-center text-center"
             variants={staggerContainer}
             initial="initial"
             animate="enter"
@@ -126,10 +114,10 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
               className="relative"
             >
               <motion.div
-                className="w-32 h-32 rounded-3xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center"
+                className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center"
                 whileHover={{ scale: 1.05 }}
               >
-                <svg viewBox="0 0 100 100" className="w-20 h-20">
+                <svg viewBox="0 0 100 100" className="w-14 h-14 sm:w-16 sm:h-16">
                   <path
                     d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
                     fill="none"
@@ -162,41 +150,20 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
 
             <motion.div
               variants={staggerItem}
-              className="mt-8 text-center"
+              className="mt-6 sm:mt-8 text-center px-4"
             >
               <motion.h1
-                className="text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+                className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
                 variants={introTextVariants}
               >
                 心镜 MindMirror
               </motion.h1>
               <motion.p
-                className="mt-1 text-white/50 text-sm"
+                className="mt-2 text-white/50 text-xs sm:text-sm"
                 variants={introTextVariants}
               >
                 轻松探索，遇见真实的自己
               </motion.p>
-            </motion.div>
-
-            <motion.div
-              variants={staggerItem}
-              className="mt-8 w-64"
-            >
-              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-violet-500 via-purple-500 to-pink-500 rounded-full shadow-lg shadow-violet-500/50"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.1 }}
-                />
-              </div>
-              <motion.div
-                className="mt-2 text-center text-sm text-white/50 font-mono"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                加载中... {progress}%
-              </motion.div>
             </motion.div>
           </motion.div>
         )}
@@ -204,14 +171,14 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
         {phase === 'boot' && (
           <motion.div
             key="boot"
-            className="relative z-10 w-full max-w-md px-8"
+            className="relative z-10 w-full max-w-xs sm:max-w-md px-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="mb-8 text-center">
+            <div className="mb-6 sm:mb-8 text-center">
               <motion.div
-                className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30"
+                className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30"
                 animate={{
                   rotate: [0, 360],
                 }}
@@ -221,7 +188,7 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
                   ease: 'linear',
                 }}
               >
-                <svg viewBox="0 0 100 100" className="w-10 h-10">
+                <svg viewBox="0 0 100 100" className="w-7 h-7 sm:w-8 sm:h-8">
                   <path
                     d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
                     fill="none"
@@ -240,7 +207,7 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
               </motion.div>
             </div>
 
-            <div className="space-y-3 mb-8">
+            <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
               <AnimatePresence mode="wait">
                 {bootMessages.slice(0, currentMessage + 1).map((msg, index) => (
                   <motion.div
@@ -249,18 +216,18 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
                     variants={bootSequenceVariants}
                     initial="initial"
                     animate="enter"
-                    className="flex items-center gap-3"
+                    className="flex items-center gap-2 sm:gap-3"
                   >
                     <motion.div
-                      className="w-2 h-2 rounded-full bg-emerald-400"
+                      className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 flex-shrink-0"
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: index * 0.1 }}
                     />
-                    <span className="text-sm text-white/80 font-mono">{msg.text}</span>
+                    <span className="text-xs sm:text-sm text-white/80 font-mono truncate">{msg.text}</span>
                     {index === currentMessage && (
                       <motion.span
-                        className="text-white/60"
+                        className="text-white/60 flex-shrink-0"
                         animate={{ opacity: [1, 0] }}
                         transition={{ duration: 0.5, repeat: Infinity }}
                       >
@@ -283,7 +250,7 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
             transition={{ duration: 0.3 }}
           >
             <motion.div
-              className="text-2xl font-bold text-white"
+              className="text-base sm:text-lg md:text-xl font-bold text-white"
               animate={{
                 opacity: [1, 0.5, 1],
               }}
@@ -299,12 +266,12 @@ export default function SplashScreen({ onComplete, minDuration = 4000 }: SplashS
       </AnimatePresence>
 
       <motion.div
-        className="absolute bottom-8 text-center text-white/30 text-sm"
+        className="absolute bottom-6 sm:bottom-8 left-0 right-0 text-center px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
       >
-        <p>© 2024 心镜 MindMirror. 照见自己，成为更好的自己。</p>
+        <p className="text-[10px] sm:text-xs text-white/30">© 2024 心镜 MindMirror. 照见自己，成为更好的自己。</p>
       </motion.div>
     </motion.div>
   )
