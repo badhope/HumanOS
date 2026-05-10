@@ -46,7 +46,7 @@ function ScatterDistributionChart({
           <Tooltip
             contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px' }}
             labelStyle={{ color: '#fff' }}
-            formatter={(value: any, name: string, props: any) => [
+            formatter={(value: number, name: string, props: { payload: { isUser: boolean; name: string } }) => [
               props.payload.isUser ? '您的位置' : props.payload.name,
               '',
             ]}
@@ -55,7 +55,7 @@ function ScatterDistributionChart({
             {scatterData.map((d, i) => (
               <Cell
                 key={i}
-                fill={d.isUser ? '#10b981' : (d as any).color || colors[i]}
+                fill={d.isUser ? '#10b981' : (d as { color?: string }).color || colors[i]}
               />
             ))}
           </Scatter>
@@ -71,13 +71,11 @@ function CircularProgressChart({
   size = 'medium',
   colorScheme = 'violet',
   showPercentage = true,
-  animated = true,
 }: {
   score: number
   size?: 'small' | 'medium' | 'large'
   colorScheme?: 'violet' | 'amber' | 'emerald' | 'cyan' | 'rose'
   showPercentage?: boolean
-  animated?: boolean
 }) {
   const sizeMap = { small: 80, medium: 120, large: 160 }
   const colorMap: Record<string, string> = {
@@ -172,7 +170,6 @@ export default function EnhancedReportTemplate({
               size="small"
               colorScheme={isIQTest ? 'amber' : 'violet'}
               showPercentage
-              animated
             />
           </motion.div>
         </div>
@@ -220,7 +217,7 @@ export default function EnhancedReportTemplate({
             认知能力详细分析
           </h3>
           <div className="grid md:grid-cols-2 gap-4">
-            {Object.entries(result.cognitiveProfile).map(([key, value]: [string, any], index) => (
+            {Object.entries(result.cognitiveProfile).map(([key, value]: [string, string], index) => (
               <motion.div
                 key={key}
                 initial={{ opacity: 0, y: 10 }}
@@ -334,7 +331,7 @@ export default function EnhancedReportTemplate({
             主题相关性权重分析
           </h3>
           <div className="space-y-4">
-            {Object.entries(result.themeRelevance).map(([theme, data]: [string, any], index) => (
+            {Object.entries(result.themeRelevance).map(([theme, data]: [string, ThemeRelevance[string]], index) => (
               <motion.div
                 key={theme}
                 initial={{ opacity: 0, x: -10 }}

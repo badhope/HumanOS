@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Play, Pause, Volume2, VolumeX, Check, ChevronRight, Award, Timer } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useAppStore } from '../../../store'
 
 type Phase = 'intro' | 'breathing' | 'bodyscan' | 'sensory' | 'reflection' | 'complete'
 
@@ -16,7 +15,6 @@ interface TrainingRecord {
 
 export default function EmotionAnchoringTraining() {
   const navigate = useNavigate()
-  const { addCompletedAssessment } = useAppStore()
   const [phase, setPhase] = useState<Phase>('intro')
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
@@ -151,7 +149,6 @@ export default function EmotionAnchoringTraining() {
       notes: reflection,
     })
     
-    const today = new Date().toISOString().split('T')[0]
     const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
     const hasYesterdayRecord = trainingData.records.some((r: TrainingRecord) => 
       new Date(r.completedAt).toISOString().split('T')[0] === yesterday

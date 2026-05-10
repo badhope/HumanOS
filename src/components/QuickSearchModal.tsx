@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Command, FileText, Sparkles, TrendingUp, Keyboard, ChevronRight, ArrowRight, Clock } from 'lucide-react'
+import { Search, X, FileText, Sparkles, TrendingUp, Keyboard, ChevronRight, ArrowRight, Clock } from 'lucide-react'
 import { assessments } from '@data/assessments'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useShortcutContext } from '@hooks/useShortcutContext'
 
 interface SearchResult {
@@ -30,17 +30,7 @@ export default function QuickSearchModal() {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
-  const location = useLocation()
   
-  const isImmersiveMode = 
-    location.pathname.includes('/simulated-world') && location.pathname !== '/simulated-world' ||
-    location.pathname.includes('/assessment/') ||
-    location.pathname.includes('/world/play') ||
-    location.pathname.includes('/scenario/') ||
-    location.pathname.includes('/economy') ||
-    location.pathname.includes('/xianxia') ||
-    location.pathname.includes('/game/')
-
   const buildSearchIndex = useCallback((): SearchResult[] => {
     const assessmentItems: SearchResult[] = assessments.map(ass => ({
       id: ass.id,

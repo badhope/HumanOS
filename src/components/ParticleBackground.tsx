@@ -82,7 +82,7 @@ export default function ParticleBackground({
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      particlesRef.current.forEach((particle, i) => {
+      particlesRef.current.forEach((particle) => {
         particle.x += particle.speedX
         particle.y += particle.speedY
         particle.opacity += (Math.random() - 0.5) * 0.05

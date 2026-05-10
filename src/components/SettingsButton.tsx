@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Settings as SettingsIcon, X } from 'lucide-react'
+import { Settings as SettingsIcon } from 'lucide-react'
 import Settings from './Settings'
 
 export default function SettingsButton() {

@@ -9,13 +9,13 @@ import {
   MetricResult,
   CorrelationResult
 } from '../utils/enhancedAnalysisFramework'
-import { AssessmentResult, Dimension } from '../types'
+import { AssessmentResult } from '../types'
 
 interface IntegratedAnalysisReportProps {
   result: AssessmentResult
   assessmentType: string
   mode?: AssessmentVersion
-  answers?: Record<string, any>
+  answers?: Record<string, unknown>
   onExport?: () => void
 }
 
@@ -268,8 +268,7 @@ const VersionBadge: React.FC<{ config: VersionConfig }> = ({ config }) => (
 
 const OverallSummary: React.FC<{
   results: EnhancedAnalysisResult[]
-  version: AssessmentVersion
-}> = ({ results, version }) => {
+}> = ({ results }) => {
   const avgScore = useMemo(() => {
     if (results.length === 0) return 0
     return results.reduce((sum, r) => sum + r.overallScore, 0) / results.length
@@ -337,7 +336,7 @@ const OverallSummary: React.FC<{
 
 const IntegratedAnalysisReport: React.FC<IntegratedAnalysisReportProps> = ({
   result,
-  assessmentType,
+  assessmentType: _assessmentType,
   mode = 'normal',
   answers = {},
   onExport
@@ -417,7 +416,7 @@ const IntegratedAnalysisReport: React.FC<IntegratedAnalysisReportProps> = ({
         </div>
       </div>
 
-      <OverallSummary results={analysisResults} version={mode} />
+      <OverallSummary results={analysisResults} />
 
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-900">维度分析</h3>
@@ -429,7 +428,7 @@ const IntegratedAnalysisReport: React.FC<IntegratedAnalysisReportProps> = ({
       </div>
 
       <div className="space-y-4">
-        {analysisResults.map((analysisResult, index) => {
+        {analysisResults.map((analysisResult) => {
           const dimension = dimensions.find(d => d.id === analysisResult.dimensionId)
           if (!dimension) return null
 

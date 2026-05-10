@@ -1,10 +1,9 @@
 import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Gem, Sun, Sparkles, Gamepad2, Zap, Compass, AlertCircle } from 'lucide-react'
+import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Sun, Sparkles, Gamepad2, Zap, Compass } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useAppStore, type TrainingRecord, type MoodRecord } from '../../store'
+import { useAppStore, type TrainingRecord } from '../../store'
 import { useResponsive } from '../../hooks/useResponsive'
-import type { CompletedAssessment } from '../../types'
 import {
   FOUNDATION_TRAININGS,
   COGNITION_TRAININGS_FULL,
@@ -12,14 +11,12 @@ import {
   ATTACHMENT_TRAININGS_FULL,
   SOCIAL_TRAININGS_FULL,
   FUN_TRAININGS_FULL,
-  ALL_TRAININGS,
   getRecommendedTrainings
 } from '../data/training-library'
 import {
   ALL_TRAINING_TRACKS,
   checkLevelUnlocked,
-  type UserProgress,
-  LEVEL_LABELS
+  type UserProgress
 } from '../data/training-levels'
 import TrainingGuide from '../components/training/TrainingGuide'
 
@@ -41,7 +38,6 @@ export default function Training() {
   const { isDesktop } = useResponsive()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<TabType>('guide')
-  const [selectedTrack, setSelectedTrack] = useState<string | null>(null)
 
   const today = useMemo(() => new Date().toISOString().split('T')[0], [])
   const todayMood = getMoodForDate(today)
@@ -82,8 +78,6 @@ export default function Training() {
     activeTab === 'social' ? SOCIAL_TRAININGS_FULL :
     activeTab === 'career' ? FOUNDATION_TRAININGS.filter(t => t.category === 'career') :
     FUN_TRAININGS_FULL
-
-  const currentTrack = ALL_TRAINING_TRACKS.find(t => t.id === activeTab)
 
   const isTrainingUnlocked = (trainingId: string): boolean => {
     for (const track of ALL_TRAINING_TRACKS) {

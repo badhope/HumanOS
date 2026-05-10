@@ -21,8 +21,8 @@
  */
 
 import { motion } from 'framer-motion'
-import { Award, TrendingUp, Lightbulb, Briefcase, Target, Heart, Brain, User, Users, Shield, Compass, Zap, Activity, AlertTriangle, CheckCircle, Clock, BarChart3 } from 'lucide-react'
-import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, CartesianGrid, ScatterChart, Scatter, Legend, AreaChart, Area } from 'recharts'
+import { Award, TrendingUp, Lightbulb, Briefcase, Target, Heart, Brain, User, Users, Shield, Compass, Zap, Activity, AlertTriangle, CheckCircle, BarChart3 } from 'lucide-react'
+import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell, CartesianGrid, ScatterChart, Scatter } from 'recharts'
 import type { SASResult, ECRResult, HollandResult } from '../utils/calculators'
 import { getAssessmentById } from '../data/assessments'
 import DOMPurify from 'dompurify'
@@ -47,11 +47,6 @@ const SAS_DIMENSION_NAMES: Record<string, string> = {
 }
 
 // ECR依恋类型配色 - 红蓝对立色
-const ECR_COLORS = {
-  anxiety: '#ef4444',
-  avoidance: '#3b82f6'
-}
-
 const ECR_DIMENSION_NAMES: Record<string, string> = {
   anxiety_abandon: '被弃焦虑',
   anxiety_need: '情感需求',
@@ -79,14 +74,12 @@ const HOLLAND_NAMES: Record<string, string> = {
 }
 
 // ==============================================
-// 🔀 报告路由分发层 - 核心入口
-// ==============================================
 // 根据测评ID路由到对应的报告渲染组件
 // 这是整个报告系统的调度中心
 
 interface ReportTemplateProps {
-  result: any          // 计算器返回的完整结果对象
-  assessmentType: string  // 测评唯一ID，用于分支判断
+  result: ReportResult
+  assessmentType: string
   mode?: string
 }
 
@@ -989,7 +982,7 @@ const OFFICIALDOM_COLORS: Record<string, string> = {
   machiavellianism: '#06b6d4',
 }
 
-function OfficialdomReport({ result }: { result: any }) {
+function OfficialdomReport({ result }: { result: GenericReportResult }) {
   const radarData = Object.entries(result.dimensions || {}).map(([key, value]) => ({
     dimension: OFFICIALDOM_DIMENSION_NAMES[key] || key,
     score: Math.round((value as number) * 100 / 5)
@@ -1154,15 +1147,7 @@ const GMA_DIMENSION_NAMES: Record<string, string> = {
   drinkingCulture: '酒桌文化',
 }
 
-const GMA_COLORS: Record<string, string> = {
-  tableManner: '#ef4444',
-  speakingArt: '#f59e0b',
-  giftGiving: '#10b981',
-  eyeContact: '#3b82f6',
-  drinkingCulture: '#8b5cf6',
-}
-
-function GMAReport({ result }: { result: any }) {
+function GMAReport({ result }: { result: GenericReportResult }) {
   const radarData = Object.entries(result.dimensions || {}).map(([key, value]) => ({
     dimension: GMA_DIMENSION_NAMES[key] || key,
     score: Math.round((value as number) * 100 / 5)
@@ -1329,14 +1314,7 @@ const CAST_DIMENSION_NAMES: Record<string, string> = {
   moralityKidnapping: '道德绑架',
 }
 
-const CAST_COLORS: Record<string, string> = {
-  reportAnxiety: '#ef4444',
-  comparisonMania: '#f59e0b',
-  classObsession: '#3b82f6',
-  moralityKidnapping: '#ec4899',
-}
-
-function CASTReport({ result }: { result: any }) {
+function CASTReport({ result }: { result: GenericReportResult }) {
   const radarData = result.radarData || Object.entries(result.dimensions || {}).map(([key, value]) => ({
     dimension: CAST_DIMENSION_NAMES[key] || key,
     score: value as number,
@@ -1637,7 +1615,7 @@ function CASTReport({ result }: { result: any }) {
   )
 }
 
-function IdeologyReport({ result }: { result: any }) {
+function IdeologyReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -1660,7 +1638,7 @@ function IdeologyReport({ result }: { result: any }) {
   )
 }
 
-function IQReport({ result }: { result: any }) {
+function IQReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -1683,7 +1661,7 @@ function IQReport({ result }: { result: any }) {
   )
 }
 
-function EQReport({ result }: { result: any }) {
+function EQReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -1998,7 +1976,7 @@ function EQReport({ result }: { result: any }) {
   )
 }
 
-function DarkTriadReport({ result }: { result: any }) {
+function DarkTriadReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -2021,7 +1999,7 @@ function DarkTriadReport({ result }: { result: any }) {
   )
 }
 
-function OceanReport({ result }: { result: any }) {
+function OceanReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -2052,7 +2030,7 @@ function OceanReport({ result }: { result: any }) {
  * 【五大维度】自我实现 / 关系质量 / 社会贡献 / 个人成长 / 超越性
  * 【6个段位】虚无主义者 → 存在主义者 → 探索者 → 践行者 → 意义构建者 → 开悟大师
  */
-function LifeMeaningReport({ result }: { result: any }) {
+function LifeMeaningReport({ result }: { result: GenericReportResult }) {
   // ---------- 雷达图数据转换 ----------
   // 将计算器返回的英文维度名映射成中文显示名
   const radarData = Object.entries(result.dimensions || {}).map(([key, value]) => ({
@@ -2238,7 +2216,7 @@ function LifeMeaningReport({ result }: { result: any }) {
  * 【五大维度】国家认同 / 文化自信 / 社会责任感 / 历史认知 / 全球视野
  * 【6个段位】建议重修思想道德课 → 理性中立路人 → 普通群众 → 热血青年 → 红色传承者 → 共产主义接班人
  */
-function PatriotismReport({ result }: { result: any }) {
+function PatriotismReport({ result }: { result: GenericReportResult }) {
   const radarData = Object.entries(result.dimensions || {}).map(([key, value]) => ({
     dimension: {
       nationalPride: '国家自豪感',
@@ -2420,7 +2398,7 @@ function PatriotismReport({ result }: { result: any }) {
  * 【五大维度】演技水平 / 时间管理 / 理由储备 / 反侦察能力 / 摸鱼心态
  * 【6个段位】卷王 → 老实人 → 入门摸鱼仔 → 合格摸鱼人 → 摸鱼大师 → 摸鱼之神
  */
-function SlackingReport({ result }: { result: any }) {
+function SlackingReport({ result }: { result: GenericReportResult }) {
   const radarData = Object.entries(result.dimensions || {}).map(([key, value]) => ({
     dimension: {
       meetingEvading: '逃会技巧',
@@ -2599,7 +2577,7 @@ function SlackingReport({ result }: { result: any }) {
  * 【五大维度】饭量指数 / 美食鉴赏力 / 探店积极性 / 厨艺水平 / 吃货执念
  * 【6个段位】修仙者 → 生存型吃饭 → 普通干饭人 → 干饭爱好者 → 干饭大师 → 干饭之神
  */
-function FoodieReport({ result }: { result: any }) {
+function FoodieReport({ result }: { result: GenericReportResult }) {
   const radarData = Object.entries(result.dimensions || {}).map(([key, value]) => ({
     dimension: {
       appetite: '饭量指数',
@@ -2778,7 +2756,7 @@ function FoodieReport({ result }: { result: any }) {
  * 【五大维度】日均使用时长 / 社交媒体依赖 / 游戏沉迷度 / FOMO程度 / 线下能力
  * 【6个段位】赛博隐士 → 数字移民 → 普通网民 → 网瘾患者 → 资深网民 → 人形自走终端
  */
-function InternetAddictionReport({ result }: { result: any }) {
+function InternetAddictionReport({ result }: { result: GenericReportResult }) {
   const radarData = Object.entries(result.dimensions || {}).map(([key, value]) => ({
     dimension: {
       dailyUsage: '日均使用',
@@ -2957,7 +2935,7 @@ function InternetAddictionReport({ result }: { result: any }) {
  * 【五大维度】实战经验 / 理论深度 / 技术水平 / 玩法多样性 / 观念开放度
  * 【6个段位】国宝级纯爱战士 → 理论派选手 → 正常人类 → 老司机 → 车神 → 人间泰迪
  */
-function SexualExperienceReport({ result }: { result: any }) {
+function SexualExperienceReport({ result }: { result: GenericReportResult }) {
   const radarData = Object.entries(result.dimensions || {}).map(([key, value]) => ({
     dimension: {
       practical: '实战经验',
@@ -3132,7 +3110,7 @@ function SexualExperienceReport({ result }: { result: any }) {
  * 🎨 颜色潜意识测试 - 完整报告渲染组件
  * ==============================================
  */
-function ColorSubconsciousReport({ result }: { result: any }) {
+function ColorSubconsciousReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -3227,7 +3205,7 @@ function ColorSubconsciousReport({ result }: { result: any }) {
  * 🐕 ABM恋爱动物人格 - 完整报告渲染组件
  * ==============================================
  */
-function AbmLoveAnimalReport({ result }: { result: any }) {
+function AbmLoveAnimalReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -3321,7 +3299,7 @@ function AbmLoveAnimalReport({ result }: { result: any }) {
  * 🧠 精神年龄诊断 - 完整报告渲染组件
  * ==============================================
  */
-function MentalAgeReport({ result }: { result: any }) {
+function MentalAgeReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -3387,7 +3365,7 @@ function MentalAgeReport({ result }: { result: any }) {
  * 🦥 SBTI傻屌人格测试 - 完整报告渲染组件
  * ==============================================
  */
-function SBTIPersonalityReport({ result }: { result: any }) {
+function SBTIPersonalityReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -3491,7 +3469,7 @@ function SBTIPersonalityReport({ result }: { result: any }) {
  *   1. 在上面的路由层加 if 判断分支
  *   2. 写对应的专属报告渲染组件
  */
-function DefaultReport({ result }: { result: any }) {
+function DefaultReport({ result }: { result: GenericReportResult }) {
   return (
     <div className="space-y-6">
       <motion.div
@@ -3562,7 +3540,7 @@ function EnhancedReportTemplate({ result, assessment }: EnhancedReportProps) {
       }
       const rendered = evalInContext(content, result)
       return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(rendered, { USE_PROFILES: { html: true }, ALLOWED_TAGS: ['div', 'span', 'p', 'strong', 'em', 'b', 'i', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }) }} />
-    } catch (e) {
+    } catch {
       return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content, { USE_PROFILES: { html: true }, ALLOWED_TAGS: ['div', 'span', 'p', 'strong', 'em', 'b', 'i', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }) }} />
     }
   }

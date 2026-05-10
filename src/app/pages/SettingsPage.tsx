@@ -160,7 +160,7 @@ export default function SettingsPage() {
         const data = JSON.parse(e.target?.result as string)
         if (data.user) setUser(data.user)
         if (Array.isArray(data.completedAssessments)) {
-          data.completedAssessments.forEach((a: any) => {
+          data.completedAssessments.forEach((a: Record<string, unknown>) => {
             if (a.assessmentId) {
               const existingIndex = completedAssessments.findIndex(
                 ca => ca.assessmentId === a.assessmentId && ca.completedAt === a.completedAt
@@ -168,8 +168,8 @@ export default function SettingsPage() {
               if (existingIndex === -1) {
                 completedAssessments.push({
                   ...a,
-                  completedAt: new Date(a.completedAt),
-                } as any)
+                  completedAt: new Date(a.completedAt as string),
+                } as never)
               }
             }
           })
@@ -205,10 +205,7 @@ export default function SettingsPage() {
     }
   }
 
-  const handleDeleteRecord = (recordId: string) => {
-    setDeleteTarget(recordId)
-    setShowDeleteModal(true)
-  }
+
 
   const confirmDelete = () => {
     if (deleteTarget) {
@@ -478,7 +475,7 @@ export default function SettingsPage() {
                   {colorOptions.map((color) => (
                     <motion.button
                       key={color.value}
-                      onClick={() => setAccentColor(color.value as any)}
+                      onClick={() => setAccentColor(color.value as typeof accentColor)}
                       className={cn(
                         'w-12 h-12 rounded-full transition-all',
                         accentColor === color.value && 'ring-4 ring-white/30 scale-110'
