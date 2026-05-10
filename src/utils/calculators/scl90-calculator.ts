@@ -1,22 +1,25 @@
 import type { Answer } from '../../types'
 
 export interface SCL90Result extends Record<string, any> {
+  score: number
+  title: string
+  subtitle: string
+  description: string
+  dimensions: Array<{
+    name: string
+    score: number
+    maxScore: number
+    description: string
+  }>
+  strengths: string[]
+  weaknesses: string[]
+  suggestions: string[]
+  careers: string[]
+  radarData: { dimension: string; score: number; fullMark: number }[]
   rawScore: number
   generalSymptomIndex: number
   level: 'normal' | 'mild' | 'moderate' | 'severe'
   levelText: string
-  dimensions: {
-    somatization: { score: number; level: string; items: number }
-    obsessiveCompulsive: { score: number; level: string; items: number }
-    interpersonalSensitivity: { score: number; level: string; items: number }
-    depression: { score: number; level: string; items: number }
-    anxiety: { score: number; level: string; items: number }
-    hostility: { score: number; level: string; items: number }
-    phobicAnxiety: { score: number; level: string; items: number }
-    paranoidIdeation: { score: number; level: string; items: number }
-    psychoticism: { score: number; level: string; items: number }
-  }
-  radarData: { dimension: string; score: number; fullMark: number }[]
   interpretation: string
   recommendations: string[]
   warning: string
@@ -61,14 +64,14 @@ export function calculateSCL90(answers: Answer[]): SCL90Result {
     answerMap[a.questionId] = typeof a.value === 'number' ? a.value : parseInt(String(a.value || 1))
   })
 
-  const dimensions: SCL90Result['dimensions'] = {} as SCL90Result['dimensions']
+  const rawDimensions: Record<string, { score: number; level: string; items: number }> = {}
   let totalRaw = 0
 
   Object.entries(dimensionMap).forEach(([dim, ids]) => {
     const score = ids.reduce((sum, id) => sum + (answerMap[id] || 1), 0)
     const itemCount = ids.length
     const averageScore = score / itemCount
-    dimensions[dim as keyof SCL90Result['dimensions']] = {
+    rawDimensions[dim] = {
       score: Math.round(averageScore * 100) / 100,
       level: getLevel((averageScore / 5) * 100),
       items: itemCount,
@@ -84,17 +87,30 @@ export function calculateSCL90(answers: Answer[]): SCL90Result {
   else if (generalSymptomIndex >= 2.0) { level = 'moderate'; levelText = '存在中等程度心理困扰' }
   else if (generalSymptomIndex >= 1.5) { level = 'mild'; levelText = '存在轻微心理症状' }
 
-  const radarData = [
-    { dimension: '躯体化', score: (dimensions.somatization.score / 5) * 100, fullMark: 100 },
-    { dimension: '强迫症状', score: (dimensions.obsessiveCompulsive.score / 5) * 100, fullMark: 100 },
-    { dimension: '人际关系', score: (dimensions.interpersonalSensitivity.score / 5) * 100, fullMark: 100 },
-    { dimension: '抑郁', score: (dimensions.depression.score / 5) * 100, fullMark: 100 },
-    { dimension: '焦虑', score: (dimensions.anxiety.score / 5) * 100, fullMark: 100 },
-    { dimension: '敌对', score: (dimensions.hostility.score / 5) * 100, fullMark: 100 },
-    { dimension: '恐怖', score: (dimensions.phobicAnxiety.score / 5) * 100, fullMark: 100 },
-    { dimension: '偏执', score: (dimensions.paranoidIdeation.score / 5) * 100, fullMark: 100 },
-    { dimension: '精神病性', score: (dimensions.psychoticism.score / 5) * 100, fullMark: 100 },
+  const dimensions: SCL90Result['dimensions'] = [
+    { name: '躯体化', score: Math.round((rawDimensions.somatization.score / 5) * 100), maxScore: 100, description: getDimensionAdvice('躯体化', rawDimensions.somatization.score) },
+    { name: '强迫症状', score: Math.round((rawDimensions.obsessiveCompulsive.score / 5) * 100), maxScore: 100, description: getDimensionAdvice('强迫症状', rawDimensions.obsessiveCompulsive.score) },
+    { name: '人际关系敏感', score: Math.round((rawDimensions.interpersonalSensitivity.score / 5) * 100), maxScore: 100, description: getDimensionAdvice('人际关系', rawDimensions.interpersonalSensitivity.score) },
+    { name: '抑郁', score: Math.round((rawDimensions.depression.score / 5) * 100), maxScore: 100, description: getDimensionAdvice('抑郁', rawDimensions.depression.score) },
+    { name: '焦虑', score: Math.round((rawDimensions.anxiety.score / 5) * 100), maxScore: 100, description: getDimensionAdvice('焦虑', rawDimensions.anxiety.score) },
+    { name: '敌对', score: Math.round((rawDimensions.hostility.score / 5) * 100), maxScore: 100, description: getDimensionAdvice('敌对', rawDimensions.hostility.score) },
+    { name: '恐怖', score: Math.round((rawDimensions.phobicAnxiety.score / 5) * 100), maxScore: 100, description: getDimensionAdvice('恐怖', rawDimensions.phobicAnxiety.score) },
+    { name: '偏执', score: Math.round((rawDimensions.paranoidIdeation.score / 5) * 100), maxScore: 100, description: getDimensionAdvice('偏执', rawDimensions.paranoidIdeation.score) },
+    { name: '精神病性', score: Math.round((rawDimensions.psychoticism.score / 5) * 100), maxScore: 100, description: getDimensionAdvice('精神病性', rawDimensions.psychoticism.score) },
   ]
+
+  const radarData = dimensions.map(d => ({ dimension: d.name, score: d.score, fullMark: 100 }))
+
+  const strengths: string[] = []
+  const weaknesses: string[] = []
+  
+  dimensions.forEach(dim => {
+    if (dim.score <= 40) {
+      strengths.push(`${dim.name}表现正常`)
+    } else if (dim.score >= 60) {
+      weaknesses.push(`${dim.name}需要关注`)
+    }
+  })
 
   let interpretation = `### SCL-90 测评结果
 
@@ -102,17 +118,17 @@ export function calculateSCL90(answers: Answer[]): SCL90Result {
 
 **各维度得分详情：**
 
-| 维度 | 均分 | 等级 |
+| 维度 | 得分 | 状态 |
 |------|------|------|
-| 躯体化 | ${dimensions.somatization.score} | ${dimensions.somatization.level} |
-| 强迫症状 | ${dimensions.obsessiveCompulsive.score} | ${dimensions.obsessiveCompulsive.level} |
-| 人际关系敏感 | ${dimensions.interpersonalSensitivity.score} | ${dimensions.interpersonalSensitivity.level} |
-| 抑郁 | ${dimensions.depression.score} | ${dimensions.depression.level} |
-| 焦虑 | ${dimensions.anxiety.score} | ${dimensions.anxiety.level} |
-| 敌对 | ${dimensions.hostility.score} | ${dimensions.hostility.level} |
-| 恐怖 | ${dimensions.phobicAnxiety.score} | ${dimensions.phobicAnxiety.level} |
-| 偏执 | ${dimensions.paranoidIdeation.score} | ${dimensions.paranoidIdeation.level} |
-| 精神病性 | ${dimensions.psychoticism.score} | ${dimensions.psychoticism.level} |
+| 躯体化 | ${rawDimensions.somatization.score} | ${rawDimensions.somatization.level} |
+| 强迫症状 | ${rawDimensions.obsessiveCompulsive.score} | ${rawDimensions.obsessiveCompulsive.level} |
+| 人际关系敏感 | ${rawDimensions.interpersonalSensitivity.score} | ${rawDimensions.interpersonalSensitivity.level} |
+| 抑郁 | ${rawDimensions.depression.score} | ${rawDimensions.depression.level} |
+| 焦虑 | ${rawDimensions.anxiety.score} | ${rawDimensions.anxiety.level} |
+| 敌对 | ${rawDimensions.hostility.score} | ${rawDimensions.hostility.level} |
+| 恐怖 | ${rawDimensions.phobicAnxiety.score} | ${rawDimensions.phobicAnxiety.level} |
+| 偏执 | ${rawDimensions.paranoidIdeation.score} | ${rawDimensions.paranoidIdeation.level} |
+| 精神病性 | ${rawDimensions.psychoticism.score} | ${rawDimensions.psychoticism.level} |
 
 `
 
@@ -151,30 +167,10 @@ export function calculateSCL90(answers: Answer[]): SCL90Result {
   }
 
   const recommendationPools = [
-    [
-      '保持规律作息和适度运动',
-      '每天给自己留出放松时间',
-      '与信任的朋友或家人交流',
-      '练习深呼吸或正念冥想',
-    ],
-    [
-      '增加有氧运动（每周3-5次）',
-      '建立规律的睡眠习惯',
-      '尝试记录情绪日记',
-      '必要时寻求心理咨询',
-    ],
-    [
-      '优先保证充足睡眠',
-      '减少不必要的压力源',
-      '寻求专业心理支持',
-      '建立支持性社交网络',
-    ],
-    [
-      '建议寻求专业心理咨询',
-      '考虑预约精神科医生',
-      '告知信任的人你的状态',
-      '必要时拨打心理援助热线',
-    ],
+    ['保持规律作息和适度运动', '每天给自己留出放松时间', '与信任的朋友或家人交流', '练习深呼吸或正念冥想'],
+    ['增加有氧运动（每周3-5次）', '建立规律的睡眠习惯', '尝试记录情绪日记', '必要时寻求心理咨询'],
+    ['优先保证充足睡眠', '减少不必要的压力源', '寻求专业心理支持', '建立支持性社交网络'],
+    ['建议寻求专业心理咨询', '考虑预约精神科医生', '告知信任的人你的状态', '必要时拨打心理援助热线'],
   ]
 
   const levelIndex = level === 'normal' ? 0 : level === 'mild' ? 1 : level === 'moderate' ? 2 : 3
@@ -185,14 +181,30 @@ export function calculateSCL90(answers: Answer[]): SCL90Result {
     : '✓ 本测评结果仅供参考，保持健康的生活方式是维持心理健康的关键。'
 
   return {
+    score: Math.round((1 - generalSymptomIndex / 5) * 100),
+    title: 'SCL-90 症状自评量表报告',
+    subtitle: `总症状指数: ${generalSymptomIndex}`,
+    description: `您的心理健康状态${levelText}。${weaknesses.length > 0 ? '建议关注' + weaknesses.join('、') : '各维度表现正常'}`,
+    dimensions,
+    strengths: strengths.length > 0 ? strengths : ['心理健康状态良好'],
+    weaknesses,
+    suggestions: recommendations,
+    careers: [],
+    radarData,
     rawScore: totalRaw,
     generalSymptomIndex,
     level,
     levelText,
-    dimensions,
-    radarData,
     interpretation,
     recommendations,
     warning,
   }
+}
+
+function getDimensionAdvice(name: string, score: number): string {
+  const percentage = (score / 5) * 100
+  if (percentage <= 40) return '表现正常，继续保持'
+  if (percentage <= 60) return '轻度异常，建议关注'
+  if (percentage <= 75) return '中度异常，需要干预'
+  return '重度异常，务必重视'
 }

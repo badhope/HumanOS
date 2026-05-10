@@ -1,5 +1,5 @@
 import type { Assessment } from '../../types'
-import { calculatePSQI } from '../../utils/calculators/professional-calculators-factory'
+import { calculatePSQI } from '../../utils/calculators/psqi-calculator'
 
 export const sleepQualityAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'sleep-quality',

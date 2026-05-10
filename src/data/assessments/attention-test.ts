@@ -1,5 +1,5 @@
 import type { Assessment } from '../../types'
-import { calculateAttention } from '../../utils/calculators/professional-calculators-factory'
+import { calculateAttention } from '../../utils/calculators/attention-calculator'
 
 export const attentionTestAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'attention-test',
