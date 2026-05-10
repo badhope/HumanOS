@@ -83,7 +83,8 @@ export default function GlobalMenu() {
   }
 
   const isImmersiveMode = 
-    location.pathname.includes('/assessment/')
+    location.pathname.includes('/assessment/') ||
+    location.pathname.includes('/legacy/results/')
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

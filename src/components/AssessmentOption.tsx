@@ -32,7 +32,7 @@ export const AssessmentOption = memo(function AssessmentOption({
       key={optionId}
       onClick={() => onClick(optionId)}
       className={cn(
-        'w-full p-4 sm:p-5 rounded-xl text-left transition-all duration-200 flex items-start gap-4 relative overflow-hidden',
+        'w-full p-3 sm:p-4 rounded-xl text-left transition-all duration-200 flex items-start gap-2.5 sm:gap-4 relative overflow-hidden',
         selected
           ? 'bg-gradient-to-r from-violet-500/20 to-pink-500/15 border border-violet-500/50 text-white shadow-lg shadow-violet-500/20'
           : 'bg-white/5 text-white/80 hover:bg-white/10 hover:text-white border border-transparent hover:border-violet-500/20'
@@ -62,7 +62,7 @@ export const AssessmentOption = memo(function AssessmentOption({
       )}
       
       <div className={cn(
-        'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-semibold relative z-10 transition-all duration-200',
+        'w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 font-medium sm:font-semibold relative z-10 transition-all duration-200 text-xs sm:text-sm',
         selected 
           ? 'bg-gradient-to-br from-violet-500 to-pink-500 text-white shadow-lg shadow-violet-500/30' 
           : 'bg-white/10 text-white/60 group-hover:bg-white/15'
@@ -73,14 +73,14 @@ export const AssessmentOption = memo(function AssessmentOption({
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 500, damping: 15 }}
           >
-            <Check className="w-4 h-4" />
+            <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </motion.div>
         ) : (
           String.fromCharCode(65 + index)
         )}
       </div>
       
-      <span className="flex-1 pt-0.5 relative z-10 leading-relaxed">
+      <span className="flex-1 pt-0.5 relative z-10 leading-relaxed text-xs sm:text-sm">
         {option.text}
       </span>
     </motion.button>

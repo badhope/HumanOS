@@ -162,71 +162,71 @@ export default function Results() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-24 pb-12">
-      <div id="result-export-container" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-16 sm:pt-20 md:pt-24 pb-8 sm:pb-12">
+      <div id="result-export-container" className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6">
         <motion.div
-          className="flex items-center gap-4 mb-8"
+          className="flex items-center gap-2 sm:gap-4 mb-6 sm:mb-8"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
           <motion.button
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 text-white/60 hover:text-white transition-colors text-xs sm:text-sm"
             type="button"
           >
-            <Home className="w-5 h-5" />
-            返回主页
+            <Home className="w-4 h-4" />
+            <span className="hidden sm:inline">返回主页</span>
           </motion.button>
-          <span className="text-white/30">|</span>
+          <span className="text-white/30 hidden sm:inline">|</span>
           <motion.button
             onClick={() => navigate('/assessments')}
-            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 text-white/60 hover:text-white transition-colors text-xs sm:text-sm"
             type="button"
           >
-            <ArrowLeft className="w-5 h-5" />
-            返回测评列表
+            <ArrowLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">返回测评列表</span>
           </motion.button>
-          <span className="text-white/30">|</span>
+          <span className="text-white/30 hidden sm:inline">|</span>
           <motion.button
             onClick={() => navigate('/app/training')}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-violet-500/25 transition-all"
+            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs sm:text-sm font-medium hover:shadow-lg hover:shadow-violet-500/25 transition-all"
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <Trophy className="w-4 h-4" />
-            开启训练
+            <Trophy className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">开启训练</span>
           </motion.button>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
           <motion.h1
-            className="text-4xl md:text-5xl font-bold text-white mb-4"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4"
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
             您的测评报告
           </motion.h1>
           <motion.div
-            className="flex items-center justify-center gap-3 flex-wrap"
+            className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <span className="text-white/60 text-lg">{assessment.title}</span>
-            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+            <span className="text-white/60 text-sm sm:text-base">{assessment.title}</span>
+            <span className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium ${
               resultRecord.mode === 'professional'
                 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
                 : 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
             }`}>
               {resultRecord.mode === 'professional' ? '专业版' : '标准版'}
             </span>
-            <span className="text-white/60 text-lg">· 测评准确度 {resultRecord.result.accuracy}%</span>
+            <span className="text-white/60 text-xs sm:text-sm">· 准确度 {resultRecord.result.accuracy}%</span>
           </motion.div>
         </motion.div>
 
@@ -244,10 +244,10 @@ export default function Results() {
         />
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4"
         >
           <ResultExportButton
             resultId={id || 'result'}
@@ -259,7 +259,7 @@ export default function Results() {
 
           <motion.button
             onClick={() => navigate('/assessments')}
-            className="flex items-center gap-2 px-8 py-4 rounded-xl glass text-white font-semibold hover:bg-white/10 border border-white/20 transition-all"
+            className="flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-4 rounded-xl glass text-white text-sm sm:text-base font-semibold hover:bg-white/10 border border-white/20 transition-all"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="button"
@@ -269,13 +269,13 @@ export default function Results() {
 
           <motion.button
             onClick={() => navigate('/leaderboard')}
-            className="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold hover:shadow-lg hover:shadow-amber-500/25 transition-all"
+            className="flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white text-sm sm:text-base font-semibold hover:shadow-lg hover:shadow-amber-500/25 transition-all"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="button"
           >
-            <Trophy className="w-5 h-5" />
-            查看排行榜
+            <Trophy className="w-4 h-4" />
+            <span className="hidden sm:inline">查看排行榜</span>
           </motion.button>
         </motion.div>
       </div>
@@ -293,13 +293,13 @@ export default function Results() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-slate-900 rounded-3xl p-8 max-w-sm w-full"
+            className="bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 max-w-xs sm:max-w-sm w-full"
           >
-            <h3 className="text-2xl font-bold text-white text-center mb-6">扫码分享</h3>
-            <div className="bg-white rounded-2xl p-6 flex items-center justify-center">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white text-center mb-4 sm:mb-6">扫码分享</h3>
+            <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-6 flex items-center justify-center">
               <QRCodeSVG
                 value={window.location.href}
-                size={200}
+                size={140}
                 level="H"
                 includeMargin
               />
@@ -309,7 +309,7 @@ export default function Results() {
             </p>
             <button
               onClick={() => setShowQRCode(false)}
-              className="w-full mt-6 px-6 py-3 rounded-xl bg-violet-500 text-white font-semibold hover:bg-violet-600 transition-colors"
+              className="w-full mt-6 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-violet-500 text-white font-medium sm:font-semibold hover:bg-violet-600 transition-colors text-sm sm:text-base"
               type="button"
             >
               关闭

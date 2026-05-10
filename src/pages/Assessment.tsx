@@ -541,25 +541,25 @@ export default function Assessment() {
           </div>
         </motion.div>
       )}
-      <div className="flex items-center justify-between p-4 sm:p-6">
+      <div className="flex items-center justify-between px-3 sm:px-4 md:p-6">
         <motion.button
           onClick={handleExit}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/60 hover:text-white hover:bg-white/10 transition-all"
+          className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-xl glass text-white/60 hover:text-white hover:bg-white/10 transition-all"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
         >
-          <X className="w-5 h-5" />
-          <span className="hidden sm:inline">退出</span>
+          <X className="w-4 sm:w-5 h-4 sm:h-5" />
+          <span className="text-xs sm:text-sm hidden md:inline">退出</span>
         </motion.button>
 
-        <div className="flex-1 max-w-md mx-4">
-          <div className="flex items-center justify-between text-sm mb-2">
-            <div className="flex items-center gap-3">
-              <span className="text-white/60">
-                第 {currentQuestion + 1} 题 / 共 {questions.length} 题
+        <div className="flex-1 max-w-[180px] sm:max-w-md mx-2 sm:mx-4">
+          <div className="flex items-center justify-between text-xs sm:text-sm mb-1.5 sm:mb-2">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <span className="text-white/60 whitespace-nowrap">
+                {currentQuestion + 1}/{questions.length}
               </span>
-              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+              <span className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium ${
                 mode === 'professional' 
                   ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
                   : 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
@@ -567,16 +567,11 @@ export default function Assessment() {
                 {modeLabels[mode] || '标准版'}
               </span>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="text-emerald-400 text-xs hidden sm:inline">
-                剩余 {estimatedTimeRemaining}
-              </span>
-              <span className="text-white/60">
-                已答 {answeredCount} / {questions.length}
-              </span>
-            </div>
+            <span className="text-emerald-400 text-[10px] sm:text-xs hidden sm:inline">
+              {estimatedTimeRemaining}
+            </span>
           </div>
-          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+          <div className="h-1.5 sm:h-2 bg-white/10 rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500 relative"
               initial={{ width: 0 }}
@@ -600,33 +595,33 @@ export default function Assessment() {
 
         <motion.button
           onClick={() => setShowAnswerSheet(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl glass text-white/60 hover:text-white hover:bg-white/10 transition-all"
+          className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 rounded-xl glass text-white/60 hover:text-white hover:bg-white/10 transition-all"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
         >
-          <Grid3x3 className="w-5 h-5" />
-          <span className="hidden sm:inline">答题卡</span>
+          <Grid3x3 className="w-4 sm:w-5 h-4 sm:h-5" />
+          <span className="text-xs sm:text-sm hidden md:inline">答题卡</span>
         </motion.button>
       </div>
 
-      <div className="flex justify-center mb-3">
+      <div className="flex justify-center mb-2 sm:mb-3">
         <motion.div
           className={cn(
-            'flex items-center gap-2 px-4 py-2 rounded-full',
+            'flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm',
             timeLeft <= 10 ? 'bg-red-500/20 text-red-400' : 'glass text-white/60'
           )}
           animate={timeLeft <= 10 ? { scale: [1, 1.05, 1] } : {}}
           transition={{ duration: 0.5, repeat: timeLeft <= 10 ? Infinity : 0 }}
         >
-          <Clock className="w-4 h-4" />
+          <Clock className="w-3 sm:w-4 h-3 sm:h-4" />
           <span className="font-mono font-semibold">{timeLeft}s</span>
         </motion.div>
       </div>
 
 
 
-      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 md:px-8 pb-4">
+      <div className="flex-1 flex items-center justify-center px-3 sm:px-4 md:px-8 pb-3 sm:pb-4">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestion}
@@ -634,11 +629,11 @@ export default function Assessment() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -80, scale: 0.98 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="w-full max-w-md md:max-w-xl lg:max-w-2xl mx-auto"
+            className="w-full max-w-[340px] sm:max-w-md md:max-w-xl lg:max-w-2xl mx-auto"
           >
-            <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-5 sm:p-8 border border-white/10 shadow-2xl shadow-black/20">
+            <div className="bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-8 border border-white/10 shadow-2xl shadow-black/20">
               <motion.h2
-                className="text-lg sm:text-xl md:text-2xl font-semibold text-white mb-6 sm:mb-8 text-center leading-relaxed"
+                className="text-sm sm:text-base md:text-xl lg:text-2xl font-medium sm:font-semibold text-white mb-4 sm:mb-6 md:mb-8 text-center leading-relaxed"
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.1 }}
@@ -646,7 +641,7 @@ export default function Assessment() {
                 {currentQ.text}
               </motion.h2>
 
-              <div className="space-y-2.5 sm:space-y-3">
+              <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
                 {currentQ.options.map((option, index) => (
                   <AssessmentOption
                     key={option.id || index}
@@ -663,41 +658,41 @@ export default function Assessment() {
         </AnimatePresence>
       </div>
 
-      <div className="flex items-center justify-between p-4 sm:p-6 md:px-8 pb-safe">
+      <div className="flex items-center justify-between px-3 sm:px-4 md:px-8 pb-safe">
         <motion.button
           onClick={handlePrevious}
           disabled={currentQuestion === 0}
-          className="flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all disabled:opacity-30 border border-white/5"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all disabled:opacity-30 border border-white/5"
           whileHover={{ scale: currentQuestion === 0 ? 1 : 1.03 }}
           whileTap={{ scale: currentQuestion === 0 ? 1 : 0.97 }}
           type="button"
         >
-          <ArrowLeft className="w-4 sm:w-5 h-4 sm:h-5" />
-          <span className="hidden sm:inline">上一题</span>
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-xs sm:text-sm hidden sm:inline">上一题</span>
         </motion.button>
 
         {currentQuestion === questions.length - 1 ? (
           <motion.button
             onClick={handleSubmit}
-            className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500 text-white font-semibold shadow-xl shadow-violet-500/30 bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500"
+            className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500 text-white text-xs sm:text-sm font-semibold shadow-xl shadow-violet-500/30 bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500"
             whileHover={{ scale: 1.03, y: -1 }}
             whileTap={{ scale: 0.97, y: 1 }}
             type="button"
           >
-            提交答案
-            <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
+            提交
+            <ArrowRight className="w-4 h-4" />
           </motion.button>
         ) : (
           <motion.button
             onClick={handleNext}
             disabled={selectedOption === null}
-            className="flex items-center gap-2 px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500 text-white font-semibold shadow-xl shadow-violet-500/30 bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 disabled:opacity-30 disabled:pointer-events-none"
+            className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-violet-500 via-pink-500 to-violet-500 text-white text-xs sm:text-sm font-semibold shadow-xl shadow-violet-500/30 bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 disabled:opacity-30 disabled:pointer-events-none"
             whileHover={{ scale: selectedOption === null ? 1 : 1.03, y: selectedOption === null ? 0 : -1 }}
             whileTap={{ scale: selectedOption === null ? 1 : 0.97, y: selectedOption === null ? 0 : 1 }}
             type="button"
           >
             <span className="hidden sm:inline">下一题</span>
-            <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
+            <ArrowRight className="w-4 h-4" />
           </motion.button>
         )}
       </div>
@@ -717,7 +712,7 @@ export default function Assessment() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[500] flex items-center justify-center"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[500] flex items-center justify-center p-4"
           >
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
@@ -728,12 +723,12 @@ export default function Assessment() {
               <motion.div
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 0.5 }}
-                className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 flex items-center justify-center"
+                className="w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 mx-auto mb-4 sm:mb-6 rounded-full bg-gradient-to-r from-violet-500 to-pink-500 flex items-center justify-center"
               >
-                <CheckCircle2 className="w-12 h-12 text-white" />
+                <CheckCircle2 className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 text-white" />
               </motion.div>
-              <h3 className="text-2xl font-bold text-white mb-2">答案提交成功！</h3>
-              <p className="text-white/60">正在为您生成专属分析报告...</p>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2">答案提交成功！</h3>
+              <p className="text-white/60 text-sm sm:text-base">正在为您生成专属分析报告...</p>
             </motion.div>
           </motion.div>
         )}
@@ -751,23 +746,23 @@ export default function Assessment() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="glass rounded-3xl p-8 max-w-md w-full text-center"
+              className="glass rounded-2xl sm:rounded-3xl p-5 sm:p-8 max-w-md w-full text-center"
             >
-              <AlertTriangle className="w-16 h-16 text-amber-400 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white mb-2">确定要退出吗？</h3>
-              <p className="text-white/60 mb-6">退出后当前答题进度将不会保存</p>
-              <div className="flex flex-col gap-3">
+              <AlertTriangle className="w-12 sm:w-16 h-12 sm:h-16 text-amber-400 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2">确定要退出吗？</h3>
+              <p className="text-white/60 text-sm sm:text-base mb-4 sm:mb-6">退出后当前答题进度将不会保存</p>
+              <div className="flex flex-col gap-2 sm:gap-3">
                 <button
                   onClick={() => setShowExitConfirm(false)}
-                  className="w-full px-6 py-3 rounded-xl glass text-white hover:bg-white/10 transition-colors"
+                  className="w-full px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl glass text-white hover:bg-white/10 transition-colors text-sm sm:text-base"
                   type="button"
                 >
                   继续答题
                 </button>
-                <div className="flex gap-3">
+                <div className="flex gap-2 sm:gap-3">
                   <button
                     onClick={goHome}
-                    className="flex-1 px-6 py-3 rounded-xl glass text-white hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl glass text-white hover:bg-white/10 transition-colors flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-base"
                     type="button"
                   >
                     <Home className="w-4 h-4" />
@@ -775,7 +770,7 @@ export default function Assessment() {
                   </button>
                   <button
                     onClick={confirmExit}
-                    className="flex-1 px-6 py-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors"
+                    className="flex-1 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors text-sm sm:text-base"
                     type="button"
                   >
                     返回列表
@@ -799,25 +794,25 @@ export default function Assessment() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="glass rounded-3xl p-8 max-w-md w-full text-center"
+              className="glass rounded-2xl sm:rounded-3xl p-5 sm:p-8 max-w-md w-full text-center"
             >
-              <AlertTriangle className="w-16 h-16 text-amber-400 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white mb-2">还有题目未完成</h3>
-              <p className="text-white/60 mb-2">
+              <AlertTriangle className="w-12 sm:w-16 h-12 sm:h-16 text-amber-400 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2">还有题目未完成</h3>
+              <p className="text-white/60 text-sm sm:text-base mb-1">
                 您还有 <span className="text-violet-400 font-semibold">{questions.length - answeredCount}</span> 道题目未作答
               </p>
-              <p className="text-white/40 text-sm mb-6">请完成所有题目后再提交</p>
-              <div className="flex gap-4">
+              <p className="text-white/40 text-xs sm:text-sm mb-4 sm:mb-6">请完成所有题目后再提交</p>
+              <div className="flex gap-2 sm:gap-4">
                 <button
                   onClick={() => setShowSubmitConfirm(false)}
-                  className="flex-1 px-6 py-3 rounded-xl glass text-white hover:bg-white/10 transition-colors"
+                  className="flex-1 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl glass text-white hover:bg-white/10 transition-colors text-sm sm:text-base"
                   type="button"
                 >
                   继续答题
                 </button>
                 <button
                   onClick={submitAssessment}
-                  className="flex-1 px-6 py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+                  className="flex-1 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors text-sm sm:text-base"
                   type="button"
                 >
                   强制提交
@@ -840,14 +835,14 @@ export default function Assessment() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="glass rounded-3xl p-8 max-w-md w-full text-center"
+              className="glass rounded-2xl sm:rounded-3xl p-5 sm:p-8 max-w-md w-full text-center"
             >
-              <Clock className="w-16 h-16 text-red-400 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white mb-2">答题超时</h3>
-              <p className="text-white/60 mb-6">很抱歉，您未在规定时间内完成答题</p>
+              <Clock className="w-12 sm:w-16 h-12 sm:h-16 text-red-400 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2">答题超时</h3>
+              <p className="text-white/60 text-sm sm:text-base mb-4 sm:mb-6">很抱歉，您未在规定时间内完成答题</p>
               <button
                 onClick={() => navigate('/assessments')}
-                className="w-full px-6 py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+                className="w-full px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors text-sm sm:text-base"
                 type="button"
               >
                 返回测评列表
