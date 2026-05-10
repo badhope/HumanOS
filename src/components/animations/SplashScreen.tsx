@@ -11,13 +11,12 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShow(false)
-      setTimeout(onComplete, 500)
     }, 2500)
     return () => clearTimeout(timer)
-  }, [onComplete])
+  }, [])
 
   return (
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={onComplete}>
       {show && (
         <motion.div
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
