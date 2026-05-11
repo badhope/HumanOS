@@ -31,11 +31,19 @@ export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
             </svg>
           </div>
           
-          <h1 
-            className="text-sm sm:text-base font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-blue-400 bg-clip-text text-transparent truncate min-w-0"
-          >
-            {title}
-          </h1>
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="text-sm sm:text-base font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-blue-400 bg-clip-text text-transparent whitespace-nowrap">
+              心镜
+            </span>
+            <span className="text-xs sm:text-sm font-medium text-white/50 whitespace-nowrap hidden sm:inline">
+              MindMirror
+            </span>
+            {title && title !== '心镜' && (
+              <span className="text-sm sm:text-base font-medium text-white/80 truncate">
+                · {title}
+              </span>
+            )}
+          </div>
         </div>
         
         {onMenuClick && (
