@@ -7,6 +7,8 @@ import { useState } from 'react'
 import LegacyHeader from '../app/components/LegacyHeader'
 import { PageWrapper } from '@components/layout'
 
+const MAX_NORMAL_QUESTIONS = 28
+
 export default function AssessmentConfirm() {
   const { id } = useParams<{ id: string }>()
   const [searchParams] = useSearchParams()
@@ -15,23 +17,6 @@ export default function AssessmentConfirm() {
   const modeFromUrl = searchParams.get('mode') as 'normal' | 'professional'
   const selectedMode = modeFromUrl === 'professional' ? 'professional' : 'normal'
   const [showCredibility, setShowCredibility] = useState(false)
-
-  const modeConfigs = {
-    normal: {
-      label: '标准版',
-      sublabel: '推荐选择',
-      accuracy: '高准确率',
-      color: 'from-violet-500 to-pink-500',
-      description: '科学抽样，去重优化，适合大多数用户快速获得准确结果'
-    },
-    professional: {
-      label: '专业版',
-      sublabel: '深度分析',
-      accuracy: '学术级精度',
-      color: 'from-amber-500 to-orange-500',
-      description: '完整量表，信效度最高，适合心理学爱好者和专业人士'
-    },
-  }
 
   if (!assessment) {
     return (
@@ -54,9 +39,32 @@ export default function AssessmentConfirm() {
     navigate(`/legacy/assessment/${id}?mode=${selectedMode}`)
   }
 
-  const realQuestionCount = assessment.questions?.length || 0
-  const durationMinutes = selectedMode === 'normal' ? Math.max(5, Math.ceil(realQuestionCount * 10 / 60)) : Math.max(10, Math.ceil(realQuestionCount * 10 / 60))
-  const displayQuestionCount = realQuestionCount
+  const totalQuestionCount = assessment.questions?.length || 0
+  const hasProfessionalQuestions = !!(assessment as any).professionalQuestions
+  const normalQuestionCount = hasProfessionalQuestions
+    ? (assessment as any).professionalQuestions.normal?.length || totalQuestionCount
+    : Math.min(MAX_NORMAL_QUESTIONS, totalQuestionCount)
+  const displayQuestionCount = selectedMode === 'normal' ? normalQuestionCount : totalQuestionCount
+  const durationMinutes = Math.max(3, Math.ceil(displayQuestionCount * 10 / 60))
+
+  const modeConfigs = {
+    normal: {
+      label: '标准版',
+      sublabel: '推荐选择',
+      accuracy: '高准确率',
+      color: 'from-violet-500 to-pink-500',
+      description: normalQuestionCount < totalQuestionCount
+        ? `从${totalQuestionCount}题中科学抽样${normalQuestionCount}题，去重优化，快速获得准确结果`
+        : `${normalQuestionCount}道精选题目，适合快速获得准确结果`
+    },
+    professional: {
+      label: '专业版',
+      sublabel: '深度分析',
+      accuracy: '学术级精度',
+      color: 'from-amber-500 to-orange-500',
+      description: '完整量表，信效度最高，适合心理学爱好者和专业人士'
+    },
+  }
   const qualityLabel = {
     lite: '科学',
     standard: '专业',

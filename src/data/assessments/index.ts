@@ -101,11 +101,15 @@ export const getStandardAssessment = (id: StandardAssessmentId) => {
 }
 
 export const standardAssessmentList = Object.values(standardAssessments).map(assessment => {
-  const questionCount = assessment.questions?.length || 24
-  const accurateDuration = Math.max(1, Math.ceil(questionCount / 7))
+  const totalQuestions = assessment.questions?.length || 0
+  const hasProQuestions = !!(assessment as any).professionalQuestions
+  const normalQuestionCount = hasProQuestions
+    ? (assessment as any).professionalQuestions.normal?.length || totalQuestions
+    : Math.min(28, totalQuestions)
+  const accurateDuration = Math.max(1, Math.ceil(normalQuestionCount / 7))
   return {
     ...assessment,
-    questionCount,
+    questionCount: normalQuestionCount,
     duration: accurateDuration,
   }
 })
@@ -224,12 +228,16 @@ export function getAssessmentById(id: string) {
   }
   if (!match) return undefined
   
-  const questionCount = match.questions?.length || 24
-  const accurateDuration = Math.max(1, Math.ceil(questionCount / 7))
+  const totalQuestions = match.questions?.length || 0
+  const hasProQuestions = !!(match as any).professionalQuestions
+  const normalQuestionCount = hasProQuestions
+    ? (match as any).professionalQuestions.normal?.length || totalQuestions
+    : Math.min(28, totalQuestions)
+  const accurateDuration = Math.max(1, Math.ceil(normalQuestionCount / 7))
   
   return {
     ...match,
-    questionCount,
+    questionCount: normalQuestionCount,
     duration: accurateDuration,
   }
 }
