@@ -30,7 +30,7 @@
  */
 
 import type { Answer, AssessmentResult } from '../../types'
-import { diversityEngine, isomericEngine } from '../../data/assessments/diversity-enhancement-engine'
+import { diversityEngine, isomericEngine } from '../diversity-enhancement-engine'
 import { darkAssessment } from '../../data/assessments/dark-triad'
 
 const DARK_NORMS = {
