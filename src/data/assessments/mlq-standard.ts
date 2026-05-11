@@ -4,7 +4,7 @@ import { calculateMLQ } from '../../utils/calculators/professional-calculators-f
 export const mlqStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'mlq-standard',
   title: 'MLQ 变革型领导力',
-  description: '巴斯领导力经典 | 你能带领多大的团队？魅力×愿景×智慧×关怀 四维诊断',
+  description: '了解你的领导风格和领导力发展潜力',
   icon: '🦁',
   category: '职业发展',
   subcategory: '权力适应',

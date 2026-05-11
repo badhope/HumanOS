@@ -322,12 +322,14 @@ export default function Assessment() {
     setCalculating(true)
     setShowSubmitSuccess(true)
     
+    const effectiveMode = mode === 'professional' ? 'normal' : mode
+    
     try {
       setTimeout(async () => {
         try {
           let rawResult
-          if (mode === 'professional') {
-            rawResult = await calculateProfessionalResult(assessment.id, answers, mode)
+          if (effectiveMode === 'professional') {
+            rawResult = await calculateProfessionalResult(assessment.id, answers, effectiveMode)
           } else {
             rawResult = assessment.resultCalculator(answers)
           }
@@ -345,7 +347,7 @@ export default function Assessment() {
             answers,
             result: adaptedResult,
             completedAt: new Date(),
-            mode,
+            mode: effectiveMode,
           })
 
           try {

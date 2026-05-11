@@ -4,7 +4,7 @@ import { calculateGMA } from '../../utils/calculators/gma-calculator'
 export const gmaAssessment: Assessment = {
   id: 'gma-maturity',
   title: 'G.M.A 人情世故成熟能力测验',
-  description: '通用社会成熟能力(General Maturity Ability)标准化测验。测量中国人特有的社会生存智力。50道场景题，匿名作答。',
+  description: '帮助你了解在社交场合中的成熟度和应对能力',
   category: '社交关系',
   subcategory: '社会智力',
   difficulty: 'standard',

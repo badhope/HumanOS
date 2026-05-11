@@ -4,7 +4,7 @@ import { calculateSDS } from '../../utils/calculators/professional-calculators-f
 export const sdsStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'sds-standard',
   title: 'SDS 抑郁自评量表',
-  description: '国际通用的抑郁症筛查工具，Zung氏标准化量表，准确识别抑郁风险',
+  description: '常用的抑郁自评量表，帮助你了解近期的情绪状态',
   icon: '🩹',
   category: '心理健康',
   subcategory: '情绪健康',

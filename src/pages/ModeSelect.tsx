@@ -53,18 +53,22 @@ export default function ModeSelect() {
       id: 'professional',
       icon: Crown,
       label: '👑 专业版',
-      tag: '深度分析',
+      tag: '暂不开放',
       questionCount: `全量 ${realQuestionCount || 60} 题`,
       duration: `约 ${proDuration} 分钟`,
       accuracy: '学术级精度',
-      color: 'from-amber-500 to-orange-500',
-      borderColor: 'border-amber-500/30',
-      bgHover: 'hover:bg-amber-500/10',
-      description: '完整量表，信效度最高，适合心理学爱好者和专业人士'
+      color: 'from-gray-500 to-gray-600',
+      borderColor: 'border-gray-500/30',
+      bgHover: '',
+      description: '完整量表正在升级维护中，敬请期待',
+      disabled: true,
     },
   ]
 
   const handleSelect = (mode: string) => {
+    if (mode === 'professional') {
+      return
+    }
     navigate(`/legacy/confirm/${id}?mode=${mode}`)
   }
 
@@ -93,9 +97,9 @@ export default function ModeSelect() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 + index * 0.1 }}
               onClick={() => handleSelect(mode.id)}
-              className={`relative overflow-hidden rounded-2xl border-2 ${mode.borderColor} ${mode.bgHover} cursor-pointer transition-all p-6 group`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className={`relative overflow-hidden rounded-2xl border-2 ${mode.borderColor} ${mode.bgHover} ${mode.disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'} transition-all p-6 group`}
+              whileHover={mode.disabled ? {} : { scale: 1.02 }}
+              whileTap={mode.disabled ? {} : { scale: 0.98 }}
             >
               <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${mode.color} opacity-10 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:opacity-20 transition-opacity`} />
               
