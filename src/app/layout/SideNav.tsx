@@ -40,7 +40,10 @@ export default function SideNav() {
             </svg>
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">心镜 MindMirror</h1>
+            <h1 className="text-lg font-bold text-white">
+              心镜
+              <span className="hidden md:inline text-violet-400/70"> MindMirror</span>
+            </h1>
             <p className="text-xs text-white/40">照见自己，成为更好的自己</p>
           </div>
         </div>

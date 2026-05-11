@@ -70,8 +70,9 @@ export default function SideDrawer({ isOpen, onClose }: SideDrawerProps) {
                     </svg>
                   </motion.div>
                   <div>
-                    <h1 className="text-xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-                      心镜 MindMirror
+                    <h1 className="text-lg font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
+                      心镜
+                      <span className="hidden md:inline"> MindMirror</span>
                     </h1>
                     <p className="text-xs text-white/40">照见自己，成为更好的自己</p>
                   </div>
