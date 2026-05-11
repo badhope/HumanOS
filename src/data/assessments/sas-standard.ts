@@ -4,7 +4,7 @@ import { calculateSAS } from '../../utils/calculators/sas-calculator'
 export const sasStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'sas-standard',
   title: 'Zung SAS 焦虑自评量表',
-  description: '国际通用的焦虑症状筛查工具，准确评估你的焦虑水平',
+  description: '常用的焦虑自评量表，帮助你了解近期的情绪状态',
   icon: '⚡',
   category: '自我认知',
   subcategory: '焦虑水平',

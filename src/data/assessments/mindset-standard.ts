@@ -4,7 +4,7 @@ import { calculateMindset } from '../../utils/calculators/professional-calculato
 export const mindsetStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'mindset-standard',
   title: 'Dweck 思维模式量表',
-  description: '斯坦福心理学经典 | 成长型思维 vs 固定型思维 科学诊断',
+  description: '测量你的思维模式倾向，了解你是成长型还是固定型思维',
   icon: '🧠',
   category: '经典心理学',
   subcategory: '心智成熟度',

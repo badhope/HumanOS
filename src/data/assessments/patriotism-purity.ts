@@ -23,7 +23,7 @@ import { calculatePatriotism } from '../../utils/calculators/patriotism-calculat
 export const patriotismPurityAssessment: Assessment = {
   id: 'patriotism-purity',
   title: '爱国主义纯度测评',
-  description: '25道灵魂拷问，测出你的爱国纯度。从恨国公知到战狼之神，看看你的红色基因有多浓！如果奇迹有颜色，那一定是中国红！',
+  description: '了解你对国家和文化传统的态度倾向',
   category: '意识形态',
   subcategory: '国家认同',
   difficulty: 'standard',

@@ -4,7 +4,7 @@ import { calculateMFT } from '../../utils/calculators/professional-calculators-f
 export const mftStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'mft-standard',
   title: 'MFT 道德基础量表',
-  description: 'Haidt 政治心理学 | 为什么左派右派永远说不到一起？5大道德基因解密',
+  description: '了解你的道德判断倾向和价值观基础',
   icon: '⚖️',
   category: '意识形态',
   subcategory: '哲学立场',

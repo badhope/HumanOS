@@ -4,7 +4,7 @@ import { calculateOcean } from '../../utils/calculators/ocean-calculator'
 export const oceanAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'ocean-bigfive',
   title: '大五人格OCEAN',
-  description: '当代心理学最权威的人格特质模型，从五个维度全面描绘你的人格画像',
+  description: '经典的人格特质模型，帮助你了解自己的人格特征',
   icon: '🌊',
   category: '自我认知',
   subcategory: '特质论人格',

@@ -4,7 +4,7 @@ import { calculateIdeology } from '../../utils/calculators/ideology-calculator'
 export const ideologyAssessment: Assessment = {
   id: 'ideology-9square',
   title: '意识形态罗盘 5×5',
-  description: '真正专业的政治坐标测试。4大维度，50道题，精准定位你在19种意识形态中的位置。从斯大林到安兰德，从托洛茨基到希特勒，你到底站在哪一边？',
+  description: '了解你在不同社会议题上的立场',
   category: '意识形态',
   subcategory: '政治坐标',
   difficulty: 'standard',
