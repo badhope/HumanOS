@@ -2,7 +2,7 @@ import type { Assessment } from '../../types'
 import { calculateDark } from '../../utils/calculators/dark-calculator'
 
 export const darkAssessment: Assessment = {
-  id: 'dark-triangle',
+  id: 'dark-triad',
   title: '暗黑人格DARK量表',
   description: '了解你在人格特质黑暗面方面的倾向',
   category: '自我认知',

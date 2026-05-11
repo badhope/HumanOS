@@ -4,7 +4,7 @@ import { calculateMentalAge } from '../../utils/calculators/mental-age-calculato
 export const mentalAgeAssessment: Assessment = {
   id: 'mental-age',
   title: '精神年龄诊断',
-  description: '你的身体在上班，灵魂已经退休了吗？18道灵魂拷问，精准测出你的心智老化程度',
+  description: '趣味测评，了解你的思维方式和心智成熟度',
   category: '自我认知',
   subcategory: '心智成熟度',
   difficulty: 'standard',

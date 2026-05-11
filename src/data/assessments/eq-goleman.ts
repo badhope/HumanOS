@@ -4,7 +4,7 @@ import { calculateEQ } from '../../utils/calculators/eq-calculator'
 export const eqAssessment: Assessment = {
   id: 'eq-goleman',
   title: '戈尔曼情绪智力测评',
-  description: '全球最权威的EQ测试。真正决定你人生上限的，不是智商，而是情绪智力。30道题，5大维度。',
+  description: '基于戈尔曼情绪智力理论，测量你在情绪觉察、管理、激励、共情和社交技巧方面的发展水平。40道题，5大维度。',
   category: '自我认知',
   subcategory: '情绪能力',
   difficulty: 'standard',

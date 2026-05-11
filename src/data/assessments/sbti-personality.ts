@@ -4,7 +4,7 @@ import { calculateSBTI } from '../../utils/calculators/sbti-calculator'
 export const sbtiAssessment: Assessment = {
   id: 'sbti-personality',
   title: 'SBTI 傻屌人格测试',
-  description: '2026全网爆火！比MBTI更懂你的摆烂人生',
+  description: '趣味测评，了解你在生活中的处事风格',
   category: '自我认知',
   subcategory: '互联网人格',
   difficulty: 'standard',

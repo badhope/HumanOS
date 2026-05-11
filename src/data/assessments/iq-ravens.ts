@@ -4,7 +4,7 @@ import { calculateIQ } from '../../utils/calculators/iq-calculator'
 export const iqAssessment: Assessment = {
   id: 'iq-ravens',
   title: '瑞文标准智力测验',
-  description: '最权威的流体智力测试。不受语言和教育影响，纯粹测量你的抽象推理能力。60道题，难度递增。',
+  description: '经典流体智力测验。不受语言和教育影响，测量抽象推理能力。60道题，难度递增。',
   category: '自我认知',
   subcategory: '流体智力',
   difficulty: 'expert',

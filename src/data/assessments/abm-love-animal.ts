@@ -19,7 +19,7 @@ const TWELVE_LOVE_ANIMALS = [
 export const abmLoveAnimalAssessment: Assessment = {
   id: 'abm-love-animal',
   title: 'ABM 恋爱动物人格',
-  description: '心动的信号官方同款！16道恋爱灵魂拷问，测出你的专属爱情动物系',
+  description: '通过选择题了解你的恋爱风格和性格特点',
   category: '社交关系',
   subcategory: '恋爱模式',
   difficulty: 'standard',

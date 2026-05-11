@@ -21,7 +21,7 @@ import { calculateSlacking } from '../../utils/calculators/slacking-calculator'
 export const slackingPurityAssessment: Assessment = {
   id: 'slacking-purity',
   title: '打工人摸鱼纯度测评',
-  description: '25道灵魂拷问，测出你的摸鱼纯度等级，解锁"摸鱼之神"还是"社畜本畜"成就。带薪拉屎、假装工作、逃会技巧...看看你到底有多会摸！',
+  description: '趣味测评，了解你在职场中的行为模式',
   category: '职业发展',
   subcategory: '职场行为',
   difficulty: 'standard',

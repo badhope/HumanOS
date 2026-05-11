@@ -23,7 +23,7 @@ import { calculateLifeMeaning } from '../../utils/calculators/life-meaning-calcu
 export const lifeMeaningAssessment: Assessment = {
   id: 'life-meaning',
   title: '人生意义感深度测评',
-  description: '25道哲学拷问，测出你的存在主义等级。从虚无主义者到开悟大师，看看你对人生意义的理解达到了哪个层次。人为什么活着？这是个问题。',
+  description: '了解你对人生意义和价值观的看法',
   category: '意识形态',
   subcategory: '存在主义',
   difficulty: 'standard',

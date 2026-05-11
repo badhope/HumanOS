@@ -4,7 +4,7 @@ import { calculatePCQ } from '../../utils/calculators/professional-calculators-f
 export const pcqStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'pcq-standard',
   title: 'PCQ-26 心理资本测评',
-  description: '积极心理学核心量表 | 测量你的HERO四大心理资本：希望×效能×韧性×乐观',
+  description: '了解你在积极心理品质方面的发展状况',
   icon: '💎',
   category: '心理健康',
   subcategory: '积极心理学',

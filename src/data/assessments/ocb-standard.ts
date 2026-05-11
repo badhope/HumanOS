@@ -4,7 +4,7 @@ import { calculateOCB } from '../../utils/calculators/professional-calculators-f
 export const ocbStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'ocb-standard',
   title: 'OCB 组织公民行为量表',
-  description: '组织行为学经典 | KPI之外的隐性绩效测评：你是老板心中的好员工吗？',
+  description: '了解你在工作中超越基本要求的行为表现',
   icon: '🤝',
   category: '职业发展',
   subcategory: '企业文化',

@@ -4,7 +4,7 @@ import { calculateMetacognition } from '../../utils/calculators/professional-cal
 export const metacognitionStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'metacognition-standard',
   title: '元认知能力量表',
-  description: '思考你如何思考 | 测量自我觉察和认知管理的核心能力',
+  description: '了解你在思考和决策过程中的自我觉察能力',
   icon: '👁️',
   category: '经典心理学',
   subcategory: '流体智力',

@@ -25,7 +25,7 @@ import { calculateFoodie } from '../../utils/calculators/foodie-calculator'
 export const foodieLevelAssessment: Assessment = {
   id: 'foodie-level',
   title: '干饭人等级测评',
-  description: '35道灵魂拷问，测出你是"饭渣"还是"饭神"！从食欲、味觉、厨艺、探店、消费五个维度，全面鉴定你的干饭人纯度。',
+  description: '趣味测评，了解你在美食方面的喜好和行为习惯',
   category: '娱乐趣味',
   subcategory: '饮食文化',
   difficulty: 'standard',

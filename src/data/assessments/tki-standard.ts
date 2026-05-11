@@ -4,7 +4,7 @@ import { calculateTKI } from '../../utils/calculators/professional-calculators-f
 export const tkiStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'tki-standard',
   title: 'TKI 冲突模式量表',
-  description: '冲突管理金标准 | 托马斯-基尔曼：竞争×协作×妥协×回避×迁就 五维诊断',
+  description: '了解你在人际冲突中的应对方式和倾向',
   icon: '⚔️',
   category: '职业发展',
   subcategory: '职场行为',

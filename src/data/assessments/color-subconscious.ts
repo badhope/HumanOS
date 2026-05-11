@@ -16,7 +16,7 @@ const NINE_SOUL_COLORS = [
 export const colorSubconsciousAssessment: Assessment = {
   id: 'color-subconscious',
   title: '色彩潜意识投射',
-  description: '16道色彩心理学测试，看穿你灵魂的真实底色',
+  description: '16道色彩心理学测试，探索你对不同色彩的感知与联想',
   category: '意识形态',
   subcategory: '潜意识',
   difficulty: 'standard',

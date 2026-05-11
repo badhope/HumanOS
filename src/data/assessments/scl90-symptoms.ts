@@ -2,7 +2,7 @@ import type { Assessment } from '../../types'
 import { calculateSCL90 } from '../../utils/calculators/scl90-calculator'
 
 export const scl90Assessment: Omit<Assessment, 'id'> & { id: string } = {
-  id: 'scl90',
+  id: 'scl90-symptoms',
   title: 'SCL-90 症状自评量表',
   subtitle: '心理健康筛查',
   description: '评估你的心理健康状态，识别潜在的心理困扰',
