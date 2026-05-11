@@ -51,6 +51,10 @@ export default function App() {
   const isNewApp = location.pathname.startsWith('/app')
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
+
+  useEffect(() => {
     const root = document.documentElement
     root.classList.remove('light', 'dark')
     root.classList.add(theme)
