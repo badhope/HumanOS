@@ -94,19 +94,19 @@ export default function App() {
                     <Route path="discover" element={<Discover />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="getting-started" element={<GettingStarted />} />
+                    <Route path="library/articles" element={<LibraryArticles />} />
+                    <Route path="library/article/:id" element={<ArticleDetail />} />
+                    <Route path="library/tools" element={<LibraryTools />} />
+                    <Route path="library/resources" element={<LibraryResources />} />
+                    <Route path="community/share" element={<CommunityShare />} />
+                    <Route path="community/discussion" element={<CommunityDiscussion />} />
+                    <Route path="community/expert" element={<CommunityExpert />} />
+                    <Route path="growth/training" element={<GrowthTraining />} />
+                    <Route path="growth/habits" element={<GrowthHabits />} />
                   </Route>
 
                   <Route path="/app/training/:programId" element={<UniversalTraining />} />
                   <Route path="/app/growth" element={<GrowthDashboard />} />
-                  <Route path="/app/library/articles" element={<LibraryArticles />} />
-                  <Route path="/app/library/article/:id" element={<ArticleDetail />} />
-                  <Route path="/app/library/tools" element={<LibraryTools />} />
-                  <Route path="/app/library/resources" element={<LibraryResources />} />
-                  <Route path="/app/community/share" element={<CommunityShare />} />
-                  <Route path="/app/community/discussion" element={<CommunityDiscussion />} />
-                  <Route path="/app/community/expert" element={<CommunityExpert />} />
-                  <Route path="/app/growth/training" element={<GrowthTraining />} />
-                  <Route path="/app/growth/habits" element={<GrowthHabits />} />
 
                   <Route path="/assessments" element={<Navigate to="/app/discover" replace />} />
                   <Route path="/categories" element={<Navigate to="/app/discover" replace />} />
