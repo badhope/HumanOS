@@ -54,10 +54,12 @@ export default function IntegratedAnalysisReport({
     const data = {
       ...result,
       ...answers,
-      dimensions: result.dimensions?.reduce((acc, dim) => {
-        acc[dim.name] = dim.score
-        return acc
-      }, {} as Record<string, number>)
+      dimensions: Array.isArray(result.dimensions) 
+        ? result.dimensions.reduce((acc, dim) => {
+            acc[dim.name] = dim.score
+            return acc
+          }, {} as Record<string, number>)
+        : {}
     }
     return enhancedAnalysisFramework.generateComprehensiveAnalysis(mode, data)
   }, [result, answers, mode])

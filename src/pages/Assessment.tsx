@@ -323,11 +323,11 @@ export default function Assessment() {
     setShowSubmitSuccess(true)
     
     try {
-      setTimeout(() => {
+      setTimeout(async () => {
         try {
           let rawResult
           if (mode === 'professional') {
-            rawResult = calculateProfessionalResult(assessment.id, answers, mode)
+            rawResult = await calculateProfessionalResult(assessment.id, answers, mode)
           } else {
             rawResult = assessment.resultCalculator(answers)
           }
