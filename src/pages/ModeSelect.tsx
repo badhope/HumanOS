@@ -31,7 +31,7 @@ export default function ModeSelect() {
   }
 
   const realQuestionCount = assessment.questionCount || assessment.questions?.length || 0
-  const normalQuestionCount = Math.min(28, Math.ceil(realQuestionCount * 0.5) || 28)
+  const normalQuestionCount = realQuestionCount
   const normalDuration = Math.max(5, Math.ceil(normalQuestionCount * 10 / 60))
   const proDuration = Math.max(10, Math.ceil(realQuestionCount * 10 / 60))
 
@@ -41,11 +41,11 @@ export default function ModeSelect() {
       icon: Zap,
       label: '⚡ 标准版',
       tag: '推荐选择',
-      questionCount: `约 ${normalQuestionCount} 题`,
+      questionCount: `${normalQuestionCount} 题`,
       duration: `约 ${normalDuration} 分钟`,
       accuracy: '高准确率',
-      color: 'from-violet-500 to-pink-500',
-      borderColor: 'border-violet-500/30',
+      color: 'from-violet-400 to-pink-400',
+      borderColor: 'border-violet-400/50 bg-white/5',
       bgHover: 'hover:bg-violet-500/10',
       description: '科学抽样，去重优化，适合大多数用户快速获得准确结果'
     },
@@ -119,17 +119,17 @@ export default function ModeSelect() {
                   <p className="text-white/60 text-sm mb-3">{mode.description}</p>
                   
                   <div className="flex flex-wrap gap-4 text-sm">
-                    <div className="flex items-center gap-1.5 text-white/50">
+                    <div className="flex items-center gap-1.5 text-white/70">
                       <span className="text-violet-400">📝</span>
-                      <span>{mode.questionCount}</span>
+                      <span className="text-white/90">{mode.questionCount}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-white/50">
+                    <div className="flex items-center gap-1.5 text-white/70">
                       <span className="text-violet-400">⏱️</span>
-                      <span>{mode.duration}</span>
+                      <span className="text-white/90">{mode.duration}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-white/50">
+                    <div className="flex items-center gap-1.5 text-white/70">
                       <span className="text-violet-400">🎯</span>
-                      <span>{mode.accuracy}</span>
+                      <span className="text-white/90">{mode.accuracy}</span>
                     </div>
                   </div>
                 </div>
