@@ -138,7 +138,12 @@ export default function AssessmentConfirm() {
             transition={{ delay: 0.45 }}
             className="mb-8"
           >
-            <div className={`relative p-6 rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br ${modeConfigs[selectedMode].color} opacity-15`}>
+            <div className={`relative p-6 rounded-2xl border-2 border-violet-500/40 ${
+                selectedMode === 'normal' 
+                  ? 'bg-gradient-to-br from-violet-500/20 to-pink-500/10' 
+                  : 'bg-gradient-to-br from-amber-500/20 to-orange-500/10'
+              }`}>
+              <div className="absolute inset-0 bg-black/35 rounded-2xl"></div>
               <div className="relative z-10 flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${modeConfigs[selectedMode].color} flex items-center justify-center shadow-lg`}>
                   {selectedMode === 'normal' ? (
@@ -164,7 +169,7 @@ export default function AssessmentConfirm() {
                       {modeConfigs[selectedMode].sublabel}
                     </span>
                   </div>
-                  <p className="text-white/70 text-sm">{modeConfigs[selectedMode].description}</p>
+                  <p className="text-white/90 text-sm">{modeConfigs[selectedMode].description}</p>
                 </div>
               </div>
             </div>
