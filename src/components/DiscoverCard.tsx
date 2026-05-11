@@ -47,7 +47,13 @@ const CategoryCard = memo(function CategoryCard({ name, icon: Icon, color, bgGra
               {name}
               <Sparkles size={16} className="text-amber-300" />
             </h3>
-            <p className="text-xs sm:text-sm text-white/60">{subcategories.length} 个子分类 · 探索更多测评</p>
+            <p className="text-xs sm:text-sm text-white/60">
+              {name.includes('测评') ? `${subcategories.length} 个子分类 · 探索更多测评` :
+               name.includes('图书馆') ? `${subcategories.length} 个子分类 · 丰富知识储备` :
+               name.includes('社区') ? `${subcategories.length} 个子分类 · 与他人互动` :
+               name.includes('成长') ? `${subcategories.length} 个子分类 · 见证自我蜕变` :
+               `${subcategories.length} 个子分类`}
+            </p>
           </div>
         </div>
         <motion.div
@@ -89,10 +95,15 @@ interface SubcategoryCardProps {
 const SubcategoryCard = memo(function SubcategoryCard({ subcategory, delay }: SubcategoryCardProps) {
   const [isExpanded, setIsExpanded] = useState(true)
   const SubIcon = subcategory.icon
+  const navigate = useNavigate()
 
-  const toggleExpand = useCallback(() => {
-    setIsExpanded(prev => !prev)
-  }, [])
+  const handleHeaderClick = useCallback(() => {
+    if (subcategory.path) {
+      navigate(subcategory.path)
+    } else {
+      setIsExpanded(prev => !prev)
+    }
+  }, [navigate, subcategory.path])
 
   return (
     <motion.div
@@ -102,7 +113,7 @@ const SubcategoryCard = memo(function SubcategoryCard({ subcategory, delay }: Su
       transition={{ delay }}
     >
       <motion.div
-        onClick={toggleExpand}
+        onClick={handleHeaderClick}
         className="p-3 sm:p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all"
         whileHover={{ scale: 1.01 }}
       >
@@ -112,7 +123,9 @@ const SubcategoryCard = memo(function SubcategoryCard({ subcategory, delay }: Su
           </div>
           <div className="min-w-0">
             <span className="text-base font-semibold text-white truncate">{subcategory.name}</span>
-            <p className="text-xs text-white/40 mt-0.5">{subcategory.items.length} 个测评</p>
+            <p className="text-xs text-white/40 mt-0.5">
+              {subcategory.items[0]?.questionCount ? `${subcategory.items.length} 个测评` : `${subcategory.items.length} 个项目`}
+            </p>
           </div>
         </div>
         <motion.div
