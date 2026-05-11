@@ -28,11 +28,13 @@ function ProfilePanel({ isOpen, onClose }: ProfilePanelProps) {
         assessmentId: a.assessmentId,
         completedAt,
         score: a.result?.score || 0,
-        dimensions: a.result?.dimensions?.map(d => ({
-          name: d.name,
-          score: d.score,
-          maxScore: typeof d.maxScore === 'number' ? d.maxScore : 100,
-        })) || [],
+        dimensions: Array.isArray(a.result?.dimensions) 
+          ? a.result.dimensions.map(d => ({
+              name: d.name,
+              score: d.score,
+              maxScore: typeof d.maxScore === 'number' ? d.maxScore : 100,
+            })) 
+          : [],
         category: 'personality',
       }
     })

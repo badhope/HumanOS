@@ -175,7 +175,17 @@ export function calculateBounty(answers: Answer[]): BountyResult & AssessmentRes
     { category: '未来潜力', contribution: dimensionScores.potential, amount: Math.round(totalBounty * 0.15) },
   ]
 
+  const dimensions = [
+    { name: '战斗力', score: dimensionScores.combatPower, maxScore: 100 },
+    { name: '势力值', score: dimensionScores.influence, maxScore: 100 },
+    { name: '威胁度', score: dimensionScores.threatLevel, maxScore: 100 },
+    { name: '知名度', score: dimensionScores.notoriety, maxScore: 100 },
+    { name: '成长性', score: dimensionScores.potential, maxScore: 100 },
+  ]
+
   return {
+    type: 'bounty',
+    typeName: '海贼王赏金测算',
     totalBounty,
     formattedBounty: formatBounty(totalBounty),
     bountyLevel: tier.level as BountyResult['bountyLevel'],
@@ -192,5 +202,8 @@ export function calculateBounty(answers: Answer[]): BountyResult & AssessmentRes
     yonkoProbability,
     comparisonCharacters,
     bountyBreakdown,
+    dimensions,
+    score: Math.round(weightedScore),
+    summary: `${tier.emoji} ${tier.title} - 赏金 ${formatBounty(totalBounty)}`,
   }
 }
