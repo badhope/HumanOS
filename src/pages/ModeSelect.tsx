@@ -5,6 +5,8 @@ import { getAssessmentById } from '@data/assessments'
 import LegacyHeader from '../app/components/LegacyHeader'
 import { PageWrapper } from '@components/layout'
 
+const MAX_NORMAL_QUESTIONS = 28
+
 export default function ModeSelect() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
@@ -30,10 +32,14 @@ export default function ModeSelect() {
     )
   }
 
-  const realQuestionCount = assessment.questionCount || assessment.questions?.length || 0
-  const normalQuestionCount = realQuestionCount
-  const normalDuration = Math.max(5, Math.ceil(normalQuestionCount * 10 / 60))
-  const proDuration = Math.max(10, Math.ceil(realQuestionCount * 10 / 60))
+  const totalQuestionCount = assessment.questions?.length || 0
+  const hasProfessionalQuestions = !!(assessment as any).professionalQuestions
+  const normalQuestionCount = hasProfessionalQuestions
+    ? (assessment as any).professionalQuestions.normal?.length || totalQuestionCount
+    : Math.min(MAX_NORMAL_QUESTIONS, totalQuestionCount)
+  const proQuestionCount = totalQuestionCount
+  const normalDuration = Math.max(3, Math.ceil(normalQuestionCount * 10 / 60))
+  const proDuration = Math.max(10, Math.ceil(proQuestionCount * 10 / 60))
 
   const modes = [
     {
@@ -47,14 +53,16 @@ export default function ModeSelect() {
       color: 'from-violet-400 to-pink-400',
       borderColor: 'border-violet-400/50 bg-white/5',
       bgHover: 'hover:bg-violet-500/10',
-      description: '科学抽样，去重优化，适合大多数用户快速获得准确结果'
+      description: normalQuestionCount < totalQuestionCount
+        ? `从${totalQuestionCount}题中科学抽样${normalQuestionCount}题，去重优化，快速获得准确结果`
+        : `${normalQuestionCount}道精选题目，适合快速获得准确结果`
     },
     {
       id: 'professional',
       icon: Crown,
       label: '👑 专业版',
       tag: '暂不开放',
-      questionCount: `全量 ${realQuestionCount || 60} 题`,
+      questionCount: `全量 ${proQuestionCount} 题`,
       duration: `约 ${proDuration} 分钟`,
       accuracy: '学术级精度',
       color: 'from-gray-500 to-gray-600',
