@@ -18,7 +18,7 @@
 
 import type { Answer, AssessmentResult } from '../../types'
 import { buildAnswerMap, calculateLikertScore } from './calculator-utils'
-import { diversityEngine, isomericEngine, POPULATION_NORMS } from '../../data/assessments/diversity-enhancement-engine'
+import { diversityEngine, isomericEngine, POPULATION_NORMS } from '../diversity-enhancement-engine'
 import { philoAssessment } from '../../data/assessments/philo-spectrum'
 
 /**
