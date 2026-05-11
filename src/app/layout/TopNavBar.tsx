@@ -59,3 +59,70 @@ export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
     </div>
   )
 }
+import {import { Menu } from 'lucide-react'
+
+interface TopNavBarProps {
+  title: string
+  onMenuClick?: () => void
+}
+
+export default function TopNavBar({ title, onimport { Menu } from 'lucide-react'
+
+interface TopNavBarProps {
+  title: string
+  onMenuClick?: () => void
+}
+
+export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
+  return (
+    <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blimport { Menu } from 'lucide-react'
+
+interface TopNavBarProps {
+  title: string
+  onMenuClick?: () => void
+}
+
+export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
+  return (
+    <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-violet-500/10 pt-safe">
+      <div className="flex items-center justify-between h-14 sm:h-16 px-import { Menu } from 'lucide-react'
+
+interface TopNavBarProps {
+  title: string
+  onMenuClick?: () => void
+}
+
+export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
+  return (
+    <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-violet-500/10 pt-safe">
+      <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 max-w-md mx-auto">
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
+import { Menu } from 'lucide-react'
+
+interface TopNavBarProps {
+  title: string
+  onMenuClick?: () => void
+}
+
+export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
+  return (
+    <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-violet-500/10 pt-safe">
+      <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 max-w-md mx-auto">
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
+          <div 
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-violet-500/20 to-pimport { Menu } from 'lucide-react'
+
+interface TopNavBarProps {
+  title: string
+  onMenuClick?: () => void
+}
+
+export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
+  return (
+    <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-violet-500/10 pt-safe">
+      <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 max-w-md mx-auto">
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
+          <div 
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30 flex items-center justify-center flex-shrink-0"
+          >
+            <svg viewBox="0
