@@ -13,7 +13,7 @@ const likert6Options = [
 export const burnoutAssessment: Assessment = {
   id: 'burnout-mbi',
   title: 'MBI 职业倦怠测评',
-  description: '马氏倦怠量表(MBI)专业测评：情绪衰竭、去人格化、个人成就感三维度评估，识别并干预职业倦怠风险',
+  description: '帮助你了解在工作中的身心疲劳程度',
   category: '职业发展',
   subcategory: '职业耗竭',
   difficulty: 'standard',

@@ -191,8 +191,30 @@ function LazyReportWithRetry({
   )
 }
 
+function normalizeDimensions(result: AssessmentResult): AssessmentResult {
+  if (result.dimensions && !Array.isArray(result.dimensions)) {
+    const dimObj = result.dimensions as Record<string, any>
+    const dimArray = Object.entries(dimObj).map(([key, value]) => {
+      if (typeof value === 'object' && value !== null && 'score' in value) {
+        return value as { name: string; score: number; description?: string }
+      }
+      return {
+        name: key,
+        score: typeof value === 'number' ? value : 0,
+        description: '',
+      }
+    })
+    return { ...result, dimensions: dimArray }
+  }
+  if (!result.dimensions) {
+    return { ...result, dimensions: [] }
+  }
+  return result
+}
+
 export default function LazyReportRouter(props: ReportRouterProps) {
-  const { result, assessmentType, ideologyScores, primaryIdeology, matchScore } = props
+  const { result: rawResult, assessmentType, ideologyScores, primaryIdeology, matchScore } = props
+  const result = normalizeDimensions(rawResult)
   const type = assessmentType.toLowerCase()
   const mode = props.mode || 'normal'
   const [useFallback, setUseFallback] = useState(false)

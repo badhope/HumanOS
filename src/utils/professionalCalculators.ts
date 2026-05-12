@@ -25,6 +25,35 @@ import { mbtiPersonalities } from '../data/mbti-data'
 import { bigFiveSubscaleNames } from '../data/professional/bigfive-professional'
 import { eqDimensions } from '../data/professional/eq-professional'
 import { hollandTypes, calculateHollandCode } from '../data/professional/holland-professional'
+import {
+  calculateDark,
+  calculateKolb,
+  calculateASI,
+  calculateMindset,
+  calculateMLQ,
+  calculateMFT,
+  calculatePCQ,
+  calculateSchwartz,
+  calculateMetacognition,
+  calculateTKI,
+  calculateELS,
+  calculateOCB,
+  calculateHardiness,
+  calculateSlacking,
+  calculateFoodie,
+  calculateInternetAddiction,
+  calculateLifeMeaning,
+  calculatePatriotism,
+  calculateSexualExperience,
+  calculateGMA,
+  calculateCAST,
+  calculatePhilo,
+  calculateBounty,
+  calculateLacan,
+  calculatePUA,
+  calculateFuBao,
+  calculateBurnout,
+} from './calculators'
 
 export {
   calculateSASProfessional,
@@ -534,18 +563,19 @@ function calculateAccuracy(answeredCount: number, totalQuestions: number): numbe
   return Math.min(99, Math.round(baseAccuracy + completionRate * maxBonus))
 }
 
-export function calculateProfessionalResult(
+export async function calculateProfessionalResult(
   assessmentType: string,
   answers: Answer[],
   mode: 'normal' | 'advanced' | 'professional'
-): ProfessionalAssessmentResult {
+): Promise<ProfessionalAssessmentResult> {
+  const professionalModule = await import('./calculators/professional')
   const {
     calculateSASProfessional,
     calculateAttachmentProfessional,
     calculatePoliticalIdeologyProfessional,
     calculateSDSProfessional,
     calculatePSSProfessional,
-  } = require('./calculators/professional')
+  } = professionalModule
 
   const calculators: Record<string, (answers: Answer[]) => any> = {
     'mbti-standard': calculateMBTIProfessional,
@@ -737,33 +767,3 @@ export function createDifferentiatedResult(
   const base = generateProfessionalResult(baseResult, mode)
   return enhanceResultDifferentiation(base, { detailLevel: mode === 'professional' ? 'comprehensive' : mode === 'advanced' ? 'detailed' : 'standard' })
 }
-
-const {
-  calculateDark,
-  calculateKolb,
-  calculateASI,
-  calculateMindset,
-  calculateMLQ,
-  calculateMFT,
-  calculatePCQ,
-  calculateSchwartz,
-  calculateMetacognition,
-  calculateTKI,
-  calculateELS,
-  calculateOCB,
-  calculateHardiness,
-  calculateSlacking,
-  calculateFoodie,
-  calculateInternetAddiction,
-  calculateLifeMeaning,
-  calculatePatriotism,
-  calculateSexualExperience,
-  calculateGMA,
-  calculateCAST,
-  calculatePhilo,
-  calculateBounty,
-  calculateLacan,
-  calculatePUA,
-  calculateFuBao,
-  calculateBurnout,
-} = require('./calculators')

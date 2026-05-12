@@ -21,7 +21,7 @@ import { calculateSexualExperience } from '../../utils/calculators/sexual-experi
 export const sexualExperienceAssessment: Assessment = {
   id: 'sexual-experience',
   title: '性经验指数测评',
-  description: '25道灵魂拷问，测出你的老司机等级。从白纸一张到都市传说，看看你在情场到底是什么段位。纯爱战士和老司机请各就各位！',
+  description: '趣味测评，了解你在情感方面的心态和观念',
   category: '娱乐趣味',
   subcategory: '亲密探索',
   difficulty: 'standard',

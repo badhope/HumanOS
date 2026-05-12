@@ -4,7 +4,7 @@ import { calculatePSQI } from '../../utils/calculators/psqi-calculator'
 export const sleepQualityAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'sleep-quality',
   title: '睡眠质量测评 (PSQI简化版)',
-  description: '匹兹堡睡眠质量指数，评估你的睡眠质量和日间功能状态',
+  description: '帮助你了解近期的睡眠质量状况',
   icon: '🌙',
   category: '健康',
   subcategory: '睡眠健康',

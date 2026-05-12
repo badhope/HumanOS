@@ -5,6 +5,8 @@ import { getAssessmentById } from '@data/assessments'
 import LegacyHeader from '../app/components/LegacyHeader'
 import { PageWrapper } from '@components/layout'
 
+const MAX_NORMAL_QUESTIONS = 28
+
 export default function ModeSelect() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
@@ -30,10 +32,14 @@ export default function ModeSelect() {
     )
   }
 
-  const realQuestionCount = assessment.questionCount || assessment.questions?.length || 0
-  const normalQuestionCount = Math.min(28, Math.ceil(realQuestionCount * 0.5) || 28)
-  const normalDuration = Math.max(5, Math.ceil(normalQuestionCount * 10 / 60))
-  const proDuration = Math.max(10, Math.ceil(realQuestionCount * 10 / 60))
+  const totalQuestionCount = assessment.questions?.length || 0
+  const hasProfessionalQuestions = !!(assessment as any).professionalQuestions
+  const normalQuestionCount = hasProfessionalQuestions
+    ? (assessment as any).professionalQuestions.normal?.length || totalQuestionCount
+    : Math.min(MAX_NORMAL_QUESTIONS, totalQuestionCount)
+  const proQuestionCount = totalQuestionCount
+  const normalDuration = Math.max(3, Math.ceil(normalQuestionCount * 10 / 60))
+  const proDuration = Math.max(10, Math.ceil(proQuestionCount * 10 / 60))
 
   const modes = [
     {
@@ -41,30 +47,36 @@ export default function ModeSelect() {
       icon: Zap,
       label: '⚡ 标准版',
       tag: '推荐选择',
-      questionCount: `约 ${normalQuestionCount} 题`,
+      questionCount: `${normalQuestionCount} 题`,
       duration: `约 ${normalDuration} 分钟`,
       accuracy: '高准确率',
-      color: 'from-violet-500 to-pink-500',
-      borderColor: 'border-violet-500/30',
+      color: 'from-violet-400 to-pink-400',
+      borderColor: 'border-violet-400/50 bg-white/5',
       bgHover: 'hover:bg-violet-500/10',
-      description: '科学抽样，去重优化，适合大多数用户快速获得准确结果'
+      description: normalQuestionCount < totalQuestionCount
+        ? `从${totalQuestionCount}题中科学抽样${normalQuestionCount}题，去重优化，快速获得准确结果`
+        : `${normalQuestionCount}道精选题目，适合快速获得准确结果`
     },
     {
       id: 'professional',
       icon: Crown,
       label: '👑 专业版',
-      tag: '深度分析',
-      questionCount: `全量 ${realQuestionCount || 60} 题`,
+      tag: '暂不开放',
+      questionCount: `全量 ${proQuestionCount} 题`,
       duration: `约 ${proDuration} 分钟`,
       accuracy: '学术级精度',
-      color: 'from-amber-500 to-orange-500',
-      borderColor: 'border-amber-500/30',
-      bgHover: 'hover:bg-amber-500/10',
-      description: '完整量表，信效度最高，适合心理学爱好者和专业人士'
+      color: 'from-gray-500 to-gray-600',
+      borderColor: 'border-gray-500/30',
+      bgHover: '',
+      description: '完整量表正在升级维护中，敬请期待',
+      disabled: true,
     },
   ]
 
   const handleSelect = (mode: string) => {
+    if (mode === 'professional') {
+      return
+    }
     navigate(`/legacy/confirm/${id}?mode=${mode}`)
   }
 
@@ -93,9 +105,9 @@ export default function ModeSelect() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 + index * 0.1 }}
               onClick={() => handleSelect(mode.id)}
-              className={`relative overflow-hidden rounded-2xl border-2 ${mode.borderColor} ${mode.bgHover} cursor-pointer transition-all p-6 group`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className={`relative overflow-hidden rounded-2xl border-2 ${mode.borderColor} ${mode.bgHover} ${mode.disabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'} transition-all p-6 group`}
+              whileHover={mode.disabled ? {} : { scale: 1.02 }}
+              whileTap={mode.disabled ? {} : { scale: 0.98 }}
             >
               <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${mode.color} opacity-10 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:opacity-20 transition-opacity`} />
               
@@ -115,17 +127,17 @@ export default function ModeSelect() {
                   <p className="text-white/60 text-sm mb-3">{mode.description}</p>
                   
                   <div className="flex flex-wrap gap-4 text-sm">
-                    <div className="flex items-center gap-1.5 text-white/50">
+                    <div className="flex items-center gap-1.5 text-white/70">
                       <span className="text-violet-400">📝</span>
-                      <span>{mode.questionCount}</span>
+                      <span className="text-white/90">{mode.questionCount}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-white/50">
+                    <div className="flex items-center gap-1.5 text-white/70">
                       <span className="text-violet-400">⏱️</span>
-                      <span>{mode.duration}</span>
+                      <span className="text-white/90">{mode.duration}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-white/50">
+                    <div className="flex items-center gap-1.5 text-white/70">
                       <span className="text-violet-400">🎯</span>
-                      <span>{mode.accuracy}</span>
+                      <span className="text-white/90">{mode.accuracy}</span>
                     </div>
                   </div>
                 </div>

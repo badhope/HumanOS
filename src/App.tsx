@@ -22,6 +22,15 @@ import SettingsPage from './app/pages/SettingsPage'
 import GrowthDashboard from './app/pages/GrowthDashboard'
 import GettingStarted from './app/pages/GettingStarted'
 import UniversalTraining from './app/pages/training/UniversalTraining'
+import LibraryArticles from './app/pages/library/LibraryArticles'
+import ArticleDetail from './app/pages/library/ArticleDetail'
+import LibraryTools from './app/pages/library/LibraryTools'
+import LibraryResources from './app/pages/library/LibraryResources'
+import CommunityShare from './app/pages/community/CommunityShare'
+import CommunityDiscussion from './app/pages/community/CommunityDiscussion'
+import CommunityExpert from './app/pages/community/CommunityExpert'
+import GrowthTraining from './app/pages/growth/GrowthTraining'
+import GrowthHabits from './app/pages/growth/GrowthHabits'
 
 const ModeSelect = lazy(() => import('./pages/ModeSelect'))
 const AssessmentConfirm = lazy(() => import('./pages/AssessmentConfirm'))
@@ -49,6 +58,10 @@ export default function App() {
   const location = useLocation()
   
   const isNewApp = location.pathname.startsWith('/app')
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
 
   useEffect(() => {
     const root = document.documentElement
@@ -81,10 +94,18 @@ export default function App() {
                     <Route path="discover" element={<Discover />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="getting-started" element={<GettingStarted />} />
+                    <Route path="library/articles" element={<LibraryArticles />} />
+                    <Route path="library/article/:id" element={<ArticleDetail />} />
+                    <Route path="library/tools" element={<LibraryTools />} />
+                    <Route path="library/resources" element={<LibraryResources />} />
+                    <Route path="community/share" element={<CommunityShare />} />
+                    <Route path="community/discussion" element={<CommunityDiscussion />} />
+                    <Route path="community/expert" element={<CommunityExpert />} />
+                    <Route path="growth" element={<GrowthDashboard />} />
+                    <Route path="growth/training" element={<GrowthTraining />} />
+                    <Route path="growth/habits" element={<GrowthHabits />} />
+                    <Route path="training/:programId" element={<UniversalTraining />} />
                   </Route>
-
-                  <Route path="/app/training/:programId" element={<UniversalTraining />} />
-                  <Route path="/app/growth" element={<GrowthDashboard />} />
 
                   <Route path="/assessments" element={<Navigate to="/app/discover" replace />} />
                   <Route path="/categories" element={<Navigate to="/app/discover" replace />} />

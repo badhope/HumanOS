@@ -30,7 +30,7 @@
  */
 
 import type { Answer, AssessmentResult } from '../../types'
-import { diversityEngine, isomericEngine } from '../../data/assessments/diversity-enhancement-engine'
+import { diversityEngine, isomericEngine } from '../diversity-enhancement-engine'
 import { darkAssessment } from '../../data/assessments/dark-triad'
 
 const DARK_NORMS = {
@@ -60,12 +60,7 @@ export interface DarkResult extends Record<string, any> {
   primaryDarkTrait: string
   darkProfile: string
   darkProfileEmoji: string
-  dimensions: {
-    manipulation: number
-    grandiosity: number
-    callousness: number
-    cruelty: number
-  }
+  dimensions: { name: string; score: number }[]
   radarData: { axis: string; value: number }[]
   profileDescription: string
   darkTraits: string[]
@@ -184,13 +179,6 @@ export function calculateDark(answers: Answer[]): DarkResult {
   } else {
     darkProfile = '灰色地带居民 🌓'
     darkProfileEmoji = '🌓'
-  }
-
-  const dimensions = {
-    manipulation: machiavellianism,
-    grandiosity: narcissism,
-    callousness: psychopathy,
-    cruelty: sadism,
   }
 
   const radarData = [
@@ -323,7 +311,12 @@ export function calculateDark(answers: Answer[]): DarkResult {
     primaryDarkTrait,
     darkProfile: finalDarkProfile,
     darkProfileEmoji: finalEmoji,
-    dimensions,
+    dimensions: [
+      { name: '操纵', score: machiavellianism },
+      { name: '自大', score: narcissism },
+      { name: '冷酷', score: psychopathy },
+      { name: '残忍', score: sadism },
+    ],
     radarData,
     profileDescription: allScoresInMidrange ? midrangeSubtype.description : randomPick(profileDescriptions[darkProfile] || profileDescriptions['正常人 🧑']),
     darkTraits: traitDescriptions[primaryDarkTrait] || ['复杂的人性'],

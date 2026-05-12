@@ -1,11 +1,11 @@
 import type { Assessment } from '../../types'
-import { calculatePSS10 } from '../../utils/calculators/pss10-calculator'
+import { calculatePSS10 as calculatePSS } from '../../utils/calculators/pss10-calculator'
 
 export const pssStressAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'pss-stress',
   title: 'PSS-10 压力知觉量表',
   subtitle: 'Perceived Stress Scale',
-  description: '国际权威压力感知评估工具，准确测量你对生活中压力的感知程度',
+  description: '国际常用压力感知评估工具，测量你对生活中压力的感知程度',
   icon: '🌊',
   category: '心理健康',
   subcategory: '压力管理',

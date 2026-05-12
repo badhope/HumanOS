@@ -250,7 +250,7 @@ export default function Profile() {
               </div>
               <p className="text-slate-400 mb-4">还没有完成任何测评</p>
               <button
-                onClick={() => navigate('/assessments')}
+                onClick={() => navigate('/app/discover')}
                 className="px-6 py-2 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-medium hover:shadow-lg hover:shadow-violet-500/25 transition-all"
               >
                 开始探索

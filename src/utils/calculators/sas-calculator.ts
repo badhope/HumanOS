@@ -22,18 +22,15 @@ import type { Answer, AssessmentResult } from '../../types'
  * - cognitive_anxiety: 认知焦虑
  * - sleep_anxiety: 睡眠障碍（权重最高）
  */
+type SASDimensionDetail = { score: number; percentage: number; level: string }
+
 export interface SASResult extends Record<string, any> {
   rawScore: number
   standardScore: number
   percentile: number
   level: 'normal' | 'mild' | 'moderate' | 'severe'
   levelText: string
-  dimensions: {
-    social_anxiety: { score: number; percentage: number; level: string }
-    somatic_anxiety: { score: number; percentage: number; level: string }
-    cognitive_anxiety: { score: number; percentage: number; level: string }
-    sleep_anxiety: { score: number; percentage: number; level: string }
-  }
+  dimensions: { name: string; score: number }[]
   radarData: { dimension: string; score: number; fullMark: number }[]
   interpretation: string
   recommendations: string[]
@@ -62,7 +59,7 @@ export function calculateSAS(answers: Answer[]): SASResult {
     answerMap[a.questionId] = value
   })
 
-  const dimensions: SASResult['dimensions'] = {} as SASResult['dimensions']
+  const dimensions: Record<string, SASDimensionDetail> = {} as Record<string, SASDimensionDetail>
   let totalRaw = 0
 
   Object.entries(dimensionMap).forEach(([dim, ids]) => {
@@ -73,7 +70,7 @@ export function calculateSAS(answers: Answer[]): SASResult {
     if (percentage >= 75) level = '重度'
     else if (percentage >= 60) level = '中度'
     else if (percentage >= 50) level = '轻度'
-    dimensions[dim as keyof SASResult['dimensions']] = { score, percentage, level }
+    dimensions[dim as string] = { score, percentage, level }
     totalRaw += score
   })
 
@@ -195,7 +192,12 @@ export function calculateSAS(answers: Answer[]): SASResult {
     percentile,
     level,
     levelText,
-    dimensions,
+    dimensions: [
+      { name: '社交焦虑', score: dimensions.social_anxiety.percentage },
+      { name: '躯体焦虑', score: dimensions.somatic_anxiety.percentage },
+      { name: '认知焦虑', score: dimensions.cognitive_anxiety.percentage },
+      { name: '睡眠焦虑', score: dimensions.sleep_anxiety.percentage },
+    ],
     radarData,
     interpretation,
     recommendations,

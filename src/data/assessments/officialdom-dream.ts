@@ -27,7 +27,7 @@ import { calculateOfficialdom } from '../../data/professional/officialdom/offici
 export const officialdomAssessment: Assessment = {
   id: 'officialdom-dream',
   title: 'D.R.E.A.M 官场人格五维测评',
-  description: '基于现代组织行为学的深度人格测评。40道真实职场情境，揭示您在权力结构中的核心特质与生存策略。',
+  description: '了解你在职场环境中的行为风格和处世方式',
   category: '职业发展',
   subcategory: '权力适应',
   difficulty: 'expert',

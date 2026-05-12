@@ -4,13 +4,13 @@ import { calculateMentalAge } from '../../utils/calculators/mental-age-calculato
 export const mentalAgeAssessment: Assessment = {
   id: 'mental-age',
   title: '精神年龄诊断',
-  description: '你的身体在上班，灵魂已经退休了吗？18道灵魂拷问，精准测出你的心智老化程度',
+  description: '趣味测评，了解你的思维方式和心智成熟度',
   category: '自我认知',
   subcategory: '心智成熟度',
   difficulty: 'standard',
   duration: 3,
   quality: '娱乐',
-  questionCount: 18,
+  questionCount: 20,
   questions: [
     { id: 'age-1', type: 'single', text: '朋友约你晚上 8 点出去聚餐，你的第一反应是？', dimension: 'cognition', options: [
       { id: '1', value: 1, text: '太好了！通宵都没问题！' },
@@ -137,6 +137,20 @@ export const mentalAgeAssessment: Assessment = {
       { id: '3', value: 3, text: '刚工作的时候' },
       { id: '4', value: 4, text: '不想回去，现在就挺好' },
       { id: '5', value: 5, text: '越活越明白，现在就是最好的年纪' },
+    ]},
+    { id: 'age-19', type: 'single', text: '对于"躺平"，你怎么看？', dimension: 'resilience', options: [
+      { id: '1', value: 1, text: '年轻就要多奋斗！' },
+      { id: '2', value: 2, text: '可以理解，但自己还是要努力' },
+      { id: '3', value: 3, text: '偶尔躺躺也行' },
+      { id: '4', value: 4, text: '躺平挺好的，何必那么累' },
+      { id: '5', value: 5, text: '躺平是我的人生哲学' },
+    ]},
+    { id: 'age-20', type: 'single', text: '你更愿意把时间花在？', dimension: 'social', options: [
+      { id: '1', value: 1, text: '社交网络上冲浪' },
+      { id: '2', value: 2, text: '跟朋友出去玩' },
+      { id: '3', value: 3, text: '一个人安静地待着' },
+      { id: '4', value: 4, text: '学习和自我提升' },
+      { id: '5', value: 5, text: '工作和赚钱' },
     ]},
   ],
   resultCalculator: calculateMentalAge,

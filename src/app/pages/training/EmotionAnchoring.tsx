@@ -139,7 +139,7 @@ export default function EmotionAnchoringTraining() {
     const duration = Math.floor((Date.now() - startTime) / 1000)
     
     const existingTraining = localStorage.getItem('training-progress')
-    const trainingData = existingTraining ? JSON.parse(existingTraining) : { records: [], streak: 0 }
+    const trainingData = existingTraining ? (() => { try { return JSON.parse(existingTraining) } catch { return { records: [], streak: 0 } } })() : { records: [], streak: 0 }
     
     trainingData.records.push({
       planId: 'emotion-anchoring',
@@ -494,7 +494,7 @@ export default function EmotionAnchoringTraining() {
               <div className="grid grid-cols-3 gap-3">
                 {[
                   { label: '训练时长', value: formatTime(Math.floor((Date.now() - startTime) / 1000)), icon: '⏱️' },
-                  { label: '连续打卡', value: JSON.parse(localStorage.getItem('training-progress') || '{"streak":1}').streak + '天', icon: '🔥' },
+                  { label: '连续打卡', value: (() => { try { return JSON.parse(localStorage.getItem('training-progress') || '{"streak":1}').streak + '天' } catch { return '1天' } })(), icon: '🔥' },
                   { label: '获得点数', value: '+50', icon: '⭐' },
                 ].map((stat, i) => (
                   <motion.div

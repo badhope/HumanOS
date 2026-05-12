@@ -319,7 +319,7 @@ export default function Dashboard() {
                 <RippleButton
                   variant="primary"
                   className="mt-4"
-                  onClick={() => navigate('/assessments')}
+                  onClick={() => navigate('/app/discover')}
                 >
                   开始测评
                 </RippleButton>
@@ -438,7 +438,7 @@ export default function Dashboard() {
               <RippleButton
                 variant="primary"
                 size="lg"
-                onClick={() => navigate('/assessments')}
+                onClick={() => navigate('/app/discover')}
               >
                 开始测评
               </RippleButton>

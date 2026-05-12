@@ -4,7 +4,7 @@ import { calculatePSS } from '../../utils/calculators/professional-calculators-f
 export const pssStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'pss-standard',
   title: 'PSS 压力感知量表',
-  description: '国际权威压力测评工具，准确评估你的压力水平和应对能力',
+  description: '常用的压力感知量表，帮助你了解近期的压力状态',
   icon: '🌋',
   category: '心理健康',
   subcategory: '压力管理',

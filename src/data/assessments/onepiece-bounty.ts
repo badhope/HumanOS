@@ -4,7 +4,7 @@ import { calculateBounty } from '../../utils/calculators/berry-calculator'
 export const bountyAssessment: Assessment = {
   id: 'onepiece-bounty',
   title: '🏴‍☠️ 海贼王赏金测评',
-  description: '基于战力、势力、威胁度、名声、潜力五大维度，参考海军本部悬赏标准，精确计算你在海贼王世界的悬赏金额。SSS级四皇？还是D级打杂？50道沉浸式情境题，深度还原伟大航路冒险体验！',
+  description: '趣味测评，通过情境选择题探索你在动漫世界中的角色定位',
   category: '娱乐趣味',
   subcategory: '动漫同人',
   difficulty: 'lite',

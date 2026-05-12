@@ -30,7 +30,7 @@ import type { Answer, Question, ProfessionalQuestion } from '../types'
 import { cn } from '@utils/cn'
 import AnswerSheet from '@components/AnswerSheet'
 import { AssessmentOption } from '@components/AssessmentOption'
-import { calculateProfessionalResult } from '@utils/professionalCalculators'
+import { calculatorEngine } from '@utils/calculators/CalculatorEngine'
 import {
   mbtiProfessionalQuestions,
   bigFiveProfessionalQuestions,
@@ -56,6 +56,45 @@ import {
 
 const QUESTION_TIME_LIMIT = 45
 const ANSWER_STORAGE_KEY = 'assessment-answers-draft'
+const STORAGE_EXPIRY_MS = 1000 * 60 * 60 // 1小时过期
+
+// localStorage 安全工具
+const safeStorage = {
+  setItem: (key: string, data: unknown): void => {
+    try {
+      const payload = JSON.stringify({
+        data,
+        timestamp: Date.now(),
+      })
+      localStorage.setItem(key, payload)
+    } catch {
+      // 忽略存储错误
+    }
+  },
+  getItem: <T,>(key: string): T | null => {
+    try {
+      const item = localStorage.getItem(key)
+      if (!item) return null
+      
+      const { data, timestamp } = JSON.parse(item)
+      if (!timestamp || Date.now() - timestamp > STORAGE_EXPIRY_MS) {
+        localStorage.removeItem(key)
+        return null
+      }
+      return data as T
+    } catch {
+      localStorage.removeItem(key)
+      return null
+    }
+  },
+  removeItem: (key: string): void => {
+    try {
+      localStorage.removeItem(key)
+    } catch {
+      // 忽略删除错误
+    }
+  },
+}
 
 export default function Assessment() {
   const { id } = useParams<{ id: string }>()
@@ -158,7 +197,11 @@ export default function Assessment() {
     )
 
     const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
-    const savedDraft = localStorage.getItem(storageKey)
+    const savedDraft = safeStorage.getItem<{
+      answers: Answer[]
+      lastQuestion: number
+      randomizationSeed: string
+    }>(storageKey)
     
     let finalQuestions: RandomizedQuestion[]
     let currentQ = 0
@@ -166,16 +209,15 @@ export default function Assessment() {
     
     if (savedDraft) {
       try {
-        const draft = JSON.parse(savedDraft)
-        if (draft.answers && draft.answers.length > 0 && draft.randomizationSeed) {
-          setRandomizationSeed(draft.randomizationSeed)
+        if (Array.isArray(savedDraft.answers) && savedDraft.answers.length > 0 && savedDraft.randomizationSeed) {
+          setRandomizationSeed(savedDraft.randomizationSeed)
           finalQuestions = smartRandomizeQuestions(processedQuestions, {
-            seed: draft.randomizationSeed,
+            seed: savedDraft.randomizationSeed,
             shuffleQuestions: true,
             shuffleOptions: true
           })
-          existingAnswers = draft.answers
-          currentQ = Math.min(draft.lastQuestion || 0, finalQuestions.length - 1)
+          existingAnswers = savedDraft.answers
+          currentQ = Math.min(savedDraft.lastQuestion || 0, finalQuestions.length - 1)
         } else {
           const seed = generateSeed()
           setRandomizationSeed(seed)
@@ -273,12 +315,11 @@ export default function Assessment() {
       if (assessment) {
         try {
           const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
-          localStorage.setItem(storageKey, JSON.stringify({
+          safeStorage.setItem(storageKey, {
             answers: newAnswers,
             lastQuestion: currentQuestion,
             randomizationSeed,
-            savedAt: Date.now(),
-          }))
+          })
         } catch (e) {
           console.error('Failed to save answer to localStorage:', e)
         }
@@ -323,19 +364,19 @@ export default function Assessment() {
     setShowSubmitSuccess(true)
     
     try {
-      setTimeout(() => {
+      setTimeout(async () => {
         try {
-          let rawResult
-          if (mode === 'professional') {
-            rawResult = calculateProfessionalResult(assessment.id, answers, mode)
-          } else {
-            rawResult = assessment.resultCalculator(answers)
-          }
+          const calculationResult = await calculatorEngine.calculate({
+            assessmentId: assessment.id,
+            answers,
+            mode: mode as 'normal' | 'advanced' | 'professional',
+          })
           
           const adaptedResult = {
-            ...rawResult,
+            ...calculationResult.result,
             source: 'frontend',
             calculated_at: new Date().toISOString(),
+            _calculationMetadata: calculationResult.metadata,
           }
           const recordId = crypto.randomUUID()
           
@@ -345,12 +386,12 @@ export default function Assessment() {
             answers,
             result: adaptedResult,
             completedAt: new Date(),
-            mode,
+            mode: mode as 'normal' | 'advanced' | 'professional',
           })
 
           try {
             const storageKey = `${ANSWER_STORAGE_KEY}-${assessment.id}-${mode}`
-            localStorage.removeItem(storageKey)
+            safeStorage.removeItem(storageKey)
           } catch (e) {
             console.error('Failed to clear localStorage:', e)
           }

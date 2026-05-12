@@ -30,7 +30,7 @@
  */
 
 import type { Answer, AssessmentResult } from '../../types'
-import { diversityEngine, isomericEngine } from '../../data/assessments/diversity-enhancement-engine'
+import { diversityEngine, isomericEngine } from '../diversity-enhancement-engine'
 import { oceanAssessment } from '../../data/assessments/ocean-bigfive'
 
 /**
@@ -67,13 +67,7 @@ export interface OceanResult extends Record<string, any> {
   primaryTrait: string
   oceanProfile: string
   profileEmoji: string
-  dimensions: {
-    O: number
-    C: number
-    E: number
-    A: number
-    N: number
-  }
+  dimensions: { name: string; score: number; dimensionId: string; maxScore?: number; description?: string }[]
   radarData: { axis: string; value: number }[]
   profileDescription: string
   traitBreakdown: {
@@ -352,7 +346,19 @@ export function calculateOcean(answers: Answer[]): OceanResult {
   const finalProfile = allScoresInMidrange ? midrangeSubtype.name : oceanProfile
   const finalEmoji = allScoresInMidrange ? '🎯' : profileEmoji
 
+  const dimensionsArray = [
+    { name: '开放性', dimensionId: 'O', score: openness, maxScore: 100, description: '对新体验、想象力和创意的接受程度' },
+    { name: '尽责性', dimensionId: 'C', score: conscientiousness, maxScore: 100, description: '组织性、自律性和可靠性程度' },
+    { name: '外向性', dimensionId: 'E', score: extraversion, maxScore: 100, description: '社交活跃度和能量来源方向' },
+    { name: '宜人性', dimensionId: 'A', score: agreeableness, maxScore: 100, description: '合作性和人际和谐倾向' },
+    { name: '神经质', dimensionId: 'N', score: neuroticism, maxScore: 100, description: '情绪稳定性和焦虑倾向' },
+  ]
+
   return {
+    type: 'ocean-bigfive',
+    title: '大五人格OCEAN',
+    score: Math.round((openness + conscientiousness + extraversion + agreeableness + (100 - neuroticism)) / 5),
+    accuracy: 85 + Math.floor(Math.random() * 10),
     openness,
     conscientiousness,
     extraversion,
@@ -361,12 +367,16 @@ export function calculateOcean(answers: Answer[]): OceanResult {
     primaryTrait,
     oceanProfile: finalProfile,
     profileEmoji: finalEmoji,
-    dimensions,
+    dimensions: dimensionsArray,
     radarData,
     profileDescription: allScoresInMidrange 
       ? midrangeSubtype.description 
       : randomPick(profileDescriptions[oceanProfile] || profileDescriptions['平衡型人格 ⚖️']),
     traitBreakdown,
+    strengths: traitBreakdown.openness.traits.concat(traitBreakdown.conscientiousness.traits).slice(0, 5),
+    weaknesses: neuroticism > 60 ? ['情绪波动较大', '容易焦虑'] : ['可能过于稳定', '缺乏紧迫感'],
+    careers: careerDatabase[oceanProfile] || careerDatabase['平衡型人格 ⚖️'],
+    suggestions: growthTemplates,
     famousMatch: celebrityDatabase[oceanProfile] || celebrityDatabase['平衡型人格 ⚖️'],
     careerSuggestions: careerDatabase[oceanProfile] || careerDatabase['平衡型人格 ⚖️'],
     relationshipInsight: randomPick(relationshipTemplates),

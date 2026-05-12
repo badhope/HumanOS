@@ -7,6 +7,8 @@ import { useState } from 'react'
 import LegacyHeader from '../app/components/LegacyHeader'
 import { PageWrapper } from '@components/layout'
 
+const MAX_NORMAL_QUESTIONS = 28
+
 export default function AssessmentConfirm() {
   const { id } = useParams<{ id: string }>()
   const [searchParams] = useSearchParams()
@@ -16,30 +18,13 @@ export default function AssessmentConfirm() {
   const selectedMode = modeFromUrl === 'professional' ? 'professional' : 'normal'
   const [showCredibility, setShowCredibility] = useState(false)
 
-  const modeConfigs = {
-    normal: {
-      label: '标准版',
-      sublabel: '推荐选择',
-      accuracy: '高准确率',
-      color: 'from-violet-500 to-pink-500',
-      description: '科学抽样，去重优化，适合大多数用户快速获得准确结果'
-    },
-    professional: {
-      label: '专业版',
-      sublabel: '深度分析',
-      accuracy: '学术级精度',
-      color: 'from-amber-500 to-orange-500',
-      description: '完整量表，信效度最高，适合心理学爱好者和专业人士'
-    },
-  }
-
   if (!assessment) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-4">测评不存在</h2>
           <button
-            onClick={() => navigate('/assessments')}
+            onClick={() => navigate('/app/discover')}
             className="px-6 py-3 rounded-xl bg-violet-500 text-white"
             type="button"
           >
@@ -54,9 +39,32 @@ export default function AssessmentConfirm() {
     navigate(`/legacy/assessment/${id}?mode=${selectedMode}`)
   }
 
-  const realQuestionCount = assessment.questions?.length || 0
-  const durationMinutes = selectedMode === 'normal' ? 5 : Math.max(10, Math.ceil(realQuestionCount * 10 / 60))
-  const displayQuestionCount = selectedMode === 'normal' ? 28 : realQuestionCount || 60
+  const totalQuestionCount = assessment.questions?.length || 0
+  const hasProfessionalQuestions = !!(assessment as any).professionalQuestions
+  const normalQuestionCount = hasProfessionalQuestions
+    ? (assessment as any).professionalQuestions.normal?.length || totalQuestionCount
+    : Math.min(MAX_NORMAL_QUESTIONS, totalQuestionCount)
+  const displayQuestionCount = selectedMode === 'normal' ? normalQuestionCount : totalQuestionCount
+  const durationMinutes = Math.max(3, Math.ceil(displayQuestionCount * 10 / 60))
+
+  const modeConfigs = {
+    normal: {
+      label: '标准版',
+      sublabel: '推荐选择',
+      accuracy: '高准确率',
+      color: 'from-violet-500 to-pink-500',
+      description: normalQuestionCount < totalQuestionCount
+        ? `从${totalQuestionCount}题中科学抽样${normalQuestionCount}题，去重优化，快速获得准确结果`
+        : `${normalQuestionCount}道精选题目，适合快速获得准确结果`
+    },
+    professional: {
+      label: '专业版',
+      sublabel: '深度分析',
+      accuracy: '学术级精度',
+      color: 'from-amber-500 to-orange-500',
+      description: '完整量表，信效度最高，适合心理学爱好者和专业人士'
+    },
+  }
   const qualityLabel = {
     lite: '科学',
     standard: '专业',
@@ -130,7 +138,12 @@ export default function AssessmentConfirm() {
             transition={{ delay: 0.45 }}
             className="mb-8"
           >
-            <div className={`relative p-6 rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br ${modeConfigs[selectedMode].color} opacity-15`}>
+            <div className={`relative p-6 rounded-2xl border-2 border-violet-500/40 ${
+                selectedMode === 'normal' 
+                  ? 'bg-gradient-to-br from-violet-500/20 to-pink-500/10' 
+                  : 'bg-gradient-to-br from-amber-500/20 to-orange-500/10'
+              }`}>
+              <div className="absolute inset-0 bg-black/35 rounded-2xl"></div>
               <div className="relative z-10 flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${modeConfigs[selectedMode].color} flex items-center justify-center shadow-lg`}>
                   {selectedMode === 'normal' ? (
@@ -156,7 +169,7 @@ export default function AssessmentConfirm() {
                       {modeConfigs[selectedMode].sublabel}
                     </span>
                   </div>
-                  <p className="text-white/70 text-sm">{modeConfigs[selectedMode].description}</p>
+                  <p className="text-white/90 text-sm">{modeConfigs[selectedMode].description}</p>
                 </div>
               </div>
             </div>

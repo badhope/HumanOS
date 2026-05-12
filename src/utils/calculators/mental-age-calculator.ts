@@ -44,7 +44,8 @@ export function calculateMentalAge(answers: Answer[]) {
   ]
 
   const level = LEVELS.find(l => totalScore >= l.min) || LEVELS[5]
-  const mentalAge = level.age + Math.floor(Math.random() * 5)
+  const ageVariance = totalScore % 5
+  const mentalAge = level.age + ageVariance
 
   return {
     mentalAge,

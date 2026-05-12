@@ -4,7 +4,7 @@ import { calculateSchwartz } from '../../utils/calculators/professional-calculat
 export const schwartzStandardAssessment: Omit<Assessment, 'id'> & { id: string } = {
   id: 'schwartz-standard',
   title: 'SVS 施瓦茨价值观量表',
-  description: '跨文化验证的人类价值观模型 | 10大核心价值观+4高阶维度全景画像',
+  description: '探索你的核心价值观，了解什么对你最重要',
   icon: '🌍',
   category: '意识形态',
   subcategory: '哲学立场',

@@ -196,6 +196,7 @@ export const standardCalculators = {
   'officialdom-dream': calculateOfficialdomWrapper,
   'sleep-quality': calculatePSQI,
   'scl90': calculateSCL90,
+  'scl90-symptoms': calculateSCL90,
   'pss-stress': calculatePSS10,
 }
 

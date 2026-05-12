@@ -145,7 +145,7 @@ export default function TrainingEngine({ program, onComplete }: TrainingEnginePr
     })
     
     const existing = localStorage.getItem('training-records')
-    const records = existing ? JSON.parse(existing) : []
+    const records = existing ? (() => { try { return JSON.parse(existing) } catch { return [] } })() : []
     records.push({
       programId: program.id,
       completedAt: Date.now(),
@@ -184,7 +184,7 @@ export default function TrainingEngine({ program, onComplete }: TrainingEnginePr
       <div className="min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#0f0f1a] to-[#0a0a0f] text-white">
         <div className="sticky top-0 z-50 p-4 flex items-center justify-between bg-black/20 backdrop-blur-xl border-b border-white/5">
           <button
-            onClick={() => navigate('/app/training')}
+            onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
           >
             <ArrowLeft size={20} />
@@ -450,7 +450,7 @@ export default function TrainingEngine({ program, onComplete }: TrainingEnginePr
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => navigate('/app/training')}
+                    onClick={() => navigate('/app/growth/training')}
                     className="flex-1 py-4 rounded-2xl bg-gradient-to-r from-violet-500 to-blue-500 font-bold"
                   >
                     下一个训练

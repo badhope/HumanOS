@@ -12,7 +12,7 @@ const DIVERSITY_OPTIMIZED_OPTIONS = [
 export const philoAssessment: Assessment = {
   id: 'philo-spectrum',
   title: '哲学光谱测评',
-  description: '✨ 多样性增强引擎已启用：应答风格校正 + IRT区分度加权 + 结果唯一性检测。基于当代分析哲学与欧陆哲学的6个核心争论维度，定位你在哲学光谱上的精确位置——48道专业哲学命题，经过斯坦福哲学百科标准校准。',
+  description: '探索你在哲学问题上的观点倾向，了解你的思维方式',
   category: '意识形态',
   subcategory: '哲学立场',
   difficulty: 'expert',

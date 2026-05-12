@@ -162,3 +162,5 @@ export function calculatePSS(answers: Answer[]): PSS10Result & AssessmentResult 
     type: 'pss10',
   }
 }
+
+export const calculatePSS10 = calculatePSS

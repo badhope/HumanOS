@@ -30,7 +30,7 @@
  */
 
 import type { Answer, AssessmentResult } from '../../types'
-import { diversityEngine, isomericEngine } from '../../data/assessments/diversity-enhancement-engine'
+import { diversityEngine, isomericEngine } from '../diversity-enhancement-engine'
 import { ideologyAssessment } from '../../data/assessments/ideology-9square'
 
 /**
@@ -66,16 +66,7 @@ export interface IdeologyResult extends Record<string, any> {
   ideologyEmoji: string
   specificIdeology: string
   gridPosition: { row: number; col: number }
-  dimensions: {
-    equality: number
-    market: number
-    authority: number
-    liberty: number
-    nation: number
-    international: number
-    tradition: number
-    progress: number
-  }
+  dimensions: { name: string; score: number }[]
   compassData: { axis: string; value: number; position: string }[]
   typeDescription: string
   famousPeople: string[]
@@ -519,7 +510,16 @@ export function calculateIdeology(answers: Answer[]): IdeologyResult {
     ideologyEmoji: finalEmoji,
     specificIdeology: finalIdeology,
     gridPosition: { row, col },
-    dimensions,
+    dimensions: [
+      { name: '平等', score: dimensions.equality },
+      { name: '市场', score: dimensions.market },
+      { name: '权威', score: dimensions.authority },
+      { name: '自由', score: dimensions.liberty },
+      { name: '民族', score: dimensions.nation },
+      { name: '国际', score: dimensions.international },
+      { name: '传统', score: dimensions.tradition },
+      { name: '进步', score: dimensions.progress },
+    ],
     compassData,
     typeDescription: allScoresInMidrange ? midrangeSubtype.description : randomPick(typeDescriptions[specificIdeology] || typeDescriptions['中间派 🤷']),
     famousPeople: famousPeopleDatabase[specificIdeology] || famousPeopleDatabase['中间派 🤷'],

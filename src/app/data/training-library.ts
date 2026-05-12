@@ -328,34 +328,157 @@ export const getTrainingById = (id: string) => ALL_TRAININGS.find(t => t.id === 
 export const getTrainingsByCategory = (category: string) => 
   ALL_TRAININGS.filter(t => t.category === category)
 
-export const getTrainingsForDimension = (dimension: string, score: number) => {
+// 测评ID到维度ID的映射
+const ASSESSMENT_TO_DIMENSION_MAP: Record<string, Record<string, string[]>> = {
+  'bigfive': {
+    'O': ['openness'],
+    'C': ['conscientiousness'],
+    'E': ['extraversion'],
+    'A': ['agreeableness'],
+    'N': ['neuroticism'],
+  },
+  'sas': {
+    'anxiety': ['sas_anxiety', 'sas_somatic'],
+    'somatic': ['sas_somatic'],
+    'cognitive': ['sas_cognitive'],
+  },
+  'sds': {
+    'depression': ['sds_depression'],
+    'psychological': ['sds_psychological'],
+  },
+  'pss': {
+    'stress': ['pss_stress'],
+  },
+  'burnout': {
+    'exhaustion': ['burnout'],
+    'cynicism': ['burnout_cynicism'],
+    'accomplishment': ['burnout_accomplishment'],
+  },
+  'eq': {
+    'selfAwareness': ['eq_self'],
+    'selfManagement': ['eq_self'],
+    'selfMotivation': ['eq_self'],
+    'empathy': ['eq_empathy'],
+    'socialSkills': ['eq_social'],
+  },
+  'ecr': {
+    'anxiety': ['attachment_anxiety'],
+    'avoidance': ['attachment_avoidance'],
+  },
+  'attachment': {
+    'anxious': ['attachment_anxiety'],
+    'avoidant': ['attachment_avoidance'],
+    'fearful': ['attachment_fearful'],
+    'secure': ['attachment_secure'],
+  },
+  'holland': {
+    'R': ['holland_realistic'],
+    'I': ['holland_investigative'],
+    'A': ['holland_artistic'],
+    'S': ['holland_social'],
+    'E': ['holland_enterprising'],
+    'C': ['holland_conventional'],
+  },
+  'iq': {
+    'logical': ['iq_logical'],
+    'verbal': ['iq_verbal'],
+    'spatial': ['iq_spatial'],
+  },
+}
+
+// 维度到训练ID的映射
+const DIMENSION_TO_TRAINING_MAP: Record<string, string[]> = {
+  'openness': ['cognitive-flexibility-o-low', 'openness-grounding-o-high'],
+  'conscientiousness': ['conscientiousness-structure-c-low', 'perfectionism-detox-c-high'],
+  'extraversion': ['introvert-confidence-e-low', 'performer-grounding-e-high'],
+  'agreeableness': ['agreeableness-warmth-a-low', 'people-pleaser-detox-a-high'],
+  'neuroticism': ['neuroticism-calming-n-high', 'emotional-range-expansion'],
+  'sas_anxiety': ['anxiety-first-aid', 'what-if-technique', 'emotion-anchoring'],
+  'sas_somatic': ['pressure-valve', 'emotion-anchoring'],
+  'sas_cognitive': ['cognitive-restructuring', 'what-if-technique'],
+  'pss_stress': ['pressure-valve', 'stress-inoculation'],
+  'burnout': ['burnout-reset', 'meaning-reconstruction', 'self-compassion'],
+  'burnout_cynicism': ['meaning-reconstruction'],
+  'eq_self': ['self-compassion', 'emotion-anchoring'],
+  'eq_empathy': ['avoidant-empathy', 'secure-base-strengthening'],
+  'eq_social': ['social-basics', 'deep-connection'],
+  'attachment_anxiety': ['anxious-self-reassurance', 'anxious-boundary-setting'],
+  'attachment_avoidance': ['avoidant-opening', 'avoidant-empathy'],
+  'attachment_fearful': ['fearful-trust-building'],
+  'attachment_secure': ['secure-base-strengthening'],
+  'dark_narcissism': ['narcissism-empathy'],
+  'disc_dominance': ['d-type-softening'],
+  'disc_influence': ['i-type-listening'],
+  'disc_steadiness': ['s-type-assertiveness'],
+  'disc_compliance': ['people-pleaser-detox-a-high'],
+}
+
+export const getTrainingsForDimension = (dimension: string, score: number): TrainingProgram[] => {
+  const trainingIds = DIMENSION_TO_TRAINING_MAP[dimension] || []
   return ALL_TRAININGS.filter(t => {
-    if (t.targetDimension !== dimension) return false
+    if (!trainingIds.includes(t.id)) return false
     if (!t.targetScoreRange) return true
     const [min, max] = t.targetScoreRange
     return score >= min && score <= max
   })
 }
 
-export const getRecommendedTrainings = (moodLevel?: number, dimensions?: Record<string, number>) => {
+export const getTrainingsForAssessment = (assessmentId: string, dimensions?: Record<string, number>): TrainingProgram[] => {
+  const dimensionMap = ASSESSMENT_TO_DIMENSION_MAP[assessmentId]
+  if (!dimensionMap) return []
+  
+  const recommendations: TrainingProgram[] = []
+  
+  if (dimensions) {
+    for (const [dimKey, targetDims] of Object.entries(dimensionMap)) {
+      const score = dimensions[dimKey] ?? dimensions[dimKey.toLowerCase()] ?? 0
+      
+      for (const targetDim of targetDims) {
+        const trainings = getTrainingsForDimension(targetDim, score)
+        recommendations.push(...trainings)
+      }
+    }
+  }
+  
+  return [...new Set(recommendations)].slice(0, 6)
+}
+
+export const getRecommendedTrainings = (moodLevel?: number, dimensions?: Record<string, number>, assessmentId?: string): TrainingProgram[] => {
+  if (assessmentId && dimensions) {
+    const fromAssessment = getTrainingsForAssessment(assessmentId, dimensions)
+    if (fromAssessment.length > 0) return fromAssessment.slice(0, 5)
+  }
+  
   let trainings = [...ALL_TRAININGS].filter(t => t.level === 1)
   
   if (dimensions) {
     const dimensionRecommendations: TrainingProgram[] = []
-    Object.entries(dimensions).forEach(([dim, score]) => {
-      const matched = getTrainingsForDimension(dim, score)
+    for (const dim of Object.keys(dimensions)) {
+      const matched = getTrainingsForDimension(dim, dimensions[dim])
       dimensionRecommendations.push(...matched)
-    })
+    }
     if (dimensionRecommendations.length > 0) {
-      return dimensionRecommendations.slice(0, 5)
+      return [...new Set(dimensionRecommendations)].slice(0, 5)
     }
   }
   
   if (moodLevel !== undefined && moodLevel <= 1) {
-    trainings = trainings.filter(t => ['emotion', 'attachment'].includes(t.category))
+    trainings = trainings.filter(t => ['emotion', 'attachment', 'mindfulness'].includes(t.category))
   } else if (moodLevel !== undefined && moodLevel >= 3) {
     trainings = trainings.filter(t => ['cognition', 'social', 'career'].includes(t.category))
   }
   
   return trainings.slice(0, 5)
+}
+
+export const getRelatedTrainings = (assessmentId: string): TrainingProgram[] => {
+  const relatedTrainings: TrainingProgram[] = []
+  
+  for (const training of ALL_TRAININGS) {
+    if (training.relatedAssessments?.includes(assessmentId)) {
+      relatedTrainings.push(training)
+    }
+  }
+  
+  return relatedTrainings
 }

@@ -41,18 +41,20 @@ import type { Answer, AssessmentResult } from '../../types'
  *   ├─ 人生补偿: 把未完成梦想强加给孩子
  *   └─ 边界消融: 你的人生就是我的人生
  */
+type DimensionScores = {
+  reportAnxiety: number
+  comparisonMania: number
+  classObsession: number
+  moralityKidnapping: number
+}
+
 export interface CASTResult extends Record<string, any> {
   rawScore: number
   castIndex: number
   percentile: number
   classification: 'godlike' | 'tiger' | 'chicken' | 'moderate' | 'buddha' | 'absent'
   classificationEmoji: string
-  dimensions: {
-    reportAnxiety: number
-    comparisonMania: number
-    classObsession: number
-    moralityKidnapping: number
-  }
+  dimensions: { name: string; score: number }[]
   subDimensions: Record<string, { name: string; score: number }[]>
   radarData: { dimension: string; score: number; fullMark: number }[]
   typeDescription: string
@@ -98,7 +100,7 @@ const DIMENSION_NAMES = {
   moralityKidnapping: '道德绑架',
 }
 
-const SUB_DIMENSION_NAMES: Record<keyof CASTResult['dimensions'], string[]> = {
+const SUB_DIMENSION_NAMES: Record<keyof DimensionScores, string[]> = {
   reportAnxiety: ['起跑恐慌', '补习狂热', '时间压榨', '金钱投射'],
   comparisonMania: ['横向比较', '面子执念', '标准异化', '价值外化'],
   classObsession: ['学历崇拜', '就业焦虑', '城市执念', '职业鄙视链'],
@@ -110,42 +112,42 @@ const PARENTING_ARCHETYPES = [
     id: 'gladiator',
     name: '竞技场斗士',
     emoji: '⚔️',
-    condition: (d: CASTResult['dimensions']) => d.comparisonMania >= 60,
+    condition: (d: DimensionScores) => d.comparisonMania >= 60,
     description: '育儿对您来说就是一场没有硝烟的战争。每一次考试都是战役，每一个别人家的孩子都是假想敌。',
   },
   {
     id: 'engineer',
     name: '育儿工程师',
     emoji: '�',
-    condition: (d: CASTResult['dimensions']) => d.reportAnxiety >= 60,
+    condition: (d: DimensionScores) => d.reportAnxiety >= 60,
     description: '您把育儿当作一个工程项目来优化。目标清晰，执行到位，数据驱动。虽然鸡血，但鸡得有章法、有逻辑。',
   },
   {
     id: 'martyrs',
     name: '牺牲型家长',
     emoji: '🕯️',
-    condition: (d: CASTResult['dimensions']) => d.moralityKidnapping >= 60,
+    condition: (d: DimensionScores) => d.moralityKidnapping >= 60,
     description: '您为孩子付出了一切，甚至牺牲了自己的人生。这份爱很沉重，但真实而磅礴。',
   },
   {
     id: 'investment',
     name: '天使投资人',
     emoji: '💰',
-    condition: (d: CASTResult['dimensions']) => d.classObsession >= 60,
+    condition: (d: DimensionScores) => d.classObsession >= 60,
     description: '您的每一分投入都在计算回报率。教育是您这辈子最大的一笔风险投资。虽然焦虑，但眼光长远。',
   },
   {
     id: 'gardener',
     name: '园丁型家长',
     emoji: '🌱',
-    condition: (d: CASTResult['dimensions']) => d.reportAnxiety <= 50 && d.moralityKidnapping <= 50,
+    condition: (d: DimensionScores) => d.reportAnxiety <= 50 && d.moralityKidnapping <= 50,
     description: '您相信孩子有自己的生长节奏。浇水施肥，阳光雨露，然后静待花开。不催不赶，尊重规律。',
   },
   {
     id: 'friend',
     name: '朋友型家长',
     emoji: '🤝',
-    condition: (d: CASTResult['dimensions']) => d.classObsession <= 50 && d.comparisonMania <= 50,
+    condition: (d: DimensionScores) => d.classObsession <= 50 && d.comparisonMania <= 50,
     description: '您和孩子更像是平等的朋友。不控制，不绑架，不焦虑。是这个时代稀有的松弛感。',
   },
   {
@@ -182,13 +184,18 @@ const FUTURE_PROJECTIONS = [
 ]
 
 function calculateSubDimensionScores(mainScore: number, subDimensionNames: string[]): CASTResult['subDimensions'][''] {
-  return subDimensionNames.map((name, i) => ({
-    name,
-    score: Math.max(0, Math.min(100, mainScore + Math.round((Math.random() - 0.5) * 25))),
-  }))
+  const variance = 10
+  return subDimensionNames.map((name, i) => {
+    const offset = (i - (subDimensionNames.length - 1) / 2) * 3
+    const score = Math.max(0, Math.min(100, mainScore + offset + (Math.random() < 0.5 ? -variance : variance) * 0.3))
+    return {
+      name,
+      score: Math.round(score),
+    }
+  })
 }
 
-function determineParentingStyle(dimensions: CASTResult['dimensions']): CASTResult['parentingStyleArchetype'] {
+function determineParentingStyle(dimensions: DimensionScores): CASTResult['parentingStyleArchetype'] {
   const matched = PARENTING_ARCHETYPES.find(arch => arch.condition(dimensions))
   if (matched) {
     return { name: matched.name, emoji: matched.emoji, description: matched.description }
@@ -207,7 +214,7 @@ function determineParentingStyle(dimensions: CASTResult['dimensions']): CASTResu
   }
 }
 
-function calculateParentingMatrix(dimensions: CASTResult['dimensions']): CASTResult['parentingMatrix'] {
+function calculateParentingMatrix(dimensions: DimensionScores): CASTResult['parentingMatrix'] {
   const controlScore = (dimensions.reportAnxiety + dimensions.classObsession) / 2
   const anxietyScore = (dimensions.reportAnxiety + dimensions.comparisonMania) / 2
   const warmthScore = 100 - dimensions.moralityKidnapping
@@ -228,7 +235,7 @@ function calculateParentingMatrix(dimensions: CASTResult['dimensions']): CASTRes
 }
 
 export function calculateCAST(answers: Answer[]): CASTResult {
-  const dimensionMap: Record<keyof CASTResult['dimensions'], string[]> = {
+  const dimensionMap: Record<keyof DimensionScores, string[]> = {
     reportAnxiety: ['cast-1', 'cast-2', 'cast-3', 'cast-4', 'cast-5', 'cast-6', 'cast-7', 'cast-8', 'cast-9', 'cast-10'],
     comparisonMania: ['cast-11', 'cast-12', 'cast-13', 'cast-14', 'cast-15', 'cast-16', 'cast-17', 'cast-18', 'cast-19', 'cast-20'],
     classObsession: ['cast-21', 'cast-22', 'cast-23', 'cast-24', 'cast-25', 'cast-26', 'cast-27', 'cast-28', 'cast-29', 'cast-30'],
@@ -240,20 +247,20 @@ export function calculateCAST(answers: Answer[]): CASTResult {
     answerMap[a.questionId] = typeof a.value === 'number' ? a.value : parseInt(String(a.value || 3))
   })
 
-  const dimensions: CASTResult['dimensions'] = {} as CASTResult['dimensions']
+  const dimensions: DimensionScores = {} as DimensionScores
   let totalRaw = 0
 
   Object.entries(dimensionMap).forEach(([dim, ids]) => {
     const score = ids.reduce((sum, id) => sum + (answerMap[id] || 3), 0)
     const maxScore = ids.length * 5
     const percentage = maxScore > 0 ? Math.round((score / maxScore) * 100) : 50
-    dimensions[dim as keyof CASTResult['dimensions']] = percentage
+    dimensions[dim as keyof DimensionScores] = percentage
     totalRaw += score
   })
 
   const subDimensions: CASTResult['subDimensions'] = {}
   Object.entries(dimensions).forEach(([dim, score]) => {
-    const names = SUB_DIMENSION_NAMES[dim as keyof CASTResult['dimensions']]
+    const names = SUB_DIMENSION_NAMES[dim as keyof DimensionScores]
     subDimensions[dim] = calculateSubDimensionScores(score, names)
   })
 
@@ -329,7 +336,12 @@ export function calculateCAST(answers: Answer[]): CASTResult {
     percentile,
     classification,
     classificationEmoji,
-    dimensions,
+    dimensions: [
+      { name: '报班焦虑', score: dimensions.reportAnxiety },
+      { name: '攀比狂热', score: dimensions.comparisonMania },
+      { name: '阶层执念', score: dimensions.classObsession },
+      { name: '道德绑架', score: dimensions.moralityKidnapping },
+    ],
     subDimensions,
     radarData,
     typeDescription,

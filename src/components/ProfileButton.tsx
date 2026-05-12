@@ -28,11 +28,13 @@ function ProfilePanel({ isOpen, onClose }: ProfilePanelProps) {
         assessmentId: a.assessmentId,
         completedAt,
         score: a.result?.score || 0,
-        dimensions: a.result?.dimensions?.map(d => ({
-          name: d.name,
-          score: d.score,
-          maxScore: typeof d.maxScore === 'number' ? d.maxScore : 100,
-        })) || [],
+        dimensions: Array.isArray(a.result?.dimensions) 
+          ? a.result.dimensions.map(d => ({
+              name: d.name,
+              score: d.score,
+              maxScore: typeof d.maxScore === 'number' ? d.maxScore : 100,
+            })) 
+          : [],
         category: 'personality',
       }
     })
@@ -95,7 +97,7 @@ function ProfilePanel({ isOpen, onClose }: ProfilePanelProps) {
                 <button
                   onClick={() => {
                     onClose()
-                    navigate('/assessments')
+                    navigate('/app/discover')
                   }}
                   className="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-medium"
                   type="button"
@@ -310,7 +312,7 @@ function ProfilePanel({ isOpen, onClose }: ProfilePanelProps) {
                   <button
                     onClick={() => {
                       onClose()
-                      navigate('/assessments')
+                      navigate('/app/discover')
                     }}
                     className="px-6 py-3 rounded-xl bg-white/10 text-white font-medium hover:bg-white/20 transition-colors"
                     type="button"
