@@ -34,7 +34,6 @@ import {
   Save,
   Share,
   Palette as ColorWheel,
-  BellOff,
   Lock,
   Unlock,
   Cpu,
@@ -184,7 +183,7 @@ function ActionButton({ icon: Icon, label, description, onClick, variant = 'defa
         <p className="text-white font-medium">{label}</p>
         <p className="text-sm text-white/50">{description}</p>
       </div>
-      <ChevronRight size={20} className="text-white/40 shrink-0" />
+      <ChevronRight size={20} className="text-white/30 shrink-0" />
     </motion.button>
   )
 }
@@ -715,7 +714,7 @@ export default function SettingsPage() {
               <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
                 <SectionHeader icon={Lock} title="安全选项" description="账号安全设置" />
                 <div className="space-y-4">
-                  <ActionButton icon={Unlock} label="修改密码" description="更新您的登录密码" onClick={() => toast.info('密码修改功能开发中', 2000)} />
+                  <ActionButton icon={Unlock} label="修改密码" description="更新你的登录密码" onClick={() => toast.info('密码修改功能开发中', 2000)} />
                   <ActionButton icon={Star} label="两步验证" description="启用额外的安全保护" onClick={() => toast.info('两步验证功能开发中', 2000)} />
                   <ActionButton icon={History} label="登录记录" description="查看最近的登录活动" onClick={() => toast.info('登录记录功能开发中', 2000)} />
                 </div>
@@ -759,7 +758,7 @@ export default function SettingsPage() {
               className="space-y-6"
             >
               <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
-                <SectionHeader icon={Database} title="数据管理" description="管理您的数据" color="from-indigo-500 to-blue-500" />
+                <SectionHeader icon={Database} title="数据管理" description="管理你的数据" color="from-indigo-500 to-blue-500" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <ActionButton icon={Download} label="导出数据" description="备份到本地文件" onClick={exportDataJSON} variant="success" />
                   <ActionButton icon={Upload} label="导入数据" description="从文件恢复" onClick={() => fileInputRef.current?.click()} />
@@ -873,7 +872,7 @@ export default function SettingsPage() {
                 <SectionHeader icon={HelpCircle} title="帮助与支持" description="获取帮助信息" />
                 <div className="space-y-4">
                   <ActionButton icon={HelpCircle} label="帮助中心" description="查看使用指南" onClick={() => toast.info('帮助中心开发中', 2000)} />
-                  <ActionButton icon={Target} label="反馈建议" description="提交您的意见" onClick={() => toast.info('反馈功能开发中', 2000)} />
+                  <ActionButton icon={Target} label="反馈建议" description="提交你的意见" onClick={() => toast.info('反馈功能开发中', 2000)} />
                   <ActionButton icon={Award} label="关于我们" description="了解更多" onClick={() => toast.info('关于页面开发中', 2000)} />
                 </div>
               </div>
