@@ -35,13 +35,7 @@ export interface IQResult extends Record<string, any> {
   percentile: number
   classification: string
   classificationEmoji: string
-  dimensions: {
-    patternCompletion: number
-    analogicalReasoning: number
-    serialReasoning: number
-    logicalReasoning: number
-    advancedReasoning: number
-  }
+  dimensions: { name: string; score: number; dimensionId: string }[]
   radarData: { dimension: string; score: number; fullMark: number }[]
   typeDescription: string
   cognitiveStyle: {
@@ -443,13 +437,21 @@ export function calculateIQ(answers: Answer[]): IQResult {
     return tips
   }
 
+  const dimensionsArray = [
+    { name: '图形补全', dimensionId: 'patternCompletion', score: dimensions.patternCompletion },
+    { name: '类比推理', dimensionId: 'analogicalReasoning', score: dimensions.analogicalReasoning },
+    { name: '数字序列', dimensionId: 'serialReasoning', score: dimensions.serialReasoning },
+    { name: '逻辑推理', dimensionId: 'logicalReasoning', score: dimensions.logicalReasoning },
+    { name: '高级思维', dimensionId: 'advancedReasoning', score: dimensions.advancedReasoning },
+  ]
+
   return {
     rawScore,
     iqScore,
     percentile,
     classification,
     classificationEmoji,
-    dimensions,
+    dimensions: dimensionsArray,
     radarData,
     typeDescription: randomPick(typeDescriptions[classification]),
     cognitiveStyle,

@@ -32,13 +32,7 @@ export interface EQResult extends Record<string, any> {
   percentile: number
   classification: string
   classificationEmoji: string
-  dimensions: {
-    selfAwareness: number
-    selfManagement: number
-    selfMotivation: number
-    empathy: number
-    socialSkills: number
-  }
+  dimensions: { name: string; score: number; dimensionId: string }[]
   radarData: { dimension: string; score: number; fullMark: number }[]
   strongest: { key: string; name: string; value: number }
   weakest: { key: string; name: string; value: number }
@@ -465,12 +459,20 @@ export function calculateEQ(answers: Answer[]): EQResult {
     '冥想不是玄学，是情绪的健身房。从每天3分钟开始',
   ]
 
+  const dimensionsArray = [
+    { name: '自我觉察', dimensionId: 'selfAwareness', score: dimensions.selfAwareness },
+    { name: '自我管理', dimensionId: 'selfManagement', score: dimensions.selfManagement },
+    { name: '自我激励', dimensionId: 'selfMotivation', score: dimensions.selfMotivation },
+    { name: '共情能力', dimensionId: 'empathy', score: dimensions.empathy },
+    { name: '社交技巧', dimensionId: 'socialSkills', score: dimensions.socialSkills },
+  ]
+
   return {
     totalEQ,
     percentile,
     classification,
     classificationEmoji,
-    dimensions,
+    dimensions: dimensionsArray,
     radarData,
     strongest,
     weakest,

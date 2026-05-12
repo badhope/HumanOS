@@ -67,13 +67,7 @@ export interface OceanResult extends Record<string, any> {
   primaryTrait: string
   oceanProfile: string
   profileEmoji: string
-  dimensions: {
-    O: number
-    C: number
-    E: number
-    A: number
-    N: number
-  }
+  dimensions: { name: string; score: number; dimensionId: string; maxScore?: number; description?: string }[]
   radarData: { axis: string; value: number }[]
   profileDescription: string
   traitBreakdown: {

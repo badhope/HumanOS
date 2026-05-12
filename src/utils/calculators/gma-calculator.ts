@@ -27,13 +27,7 @@ export interface GMAResult extends Record<string, any> {
   percentile: number
   classification: 'legend' | 'master' | 'adept' | 'normal' | 'novice' | 'danger'
   classificationEmoji: string
-  dimensions: {
-    tableManner: number
-    speakingArt: number
-    giftGiving: number
-    eyeContact: number
-    drinkingCulture: number
-  }
+  dimensions: { name: string; score: number; dimensionId: string }[]
   radarData: { dimension: string; score: number; fullMark: number }[]
   typeDescription: string
   famousPeers: string[]
@@ -57,7 +51,7 @@ const SCENE_MASTERS = [
 ]
 
 export function calculateGMA(answers: Answer[]): GMAResult {
-  const dimensionMap: Record<keyof GMAResult['dimensions'], string[]> = {
+  const dimensionMap: Record<string, string[]> = {
     tableManner: ['gma-1', 'gma-2', 'gma-3', 'gma-4', 'gma-5', 'gma-6', 'gma-31', 'gma-32', 'gma-33', 'gma-34'],
     speakingArt: ['gma-7', 'gma-8', 'gma-9', 'gma-10', 'gma-11', 'gma-12', 'gma-35', 'gma-36', 'gma-37', 'gma-38'],
     giftGiving: ['gma-13', 'gma-14', 'gma-15', 'gma-16', 'gma-17', 'gma-18', 'gma-39', 'gma-40', 'gma-41', 'gma-42'],
@@ -70,13 +64,13 @@ export function calculateGMA(answers: Answer[]): GMAResult {
     answerMap[a.questionId] = typeof a.value === 'number' ? a.value : parseInt(String(a.value || 3))
   })
 
-  const dimensions: GMAResult['dimensions'] = {} as GMAResult['dimensions']
+  const dimensions: Record<string, number> = {}
   let totalRaw = 0
 
   Object.entries(dimensionMap).forEach(([dim, ids]) => {
     const score = ids.reduce((sum, id) => sum + (answerMap[id] || 3), 0)
     const percentage = Math.round((score / (ids.length * 5)) * 100)
-    dimensions[dim as keyof GMAResult['dimensions']] = percentage
+    dimensions[dim as string] = percentage
     totalRaw += score
   })
 
@@ -148,13 +142,21 @@ export function calculateGMA(answers: Answer[]): GMAResult {
     (gmaScore <= 70 ? '\n\n💡 提醒：这个社会对真诚的人恶意最大，但也对真正真诚的人回报最厚。' : '') +
     (gmaScore >= 130 ? '\n\n💡 大成者都是"非典型"人精：知世故而不世故，才是最善良的成熟。' : '')
 
+  const dimensionsArray = [
+    { name: '饭桌规矩', dimensionId: 'tableManner', score: dimensions.tableManner },
+    { name: '说话艺术', dimensionId: 'speakingArt', score: dimensions.speakingArt },
+    { name: '送礼分寸', dimensionId: 'giftGiving', score: dimensions.giftGiving },
+    { name: '眼色等级', dimensionId: 'eyeContact', score: dimensions.eyeContact },
+    { name: '酒桌文化', dimensionId: 'drinkingCulture', score: dimensions.drinkingCulture },
+  ]
+
   return {
     rawScore: totalRaw,
     gmaScore,
     percentile,
     classification,
     classificationEmoji,
-    dimensions,
+    dimensions: dimensionsArray,
     radarData,
     typeDescription,
     famousPeers,

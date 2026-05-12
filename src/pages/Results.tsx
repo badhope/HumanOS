@@ -23,9 +23,8 @@ import confetti from 'canvas-confetti'
 import { QRCodeSVG } from 'qrcode.react'
 import { useAppStore } from '../store'
 import { getAssessmentById } from '@data/assessments'
-import ReportRouter from '@components/reports/lazy'
+import ReportRenderer from '@components/reports/ReportRenderer'
 import ResultExportButton from '@components/ResultExportButton'
-import { KnowledgeInjector } from '@components/reports/KnowledgePanel'
 
 export default function Results() {
   const { id } = useParams<{ id: string }>()
@@ -259,17 +258,13 @@ export default function Results() {
         </motion.div>
 
         <div ref={reportRef}>
-          <ReportRouter
+          <ReportRenderer
             result={effectiveResult}
             assessmentType={effectiveAssessment.id}
             mode={(displayMode as 'normal' | 'advanced' | 'professional') || 'normal'}
+            calculationMetadata={effectiveResult?._calculationMetadata}
           />
         </div>
-
-        <KnowledgeInjector
-          assessmentId={effectiveAssessment.id}
-          result={effectiveResult as Record<string, any>}
-        />
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}

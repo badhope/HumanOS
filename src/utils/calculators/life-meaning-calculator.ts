@@ -22,13 +22,7 @@ export interface LifeMeaningResult extends Record<string, any> {
   meaningIndex: number          // 人生意义指数 0-100
   classification: string        // 分类标识
   classificationEmoji: string   // 段位emoji（与Report一致）
-  dimensions: {                 // 五维分数
-    selfRealization: number     // 马斯洛需求顶层
-    relationshipQuality: number // 亲密关系质量
-    contribution: number        // 社会贡献感
-    personalGrowth: number      // 个人成长
-    transcendence: number       // 灵性超越性
-  }
+  dimensions: Array<{ name: string; score: number }>
   title: string                 // 报告标题
   description: string           // 段位描述
   levelName: string             // 段位名称
@@ -170,7 +164,7 @@ export function calculateLifeMeaning(answers: Answer[]): LifeMeaningResult {
     meaningIndex,
     classification,
     classificationEmoji: config.emoji,
-    dimensions,
+    dimensions: Object.entries(dimensions).map(([key, value]) => ({ name: DIMENSION_NAMES[key] || key, score: Math.round(value) })),
     title: '人生意义感测评报告',
     description: config.desc,
     levelName: config.name,

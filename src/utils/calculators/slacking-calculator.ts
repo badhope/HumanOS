@@ -20,13 +20,7 @@ export interface SlackingResult extends Record<string, any> {
   slackingIndex: number
   classification: 'god' | 'master' | 'normal' | 'worker' | 'slave'
   classificationEmoji: string
-  dimensions: {
-    meetingEvading: number
-    pretendWorking: number
-    toiletEscape: number
-    overtimeResistance: number
-    gossipExpert: number
-  }
+  dimensions: { name: string; score: number }[]
   title: string
   description: string
   levelName: string
@@ -168,7 +162,13 @@ export function calculateSlacking(answers: Answer[]): SlackingResult {
     slackingIndex,
     classification,
     classificationEmoji: config.emoji,
-    dimensions,
+    dimensions: [
+      { name: '逃会技巧', score: dimensions.meetingEvading },
+      { name: '假装工作', score: dimensions.pretendWorking },
+      { name: '厕所遁术', score: dimensions.toiletEscape },
+      { name: '反加班', score: dimensions.overtimeResistance },
+      { name: '八卦专家', score: dimensions.gossipExpert },
+    ],
     title: '摸鱼纯度测评报告',
     description: config.desc,
     levelName: config.name,

@@ -21,13 +21,7 @@ export interface InternetAddictionResult extends Record<string, any> {
   addictionIndex: number
   classification: 'transcendent' | 'god' | 'addict' | 'normal' | 'casual' | 'hermit'
   classificationEmoji: string
-  dimensions: {
-    dailyUsage: number
-    socialMedia: number
-    gaming: number
-    fomo: number
-    offlineAbility: number
-  }
+  dimensions: Array<{ name: string; score: number }>
   title: string
   description: string
   levelName: string
@@ -185,7 +179,7 @@ export function calculateInternetAddiction(answers: Answer[]): InternetAddiction
     addictionIndex,
     classification,
     classificationEmoji: config.emoji,
-    dimensions,
+    dimensions: Object.entries(dimensions).map(([key, value]) => ({ name: DIMENSION_NAMES[key] || key, score: Math.round(value) })),
     title: `${config.emoji} ${config.name}`,
     description: config.desc,
     levelName: config.name,

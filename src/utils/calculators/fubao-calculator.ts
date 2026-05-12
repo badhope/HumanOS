@@ -28,13 +28,7 @@ export interface FuBaoResult extends Record<string, any> {
   percentile: number
   classification: 'martyr' | 'model' | 'normal' | 'awakened' | 'rebel'
   classificationEmoji: string
-  dimensions: {
-    overtimeAcceptance: number
-    bossWorship: number
-    sacrificeWillingness: number
-    gratitudeLevel: number
-    struggleBelief: number
-  }
+  dimensions: Array<{ name: string; score: number }>
   title: string
   description: string
   levelName: string
@@ -154,7 +148,7 @@ export function calculateFuBao(answers: Answer[]): FuBaoResult {
     percentile: Math.min(99, Math.round((fubaoIndex - 20) * 1.2)),
     classification,
     classificationEmoji: config.emoji,
-    dimensions,
+    dimensions: Object.entries(dimensions).map(([key, value]) => ({ name: DIMENSION_NAMES[key] || key, score: Math.round(value) })),
     title: '福报指数测评报告',
     description: config.desc,
     levelName: config.name,
