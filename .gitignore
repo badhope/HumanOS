@@ -92,9 +92,6 @@ release/
 release-app/
 dist/
 
-# WeChat Mini Program
-miniprogram_npm/
-
 # Documentation (optional)
 # README_EN.md
 # TEMPLATE_GUIDE.md
