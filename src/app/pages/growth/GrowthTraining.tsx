@@ -1,18 +1,15 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Brain, Target, Zap, Play, CheckCircle, Clock, TrendingUp, ChevronRight, Sparkles } from 'lucide-react'
+import { ArrowLeft, Brain, Zap, Clock, ChevronRight, Heart, Users, Gamepad2, Briefcase } from 'lucide-react'
 import {
-  ALL_TRAININGS,
   EMOTION_TRAININGS_FULL,
   COGNITION_TRAININGS_FULL,
   ATTACHMENT_TRAININGS_FULL,
   SOCIAL_TRAININGS_FULL,
   FUN_TRAININGS_FULL,
   CAREER_TRAININGS,
-  VALUES_TRAININGS,
   MINDFULNESS_TRAININGS,
-  getTrainingById,
 } from '../../data/training-library'
 import type { TrainingProgram } from '../../components/training/TrainingEngine'
 
@@ -33,7 +30,7 @@ const trainingCategories = [
     id: 'cognition',
     title: '思维认知',
     description: '提升思维能力，优化认知模式',
-    icon: Sparkles,
+    icon: Brain,
     badge: '热门',
     color: 'blue',
     colorGradient: 'from-blue-500/30 to-cyan-500/30',
@@ -102,8 +99,6 @@ const trainingCategories = [
     trainings: FUN_TRAININGS_FULL,
   },
 ]
-
-import { Heart, Users, Gamepad2, Briefcase } from 'lucide-react'
 
 function TrainingCard({ training, colorConfig }: { training: TrainingProgram; colorConfig: any }) {
   const navigate = useNavigate()

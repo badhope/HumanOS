@@ -68,7 +68,7 @@ export default function Results() {
 
   useEffect(() => {
     if (!id) {
-      navigate('/assessments')
+      navigate('/app/discover')
       return
     }
 
@@ -82,7 +82,6 @@ export default function Results() {
         completedAt: new Date(),
         mode: (stateResult.mode as 'normal' | 'advanced' | 'professional') || 'normal',
       })
-      console.log('✅ 结果已自动持久化到Store')
       setRecordFound(true)
       return
     }
@@ -101,14 +100,12 @@ export default function Results() {
       
       if (latestRecord) {
         clearInterval(retryInterval)
-        console.log(`✅ 测评记录找到，用时 ${attempts * 100}ms`)
         setRecordFound(true)
         return
       }
       
       if (attempts >= maxAttempts) {
         clearInterval(retryInterval)
-        console.log(`❌ 未找到测评记录，重试了 ${attempts} 次`)
         setRecordFound(false)
       }
     }, 100)

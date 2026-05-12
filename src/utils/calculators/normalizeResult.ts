@@ -53,7 +53,7 @@ function normalizeDimensions(dimensions: unknown): Dimension[] {
   if (Array.isArray(dimensions)) {
     return dimensions.map(d => ({
       name: sanitizeText(d.name) || '未知维度',
-      score: typeof d.score === 'number' ? Math.max(0, Math.min(100, d.score)) : 0, // 限制 0-100
+      score: typeof d.score === 'number' ? Math.max(0, Math.min(200, d.score)) : 0,
       maxScore: typeof d.maxScore === 'number' ? Math.max(0, d.maxScore) : undefined,
       description: sanitizeText(d.description),
       dimensionId: sanitizeText(d.dimensionId),
@@ -65,7 +65,7 @@ function normalizeDimensions(dimensions: unknown): Dimension[] {
       if (typeof value === 'object' && value !== null && 'score' in value) {
         return {
           name: sanitizeText((value as any).name) || DIMENSION_NAME_MAP[safeKey] || safeKey,
-          score: typeof (value as any).score === 'number' ? Math.max(0, Math.min(100, (value as any).score)) : 0,
+          score: typeof (value as any).score === 'number' ? Math.max(0, Math.min(200, (value as any).score)) : 0,
           maxScore: typeof (value as any).maxScore === 'number' ? Math.max(0, (value as any).maxScore) : undefined,
           description: sanitizeText((value as any).description),
           dimensionId: safeKey,
@@ -73,7 +73,7 @@ function normalizeDimensions(dimensions: unknown): Dimension[] {
       }
       return {
         name: DIMENSION_NAME_MAP[safeKey] || safeKey,
-        score: typeof value === 'number' ? Math.max(0, Math.min(100, value)) : 0,
+        score: typeof value === 'number' ? Math.max(0, Math.min(200, value)) : 0,
         dimensionId: safeKey,
       }
     })
@@ -102,7 +102,7 @@ export function normalizeResult(rawResult: any, assessmentType?: string): Assess
   // 确保不保留原始数据的未知属性，防止意外注入
   return {
     type: sanitizeText(rawResult.type) || sanitizeText(assessmentType) || 'unknown',
-    score: typeof rawResult.score === 'number' ? Math.max(0, Math.min(100, rawResult.score)) : 0,
+    score: typeof rawResult.score === 'number' ? Math.max(0, Math.min(200, rawResult.score)) : 0,
     accuracy: typeof rawResult.accuracy === 'number' ? Math.max(0, Math.min(100, rawResult.accuracy)) : 85,
     title: sanitizeText(rawResult.title),
     description: sanitizeText(rawResult.description),

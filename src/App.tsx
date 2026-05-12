@@ -101,12 +101,11 @@ export default function App() {
                     <Route path="community/share" element={<CommunityShare />} />
                     <Route path="community/discussion" element={<CommunityDiscussion />} />
                     <Route path="community/expert" element={<CommunityExpert />} />
+                    <Route path="growth" element={<GrowthDashboard />} />
                     <Route path="growth/training" element={<GrowthTraining />} />
                     <Route path="growth/habits" element={<GrowthHabits />} />
+                    <Route path="training/:programId" element={<UniversalTraining />} />
                   </Route>
-
-                  <Route path="/app/training/:programId" element={<UniversalTraining />} />
-                  <Route path="/app/growth" element={<GrowthDashboard />} />
 
                   <Route path="/assessments" element={<Navigate to="/app/discover" replace />} />
                   <Route path="/categories" element={<Navigate to="/app/discover" replace />} />

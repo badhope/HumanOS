@@ -15,8 +15,14 @@ const COLOR_MAP: Record<string, { bg: string; border: string; text: string }> = 
 export default function Progress() {
   const { moodHistory, completedAssessments, trainingRecords: storeTrainingRecords } = useAppStore()
   const navigate = useNavigate()
-  const localStorageRecords = JSON.parse(localStorage.getItem('training-records') || '[]') as TrainingRecord[]
-  const trainingRecords: TrainingRecord[] = storeTrainingRecords.length > 0 ? storeTrainingRecords : localStorageRecords
+  const trainingRecords: TrainingRecord[] = (() => {
+    try {
+      const localStorageRecords = JSON.parse(localStorage.getItem('training-records') || '[]') as TrainingRecord[]
+      return storeTrainingRecords.length > 0 ? storeTrainingRecords : localStorageRecords
+    } catch {
+      return storeTrainingRecords
+    }
+  })()
 
   const last7Days = Array.from({ length: 7 }, (_, i) => {
     const date = new Date()

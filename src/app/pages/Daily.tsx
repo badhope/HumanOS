@@ -37,6 +37,14 @@ export default function Daily() {
   const [selectedMood, setSelectedMood] = useState<number | null>(null)
   const [isMoodConfirmed, setIsMoodConfirmed] = useState(false)
 
+  const greeting = (() => {
+    const hour = new Date().getHours()
+    if (hour < 6) return '夜深了'
+    if (hour < 12) return '早上好'
+    if (hour < 18) return '下午好'
+    return '晚上好'
+  })()
+
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]
     const todayMood = getMoodForDate(today)
@@ -78,7 +86,7 @@ export default function Daily() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          晚上好，小明 👋
+          {greeting} 👋
         </motion.h2>
         <p className="text-white/60">今天感觉怎么样？</p>
       </motion.div>
