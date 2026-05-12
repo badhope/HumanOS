@@ -1,0 +1,90 @@
+<view class="page">
+  <view class="header">
+    <view class="logo-wrap">
+      <image class="logo" src="/images/logo.png" mode="aspectFit" />
+    </view>
+    <text class="title">心镜 MindMirror</text>
+    <text class="subtitle">照见自己，成为更好的自己</text>
+  </view>
+
+  <view class="stats-row">
+    <view class="stat-card">
+      <text class="stat-value">43+</text>
+      <text class="stat-label">专业测评</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-value">8</text>
+      <text class="stat-label">成长赛道</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-value">100%</text>
+      <text class="stat-label">本地存储</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <text class="section-title">快速开始</text>
+    
+    <view class="feature-list">
+      <view class="feature-card" bindtap="goAssessment">
+        <view class="feature-icon-wrap" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+          <text class="feature-icon-text">🧠</text>
+        </view>
+        <view class="feature-info">
+          <text class="feature-name">心理测评</text>
+          <text class="feature-desc">43+专业量表，探索你的内心</text>
+        </view>
+        <text class="feature-arrow">›</text>
+      </view>
+
+      <view class="feature-card" bindtap="goTraining">
+        <view class="feature-icon-wrap" style="background: linear-gradient(135deg, #10b981, #14b8a6);">
+          <text class="feature-icon-text">🏋️</text>
+        </view>
+        <view class="feature-info">
+          <text class="feature-name">成长训练</text>
+          <text class="feature-desc">8大赛道41套训练方案</text>
+        </view>
+        <text class="feature-arrow">›</text>
+      </view>
+
+      <view class="feature-card" bindtap="goDaily">
+        <view class="feature-icon-wrap" style="background: linear-gradient(135deg, #f59e0b, #f97316);">
+          <text class="feature-icon-text">☀️</text>
+        </view>
+        <view class="feature-info">
+          <text class="feature-name">每日打卡</text>
+          <text class="feature-desc">记录心情，追踪成长</text>
+        </view>
+        <text class="feature-arrow">›</text>
+      </view>
+
+      <view class="feature-card" bindtap="goDiscover">
+        <view class="feature-icon-wrap" style="background: linear-gradient(135deg, #3b82f6, #06b6d4);">
+          <text class="feature-icon-text">🔍</text>
+        </view>
+        <view class="feature-info">
+          <text class="feature-name">发现更多</text>
+          <text class="feature-desc">ACG主题、趣味测评</text>
+        </view>
+        <text class="feature-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <text class="section-title">热门测评</text>
+    <scroll-view class="hot-scroll" scroll-x enable-flex>
+      <view class="hot-card" wx:for="{{hotAssessments}}" wx:key="id" bindtap="goAssessmentDetail" data-id="{{item.id}}">
+        <view class="hot-emoji">{{item.emoji}}</view>
+        <text class="hot-name">{{item.name}}</text>
+        <text class="hot-count">{{item.count}}人已测</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="footer">
+    <text class="footer-text">心镜 MindMirror v3.0.0</text>
+    <text class="footer-text">专业心理测评与成长平台</text>
+  </view>
+</view>
