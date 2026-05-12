@@ -1,0 +1,48 @@
+<view class="container">
+  <view class="header">
+    <view class="logo-placeholder">🧠</view>
+    <text class="title">心镜</text>
+    <text class="subtitle">探索内心，发现更好的自己</text>
+  </view>
+
+  <view class="stats">
+    <view class="stat-item">
+      <text class="stat-value">43+</text>
+      <text class="stat-label">专业量表</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">8</text>
+      <text class="stat-label">成长赛道</text>
+    </view>
+  </view>
+
+  <view class="features">
+    <view class="feature-item">
+      <view class="feature-icon">🧠</view>
+      <view class="feature-text">
+        <text class="feature-title">心理测评</text>
+        <text class="feature-desc">了解自己的心理状态</text>
+      </view>
+    </view>
+    <view class="feature-item">
+      <view class="feature-icon">🎯</view>
+      <view class="feature-text">
+        <text class="feature-title">成长训练</text>
+        <text class="feature-desc">系统化的个人成长课程</text>
+      </view>
+    </view>
+    <view class="feature-item">
+      <view class="feature-icon">📊</view>
+      <view class="feature-text">
+        <text class="feature-title">数据追踪</text>
+        <text class="feature-desc">记录你的进步历程</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="actions">
+    <button class="primary-btn" bindtap="goToMindMirror">
+      开始使用心镜
+    </button>
+  </view>
+</view>
