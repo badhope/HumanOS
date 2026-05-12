@@ -1,5 +1,23 @@
 import type { AssessmentResult, Dimension } from '../../types'
 
+// 简单的 HTML 净化函数（前端安全措施）
+function sanitizeText(text: unknown): string {
+  if (typeof text !== 'string') return ''
+  // 移除 HTML 标签和危险字符
+  return text
+    .replace(/<[^>]*>/g, '') // 移除 HTML 标签
+    .replace(/javascript:/gi, '') // 移除 javascript 协议
+    .replace(/data:/gi, '') // 移除 data 协议
+    .trim()
+}
+
+function sanitizeArray(arr: unknown): string[] {
+  if (!Array.isArray(arr)) return []
+  return arr
+    .map(item => typeof item === 'string' ? sanitizeText(item) : '')
+    .filter(item => item.length > 0)
+}
+
 const DIMENSION_NAME_MAP: Record<string, string> = {
   O: '开放性', C: '尽责性', E: '外向性', A: '宜人性', N: '神经质',
   machiavellianism: '马基雅维利主义', narcissism: '自恋', psychopathy: '精神病态',
@@ -34,28 +52,29 @@ const DIMENSION_NAME_MAP: Record<string, string> = {
 function normalizeDimensions(dimensions: unknown): Dimension[] {
   if (Array.isArray(dimensions)) {
     return dimensions.map(d => ({
-      name: d.name || '未知维度',
-      score: typeof d.score === 'number' ? d.score : 0,
-      maxScore: d.maxScore,
-      description: d.description,
-      dimensionId: d.dimensionId,
+      name: sanitizeText(d.name) || '未知维度',
+      score: typeof d.score === 'number' ? Math.max(0, Math.min(100, d.score)) : 0, // 限制 0-100
+      maxScore: typeof d.maxScore === 'number' ? Math.max(0, d.maxScore) : undefined,
+      description: sanitizeText(d.description),
+      dimensionId: sanitizeText(d.dimensionId),
     }))
   }
   if (dimensions && typeof dimensions === 'object') {
     return Object.entries(dimensions as Record<string, any>).map(([key, value]) => {
+      const safeKey = sanitizeText(key)
       if (typeof value === 'object' && value !== null && 'score' in value) {
         return {
-          name: (value as any).name || DIMENSION_NAME_MAP[key] || key,
-          score: typeof (value as any).score === 'number' ? (value as any).score : 0,
-          maxScore: (value as any).maxScore,
-          description: (value as any).description,
-          dimensionId: key,
+          name: sanitizeText((value as any).name) || DIMENSION_NAME_MAP[safeKey] || safeKey,
+          score: typeof (value as any).score === 'number' ? Math.max(0, Math.min(100, (value as any).score)) : 0,
+          maxScore: typeof (value as any).maxScore === 'number' ? Math.max(0, (value as any).maxScore) : undefined,
+          description: sanitizeText((value as any).description),
+          dimensionId: safeKey,
         }
       }
       return {
-        name: DIMENSION_NAME_MAP[key] || key,
-        score: typeof value === 'number' ? value : 0,
-        dimensionId: key,
+        name: DIMENSION_NAME_MAP[safeKey] || safeKey,
+        score: typeof value === 'number' ? Math.max(0, Math.min(100, value)) : 0,
+        dimensionId: safeKey,
       }
     })
   }
@@ -65,7 +84,7 @@ function normalizeDimensions(dimensions: unknown): Dimension[] {
 export function normalizeResult(rawResult: any, assessmentType?: string): AssessmentResult {
   if (!rawResult || typeof rawResult !== 'object') {
     return {
-      type: assessmentType || 'unknown',
+      type: sanitizeText(assessmentType) || 'unknown',
       score: 0,
       accuracy: 0,
       title: '计算错误',
@@ -80,18 +99,18 @@ export function normalizeResult(rawResult: any, assessmentType?: string): Assess
 
   const dimensions = normalizeDimensions(rawResult.dimensions)
 
+  // 确保不保留原始数据的未知属性，防止意外注入
   return {
-    ...rawResult,
-    type: rawResult.type || assessmentType || 'unknown',
-    score: typeof rawResult.score === 'number' ? rawResult.score : 0,
-    accuracy: typeof rawResult.accuracy === 'number' ? rawResult.accuracy : 85,
-    title: rawResult.title || '',
-    description: rawResult.description || '',
+    type: sanitizeText(rawResult.type) || sanitizeText(assessmentType) || 'unknown',
+    score: typeof rawResult.score === 'number' ? Math.max(0, Math.min(100, rawResult.score)) : 0,
+    accuracy: typeof rawResult.accuracy === 'number' ? Math.max(0, Math.min(100, rawResult.accuracy)) : 85,
+    title: sanitizeText(rawResult.title),
+    description: sanitizeText(rawResult.description),
     dimensions,
-    strengths: Array.isArray(rawResult.strengths) ? rawResult.strengths : [],
-    weaknesses: Array.isArray(rawResult.weaknesses) ? rawResult.weaknesses : [],
-    careers: Array.isArray(rawResult.careers) ? rawResult.careers : [],
-    suggestions: Array.isArray(rawResult.suggestions) ? rawResult.suggestions : [],
+    strengths: sanitizeArray(rawResult.strengths),
+    weaknesses: sanitizeArray(rawResult.weaknesses),
+    careers: sanitizeArray(rawResult.careers),
+    suggestions: sanitizeArray(rawResult.suggestions),
   }
 }
 

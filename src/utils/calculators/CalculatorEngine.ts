@@ -32,12 +32,21 @@ class CalculatorEngine {
     return CalculatorEngine.instance
   }
 
+  // 安全验证 answers 数组
+  private validateAnswers(answers: unknown): number[] {
+    if (!Array.isArray(answers)) return []
+    return answers
+      .map(a => typeof a === 'number' ? a : 0)
+      .map(v => Math.max(0, Math.min(100, v))) // 限制在合理范围
+  }
+
   async calculate(context: CalculationContext): Promise<CalculationResult> {
     const startTime = performance.now()
     const { assessmentId, answers, mode } = context
 
     try {
-      const result = await this.executeCalculator(assessmentId, answers, mode)
+      const validatedAnswers = this.validateAnswers(answers)
+      const result = await this.executeCalculator(assessmentId, validatedAnswers, mode)
       const normalizedResult = normalizeResult(result, assessmentId)
       const calculationTime = performance.now() - startTime
 
@@ -53,7 +62,8 @@ class CalculatorEngine {
       console.warn(`[CalculatorEngine] 主计算器失败 (${assessmentId}):`, primaryError)
 
       try {
-        const fallbackResult = this.fallbackCalculate(assessmentId, answers)
+        const validatedAnswers = this.validateAnswers(answers)
+        const fallbackResult = this.fallbackCalculate(assessmentId, validatedAnswers)
         const normalizedResult = normalizeResult(fallbackResult, assessmentId)
         const calculationTime = performance.now() - startTime
 
@@ -69,8 +79,9 @@ class CalculatorEngine {
         console.error(`[CalculatorEngine] 降级计算器也失败 (${assessmentId}):`, fallbackError)
         const calculationTime = performance.now() - startTime
 
+        const validatedAnswers = this.validateAnswers(answers)
         return {
-          result: this.emergencyResult(assessmentId, answers),
+          result: this.emergencyResult(assessmentId, validatedAnswers),
           metadata: {
             calculatorUsed: 'emergency',
             calculationTime,

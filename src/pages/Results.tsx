@@ -36,11 +36,33 @@ export default function Results() {
   const [showQRCode, setShowQRCode] = useState(false)
   const reportRef = useRef<HTMLDivElement>(null)
 
+  // 安全验证函数
+  const isValidResult = (obj: unknown): boolean => {
+    if (!obj || typeof obj !== 'object') return false
+    // 只允许基本类型和数组
+    const allowedTypes = ['string', 'number', 'boolean']
+    for (const key in obj as Record<string, unknown>) {
+      const value = (obj as Record<string, unknown>)[key]
+      if (value !== null && !allowedTypes.includes(typeof value) && !Array.isArray(value)) {
+        return false
+      }
+    }
+    return true
+  }
+
   const resultRecord = completedAssessments.find((a) => a.id === id)
 
   const assessment = resultRecord ? getAssessmentById(resultRecord.assessmentId) : undefined
   
-  const stateResult = locationState?.calculationResult || locationState?.result || locationState
+  // 安全地从 location.state 中提取结果，防止恶意注入
+  const stateResult = (() => {
+    let candidate = locationState?.calculationResult || locationState?.result || locationState
+    // 验证候选对象的安全性
+    if (!isValidResult(candidate)) {
+      return null
+    }
+    return candidate
+  })()
 
   const [recordFound, setRecordFound] = useState(!!resultRecord || !!stateResult)
 
