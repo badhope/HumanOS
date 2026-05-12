@@ -39,7 +39,7 @@ import {
   Cpu,
   Battery,
   Wifi,
-  MoonStars,
+  Stars,
   Maximize,
   Minimize,
   History,
@@ -326,7 +326,7 @@ export default function SettingsPage() {
     { value: 'dark', label: '深色', icon: Moon },
     { value: 'light', label: '浅色', icon: Sun },
     { value: 'system', label: '系统', icon: Monitor },
-    { value: 'midnight', label: '午夜', icon: MoonStars },
+    { value: 'midnight', label: '午夜', icon: Stars },
   ]
 
   const colorOptions: ColorOption[] = [
