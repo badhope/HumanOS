@@ -71,7 +71,7 @@ const safeStorage = {
       // 忽略存储错误
     }
   },
-  getItem: <T>(key: string): T | null => {
+  getItem: <T,>(key: string): T | null => {
     try {
       const item = localStorage.getItem(key)
       if (!item) return null

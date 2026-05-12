@@ -53,7 +53,7 @@ export default function SideNav() {
           <div className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon
-              const isActive = location.pathname === item.path
+              const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/')
               
               return (
                 <button

@@ -37,7 +37,7 @@ class CalculatorEngine {
     if (!Array.isArray(answers)) return []
     return answers
       .map(a => typeof a === 'number' ? a : 0)
-      .map(v => Math.max(0, Math.min(100, v))) // 限制在合理范围
+      .map(v => Math.max(0, Math.min(100, v)))
   }
 
   async calculate(context: CalculationContext): Promise<CalculationResult> {
