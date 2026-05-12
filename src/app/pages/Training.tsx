@@ -11,7 +11,9 @@ import {
   ATTACHMENT_TRAININGS_FULL,
   SOCIAL_TRAININGS_FULL,
   FUN_TRAININGS_FULL,
-  getRecommendedTrainings
+  getRecommendedTrainings,
+  getRelatedTrainings,
+  getTrainingsForAssessment,
 } from '../data/training-library'
 import {
   ALL_TRAINING_TRACKS,

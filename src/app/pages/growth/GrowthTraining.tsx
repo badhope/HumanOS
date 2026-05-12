@@ -1,203 +1,209 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Brain, Target, Zap, Play, Pause, CheckCircle, Clock, TrendingUp, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Brain, Target, Zap, Play, CheckCircle, Clock, TrendingUp, ChevronRight, Sparkles } from 'lucide-react'
+import {
+  ALL_TRAININGS,
+  EMOTION_TRAININGS_FULL,
+  COGNITION_TRAININGS_FULL,
+  ATTACHMENT_TRAININGS_FULL,
+  SOCIAL_TRAININGS_FULL,
+  FUN_TRAININGS_FULL,
+  CAREER_TRAININGS,
+  VALUES_TRAININGS,
+  MINDFULNESS_TRAININGS,
+  getTrainingById,
+} from '../../data/training-library'
+import type { TrainingProgram } from '../../components/training/TrainingEngine'
 
-const trainingItems = [
+const trainingCategories = [
   {
     id: 'emotion',
-    title: '情绪管理训练',
+    title: '情绪管理',
     description: '系统提升情绪调节能力',
     icon: Brain,
     badge: '推荐',
     color: 'violet',
     colorGradient: 'from-violet-500/30 to-purple-500/30',
     colorBorder: 'border-violet-500/20',
-    colorText: 'text-violet-400'
+    colorText: 'text-violet-400',
+    trainings: EMOTION_TRAININGS_FULL,
   },
   {
-    id: 'focus',
-    title: '专注力训练',
-    description: '提升你的注意力',
-    icon: Target,
+    id: 'cognition',
+    title: '思维认知',
+    description: '提升思维能力，优化认知模式',
+    icon: Sparkles,
+    badge: '热门',
     color: 'blue',
     colorGradient: 'from-blue-500/30 to-cyan-500/30',
     colorBorder: 'border-blue-500/20',
-    colorText: 'text-blue-400'
+    colorText: 'text-blue-400',
+    trainings: COGNITION_TRAININGS_FULL,
   },
   {
-    id: 'confidence',
-    title: '自信心提升',
-    description: '建立强大的自信心',
+    id: 'attachment',
+    title: '亲密关系',
+    description: '理解依恋模式，建立健康关系',
+    icon: Heart,
+    badge: '推荐',
+    color: 'pink',
+    colorGradient: 'from-pink-500/30 to-rose-500/30',
+    colorBorder: 'border-pink-500/20',
+    colorText: 'text-pink-400',
+    trainings: ATTACHMENT_TRAININGS_FULL,
+  },
+  {
+    id: 'social',
+    title: '人际社交',
+    description: '提升人际交往能力',
+    icon: Users,
+    badge: '',
+    color: 'emerald',
+    colorGradient: 'from-emerald-500/30 to-teal-500/30',
+    colorBorder: 'border-emerald-500/20',
+    colorText: 'text-emerald-400',
+    trainings: SOCIAL_TRAININGS_FULL,
+  },
+  {
+    id: 'mindfulness',
+    title: '正念冥想',
+    description: '培养当下觉察能力',
     icon: Zap,
+    badge: '',
     color: 'amber',
     colorGradient: 'from-amber-500/30 to-orange-500/30',
     colorBorder: 'border-amber-500/20',
-    colorText: 'text-amber-400'
-  }
+    colorText: 'text-amber-400',
+    trainings: MINDFULNESS_TRAININGS,
+  },
+  {
+    id: 'career',
+    title: '职业发展',
+    description: '规划职业路径，实现目标',
+    icon: Briefcase,
+    badge: '',
+    color: 'violet',
+    colorGradient: 'from-violet-500/30 to-indigo-500/30',
+    colorBorder: 'border-violet-500/20',
+    colorText: 'text-violet-400',
+    trainings: CAREER_TRAININGS,
+  },
+  {
+    id: 'fun',
+    title: '趣味娱乐',
+    description: 'ACG主题趣味训练',
+    icon: Gamepad2,
+    badge: '趣味',
+    color: 'orange',
+    colorGradient: 'from-orange-500/30 to-amber-500/30',
+    colorBorder: 'border-orange-500/20',
+    colorText: 'text-orange-400',
+    trainings: FUN_TRAININGS_FULL,
+  },
 ]
 
-const emotionModules = [
-  { id: 1, title: '认识你的情绪', progress: 100, duration: 15, lessons: 5, completed: true },
-  { id: 2, title: '情绪识别练习', progress: 60, duration: 20, lessons: 6, completed: false },
-  { id: 3, title: '情绪调节技巧', progress: 0, duration: 25, lessons: 8, completed: false },
-  { id: 4, title: '压力应对策略', progress: 0, duration: 20, lessons: 5, completed: false },
-  { id: 5, title: '正念情绪疗法', progress: 0, duration: 30, lessons: 10, completed: false }
-]
+import { Heart, Users, Gamepad2, Briefcase } from 'lucide-react'
 
-const focusModules = [
-  { id: 1, title: '注意力基础训练', progress: 100, duration: 15, lessons: 5, completed: true },
-  { id: 2, title: '专注力游戏', progress: 40, duration: 20, lessons: 6, completed: false },
-  { id: 3, title: '工作记忆训练', progress: 0, duration: 25, lessons: 8, completed: false },
-  { id: 4, title: '深度工作法', progress: 0, duration: 20, lessons: 5, completed: false }
-]
-
-const confidenceModules = [
-  { id: 1, title: '自我认知探索', progress: 100, duration: 15, lessons: 5, completed: true },
-  { id: 2, title: '积极自我对话', progress: 80, duration: 20, lessons: 6, completed: false },
-  { id: 3, title: '克服自卑心理', progress: 0, duration: 25, lessons: 8, completed: false },
-  { id: 4, title: '建立自信习惯', progress: 0, duration: 20, lessons: 5, completed: false }
-]
-
-function TrainingDetail({ trainingId }: { trainingId: string }) {
-  const [activeModule, setActiveModule] = useState<number | null>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
+function TrainingCard({ training, colorConfig }: { training: TrainingProgram; colorConfig: any }) {
+  const navigate = useNavigate()
   
-  const modules = trainingId === 'emotion' ? emotionModules
-    : trainingId === 'focus' ? focusModules
-    : confidenceModules
-  
-  const currentModule = modules.find(m => m.id === activeModule)
-  const training = trainingItems.find(t => t.id === trainingId)
-  const Icon = training?.icon || Brain
-
   return (
-    <div className="space-y-4">
-      <div className={`p-4 rounded-2xl bg-gradient-to-br ${training?.colorGradient} border ${training?.colorBorder}`}>
-        <div className="flex items-center gap-3 mb-3">
-          <div className={`w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center ${training?.colorText}`}>
-            <Icon size={24} />
-          </div>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      onClick={() => navigate(`/app/training/${training.id}`)}
+      className={`p-4 rounded-xl border transition-all cursor-pointer hover:scale-[1.01] ${
+        training.category === 'fun'
+          ? 'bg-gradient-to-br from-orange-500/10 via-amber-500/10 to-rose-500/10 border-orange-500/10 hover:border-orange-500/30'
+          : 'bg-white/5 border-white/10 hover:border-white/20'
+      }`}
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <span className="text-2xl">{training.icon}</span>
           <div>
-            <h3 className="text-base font-semibold text-white">{training?.title}</h3>
-            <p className="text-xs text-white/60">{training?.description}</p>
+            <h4 className="font-medium text-white text-sm">{training.title}</h4>
+            <p className="text-xs text-white/50">{training.subtitle}</p>
           </div>
         </div>
-        <div className="flex items-center gap-4 text-xs text-white/50">
-          <span className="flex items-center gap-1">
-            <Clock size={12} />
-            {modules.reduce((sum, m) => sum + m.duration, 0)} 分钟
-          </span>
-          <span className="flex items-center gap-1">
-            <TrendingUp size={12} />
-            {modules.filter(m => m.completed).length}/{modules.length} 已完成
-          </span>
-        </div>
+        <span className={`px-2 py-0.5 rounded text-[10px] ${
+          training.category === 'fun'
+            ? 'bg-orange-500/20 text-orange-300'
+            : training.level === 1
+            ? 'bg-emerald-500/20 text-emerald-300'
+            : training.level === 2
+            ? 'bg-blue-500/20 text-blue-300'
+            : 'bg-purple-500/20 text-purple-300'
+        }`}>
+          L{training.level} {training.levelLabel}
+        </span>
       </div>
-
-      <div className="space-y-2">
-        {modules.map((module, index) => (
-          <motion.div
-            key={module.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            onClick={() => setActiveModule(activeModule === module.id ? null : module.id)}
-            className={`p-4 rounded-xl border transition-all cursor-pointer ${
-              activeModule === module.id
-                ? `${training?.colorBorder} bg-white/10`
-                : 'bg-white/5 border-white/10 hover:border-white/20'
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                module.completed
-                  ? 'bg-emerald-500/30 text-emerald-400'
-                  : module.progress > 0
-                  ? `${training?.colorGradient} ${training?.colorText}`
-                  : 'bg-white/10 text-white/50'
-              }`}>
-                {module.completed ? (
-                  <CheckCircle size={20} />
-                ) : (
-                  <span className="text-sm font-bold">{index + 1}</span>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-medium text-white">{module.title}</span>
-                  {module.completed && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">
-                      已完成
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center gap-3 text-[10px] text-white/50">
-                  <span>{module.lessons} 节课程</span>
-                  <span>·</span>
-                  <span>{module.duration} 分钟</span>
-                </div>
-                {module.progress > 0 && !module.completed && (
-                  <div className="mt-2 h-1 bg-white/10 rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-violet-500 to-purple-500"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${module.progress}%` }}
-                    />
-                  </div>
-                )}
-              </div>
-              <ChevronRight size={18} className={`text-white/30 transition-transform ${activeModule === module.id ? 'rotate-90' : ''}`} />
-            </div>
-
-            {activeModule === module.id && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="mt-3 pt-3 border-t border-white/10"
-              >
-                <div className="space-y-2">
-                  {Array.from({ length: module.lessons }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-3 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
-                    >
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        module.completed || i < Math.floor(module.progress / 20)
-                          ? 'bg-emerald-500/20 text-emerald-400'
-                          : 'bg-white/10 text-white/50'
-                      }`}>
-                        {module.completed || i < Math.floor(module.progress / 20) ? (
-                          <CheckCircle size={16} />
-                        ) : (
-                          <Play size={14} />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-xs font-medium text-white">
-                          课时 {i + 1}
-                        </div>
-                        <div className="text-[10px] text-white/40">
-                          {module.completed ? '已完成' : i < Math.floor(module.progress / 20) ? '已完成' : '未开始'}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </motion.div>
+      
+      <div className="flex items-center gap-4 text-xs text-white/40 mb-3">
+        <span className="flex items-center gap-1">
+          <Clock size={12} />
+          {training.duration}
+        </span>
+        <span>{training.exercises.length} 个练习</span>
+      </div>
+      
+      <div className="flex gap-1 flex-wrap">
+        {training.benefits.slice(0, 2).map((benefit, i) => (
+          <span key={i} className="inline-block px-2 py-0.5 rounded text-[10px] bg-white/5 text-white/40">
+            {benefit.length > 15 ? benefit.slice(0, 15) + '...' : benefit}
+          </span>
         ))}
       </div>
+    </motion.div>
+  )
+}
+
+function CategorySection({ category }: { category: typeof trainingCategories[0] }) {
+  const [expanded, setExpanded] = useState(false)
+  const Icon = category.icon
+  const displayedTrainings = expanded ? category.trainings : category.trainings.slice(0, 3)
+  
+  return (
+    <div className="mb-6">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div className={`w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center ${category.colorText}`}>
+            <Icon size={16} />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-white">{category.title}</h3>
+            <p className="text-[10px] text-white/40">{category.description}</p>
+          </div>
+        </div>
+        {category.badge && (
+          <span className={`px-2 py-0.5 rounded text-[10px] ${category.colorGradient} ${category.colorText}`}>
+            {category.badge}
+          </span>
+        )}
+      </div>
+      
+      <div className="space-y-2">
+        {displayedTrainings.map((training) => (
+          <TrainingCard key={training.id} training={training} colorConfig={category} />
+        ))}
+      </div>
+      
+      {category.trainings.length > 3 && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="w-full mt-3 py-2 text-xs text-white/50 hover:text-white/70 transition-colors flex items-center justify-center gap-1"
+        >
+          {expanded ? '收起' : `查看全部 ${category.trainings.length} 个训练`}
+          <ChevronRight size={14} className={`transition-transform ${expanded ? 'rotate-90' : ''}`} />
+        </button>
+      )}
     </div>
   )
 }
 
 export default function GrowthTraining() {
   const navigate = useNavigate()
-  const [activeTraining, setActiveTraining] = useState<string | null>(null)
-
-  const currentTraining = trainingItems.find(item => item.id === activeTraining)
 
   return (
     <div className="px-3 sm:px-4 pb-4">
@@ -207,58 +213,21 @@ export default function GrowthTraining() {
         className="mb-4 sm:mb-6"
       >
         <button 
-          onClick={() => activeTraining ? setActiveTraining(null) : navigate('/app/discover')}
+          onClick={() => navigate('/app/discover')}
           className="flex items-center gap-1 text-sm text-white/60 hover:text-white mb-2 transition-colors"
         >
           <ArrowLeft size={16} />
-          {activeTraining ? '返回训练列表' : '返回探索'}
+          返回探索
         </button>
         <h1 className="text-xl sm:text-2xl font-bold mb-1">🏋️ 训练计划</h1>
         <p className="text-xs sm:text-sm text-white/60">系统训练，遇见更好的自己</p>
       </motion.div>
 
-      {activeTraining ? (
-        <motion.div
-          key={activeTraining}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <TrainingDetail trainingId={activeTraining} />
-        </motion.div>
-      ) : (
-        <div className="space-y-3">
-          {trainingItems.map((item, index) => {
-            const Icon = item.icon
-            return (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                onClick={() => setActiveTraining(item.id)}
-                className={`p-4 rounded-2xl bg-gradient-to-br ${item.colorGradient} border ${item.colorBorder} cursor-pointer hover:scale-[1.02] transition-transform`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center ${item.colorText}`}>
-                    <Icon size={24} />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-sm font-semibold text-white">{item.title}</h3>
-                      {item.badge && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white/80">
-                          {item.badge}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-white/50">{item.description}</p>
-                  </div>
-                </div>
-              </motion.div>
-            )
-          })}
-        </div>
-      )}
+      <div className="space-y-2">
+        {trainingCategories.map((category) => (
+          <CategorySection key={category.id} category={category} />
+        ))}
+      </div>
     </div>
   )
 }
