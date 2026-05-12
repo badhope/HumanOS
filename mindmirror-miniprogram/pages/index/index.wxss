@@ -108,4 +108,56 @@
   font-size: 32rpx;
   font-weight: 600;
   border: none;
+  box-shadow: 0 10rpx 30rpx rgba(233, 69, 96, 0.3);
+}
+
+.primary-btn-hover {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* 动画 */
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(233, 69, 96, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 20rpx rgba(233, 69, 96, 0);
+  }
 }
