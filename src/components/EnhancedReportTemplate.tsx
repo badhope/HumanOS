@@ -111,6 +111,22 @@ interface EnhancedReportTemplateProps {
   matchScore?: number
 }
 
+function normalizeDimensions(dimensions: unknown): Dimension[] {
+  if (Array.isArray(dimensions)) return dimensions
+  if (dimensions && typeof dimensions === 'object') {
+    return Object.entries(dimensions as Record<string, any>).map(([key, value]) => {
+      if (typeof value === 'object' && value !== null && 'score' in value) {
+        return value as Dimension
+      }
+      return {
+        name: key,
+        score: typeof value === 'number' ? value : 0,
+      } as Dimension
+    })
+  }
+  return []
+}
+
 export default function EnhancedReportTemplate({
   result,
   assessmentType,
@@ -127,7 +143,7 @@ export default function EnhancedReportTemplate({
     title: result.title ?? '',
     description: result.description ?? '',
     percentile: result.percentile ?? '0%',
-    dimensions: result.dimensions ?? [],
+    dimensions: normalizeDimensions(result.dimensions),
     strengths: result.strengths ?? [],
     weaknesses: result.weaknesses ?? [],
     careers: result.careers ?? [],
