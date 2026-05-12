@@ -1,7 +1,5 @@
 <!-- MindMirror - Professional Psychological Growth Platform -->
 
-<div align="center">
-
 ![MindMirror Logo](https://raw.githubusercontent.com/badhope/MindMirror/main/public/pwa-512x512.png)
 
 # 🪞 MindMirror
