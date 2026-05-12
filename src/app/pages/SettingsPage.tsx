@@ -34,12 +34,233 @@ import {
   Save,
   Share,
   Palette as ColorWheel,
+  BellOff,
+  Lock,
+  Unlock,
+  Cpu,
+  Battery,
+  Wifi,
+  MoonStars,
+  Maximize,
+  Minimize,
+  History,
+  HelpCircle,
+  Star,
+  Award,
+  Target,
+  Wand2,
+  Scale,
+  Brain,
+  Heart,
+  Activity,
 } from 'lucide-react'
 import { useAppStore } from '@store'
 import { useSettingsStore } from '@store/settingsStore'
 import { getAssessmentById } from '@data/assessments'
 import { cn } from '@utils/cn'
 import { useI18n } from '../../i18n'
+
+interface ToggleSetting {
+  id: string
+  label: string
+  description: string
+  enabled: boolean
+  onToggle: () => void
+  icon: React.ElementType
+}
+
+interface Section {
+  id: string
+  label: string
+  icon: React.ElementType
+  color: string
+}
+
+interface ThemeOption {
+  value: string
+  label: string
+  icon: React.ElementType
+}
+
+interface ColorOption {
+  value: string
+  label: string
+  hex: string
+}
+
+function ToggleItem({ setting }: { setting: ToggleSetting }) {
+  const Icon = setting.icon
+  return (
+    <motion.div
+      key={setting.id}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex items-center justify-between p-5 rounded-2xl bg-white/5"
+    >
+      <div className="flex items-center gap-4 flex-1">
+        <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+          <Icon size={24} className="text-white/70" />
+        </div>
+        <div className="flex-1">
+          <p className="text-white font-medium text-base">{setting.label}</p>
+          <p className="text-sm text-white/40 mt-1">{setting.description}</p>
+        </div>
+      </div>
+      <motion.button
+        onClick={setting.onToggle}
+        className={cn(
+          'relative w-16 h-9 rounded-full transition-colors shrink-0',
+          setting.enabled ? 'bg-gradient-to-r from-violet-500 to-purple-500' : 'bg-white/20'
+        )}
+        whileTap={{ scale: 0.95 }}
+      >
+        <motion.span
+          className="absolute top-1 w-7 h-7 rounded-full bg-white shadow-lg"
+          animate={{ left: setting.enabled ? '32px' : '4px' }}
+          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+        />
+      </motion.button>
+    </motion.div>
+  )
+}
+
+function SectionHeader({ icon: Icon, title, description, color }: { icon: React.ElementType; title: string; description: string; color?: string }) {
+  return (
+    <div className="flex items-center gap-4 mb-6">
+      <div className={cn(
+        'w-12 h-12 rounded-xl flex items-center justify-center shrink-0',
+        color ? `bg-gradient-to-br ${color}` : 'bg-white/10'
+      )}>
+        <Icon size={24} className={color ? 'text-white' : 'text-white/70'} />
+      </div>
+      <div>
+        <h2 className="text-xl font-bold text-white">{title}</h2>
+        <p className="text-sm text-white/50">{description}</p>
+      </div>
+    </div>
+  )
+}
+
+function StatCard({ value, label }: { value: string | number; label: string }) {
+  return (
+    <div className="p-6 rounded-xl bg-white/5 text-center">
+      <p className="text-3xl font-bold text-white">{value}</p>
+      <p className="text-sm text-white/50 mt-2">{label}</p>
+    </div>
+  )
+}
+
+function ActionButton({ icon: Icon, label, description, onClick, variant = 'default' }: { 
+  icon: React.ElementType; 
+  label: string; 
+  description: string; 
+  onClick: () => void;
+  variant?: 'default' | 'danger' | 'success'
+}) {
+  const variants = {
+    default: 'bg-white/5 hover:bg-white/10 text-white',
+    danger: 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30',
+    success: 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30',
+  }
+  
+  return (
+    <motion.button
+      onClick={onClick}
+      className={cn(
+        'w-full p-5 rounded-2xl transition-all flex items-center gap-4',
+        variants[variant]
+      )}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <div className={cn(
+        'w-12 h-12 rounded-xl flex items-center justify-center shrink-0',
+        variant === 'danger' ? 'bg-red-500/20' : 
+        variant === 'success' ? 'bg-emerald-500/20' : 'bg-white/10'
+      )}>
+        <Icon size={24} className={variant === 'danger' ? 'text-red-400' : variant === 'success' ? 'text-emerald-400' : 'text-white/70'} />
+      </div>
+      <div className="flex-1 text-left">
+        <p className="text-white font-medium">{label}</p>
+        <p className="text-sm text-white/50">{description}</p>
+      </div>
+      <ChevronRight size={20} className="text-white/40 shrink-0" />
+    </motion.button>
+  )
+}
+
+function RadioOption<T extends string>({ 
+  value, 
+  label, 
+  icon: Icon, 
+  selected, 
+  onChange 
+}: { 
+  value: T; 
+  label: string; 
+  icon?: React.ElementType;
+  selected: boolean; 
+  onChange: (value: T) => void 
+}) {
+  return (
+    <motion.button
+      key={value}
+      onClick={() => onChange(value)}
+      className={cn(
+        'relative p-5 rounded-2xl transition-all flex flex-col items-center gap-3',
+        selected
+          ? 'bg-gradient-to-br from-violet-500/20 to-purple-500/20 border-2 border-violet-500'
+          : 'bg-white/5 border-2 border-transparent hover:border-white/20'
+      )}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      {Icon && <Icon size={28} className={selected ? 'text-violet-400' : 'text-white/60'} />}
+      <span className={cn('font-medium text-base', selected ? 'text-white' : 'text-white/60')}>
+        {label}
+      </span>
+      {selected && (
+        <motion.div
+          layoutId="selectedIndicator"
+          className="absolute inset-0 bg-violet-500/10 rounded-2xl"
+        />
+      )}
+    </motion.button>
+  )
+}
+
+function ColorOptionButton({ 
+  value, 
+  label, 
+  hex, 
+  selected, 
+  onChange 
+}: { 
+  value: string; 
+  label: string; 
+  hex: string; 
+  selected: boolean; 
+  onChange: (value: string) => void 
+}) {
+  return (
+    <motion.button
+      key={value}
+      onClick={() => onChange(value)}
+      className={cn(
+        'w-14 h-14 rounded-full transition-all flex flex-col items-center justify-center gap-1 group',
+        selected && 'ring-4 ring-white/30 scale-110'
+      )}
+      style={{ backgroundColor: hex }}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {selected && <Check size={24} className="text-white" />}
+      <span className="text-xs text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">
+        {label}
+      </span>
+    </motion.button>
+  )
+}
 
 export default function SettingsPage() {
   const navigate = useNavigate()
@@ -92,38 +313,56 @@ export default function SettingsPage() {
     bio: user?.bio || '',
   })
 
-  const sections = [
+  const sections: Section[] = [
     { id: 'personal', label: '个人', icon: User, color: 'from-blue-500 to-cyan-500' },
     { id: 'appearance', label: '外观', icon: Palette, color: 'from-violet-500 to-purple-500' },
     { id: 'notifications', label: '通知', icon: Bell, color: 'from-amber-500 to-orange-500' },
-    { id: 'data', label: '数据', icon: Database, color: 'from-emerald-500 to-teal-500' },
+    { id: 'privacy', label: '隐私', icon: Shield, color: 'from-rose-500 to-pink-500' },
+    { id: 'performance', label: '性能', icon: Cpu, color: 'from-emerald-500 to-teal-500' },
+    { id: 'data', label: '数据', icon: Database, color: 'from-indigo-500 to-blue-500' },
     { id: 'about', label: '关于', icon: Info, color: 'from-gray-500 to-slate-500' },
   ]
 
-  const toggleSettings = [
-    { id: 'animations', label: '动画效果', description: '界面动画和过渡效果', enabled: animationsEnabled, onToggle: toggleAnimations, icon: Sparkles },
-    { id: 'notifications', label: '推送通知', description: '接收测评和成就提醒', enabled: pushNotifications, onToggle: togglePushNotifications, icon: Bell },
-    { id: 'daily', label: '每日提醒', description: '每日心情打卡提醒', enabled: dailyReminder, onToggle: toggleDailyReminder, icon: Clock },
-    { id: 'achievements', label: '成就通知', description: '解锁成就时的提示', enabled: achievementNotifications, onToggle: toggleAchievementNotifications, icon: Zap },
-    { id: 'sound', label: '音效', description: '交互音效反馈', enabled: soundEffects, onToggle: toggleSoundEffects, icon: Volume2 },
-    { id: 'backup', label: '自动备份', description: '定期备份数据', enabled: autoBackup, onToggle: toggleAutoBackup, icon: Cloud },
-    { id: 'privacy', label: '隐私模式', description: '隐藏敏感数据', enabled: privacyMode, onToggle: togglePrivacyMode, icon: Shield },
-    { id: 'contrast', label: '高对比度', description: '提高可视性', enabled: highContrast, onToggle: toggleHighContrast, icon: Eye },
-    { id: 'reduced', label: '减少动画', description: '降低动画幅度', enabled: reducedMotion, onToggle: toggleReducedMotion, icon: Sparkle },
-  ]
-
-  const themeOptions = [
+  const themeOptions: ThemeOption[] = [
     { value: 'dark', label: '深色', icon: Moon },
     { value: 'light', label: '浅色', icon: Sun },
     { value: 'system', label: '系统', icon: Monitor },
+    { value: 'midnight', label: '午夜', icon: MoonStars },
   ]
 
-  const colorOptions = [
+  const colorOptions: ColorOption[] = [
     { value: 'violet', label: '紫罗兰', hex: '#8b5cf6' },
     { value: 'blue', label: '蓝色', hex: '#3b82f6' },
     { value: 'green', label: '绿色', hex: '#10b981' },
     { value: 'pink', label: '粉色', hex: '#ec4899' },
     { value: 'orange', label: '橙色', hex: '#f97316' },
+    { value: 'cyan', label: '青色', hex: '#06b6d4' },
+    { value: 'red', label: '红色', hex: '#ef4444' },
+    { value: 'amber', label: '琥珀', hex: '#f59e0b' },
+  ]
+
+  const appearanceSettings: ToggleSetting[] = [
+    { id: 'animations', label: '动画效果', description: '界面动画和过渡效果', enabled: animationsEnabled, onToggle: toggleAnimations, icon: Sparkles },
+    { id: 'reduced', label: '减少动画', description: '降低动画幅度，提升流畅度', enabled: reducedMotion, onToggle: toggleReducedMotion, icon: Minimize },
+    { id: 'contrast', label: '高对比度', description: '提高界面可视性', enabled: highContrast, onToggle: toggleHighContrast, icon: Maximize },
+  ]
+
+  const notificationSettings: ToggleSetting[] = [
+    { id: 'notifications', label: '推送通知', description: '接收测评和成就提醒', enabled: pushNotifications, onToggle: togglePushNotifications, icon: Bell },
+    { id: 'daily', label: '每日提醒', description: '每日心情打卡提醒', enabled: dailyReminder, onToggle: toggleDailyReminder, icon: Clock },
+    { id: 'achievements', label: '成就通知', description: '解锁成就时的提示', enabled: achievementNotifications, onToggle: toggleAchievementNotifications, icon: Award },
+    { id: 'sound', label: '音效', description: '交互音效反馈', enabled: soundEffects, onToggle: toggleSoundEffects, icon: Volume2 },
+  ]
+
+  const privacySettings: ToggleSetting[] = [
+    { id: 'privacy', label: '隐私模式', description: '隐藏敏感数据和测评结果', enabled: privacyMode, onToggle: togglePrivacyMode, icon: Lock },
+    { id: 'backup', label: '自动备份', description: '定期自动备份数据到本地', enabled: autoBackup, onToggle: toggleAutoBackup, icon: Cloud },
+  ]
+
+  const performanceSettings: ToggleSetting[] = [
+    { id: 'battery', label: '省电模式', description: '减少动画以节省电量', enabled: false, onToggle: () => toast.info('省电模式开发中', 2000), icon: Battery },
+    { id: 'offline', label: '离线模式', description: '优先使用本地数据', enabled: true, onToggle: () => toast.info('离线模式已启用', 2000), icon: Wifi },
+    { id: 'cache', label: '缓存优化', description: '预加载常用资源', enabled: true, onToggle: () => toast.info('缓存优化已启用', 2000), icon: Cpu },
   ]
 
   const exportDataJSON = () => {
@@ -205,8 +444,6 @@ export default function SettingsPage() {
     }
   }
 
-
-
   const confirmDelete = () => {
     if (deleteTarget) {
       deleteAssessment(deleteTarget)
@@ -286,15 +523,7 @@ export default function SettingsPage() {
             >
               <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                      <User size={24} className="text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-lg font-bold text-white">个人资料</h2>
-                      <p className="text-sm text-white/50">管理你的个人信息</p>
-                    </div>
-                  </div>
+                  <SectionHeader icon={User} title="个人资料" description="管理你的个人信息" color="from-blue-500 to-cyan-500" />
                   {!editingProfile && (
                     <motion.button
                       onClick={() => setEditingProfile(true)}
@@ -360,31 +589,18 @@ export default function SettingsPage() {
                         <p className="text-sm text-white/50 mt-1">{user?.bio || '这个人很懒，什么都没写'}</p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="p-6 rounded-xl bg-white/5 text-center">
-                        <p className="text-3xl font-bold text-white">{completedAssessments.length}</p>
-                        <p className="text-sm text-white/50 mt-2">完成测评</p>
-                      </div>
-                      <div className="p-6 rounded-xl bg-white/5 text-center">
-                        <p className="text-3xl font-bold text-white">{achievements.length}</p>
-                        <p className="text-sm text-white/50 mt-2">获得成就</p>
-                      </div>
+                    <div className="grid grid-cols-3 gap-4">
+                      <StatCard value={completedAssessments.length} label="完成测评" />
+                      <StatCard value={achievements.length} label="获得成就" />
+                      <StatCard value={Math.floor(Math.random() * 100)} label="成长积分" />
                     </div>
                   </div>
                 )}
               </div>
 
               <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shrink-0">
-                    <Globe size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">语言</h2>
-                    <p className="text-sm text-white/50">选择界面语言</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
+                <SectionHeader icon={Globe} title="语言" description="选择界面语言" color="from-amber-500 to-orange-500" />
+                <div className="grid grid-cols-2 gap-4">
                   {[
                     { value: 'zh', label: '中文' },
                     { value: 'en', label: 'English' },
@@ -393,7 +609,7 @@ export default function SettingsPage() {
                       key={lang.value}
                       onClick={() => setLanguage(lang.value as 'zh' | 'en')}
                       className={cn(
-                        'flex-1 px-6 py-4 rounded-2xl font-semibold text-lg transition-all flex items-center justify-center',
+                        'px-6 py-4 rounded-2xl font-semibold text-lg transition-all flex items-center justify-center',
                         language === lang.value
                           ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/25'
                           : 'bg-white/5 text-white/60 hover:bg-white/10'
@@ -418,117 +634,43 @@ export default function SettingsPage() {
               className="space-y-6"
             >
               <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shrink-0">
-                    <Moon size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">主题</h2>
-                    <p className="text-sm text-white/50">选择外观模式</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-4">
-                  {themeOptions.map((option) => {
-                    const Icon = option.icon
-                    return (
-                      <motion.button
-                        key={option.value}
-                        onClick={() => setTheme(option.value as 'dark' | 'light' | 'system')}
-                        className={cn(
-                          'relative p-6 rounded-2xl transition-all overflow-hidden flex flex-col items-center gap-3',
-                          theme === option.value
-                            ? 'bg-gradient-to-br from-violet-500/20 to-purple-500/20 border-2 border-violet-500'
-                            : 'bg-white/5 border-2 border-transparent hover:border-white/20'
-                        )}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <Icon size={32} className={theme === option.value ? 'text-violet-400' : 'text-white/60'} />
-                        <span className={cn('font-medium text-base', theme === option.value ? 'text-white' : 'text-white/60')}>
-                          {option.label}
-                        </span>
-                        {theme === option.value && (
-                          <motion.div
-                            layoutId="themeIndicator"
-                            className="absolute inset-0 bg-violet-500/10"
-                          />
-                        )}
-                      </motion.button>
-                    )
-                  })}
-                </div>
-              </div>
-
-              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shrink-0">
-                    <ColorWheel size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">强调色</h2>
-                    <p className="text-sm text-white/50">自定义主题颜色</p>
-                  </div>
-                </div>
-                <div className="flex gap-4 flex-wrap justify-center">
-                  {colorOptions.map((color) => (
-                    <motion.button
-                      key={color.value}
-                      onClick={() => setAccentColor(color.value as typeof accentColor)}
-                      className={cn(
-                        'w-16 h-16 rounded-full transition-all flex items-center justify-center',
-                        accentColor === color.value && 'ring-4 ring-white/30 scale-110'
-                      )}
-                      style={{ backgroundColor: color.hex }}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {accentColor === color.value && (
-                        <Check size={28} className="text-white" />
-                      )}
-                    </motion.button>
+                <SectionHeader icon={Moon} title="主题模式" description="选择外观主题" color="from-violet-500 to-purple-500" />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {themeOptions.map((option) => (
+                    <RadioOption
+                      key={option.value}
+                      value={option.value}
+                      label={option.label}
+                      icon={option.icon}
+                      selected={theme === option.value}
+                      onChange={(value) => setTheme(value as 'dark' | 'light' | 'system')}
+                    />
                   ))}
                 </div>
               </div>
 
               <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shrink-0">
-                    <Sparkles size={24} className="text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-white">视觉特效</h2>
-                    <p className="text-sm text-white/50">动画和界面效果</p>
-                  </div>
+                <SectionHeader icon={ColorWheel} title="强调色" description="自定义主题颜色" color="from-pink-500 to-rose-500" />
+                <div className="flex gap-4 flex-wrap justify-center">
+                  {colorOptions.map((color) => (
+                    <ColorOptionButton
+                      key={color.value}
+                      value={color.value}
+                      label={color.label}
+                      hex={color.hex}
+                      selected={accentColor === color.value}
+                      onChange={(value) => setAccentColor(value as typeof accentColor)}
+                    />
+                  ))}
                 </div>
+              </div>
+
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
+                <SectionHeader icon={Sparkles} title="视觉特效" description="动画和界面效果" color="from-emerald-500 to-teal-500" />
                 <div className="space-y-4">
-                  {toggleSettings.slice(0, 3).map((setting) => {
-                    const Icon = setting.icon
-                    return (
-                      <div key={setting.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/5">
-                        <div className="flex items-center gap-4 flex-1">
-                          <Icon size={24} className="text-white/60 shrink-0" />
-                          <div className="flex-1">
-                            <p className="text-white font-medium text-base">{setting.label}</p>
-                            <p className="text-sm text-white/40 mt-1">{setting.description}</p>
-                          </div>
-                        </div>
-                        <motion.button
-                          onClick={setting.onToggle}
-                          className={cn(
-                            'relative w-16 h-9 rounded-full transition-colors shrink-0',
-                            setting.enabled ? 'bg-gradient-to-r from-violet-500 to-purple-500' : 'bg-white/20'
-                          )}
-                          whileTap={{ scale: 0.95 }}
-                        >
-                          <motion.span
-                            className="absolute top-1 w-7 h-7 rounded-full bg-white shadow-lg"
-                            animate={{ left: setting.enabled ? '32px' : '4px' }}
-                            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                          />
-                        </motion.button>
-                      </div>
-                    )
-                  })}
+                  {appearanceSettings.map((setting) => (
+                    <ToggleItem key={setting.id} setting={setting} />
+                  ))}
                 </div>
               </div>
             </motion.div>
@@ -540,52 +682,71 @@ export default function SettingsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-4"
+              className="space-y-6"
             >
-              {toggleSettings.slice(1, 5).map((setting, index) => {
-                const Icon = setting.icon
-                const colors = [
-                  'from-amber-500 to-orange-500',
-                  'from-blue-500 to-cyan-500',
-                  'from-violet-500 to-purple-500',
-                  'from-emerald-500 to-teal-500',
-                ]
-                return (
-                  <motion.div
-                    key={setting.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-5 flex-1">
-                        <div className={cn('w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center shrink-0', colors[index])}>
-                          <Icon size={28} className="text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="text-white font-semibold text-lg">{setting.label}</h3>
-                          <p className="text-sm text-white/50 mt-1">{setting.description}</p>
-                        </div>
-                      </div>
-                      <motion.button
-                        onClick={setting.onToggle}
-                        className={cn(
-                          'relative w-16 h-9 rounded-full transition-colors shrink-0',
-                          setting.enabled ? 'bg-gradient-to-r from-emerald-500 to-teal-500' : 'bg-white/20'
-                        )}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <motion.span
-                          className="absolute top-1 w-7 h-7 rounded-full bg-white shadow-lg"
-                          animate={{ left: setting.enabled ? '32px' : '4px' }}
-                          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                        />
-                      </motion.button>
-                    </div>
-                  </motion.div>
-                )
-              })}
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
+                <SectionHeader icon={Bell} title="通知设置" description="管理通知偏好" color="from-amber-500 to-orange-500" />
+                <div className="space-y-4">
+                  {notificationSettings.map((setting) => (
+                    <ToggleItem key={setting.id} setting={setting} />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeSection === 'privacy' && (
+            <motion.div
+              key="privacy"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-6"
+            >
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
+                <SectionHeader icon={Shield} title="隐私保护" description="管理隐私设置" color="from-rose-500 to-pink-500" />
+                <div className="space-y-4">
+                  {privacySettings.map((setting) => (
+                    <ToggleItem key={setting.id} setting={setting} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
+                <SectionHeader icon={Lock} title="安全选项" description="账号安全设置" />
+                <div className="space-y-4">
+                  <ActionButton icon={Unlock} label="修改密码" description="更新您的登录密码" onClick={() => toast.info('密码修改功能开发中', 2000)} />
+                  <ActionButton icon={Star} label="两步验证" description="启用额外的安全保护" onClick={() => toast.info('两步验证功能开发中', 2000)} />
+                  <ActionButton icon={History} label="登录记录" description="查看最近的登录活动" onClick={() => toast.info('登录记录功能开发中', 2000)} />
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeSection === 'performance' && (
+            <motion.div
+              key="performance"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-6"
+            >
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
+                <SectionHeader icon={Cpu} title="性能设置" description="优化应用性能" color="from-emerald-500 to-teal-500" />
+                <div className="space-y-4">
+                  {performanceSettings.map((setting) => (
+                    <ToggleItem key={setting.id} setting={setting} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
+                <SectionHeader icon={Activity} title="资源管理" description="管理应用资源" />
+                <div className="space-y-4">
+                  <ActionButton icon={Database} label="清除缓存" description="清理本地缓存数据" onClick={() => toast.info('缓存清理功能开发中', 2000)} />
+                  <ActionButton icon={RefreshCw} label="检查更新" description="检查应用更新" onClick={() => toast.success('已是最新版本', 2000)} />
+                </div>
+              </div>
             </motion.div>
           )}
 
@@ -597,81 +758,25 @@ export default function SettingsPage() {
               exit={{ opacity: 0, y: -20 }}
               className="space-y-6"
             >
-              <div className="grid grid-cols-2 gap-4">
-                <motion.button
-                  onClick={exportDataJSON}
-                  className="rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 p-6 text-center transition-all hover:scale-[1.02] flex flex-col items-center"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center mb-4">
-                    <Download size={28} className="text-emerald-400" />
-                  </div>
-                  <h3 className="text-white font-semibold mb-1 text-lg">导出数据</h3>
-                  <p className="text-sm text-white/50">备份到本地文件</p>
-                </motion.button>
-
-                <motion.button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 p-6 text-center transition-all hover:scale-[1.02] flex flex-col items-center"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="w-14 h-14 rounded-2xl bg-blue-500/20 flex items-center justify-center mb-4">
-                    <Upload size={28} className="text-blue-400" />
-                  </div>
-                  <h3 className="text-white font-semibold mb-1 text-lg">导入数据</h3>
-                  <p className="text-sm text-white/50">从文件恢复</p>
-                </motion.button>
-
-                <motion.button
-                  onClick={shareResults}
-                  className="rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30 p-6 text-center transition-all hover:scale-[1.02] flex flex-col items-center"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="w-14 h-14 rounded-2xl bg-violet-500/20 flex items-center justify-center mb-4">
-                    <Share size={28} className="text-violet-400" />
-                  </div>
-                  <h3 className="text-white font-semibold mb-1 text-lg">分享应用</h3>
-                  <p className="text-sm text-white/50">推荐给朋友</p>
-                </motion.button>
-
-                <motion.button
-                  onClick={() => resetSettings()}
-                  className="rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 p-6 text-center transition-all hover:scale-[1.02] flex flex-col items-center"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="w-14 h-14 rounded-2xl bg-amber-500/20 flex items-center justify-center mb-4">
-                    <RefreshCw size={28} className="text-amber-400" />
-                  </div>
-                  <h3 className="text-white font-semibold mb-1 text-lg">重置设置</h3>
-                  <p className="text-sm text-white/50">恢复默认配置</p>
-                </motion.button>
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
+                <SectionHeader icon={Database} title="数据管理" description="管理您的数据" color="from-indigo-500 to-blue-500" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <ActionButton icon={Download} label="导出数据" description="备份到本地文件" onClick={exportDataJSON} variant="success" />
+                  <ActionButton icon={Upload} label="导入数据" description="从文件恢复" onClick={() => fileInputRef.current?.click()} />
+                  <ActionButton icon={Share} label="分享应用" description="推荐给朋友" onClick={shareResults} />
+                  <ActionButton icon={RefreshCw} label="重置设置" description="恢复默认配置" onClick={() => { resetSettings(); toast.success('设置已重置', 2000) }} />
+                </div>
               </div>
 
               <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-rose-500 flex items-center justify-center shrink-0">
-                      <Trash size={24} className="text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-white">危险区域</h2>
-                      <p className="text-sm text-white/50">不可逆的操作</p>
-                    </div>
-                  </div>
-                </div>
-                <motion.button
-                  onClick={() => { setDeleteTarget('all'); setShowDeleteModal(true) }}
-                  className="w-full px-6 py-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 font-medium flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors text-lg"
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                >
-                  <Trash2 size={20} />
-                  清空所有测评记录
-                </motion.button>
+                <SectionHeader icon={Trash} title="危险区域" description="不可逆的操作" color="from-red-500 to-rose-500" />
+                <ActionButton 
+                  icon={Trash2} 
+                  label="清空所有测评记录" 
+                  description="这将永久删除所有测评记录和成就" 
+                  onClick={() => { setDeleteTarget('all'); setShowDeleteModal(true) }} 
+                  variant="danger" 
+                />
               </div>
 
               <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
@@ -740,18 +845,14 @@ export default function SettingsPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-8 text-center">
-                  <p className="text-4xl font-bold text-white mb-2">43+</p>
-                  <p className="text-base text-white/50">专业测评</p>
-                </div>
-                <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-8 text-center">
-                  <p className="text-4xl font-bold text-white mb-2">100%</p>
-                  <p className="text-base text-white/50">本地存储</p>
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <StatCard value="43+" label="专业测评" />
+                <StatCard value="100%" label="本地存储" />
+                <StatCard value="8" label="成长赛道" />
+                <StatCard value="41" label="专项训练" />
               </div>
 
-              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6 space-y-4">
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
                 <h3 className="text-white font-semibold text-xl mb-6 text-center">技术栈</h3>
                 {[
                   { name: '前端框架', value: 'React 18 + TypeScript' },
@@ -759,12 +860,22 @@ export default function SettingsPage() {
                   { name: '状态管理', value: 'Zustand' },
                   { name: '动画库', value: 'Framer Motion' },
                   { name: '构建工具', value: 'Vite 5' },
+                  { name: '图标库', value: 'Lucide React' },
                 ].map((tech) => (
                   <div key={tech.name} className="flex items-center justify-between p-4 rounded-2xl bg-white/5">
                     <span className="text-white/70 font-medium">{tech.name}</span>
                     <span className="text-white font-semibold">{tech.value}</span>
                   </div>
                 ))}
+              </div>
+
+              <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
+                <SectionHeader icon={HelpCircle} title="帮助与支持" description="获取帮助信息" />
+                <div className="space-y-4">
+                  <ActionButton icon={HelpCircle} label="帮助中心" description="查看使用指南" onClick={() => toast.info('帮助中心开发中', 2000)} />
+                  <ActionButton icon={Target} label="反馈建议" description="提交您的意见" onClick={() => toast.info('反馈功能开发中', 2000)} />
+                  <ActionButton icon={Award} label="关于我们" description="了解更多" onClick={() => toast.info('关于页面开发中', 2000)} />
+                </div>
               </div>
             </motion.div>
           )}
