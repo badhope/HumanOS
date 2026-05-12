@@ -21,13 +21,7 @@ export interface FoodieResult extends Record<string, any> {
   foodieIndex: number
   classification: 'god' | 'master' | 'enthusiast' | 'normal' | 'survivor' | 'skeleton'
   classificationEmoji: string
-  dimensions: {
-    appetite: number
-    tasting: number
-    cooking: number
-    exploring: number
-    spending: number
-  }
+  dimensions: Array<{ name: string; score: number }>
   title: string
   description: string
   levelName: string
@@ -180,7 +174,7 @@ export function calculateFoodie(answers: Answer[]): FoodieResult {
     foodieIndex,
     classification,
     classificationEmoji: config.emoji,
-    dimensions,
+    dimensions: Object.entries(dimensions).map(([key, value]) => ({ name: DIMENSION_NAMES[key] || key, score: Math.round(value) })),
     title: `${config.emoji} ${config.name}`,
     description: config.desc,
     levelName: config.name,

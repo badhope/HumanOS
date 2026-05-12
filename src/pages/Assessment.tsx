@@ -30,7 +30,7 @@ import type { Answer, Question, ProfessionalQuestion } from '../types'
 import { cn } from '@utils/cn'
 import AnswerSheet from '@components/AnswerSheet'
 import { AssessmentOption } from '@components/AssessmentOption'
-import { calculateProfessionalResult } from '@utils/professionalCalculators'
+import { calculatorEngine } from '@utils/calculators/CalculatorEngine'
 import {
   mbtiProfessionalQuestions,
   bigFiveProfessionalQuestions,
@@ -325,19 +325,17 @@ export default function Assessment() {
     try {
       setTimeout(async () => {
         try {
-          let rawResult
-          if (mode === 'professional') {
-            rawResult = await calculateProfessionalResult(assessment.id, answers, mode)
-          } else if (assessment.resultCalculator) {
-            rawResult = assessment.resultCalculator(answers)
-          } else {
-            rawResult = await calculateProfessionalResult(assessment.id, answers, mode)
-          }
+          const calculationResult = await calculatorEngine.calculate({
+            assessmentId: assessment.id,
+            answers,
+            mode: mode as 'normal' | 'advanced' | 'professional',
+          })
           
           const adaptedResult = {
-            ...rawResult,
+            ...calculationResult.result,
             source: 'frontend',
             calculated_at: new Date().toISOString(),
+            _calculationMetadata: calculationResult.metadata,
           }
           const recordId = crypto.randomUUID()
           

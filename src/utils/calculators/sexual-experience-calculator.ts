@@ -21,13 +21,7 @@ export interface SexualExperienceResult extends Record<string, any> {
   experienceIndex: number
   classification: 'virgin' | 'rookie' | 'normal' | 'veteran' | 'master' | 'legend'
   classificationEmoji: string
-  dimensions: {
-    theoretical: number
-    practical: number
-    diversity: number
-    openness: number
-    technique: number
-  }
+  dimensions: { name: string; score: number }[]
   title: string
   description: string
   levelName: string
@@ -170,7 +164,13 @@ export function calculateSexualExperience(answers: Answer[]): SexualExperienceRe
     experienceIndex,
     classification,
     classificationEmoji: config.emoji,
-    dimensions,
+    dimensions: [
+      { name: '理论知识', score: dimensions.theoretical },
+      { name: '实战经验', score: dimensions.practical },
+      { name: '涉猎广度', score: dimensions.diversity },
+      { name: '开放程度', score: dimensions.openness },
+      { name: '技巧掌握', score: dimensions.technique },
+    ],
     title: '性经验指数测评报告',
     description: config.desc,
     levelName: config.name,

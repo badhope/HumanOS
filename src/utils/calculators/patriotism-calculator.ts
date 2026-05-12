@@ -29,13 +29,7 @@ export interface PatriotismResult extends Record<string, any> {
   patriotismIndex: number       // 核心指数 0-100（5维平均分）
   classification: string        // 分类标识（用于匹配段位）
   classificationEmoji: string   // 段位emoji
-  dimensions: {                 // 五维分数 0-100 分
-    nationalPride: number
-    culturalConfidence: number
-    historicalIdentity: number
-    socialResponsibility: number
-    internationalOutlook: number
-  }
+  dimensions: Array<{ name: string; score: number }>
   title: string                 // 报告标题
   description: string           // 段位描述文案
   levelName: string             // 段位名称（如：根正苗红）
@@ -177,7 +171,7 @@ export function calculatePatriotism(answers: Answer[]): PatriotismResult {
     patriotismIndex,
     classification,
     classificationEmoji: config.emoji,
-    dimensions,
+    dimensions: Object.entries(dimensions).map(([key, value]) => ({ name: DIMENSION_NAMES[key] || key, score: Math.round(value) })),
     title: '爱国主义纯度测评报告',
     description: config.desc,
     levelName: config.name,

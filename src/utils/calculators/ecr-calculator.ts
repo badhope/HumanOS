@@ -33,12 +33,7 @@ export interface ECRResult extends Record<string, any> {
   attachmentType: 'secure' | 'preoccupied' | 'dismissive' | 'fearful'
   attachmentTypeName: string
   attachmentTypeEmoji: string
-  dimensions: {
-    anxiety_abandon: { score: number; percentage: number }
-    anxiety_need: { score: number; percentage: number }
-    avoidance_close: { score: number; percentage: number }
-    avoidance_independent: { score: number; percentage: number }
-  }
+  dimensions: { name: string; score: number; dimensionId: string }[]
   quadrantPosition: { x: number; y: number }
   radarData: { dimension: string; score: number; fullMark: number }[]
   typeDescription: string
@@ -63,12 +58,12 @@ export function calculateECR(answers: Answer[]): ECRResult {
     answerMap[a.questionId] = typeof a.value === 'number' ? a.value : parseInt(String(a.value || 4))
   })
 
-  const dimensions: ECRResult['dimensions'] = {} as ECRResult['dimensions']
+  const dimensions: Record<string, { score: number; percentage: number }> = {}
   Object.entries(dimensionMap).forEach(([dim, ids]) => {
     const score = ids.reduce((sum, id) => sum + (answerMap[id] || 3), 0)
     const maxScore = ids.length * 5
     const percentage = maxScore > 0 ? Math.round((score / maxScore) * 100) : 50
-    dimensions[dim as keyof ECRResult['dimensions']] = { score, percentage }
+    dimensions[dim] = { score, percentage }
   })
 
   const anxietyScore = (dimensions.anxiety_abandon.score + dimensions.anxiety_need.score) / 18
@@ -207,6 +202,13 @@ export function calculateECR(answers: Answer[]): ECRResult {
     fearful: ['《蝙蝠侠》布鲁斯韦恩', '《杀死伊芙》伊芙', '《绝命毒师》杰西'],
   }
 
+  const dimensionsArray = [
+    { name: '被抛弃焦虑', dimensionId: 'anxiety_abandon', score: dimensions.anxiety_abandon.percentage },
+    { name: '亲密需求', dimensionId: 'anxiety_need', score: dimensions.anxiety_need.percentage },
+    { name: '亲密回避', dimensionId: 'avoidance_close', score: dimensions.avoidance_close.percentage },
+    { name: '独立回避', dimensionId: 'avoidance_independent', score: dimensions.avoidance_independent.percentage },
+  ]
+
   return {
     anxietyScore: Math.round(anxietyScore * 10) / 10,
     avoidanceScore: Math.round(avoidanceScore * 10) / 10,
@@ -215,7 +217,7 @@ export function calculateECR(answers: Answer[]): ECRResult {
     attachmentType,
     attachmentTypeName,
     attachmentTypeEmoji,
-    dimensions,
+    dimensions: dimensionsArray,
     quadrantPosition,
     radarData,
     typeDescription,

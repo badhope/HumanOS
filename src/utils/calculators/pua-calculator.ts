@@ -45,13 +45,7 @@ export interface PUAResult extends Record<string, any> {
   percentile: number
   classification: 'immune' | 'awake' | 'normal' | 'vulnerable' | 'victim'
   classificationEmoji: string
-  dimensions: {
-    gaslightResistance: number
-    boundaryAwareness: number
-    emotionalIndependence: number
-    criticalThinking: number
-    selfEsteem: number
-  }
+  dimensions: Array<{ name: string; score: number }>
   title: string
   description: string
   levelName: string
@@ -173,7 +167,7 @@ export function calculatePUA(answers: Answer[]): PUAResult {
     percentile: Math.min(99, Math.round((100 - puaResistance) * 1.5)),
     classification,
     classificationEmoji: config.emoji,
-    dimensions,
+    dimensions: Object.entries(dimensions).map(([key, value]) => ({ name: DIMENSION_NAMES[key] || key, score: Math.round(value) })),
     title: 'PUA 耐受度测评报告',
     description: config.desc,
     levelName: config.name,
