@@ -38,6 +38,9 @@ backend/logs/
 
 # Testing
 coverage
+tests/
+test_*.py
+test_*.cjs
 
 # Temporary files
 *.tmp
@@ -90,6 +93,11 @@ electron-release/
 release/
 release-app/
 dist/
+dev-dist/
+
+# Screenshots and temporary images
+screenshot-*.png
+screenshot-*.jpg
 
 # Documentation (optional)
 # README_EN.md
