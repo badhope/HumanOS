@@ -31,7 +31,7 @@ export default function Results() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const location = useLocation()
-  const stateResult = location.state as any
+  const locationState = location.state as any
   const completedAssessments = useAppStore((state) => state.completedAssessments)
   const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment)
   const [showQRCode, setShowQRCode] = useState(false)
@@ -40,6 +40,9 @@ export default function Results() {
   const resultRecord = completedAssessments.find((a) => a.id === id)
 
   const assessment = resultRecord ? getAssessmentById(resultRecord.assessmentId) : undefined
+  
+  const stateResult = locationState?.calculationResult || locationState?.result || locationState
+
   const [recordFound, setRecordFound] = useState(!!resultRecord || !!stateResult)
 
   useEffect(() => {
@@ -49,9 +52,10 @@ export default function Results() {
     }
 
     if (stateResult && !resultRecord) {
+      const assessmentId = stateResult.assessment_id || stateResult.assessmentId || stateResult.type || id!
       addCompletedAssessment({
         id: id!,
-        assessmentId: stateResult.assessment_id || stateResult.assessmentId || id!,
+        assessmentId,
         answers: [],
         result: stateResult,
         completedAt: new Date(),
@@ -84,7 +88,7 @@ export default function Results() {
       if (attempts >= maxAttempts) {
         clearInterval(retryInterval)
         console.log(`❌ 未找到测评记录，重试了 ${attempts} 次`)
-        navigate('/assessments')
+        setRecordFound(false)
       }
     }, 100)
     
@@ -132,33 +136,58 @@ export default function Results() {
           <h2 className="text-2xl font-bold text-white mb-2">正在加载测评结果...</h2>
           <p className="text-white/60 mb-6">请稍候，正在同步数据</p>
           <button
-            onClick={() => navigate('/assessments')}
+            onClick={() => navigate('/app/discover')}
             className="px-6 py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors"
             type="button"
           >
-            返回测评列表
+            返回探索
           </button>
         </div>
       </div>
     )
   }
 
-  if (!resultRecord || !assessment || !resultRecord.result) {
+  const effectiveResult = resultRecord?.result || stateResult
+  const effectiveAssessment = assessment || (effectiveResult?.type ? getAssessmentById(effectiveResult.type) : undefined)
+
+  if (!effectiveResult) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-4">未找到测评结果</h2>
+          <p className="text-white/60 mb-6">可能是页面刷新导致数据丢失，请重新完成测评</p>
           <button
-            onClick={() => navigate('/assessments')}
+            onClick={() => navigate('/app/discover')}
             className="px-6 py-3 rounded-xl bg-violet-500 text-white"
             type="button"
           >
-            返回测评列表
+            返回探索
           </button>
         </div>
       </div>
     )
   }
+
+  if (!effectiveAssessment) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-white mb-4">测评数据异常</h2>
+          <p className="text-white/60 mb-6">无法识别测评类型，请重新完成测评</p>
+          <button
+            onClick={() => navigate('/app/discover')}
+            className="px-6 py-3 rounded-xl bg-violet-500 text-white"
+            type="button"
+          >
+            返回探索
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const displayMode = resultRecord?.mode || effectiveResult.mode || 'normal'
+  const displayAccuracy = effectiveResult.accuracy || 85
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950 pt-16 sm:pt-20 md:pt-24 pb-8 sm:pb-12">
@@ -169,7 +198,7 @@ export default function Results() {
           animate={{ opacity: 1, x: 0 }}
         >
           <motion.button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/app/home')}
             className="flex items-center gap-1.5 sm:gap-2 text-white/60 hover:text-white transition-colors text-xs sm:text-sm"
             type="button"
           >
@@ -178,12 +207,12 @@ export default function Results() {
           </motion.button>
           <span className="text-white/30 hidden sm:inline">|</span>
           <motion.button
-            onClick={() => navigate('/assessments')}
+            onClick={() => navigate('/app/discover')}
             className="flex items-center gap-1.5 sm:gap-2 text-white/60 hover:text-white transition-colors text-xs sm:text-sm"
             type="button"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">返回测评列表</span>
+            <span className="hidden sm:inline">返回探索</span>
           </motion.button>
           <span className="text-white/30 hidden sm:inline">|</span>
           <motion.button
@@ -217,29 +246,29 @@ export default function Results() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <span className="text-white/60 text-sm sm:text-base">{assessment.title}</span>
+            <span className="text-white/60 text-sm sm:text-base">{effectiveAssessment.title}</span>
             <span className={`px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium ${
-              resultRecord.mode === 'professional'
+              displayMode === 'professional'
                 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
                 : 'bg-violet-500/20 text-violet-400 border border-violet-500/30'
             }`}>
-              {resultRecord.mode === 'professional' ? '专业版' : '标准版'}
+              {displayMode === 'professional' ? '专业版' : '标准版'}
             </span>
-            <span className="text-white/60 text-xs sm:text-sm">· 准确度 {resultRecord.result.accuracy}%</span>
+            <span className="text-white/60 text-xs sm:text-sm">· 准确度 {displayAccuracy}%</span>
           </motion.div>
         </motion.div>
 
         <div ref={reportRef}>
           <ReportRouter
-            result={resultRecord.result}
-            assessmentType={assessment.id}
-            mode={(resultRecord.mode as 'normal' | 'advanced' | 'professional') || 'normal'}
+            result={effectiveResult}
+            assessmentType={effectiveAssessment.id}
+            mode={(displayMode as 'normal' | 'advanced' | 'professional') || 'normal'}
           />
         </div>
 
         <KnowledgeInjector
-          assessmentId={assessment.id}
-          result={resultRecord.result as Record<string, any>}
+          assessmentId={effectiveAssessment.id}
+          result={effectiveResult as Record<string, any>}
         />
 
         <motion.div
@@ -250,14 +279,14 @@ export default function Results() {
         >
           <ResultExportButton
             resultId={id || 'result'}
-            title={assessment?.title || '测评报告'}
+            title={effectiveAssessment?.title || '测评报告'}
             resultData={resultRecord}
-            resultHash={resultRecord?.result?.result_hash}
+            resultHash={effectiveResult?.result_hash}
             onShowQRCode={() => setShowQRCode(true)}
           />
 
           <motion.button
-            onClick={() => navigate('/assessments')}
+            onClick={() => navigate('/app/discover')}
             className="flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-4 rounded-xl glass text-white text-sm sm:text-base font-semibold hover:bg-white/10 border border-white/20 transition-all"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -267,14 +296,14 @@ export default function Results() {
           </motion.button>
 
           <motion.button
-            onClick={() => navigate('/legacy/leaderboard')}
+            onClick={() => navigate('/app/training')}
             className="flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white text-sm sm:text-base font-semibold hover:shadow-lg hover:shadow-amber-500/25 transition-all"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="button"
           >
             <Trophy className="w-4 h-4" />
-            <span className="hidden sm:inline">查看排行榜</span>
+            <span className="hidden sm:inline">开启训练</span>
           </motion.button>
         </motion.div>
       </div>
