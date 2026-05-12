@@ -18,10 +18,11 @@ export default function SideNav() {
       className="fixed left-0 top-0 bottom-0 w-64 bg-slate-950 border-r border-violet-500/10 z-50"
     >
       <div className="p-6">
-        <div className="flex items-center gap-3 mb-8">
-          <div 
-            className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center"
-          >
+        <button
+          onClick={() => navigate('/app/home')}
+          className="flex items-center gap-3 mb-8 hover:opacity-80 transition-opacity"
+        >
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center">
             <svg viewBox="0 0 100 100" className="w-7 h-7">
               <path
                 d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
@@ -46,7 +47,7 @@ export default function SideNav() {
             </h1>
             <p className="text-xs text-white/40">照见自己，成为更好的自己</p>
           </div>
-        </div>
+        </button>
 
         <nav className="space-y-2">
           <div className="space-y-2">

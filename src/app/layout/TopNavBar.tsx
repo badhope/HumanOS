@@ -1,4 +1,5 @@
 import { Menu } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 interface TopNavBarProps {
   title: string
@@ -6,13 +7,16 @@ interface TopNavBarProps {
 }
 
 export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
+  const navigate = useNavigate()
+
   return (
     <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-violet-500/10 pt-safe">
       <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 max-w-md mx-auto">
-        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
-          <div 
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30 flex items-center justify-center flex-shrink-0"
-          >
+        <button
+          onClick={() => navigate('/app/home')}
+          className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1 hover:opacity-80 transition-opacity"
+        >
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30 flex items-center justify-center flex-shrink-0">
             <svg viewBox="0 0 100 100" className="w-5 h-5 sm:w-5.5 sm:h-5.5">
               <path
                 d="M25 80 Q25 30 50 30 L55 20 L60 30 Q75 30 75 80 L60 80 Q60 50 55 50 L50 55 L45 50 Q40 50 40 80 Z"
@@ -44,7 +48,7 @@ export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
               </span>
             )}
           </div>
-        </div>
+        </button>
         
         {onMenuClick && (
           <button 
