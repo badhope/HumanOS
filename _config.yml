@@ -1,0 +1,12 @@
+# Jekyll Configuration for MindMirror
+# Docs directory contains technical documentation with code samples
+# that should not be processed by Jekyll
+
+exclude:
+  - docs/
+  - node_modules/
+  - mindmirror-miniprogram/
+  - src/
+  - public/
+  - scripts/
+  - configs/
