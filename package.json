@@ -68,7 +68,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p configs/tsconfig.json && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p configs/tsconfig.json --noEmit",
     "lint": "eslint src",
