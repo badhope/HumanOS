@@ -94,28 +94,28 @@ function ToggleItem({ setting }: { setting: ToggleSetting }) {
       key={setting.id}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex items-center justify-between p-5 rounded-2xl bg-white/5"
+      className="flex items-center justify-between p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl bg-white/5 gap-3"
     >
-      <div className="flex items-center gap-4 flex-1">
-        <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-          <Icon size={24} className="text-white/70" />
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+          <Icon size={18} className="sm:w-6 sm:h-6 text-white/70" />
         </div>
-        <div className="flex-1">
-          <p className="text-white font-medium text-base">{setting.label}</p>
-          <p className="text-sm text-white/40 mt-1">{setting.description}</p>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm sm:text-base text-white font-medium truncate">{setting.label}</p>
+          <p className="text-xs sm:text-sm text-white/40 mt-0.5 sm:mt-1 line-clamp-2">{setting.description}</p>
         </div>
       </div>
       <motion.button
         onClick={setting.onToggle}
         className={cn(
-          'relative w-16 h-9 rounded-full transition-colors shrink-0',
+          'relative w-14 h-8 sm:w-16 sm:h-9 rounded-full transition-colors shrink-0',
           setting.enabled ? 'bg-gradient-to-r from-violet-500 to-purple-500' : 'bg-white/20'
         )}
         whileTap={{ scale: 0.95 }}
       >
         <motion.span
-          className="absolute top-1 w-7 h-7 rounded-full bg-white shadow-lg"
-          animate={{ left: setting.enabled ? '32px' : '4px' }}
+          className="absolute top-1 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white shadow-lg"
+          animate={{ left: setting.enabled ? '28px' : '4px' }}
           transition={{ type: 'spring', stiffness: 500, damping: 30 }}
         />
       </motion.button>
@@ -166,24 +166,23 @@ function ActionButton({ icon: Icon, label, description, onClick, variant = 'defa
     <motion.button
       onClick={onClick}
       className={cn(
-        'w-full p-5 rounded-2xl transition-all flex items-center gap-4',
+        'w-full p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl transition-all flex items-center gap-3',
         variants[variant]
       )}
-      whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
       <div className={cn(
-        'w-12 h-12 rounded-xl flex items-center justify-center shrink-0',
+        'w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0',
         variant === 'danger' ? 'bg-red-500/20' : 
         variant === 'success' ? 'bg-emerald-500/20' : 'bg-white/10'
       )}>
-        <Icon size={24} className={variant === 'danger' ? 'text-red-400' : variant === 'success' ? 'text-emerald-400' : 'text-white/70'} />
+        <Icon size={18} className="sm:w-6 sm:h-6 text-white/70" />
       </div>
-      <div className="flex-1 text-left">
-        <p className="text-white font-medium">{label}</p>
-        <p className="text-sm text-white/50">{description}</p>
+      <div className="flex-1 text-left min-w-0">
+        <p className="text-sm sm:text-base text-white font-medium truncate">{label}</p>
+        <p className="text-xs sm:text-sm text-white/50 line-clamp-1">{description}</p>
       </div>
-      <ChevronRight size={20} className="text-white/30 shrink-0" />
+      <ChevronRight size={16} className="sm:w-5 sm:h-5 text-white/30 shrink-0" />
     </motion.button>
   )
 }
@@ -490,21 +489,19 @@ export default function SettingsPage() {
             const Icon = section.icon
             const isActive = activeSection === section.id
             return (
-              <motion.button
+              <motion.div
                 key={section.id}
                 onClick={() => setActiveSection(section.id)}
                 className={cn(
-                  'flex items-center gap-3 px-5 py-3 rounded-full whitespace-nowrap transition-all',
+                  'flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full whitespace-nowrap transition-all shrink-0 select-none',
                   isActive
                     ? `bg-gradient-to-r ${section.color} text-white shadow-lg`
                     : 'bg-white/5 text-white/60 hover:bg-white/10'
                 )}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
-                <Icon size={20} />
-                <span className="text-base font-medium">{section.label}</span>
-              </motion.button>
+                <Icon size={16} className="sm:w-5 sm:h-5" />
+                <span className="text-sm sm:text-base font-medium truncate max-w-[60px] sm:max-w-none">{section.label}</span>
+              </motion.div>
             )
           })}
         </div>
