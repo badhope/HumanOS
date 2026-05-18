@@ -131,22 +131,6 @@ const habitsItems: DiscoverItem[] = [
 
 export const discoverCategories: DiscoverCategory[] = [
   {
-    id: 'assessments',
-    name: '📋 测评中心',
-    icon: Brain,
-    color: 'text-violet-400',
-    bgGradient: 'from-violet-500/20 to-violet-500/5',
-    borderColor: 'border-violet-500/20',
-    subcategories: [
-      { id: 'personality', name: '🧠 人格领域', icon: Brain, items: personalityItems },
-      { id: 'relationship', name: '❤️ 亲密关系', icon: Heart, items: relationshipItems },
-      { id: 'mental', name: '🧘 心理健康', icon: Leaf, items: mentalItems },
-      { id: 'career', name: '💼 职场能力', icon: Briefcase, items: careerItems },
-      { id: 'values', name: '⚖️ 价值观', icon: Target, items: valuesItems },
-      { id: 'fun', name: '🎭 趣味测试', icon: Smile, items: funItems },
-    ]
-  },
-  {
     id: 'library',
     name: '📚 心理图书馆',
     icon: BookOpen,
