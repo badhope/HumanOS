@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Calendar, Flame, Target, ChevronRight, Brain, Clock, Activity } from 'lucide-react'
+import { Flame, Target, ChevronRight, Brain, Clock, Activity } from 'lucide-react'
 import { useAppStore, type MoodRecord, type TrainingRecord } from '../../store'
 import AdvancedRadarChart from '../../components/charts/AdvancedRadarChart'
 import AchievementsPanel from '../components/AchievementsPanel'
+import TrainingCalendarHeatmap from '../../components/TrainingCalendarHeatmap'
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string }> = {
   orange: { bg: 'rgba(251, 146, 60, 0.1)', border: 'rgba(251, 146, 60, 0.2)', text: '#fb923c' },
@@ -58,18 +59,6 @@ export default function Progress() {
     }
     return streak
   })()
-
-  const moodTrend30 = Array.from({ length: 30 }, (_, i) => {
-    const date = new Date()
-    date.setDate(date.getDate() - (29 - i))
-    const dateStr = date.toISOString().split('T')[0]
-    const record = moodHistory.find((m: MoodRecord) => m.date === dateStr)
-    return {
-      date: dateStr,
-      day: date.getDate(),
-      mood: record?.mood ?? null,
-    }
-  })
 
   const trainingByCategory: Record<string, number> = {}
   trainingRecords.forEach((r: TrainingRecord) => {
@@ -224,58 +213,7 @@ export default function Progress() {
         )}
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-white/5 rounded-2xl p-5 border border-white/10"
-      >
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <Calendar size={18} className="text-violet-400" />
-          30天训练热力图
-        </h3>
-
-        {!hasTrainingData ? (
-          <div className="text-center py-6 text-white/40 text-sm">
-            完成训练后这里会点亮你的训练日历
-          </div>
-        ) : (
-          <div className="grid grid-cols-7 gap-1.5">
-            {moodTrend30.map((day, i) => {
-              const trainingsThisDay = trainingRecords.filter((r: TrainingRecord) => 
-                new Date(r.completedAt).toISOString().split('T')[0] === day.date
-              ).length
-              
-              const intensity = trainingsThisDay === 0 ? 0 : Math.min(trainingsThisDay, 3)
-              const colors = [
-                'bg-white/5',
-                'bg-violet-500/30',
-                'bg-violet-500/50',
-                'bg-violet-500',
-              ]
-              
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.45 + i * 0.01 }}
-                  className={`aspect-square rounded ${colors[intensity]} ${intensity > 0 ? 'ring-1 ring-violet-500/30' : ''}`}
-                  title={`${day.date}: ${trainingsThisDay} 个训练`}
-                />
-              )
-            })}
-          </div>
-        )}
-        <div className="flex items-center justify-end gap-2 mt-3 text-[10px] text-white/40">
-          <span>无</span>
-          <div className="w-3 h-3 rounded bg-white/5" />
-          <div className="w-3 h-3 rounded bg-violet-500/30" />
-          <div className="w-3 h-3 rounded bg-violet-500/50" />
-          <div className="w-3 h-3 rounded bg-violet-500" />
-          <span>多</span>
-        </div>
-      </motion.div>
+      <TrainingCalendarHeatmap trainingRecords={trainingRecords} />
 
       <AchievementsPanel />
 
