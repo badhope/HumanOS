@@ -7,6 +7,7 @@ interface Particle {
   speedX: number
   speedY: number
   opacity: number
+  targetOpacity: number
   color: string
 }
 
@@ -19,10 +20,20 @@ interface Meteor {
   angle: number
 }
 
+interface Connection {
+  particle1: Particle
+  particle2: Particle
+  opacity: number
+}
+
 export default function ParticleBackground({
-  variant = 'stars'
+  variant = 'stars',
+  particleCount = 100,
+  showConnections = true
 }: {
   variant?: 'stars' | 'meteors' | 'mixed'
+  particleCount?: number
+  showConnections?: boolean
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
@@ -50,30 +61,62 @@ export default function ParticleBackground({
       'rgba(236, 72, 153, ',
       'rgba(59, 130, 246, ',
       'rgba(255, 255, 255, ',
+      'rgba(167, 139, 250, ',
+      'rgba(34, 211, 238, ',
     ]
 
     const initParticles = () => {
-      particlesRef.current = Array.from({ length: 80 }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 1.5 + 0.3,
-        speedX: (Math.random() - 0.5) * 0.15,
-        speedY: (Math.random() - 0.5) * 0.15,
-        opacity: Math.random() * 0.4 + 0.1,
-        color: colors[Math.floor(Math.random() * colors.length)],
-      }))
+      particlesRef.current = Array.from({ length: particleCount }, () => {
+        const color = colors[Math.floor(Math.random() * colors.length)]
+        const baseOpacity = Math.random() * 0.5 + 0.2
+        return {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 0.5,
+          speedX: (Math.random() - 0.5) * 0.2,
+          speedY: (Math.random() - 0.5) * 0.2,
+          opacity: baseOpacity,
+          targetOpacity: baseOpacity,
+          color,
+        }
+      })
     }
 
     const createMeteor = () => {
-      if (Math.random() > 0.995 && meteorsRef.current.length < 3) {
+      if (Math.random() > 0.99 && meteorsRef.current.length < 2) {
         meteorsRef.current.push({
           x: Math.random() * canvas.width * 1.5,
           y: -50,
-          length: Math.random() * 60 + 30,
-          speed: Math.random() * 6 + 4,
+          length: Math.random() * 80 + 40,
+          speed: Math.random() * 8 + 5,
           opacity: 0.8,
           angle: Math.PI / 4,
         })
+      }
+    }
+
+    const drawConnections = () => {
+      if (!showConnections) return
+      
+      const maxDistance = 150
+      for (let i = 0; i < particlesRef.current.length; i++) {
+        for (let j = i + 1; j < particlesRef.current.length; j++) {
+          const p1 = particlesRef.current[i]
+          const p2 = particlesRef.current[j]
+          const dx = p1.x - p2.x
+          const dy = p1.y - p2.y
+          const distance = Math.sqrt(dx * dx + dy * dy)
+
+          if (distance < maxDistance) {
+            const opacity = (1 - distance / maxDistance) * 0.15 * Math.min(p1.opacity, p2.opacity)
+            ctx.beginPath()
+            ctx.moveTo(p1.x, p1.y)
+            ctx.lineTo(p2.x, p2.y)
+            ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`
+            ctx.lineWidth = 0.5
+            ctx.stroke()
+          }
+        }
       }
     }
 
@@ -85,8 +128,11 @@ export default function ParticleBackground({
       particlesRef.current.forEach((particle) => {
         particle.x += particle.speedX
         particle.y += particle.speedY
-        particle.opacity += (Math.random() - 0.5) * 0.05
-        particle.opacity = Math.max(0.1, Math.min(1, particle.opacity))
+
+        if (Math.random() > 0.95) {
+          particle.targetOpacity = Math.random() * 0.4 + 0.2
+        }
+        particle.opacity += (particle.targetOpacity - particle.opacity) * 0.02
 
         if (particle.x < 0) particle.x = canvas.width
         if (particle.x > canvas.width) particle.x = 0
@@ -98,13 +144,24 @@ export default function ParticleBackground({
         ctx.fillStyle = particle.color + particle.opacity + ')'
         ctx.fill()
 
-        if (Math.random() > 0.97) {
+        if (Math.random() > 0.98) {
           ctx.beginPath()
-          ctx.arc(particle.x, particle.y, particle.size * 3, 0, Math.PI * 2)
-          ctx.fillStyle = particle.color + particle.opacity * 0.3 + ')'
+          ctx.arc(particle.x, particle.y, particle.size * 4, 0, Math.PI * 2)
+          ctx.fillStyle = particle.color + particle.opacity * 0.2 + ')'
+          ctx.fill()
+        }
+
+        if (Math.random() > 0.999) {
+          ctx.beginPath()
+          ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity * 0.5})`
           ctx.fill()
         }
       })
+
+      if (showConnections) {
+        drawConnections()
+      }
 
       if (variant === 'meteors' || variant === 'mixed') {
         createMeteor()
@@ -152,7 +209,7 @@ export default function ParticleBackground({
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [variant])
+  }, [variant, particleCount, showConnections])
 
   return (
     <canvas

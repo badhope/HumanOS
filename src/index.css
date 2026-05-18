@@ -4,9 +4,9 @@
 
 /* CSS Custom Properties - Minimal */
 :root {
-  --color-bg-primary: #0f172a;
-  --color-bg-secondary: #1e293b;
-  --color-bg-tertiary: #334155;
+  --color-bg-primary: #1e293b;
+  --color-bg-secondary: #334155;
+  --color-bg-tertiary: #475569;
   --color-text-primary: #f8fafc;
   --color-text-secondary: #cbd5e1;
   --color-text-tertiary: #94a3b8;
@@ -32,9 +32,9 @@
 
 :root.dark,
 [data-theme="dark"] {
-  --color-bg-primary: #0f172a;
-  --color-bg-secondary: #1e293b;
-  --color-bg-tertiary: #334155;
+  --color-bg-primary: #1e293b;
+  --color-bg-secondary: #334155;
+  --color-bg-tertiary: #475569;
   --color-text-primary: #f8fafc;
   --color-text-secondary: #cbd5e1;
   --color-text-tertiary: #94a3b8;
