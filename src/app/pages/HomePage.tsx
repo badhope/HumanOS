@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Sparkles, Brain, TrendingUp, Heart, Compass, Zap, Shield, Award, Clock, Target, Users, Lightbulb } from 'lucide-react'
+import { Sparkles, Brain, TrendingUp, Heart, Compass, Zap, Shield, Award, Clock, Target, Users, Lightbulb, ChevronRight, HelpCircle } from 'lucide-react'
 import { useAppStore } from '../../store'
 
 const FEATURED_ASSESSMENTS = [
@@ -72,9 +72,55 @@ const FEATURED_ASSESSMENTS = [
 ]
 
 const TOPICS = [
-  { id: 'career', label: '职场发展', emoji: '💼', color: 'from-blue-500/20 to-cyan-500/20' },
-  { id: 'emotion', label: '情绪管理', emoji: '🌊', color: 'from-violet-500/20 to-purple-500/20' },
-  { id: 'relation', label: '人际关系', emoji: '🤝', color: 'from-pink-500/20 to-rose-500/20' },
+  { 
+    id: 'career', 
+    label: '职场发展', 
+    emoji: '💼', 
+    color: 'from-blue-500/20 to-cyan-500/20',
+    icon: TrendingUp,
+    title: '职场发展',
+    description: '职业规划、求职技巧、职场人际关系',
+    gradient: 'from-blue-500 to-cyan-500'
+  },
+  { 
+    id: 'emotion', 
+    label: '情绪管理', 
+    emoji: '🌊', 
+    color: 'from-violet-500/20 to-purple-500/20',
+    icon: Heart,
+    title: '情绪管理',
+    description: '焦虑缓解、情绪调节、心理韧性',
+    gradient: 'from-violet-500 to-purple-500'
+  },
+  { 
+    id: 'relation', 
+    label: '人际关系', 
+    emoji: '🤝', 
+    color: 'from-pink-500/20 to-rose-500/20',
+    icon: Users,
+    title: '人际关系',
+    description: '沟通技巧、亲密关系、社交能力',
+    gradient: 'from-pink-500 to-rose-500'
+  },
+]
+
+const GUIDANCE_QUESTIONS = [
+  {
+    question: '你是否经常感到焦虑不安？',
+    description: '面对工作、生活压力时难以放松'
+  },
+  {
+    question: '你是否对未来的方向感到迷茫？',
+    description: '不清楚自己的职业兴趣和人生目标'
+  },
+  {
+    question: '你想更深入地了解自己吗？',
+    description: '探索人格特质、情绪模式和行为习惯'
+  },
+  {
+    question: '你想突破自我限制吗？',
+    description: '建立自信，培养成长型思维'
+  },
 ]
 
 export default function HomePage() {
@@ -142,6 +188,61 @@ export default function HomePage() {
 
         <div className="px-3 sm:px-0">
           <h3 className="text-sm sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
+            <HelpCircle size={14} className="sm:text-[18px] text-violet-400" />
+            你是否也有这些困惑？
+          </h3>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {GUIDANCE_QUESTIONS.map((item, index) => (
+              <button
+                key={index}
+                onClick={handleStartAssessment}
+                className="group relative overflow-hidden rounded-xl p-4 bg-white/5 border border-white/10 hover:border-violet-500/30 transition-all text-left"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                
+                <div className="relative">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-violet-500/20 flex items-center justify-center shrink-0">
+                      <HelpCircle size={16} className="text-violet-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-semibold text-white mb-1 group-hover:text-violet-300 transition-colors">
+                        {item.question}
+                      </h4>
+                      <p className="text-xs text-white/40 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-3 flex items-center justify-end">
+                    <span className="text-xs text-violet-400 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                      探索答案 <ChevronRight size={12} />
+                    </span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+          
+          <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-violet-500/10 via-purple-500/10 to-pink-500/10 border border-violet-500/20">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shrink-0">
+                <Sparkles size={18} className="text-white" />
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-semibold text-white mb-1">MindMirror 能帮你什么？</h4>
+                <p className="text-xs text-white/60 leading-relaxed">
+                  通过专业的心理测评了解真实的自己，用科学的训练方法提升心理韧性，在成长社区中找到共鸣与支持。这里是你专属的心理成长伙伴。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="px-3 sm:px-0">
+          <h3 className="text-sm sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2">
             <Sparkles size={14} className="sm:text-[18px] text-amber-400" />
             你可能感兴趣的
           </h3>
@@ -188,17 +289,43 @@ export default function HomePage() {
             精选专题
           </h3>
 
-          <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0 scrollbar-hide">
-            {TOPICS.map((topic) => (
-              <button
-                key={topic.id}
-                onClick={() => navigate('/app/discover')}
-                className={`flex-shrink-0 px-4 sm:px-5 py-2 sm:py-3 rounded-lg sm:rounded-xl bg-gradient-to-r ${topic.color} border border-white/10 backdrop-blur-sm flex items-center gap-1.5 sm:gap-2 hover:border-white/20 transition-colors`}
-              >
-                <span className="text-sm sm:text-base">{topic.emoji}</span>
-                <span className="text-white font-medium text-xs sm:text-sm whitespace-nowrap">{topic.label}</span>
-              </button>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {TOPICS.map((topic) => {
+              const Icon = topic.icon
+              return (
+                <button
+                  key={topic.id}
+                  onClick={() => navigate('/app/discover')}
+                  className="group relative overflow-hidden rounded-xl p-4 bg-white/5 border border-white/10 hover:border-white/20 transition-all text-left"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />
+                  
+                  <div className="relative">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${topic.gradient} flex items-center justify-center shadow-lg`}>
+                        <Icon size={18} className="text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-white group-hover:text-violet-300 transition-colors">
+                          {topic.title}
+                        </h4>
+                        <p className="text-xs text-white/50">{topic.label}</p>
+                      </div>
+                    </div>
+                    
+                    <p className="text-xs text-white/40 leading-relaxed">
+                      {topic.description}
+                    </p>
+                    
+                    <div className="mt-3 flex items-center justify-end">
+                      <span className="text-xs text-violet-400 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                        探索 <ChevronRight size={12} />
+                      </span>
+                    </div>
+                  </div>
+                </button>
+              )
+            })}
           </div>
         </div>
 
