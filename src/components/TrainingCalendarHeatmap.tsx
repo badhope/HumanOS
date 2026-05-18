@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Calendar, Dumbbell } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Dumbbell } from 'lucide-react'
 import type { TrainingRecord } from '../store'
 
 interface TrainingCalendarHeatmapProps {
@@ -10,19 +9,19 @@ interface TrainingCalendarHeatmapProps {
 const WEEKDAY_LABELS = ['日', '一', '二', '三', '四', '五', '六']
 
 const INTENSITY_COLORS = [
-  { bg: 'bg-white/[0.04]', text: 'text-white/50' },
-  { bg: 'bg-violet-500/20', text: 'text-white/70' },
-  { bg: 'bg-violet-500/40', text: 'text-white/80' },
-  { bg: 'bg-violet-500/60', text: 'text-white' },
-  { bg: 'bg-violet-500/85', text: 'text-white' },
+  'bg-white/[0.03]',
+  'bg-violet-500/25',
+  'bg-violet-500/45',
+  'bg-violet-500/65',
+  'bg-violet-500/85',
 ]
 
-const INTENSITY_BG_STYLE = [
-  undefined,
-  'rgba(139,92,246,0.2)',
-  'rgba(139,92,246,0.4)',
-  'rgba(139,92,246,0.6)',
-  'rgba(139,92,246,0.85)',
+const INTENSITY_TEXT = [
+  'text-white/30',
+  'text-white/70',
+  'text-white/80',
+  'text-white',
+  'text-white',
 ]
 
 function getDaysInMonth(year: number, month: number): number {
@@ -44,6 +43,7 @@ export default function TrainingCalendarHeatmap({ trainingRecords }: TrainingCal
   const [viewYear, setViewYear] = useState(today.getFullYear())
   const [viewMonth, setViewMonth] = useState(today.getMonth())
   const [hoveredDay, setHoveredDay] = useState<string | null>(null)
+  const [animating, setAnimating] = useState(false)
 
   const trainingByDate = useMemo(() => {
     const map = new Map<string, number>()
@@ -55,35 +55,47 @@ export default function TrainingCalendarHeatmap({ trainingRecords }: TrainingCal
   }, [trainingRecords])
 
   const goToPrevMonth = () => {
-    if (viewMonth === 0) {
-      setViewYear((y) => y - 1)
-      setViewMonth(11)
-    } else {
-      setViewMonth((m) => m - 1)
-    }
+    if (animating) return
+    setAnimating(true)
+    setTimeout(() => {
+      if (viewMonth === 0) {
+        setViewYear((y) => y - 1)
+        setViewMonth(11)
+      } else {
+        setViewMonth((m) => m - 1)
+      }
+      setAnimating(false)
+    }, 150)
   }
 
   const goToNextMonth = () => {
-    if (viewMonth === 11) {
-      setViewYear((y) => y + 1)
-      setViewMonth(0)
-    } else {
-      setViewMonth((m) => m + 1)
-    }
+    if (animating) return
+    setAnimating(true)
+    setTimeout(() => {
+      if (viewMonth === 11) {
+        setViewYear((y) => y + 1)
+        setViewMonth(0)
+      } else {
+        setViewMonth((m) => m + 1)
+      }
+      setAnimating(false)
+    }, 150)
   }
 
   const goToToday = () => {
-    setViewYear(today.getFullYear())
-    setViewMonth(today.getMonth())
+    if (animating) return
+    setAnimating(true)
+    setTimeout(() => {
+      setViewYear(today.getFullYear())
+      setViewMonth(today.getMonth())
+      setAnimating(false)
+    }, 150)
   }
 
   const daysInMonth = getDaysInMonth(viewYear, viewMonth)
   const firstDay = getFirstDayOfMonth(viewYear, viewMonth)
   const todayStr = today.toISOString().split('T')[0]
   const isCurrentMonth = viewYear === today.getFullYear() && viewMonth === today.getMonth()
-
-  const totalCells = firstDay + daysInMonth
-  const totalRows = Math.ceil(totalCells / 7)
 
   const monthName = `${viewYear}年${viewMonth + 1}月`
 
@@ -93,7 +105,8 @@ export default function TrainingCalendarHeatmap({ trainingRecords }: TrainingCal
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={goToPrevMonth}
-            className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+            disabled={animating}
+            className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-50 flex items-center justify-center text-white/60 hover:text-white transition-colors"
           >
             <ChevronLeft size={16} />
           </button>
@@ -102,14 +115,16 @@ export default function TrainingCalendarHeatmap({ trainingRecords }: TrainingCal
           </h3>
           <button
             onClick={goToNextMonth}
-            className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+            disabled={animating}
+            className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-50 flex items-center justify-center text-white/60 hover:text-white transition-colors"
           >
             <ChevronRight size={16} />
           </button>
           {!isCurrentMonth && (
             <button
               onClick={goToToday}
-              className="ml-1 sm:ml-2 px-2 sm:px-3 py-1 rounded-lg text-[10px] sm:text-xs bg-violet-500/10 text-violet-400 hover:bg-violet-500/20 transition-colors"
+              disabled={animating}
+              className="ml-1 sm:ml-2 px-2 sm:px-3 py-1 rounded-lg text-[10px] sm:text-xs bg-violet-500/10 text-violet-400 hover:bg-violet-500/20 disabled:opacity-50 transition-colors"
             >
               今天
             </button>
@@ -121,106 +136,87 @@ export default function TrainingCalendarHeatmap({ trainingRecords }: TrainingCal
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
-        {WEEKDAY_LABELS.map((label) => (
-          <div
-            key={label}
-            className="text-center text-[10px] sm:text-xs font-medium text-white/40 py-1 sm:py-2"
-          >
-            {label}
-          </div>
-        ))}
+      <div className={`transition-opacity duration-150 ${animating ? 'opacity-0' : 'opacity-100'}`}>
+        <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
+          {WEEKDAY_LABELS.map((label) => (
+            <div
+              key={label}
+              className="text-center text-[10px] sm:text-xs font-medium text-white/40 py-1 sm:py-2"
+            >
+              {label}
+            </div>
+          ))}
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${viewYear}-${viewMonth}`}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25 }}
-            className="grid grid-cols-7 gap-1 sm:gap-1.5 col-span-7"
-          >
-            {Array.from({ length: firstDay }).map((_, i) => (
-              <div key={`empty-${i}`} className="aspect-square" />
-            ))}
+          {Array.from({ length: firstDay }).map((_, i) => (
+            <div key={`empty-${i}`} className="aspect-square" />
+          ))}
 
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const day = i + 1
-              const dateStr = formatDateStr(viewYear, viewMonth, day)
-              const count = trainingByDate.get(dateStr) || 0
-              const intensity = Math.min(count, 4)
-              const isToday = dateStr === todayStr
-              const isFuture = dateStr > todayStr
-              const isHovered = hoveredDay === dateStr
-              const color = INTENSITY_COLORS[intensity]
+          {Array.from({ length: daysInMonth }).map((_, i) => {
+            const day = i + 1
+            const dateStr = formatDateStr(viewYear, viewMonth, day)
+            const count = trainingByDate.get(dateStr) || 0
+            const intensity = Math.min(count, 4)
+            const isToday = dateStr === todayStr
+            const isFuture = dateStr > todayStr
+            const isHovered = hoveredDay === dateStr
 
-              return (
+            return (
+              <div
+                key={dateStr}
+                className="relative"
+                onMouseEnter={() => !isFuture && setHoveredDay(dateStr)}
+                onMouseLeave={() => setHoveredDay(null)}
+              >
                 <div
-                  key={dateStr}
-                  className="relative"
-                  onMouseEnter={() => setHoveredDay(dateStr)}
-                  onMouseLeave={() => setHoveredDay(null)}
+                  className={`
+                    aspect-square rounded-lg sm:rounded-xl flex flex-col items-center justify-center
+                    transition-all duration-150 cursor-default select-none relative
+                    ${isFuture ? 'bg-white/[0.02]' : INTENSITY_COLORS[intensity]}
+                    ${isToday ? 'ring-1 sm:ring-2 ring-amber-400/70 shadow-[0_0_10px_rgba(251,191,36,0.2)]' : ''}
+                    ${isHovered && !isFuture ? 'scale-105 z-10' : ''}
+                  `}
                 >
-                  <div
-                    className={`aspect-square rounded-lg sm:rounded-xl flex flex-col items-center justify-center transition-all duration-200 cursor-default select-none
-                      ${isFuture ? 'bg-white/[0.02]' : color.bg}
-                      ${isToday ? 'ring-1 sm:ring-2 ring-amber-400/60 shadow-[0_0_12px_rgba(251,191,36,0.15)]' : ''}
-                      ${!isFuture && !isToday && count === 0 ? 'bg-white/[0.03]' : ''}
-                      ${isHovered && !isFuture ? 'scale-105 z-10 shadow-lg' : ''}
-                    `}
-                    style={isHovered && !isFuture ? {
-                      backgroundColor: INTENSITY_BG_STYLE[intensity],
-                    } : undefined}
-                  >
-                    <span
-                      className={`text-[10px] sm:text-xs leading-none ${
-                        isFuture ? 'text-white/20' :
+                  <span
+                    className={`
+                      text-[10px] sm:text-xs leading-none
+                      ${isFuture ? 'text-white/20' :
                         isToday ? 'font-bold text-white' :
-                        color.text
-                      }`}
-                    >
-                      {day}
-                    </span>
-                    {count > 0 && (
-                      <div className="flex gap-[1px] mt-0.5 sm:mt-1">
-                        {Array.from({ length: Math.min(count, 3) }).map((_, j) => (
-                          <div
-                            key={j}
-                            className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-white/80"
-                          />
-                        ))}
-                        {count > 3 && (
-                          <span className="text-[7px] sm:text-[8px] text-white/50 leading-none ml-0.5">
-                            +
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <AnimatePresence>
-                    {isHovered && !isFuture && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 4, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 4, scale: 0.95 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 sm:mb-2 z-20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-slate-800 border border-white/10 shadow-xl whitespace-nowrap pointer-events-none"
-                      >
-                        <div className="text-[10px] sm:text-xs text-white font-medium">
-                          {dateStr}
-                        </div>
-                        <div className="text-[10px] sm:text-xs text-violet-400">
-                          {count > 0 ? `${count} 次训练` : '无训练记录'}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        INTENSITY_TEXT[intensity]}
+                    `}
+                  >
+                    {day}
+                  </span>
+                  {count > 0 && (
+                    <div className="flex gap-[2px] mt-0.5 sm:mt-1">
+                      {Array.from({ length: Math.min(count, 3) }).map((_, j) => (
+                        <div
+                          key={j}
+                          className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-white/80"
+                        />
+                      ))}
+                      {count > 3 && (
+                        <span className="text-[7px] sm:text-[8px] text-white/50 leading-none ml-0.5">
+                          +
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
-              )
-            })}
-          </motion.div>
-        </AnimatePresence>
+
+                {isHovered && !isFuture && (
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 sm:mb-2 z-20 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-slate-800 border border-white/10 shadow-xl whitespace-nowrap pointer-events-none">
+                    <div className="text-[10px] sm:text-xs text-white font-medium">
+                      {dateStr}
+                    </div>
+                    <div className="text-[10px] sm:text-xs text-violet-400">
+                      {count > 0 ? `${count} 次训练` : '无训练记录'}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </div>
       </div>
 
       <div className="flex items-center justify-end gap-1.5 sm:gap-2 mt-3 sm:mt-4 text-[10px] sm:text-xs text-white/40">
@@ -228,7 +224,7 @@ export default function TrainingCalendarHeatmap({ trainingRecords }: TrainingCal
         {INTENSITY_COLORS.map((color, i) => (
           <div
             key={i}
-            className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded ${i === 0 ? 'bg-white/[0.03]' : color.bg}`}
+            className={`w-3 h-3 sm:w-3.5 sm:h-3.5 rounded ${color}`}
           />
         ))}
         <span>多</span>
