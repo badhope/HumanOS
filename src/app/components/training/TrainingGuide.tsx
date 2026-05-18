@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { 
   Brain, 
   Users, 
@@ -165,136 +165,119 @@ export default function TrainingGuide() {
     }
   }
 
+  const handleToggle = (id: string) => {
+    setSelectedGuide(prev => prev === id ? null : id)
+  }
+
   return (
-    <div className="space-y-6">
-      <div className="text-center mb-8">
+    <div className="space-y-4">
+      <div className="text-center mb-6">
         <h2 className="text-xl font-bold text-white mb-2">你想解决什么问题？</h2>
         <p className="text-sm text-white/50">选择一个最符合你当前状态的问题，我们为你推荐合适的训练</p>
       </div>
 
-      <div className="space-y-4">
-        {PROBLEM_GUIDES.map((guide, index) => {
-          const Icon = guide.icon
-          const isSelected = selectedGuide === guide.id
-          
-          return (
-            <motion.div
-              key={guide.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className={cn(
-                'rounded-2xl border-2 transition-all',
-                isSelected 
-                  ? `${guide.borderColor} ${guide.bgGradient}`
-                  : 'border-white/10 bg-white/5 hover:border-white/20'
-              )}
+      {PROBLEM_GUIDES.map((guide, index) => {
+        const Icon = guide.icon
+        const isSelected = selectedGuide === guide.id
+        
+        return (
+          <motion.div
+            key={guide.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05 }}
+            className={cn(
+              'rounded-2xl border-2 transition-all overflow-hidden',
+              isSelected 
+                ? `${guide.borderColor} ${guide.bgGradient}`
+                : 'border-white/10 bg-white/5 hover:border-white/20'
+            )}
+          >
+            <button
+              onClick={() => handleToggle(guide.id)}
+              className="w-full p-5 text-left"
             >
-              <button
-                onClick={() => setSelectedGuide(isSelected ? null : guide.id)}
-                className="w-full p-5 text-left"
-              >
-                <div className="flex items-start gap-4">
-                  <div className={cn(
-                    'w-14 h-14 rounded-2xl flex items-center justify-center shrink-0',
-                    guide.bgGradient
-                  )}>
-                    <Icon size={28} className={guide.color} />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="text-lg font-bold text-white">{guide.title}</h3>
-                      {isSelected && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className={cn('w-6 h-6 rounded-full flex items-center justify-center', guide.bgGradient)}
-                        >
-                          <Check size={14} className={guide.color} />
-                        </motion.div>
-                      )}
-                    </div>
-                    <p className="text-sm text-white/50">{guide.description}</p>
-                  </div>
+              <div className="flex items-start gap-4">
+                <div className={cn(
+                  'w-12 h-12 rounded-xl flex items-center justify-center shrink-0',
+                  guide.bgGradient
+                )}>
+                  <Icon size={24} className={guide.color} />
                 </div>
-              </button>
-
-              <AnimatePresence>
-                {isSelected && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-5 pb-5 space-y-4">
-                      <div className={cn(
-                        'p-4 rounded-xl bg-white/5 border border-white/10',
-                      )}>
-                        <p className="text-sm text-white/80 leading-relaxed">
-                          {guide.tip}
-                        </p>
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="text-base font-bold text-white">{guide.title}</h3>
+                    {isSelected && (
+                      <div className={cn('w-5 h-5 rounded-full flex items-center justify-center', guide.bgGradient)}>
+                        <Check size={12} className={guide.color} />
                       </div>
+                    )}
+                  </div>
+                  <p className="text-sm text-white/50">{guide.description}</p>
+                </div>
+              </div>
+            </button>
 
-                      <div className="space-y-3">
-                        <h4 className="text-sm font-semibold text-white/70">推荐训练</h4>
-                        {guide.recommendedTrainings.map((training, idx) => (
-                          <motion.button
-                            key={training.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            onClick={() => handleStartTraining(training.id)}
-                            className={cn(
-                              'w-full p-4 rounded-xl border-2 border-white/10 transition-all text-left',
-                              'bg-white/5 hover:bg-white/10 hover:border-violet-500/50',
-                              'flex items-center justify-between group'
-                            )}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 flex items-center justify-center">
-                                <Sparkles size={20} className="text-violet-400" />
-                              </div>
-                              <div>
-                                <h5 className="font-semibold text-white text-sm">{training.title}</h5>
-                                <p className="text-xs text-white/50 flex items-center gap-2">
-                                  <Clock size={12} />
-                                  {training.duration}
-                                  <span className="px-1.5 py-0.5 rounded bg-violet-500/20 text-violet-400 text-[10px]">
-                                    {training.level}
-                                  </span>
-                                </p>
-                              </div>
-                            </div>
-                            <ArrowRight size={20} className="text-white/30 group-hover:text-violet-400 group-hover:translate-x-1 transition-all" />
-                          </motion.button>
-                        ))}
+            {isSelected && (
+              <div className="px-5 pb-5 space-y-4 border-t border-white/10 pt-4">
+                <div className={cn(
+                  'p-4 rounded-xl bg-white/5 border border-white/10',
+                )}>
+                  <p className="text-sm text-white/80 leading-relaxed">
+                    {guide.tip}
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="text-sm font-semibold text-white/70">推荐训练</h4>
+                  {guide.recommendedTrainings.map((training, idx) => (
+                    <button
+                      key={training.id}
+                      onClick={() => handleStartTraining(training.id)}
+                      className={cn(
+                        'w-full p-3 rounded-xl border border-white/10 transition-all text-left',
+                        'bg-white/5 hover:bg-white/10 hover:border-violet-500/50',
+                        'flex items-center justify-between group'
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 flex items-center justify-center">
+                          <Sparkles size={16} className="text-violet-400" />
+                        </div>
+                        <div>
+                          <h5 className="font-semibold text-white text-sm">{training.title}</h5>
+                          <p className="text-xs text-white/50 flex items-center gap-2">
+                            <Clock size={10} />
+                            {training.duration}
+                            <span className="px-1.5 py-0.5 rounded bg-violet-500/20 text-violet-400 text-[10px]">
+                              {training.level}
+                            </span>
+                          </p>
+                        </div>
                       </div>
+                      <ArrowRight size={16} className="text-white/30 group-hover:text-violet-400 group-hover:translate-x-1 transition-all" />
+                    </button>
+                  ))}
+                </div>
 
-                      <motion.button
-                        onClick={() => handleStartFromGuide(guide)}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className={cn(
-                          'w-full py-3 rounded-xl font-semibold text-white',
-                          'bg-gradient-to-r from-violet-500 to-purple-600',
-                          'flex items-center justify-center gap-2',
-                          'shadow-lg shadow-violet-500/30'
-                        )}
-                      >
-                        <span>开始训练</span>
-                        <ArrowRight size={18} />
-                      </motion.button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          )
-        })}
-      </div>
+                <button
+                  onClick={() => handleStartFromGuide(guide)}
+                  className={cn(
+                    'w-full py-3 rounded-xl font-semibold text-white',
+                    'bg-gradient-to-r from-violet-500 to-purple-600',
+                    'flex items-center justify-center gap-2',
+                    'shadow-lg shadow-violet-500/30 hover:shadow-violet-500/50 transition-shadow'
+                  )}
+                >
+                  <span>开始训练</span>
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+            )}
+          </motion.div>
+        )
+      })}
     </div>
   )
 }
