@@ -295,16 +295,6 @@ export default function TrainingGuide() {
           )
         })}
       </div>
-
-      <div className="pt-6 border-t border-white/10">
-        <button
-          onClick={() => navigate('/app/training')}
-          className="w-full py-3 rounded-xl bg-white/5 text-white/60 text-sm hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
-        >
-          <span>查看所有训练分类</span>
-          <ChevronRight size={16} />
-        </button>
-      </div>
     </div>
   )
 }
