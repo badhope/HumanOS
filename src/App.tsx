@@ -18,7 +18,6 @@ import Daily from './app/pages/Daily'
 import AssessmentsPage from './app/pages/AssessmentsPage'
 import Training from './app/pages/Training'
 import Progress from './app/pages/Progress'
-import Discover from './app/pages/Discover'
 import SettingsPage from './app/pages/SettingsPage'
 import GrowthDashboard from './app/pages/GrowthDashboard'
 import GettingStarted from './app/pages/GettingStarted'
@@ -93,13 +92,14 @@ export default function App() {
                     <Route path="assessments" element={<AssessmentsPage />} />
                     <Route path="training" element={<Training />} />
                     <Route path="progress" element={<Progress />} />
-                    <Route path="discover" element={<Discover />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="getting-started" element={<GettingStarted />} />
+                    <Route path="library" element={<LibraryArticles />} />
                     <Route path="library/articles" element={<LibraryArticles />} />
                     <Route path="library/article/:id" element={<ArticleDetail />} />
                     <Route path="library/tools" element={<LibraryTools />} />
                     <Route path="library/resources" element={<LibraryResources />} />
+                    <Route path="community" element={<CommunityShare />} />
                     <Route path="community/share" element={<CommunityShare />} />
                     <Route path="community/discussion" element={<CommunityDiscussion />} />
                     <Route path="community/expert" element={<CommunityExpert />} />
@@ -109,10 +109,11 @@ export default function App() {
                     <Route path="training/:programId" element={<UniversalTraining />} />
                   </Route>
 
-                  <Route path="/assessments" element={<Navigate to="/app/discover" replace />} />
-                  <Route path="/categories" element={<Navigate to="/app/discover" replace />} />
-                  <Route path="/legacy/categories" element={<Navigate to="/app/discover" replace />} />
-                  <Route path="/legacy/assessments" element={<Navigate to="/app/discover" replace />} />
+                  <Route path="/app/discover" element={<Navigate to="/app/assessments" replace />} />
+                  <Route path="/assessments" element={<Navigate to="/app/assessments" replace />} />
+                  <Route path="/categories" element={<Navigate to="/app/assessments" replace />} />
+                  <Route path="/legacy/categories" element={<Navigate to="/app/assessments" replace />} />
+                  <Route path="/legacy/assessments" element={<Navigate to="/app/assessments" replace />} />
                   <Route path="/legacy/home" element={<Navigate to="/app/daily" replace />} />
                   <Route path="/legacy/mode-select/:id" element={<ModeSelect />} />
                   <Route path="/legacy/mode-select/onepiece/:id" element={<OnePieceModeSelect />} />

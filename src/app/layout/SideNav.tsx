@@ -1,13 +1,18 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Home, TestTube, Dumbbell, TrendingUp, Compass, User, Settings } from 'lucide-react'
+import { Home, TestTube, Dumbbell, TrendingUp, BookOpen, Users, Sparkles, User, Settings, ChevronRight } from 'lucide-react'
 import { clsx } from 'clsx'
 
-const menuItems = [
+const mainMenuItems = [
   { path: '/app/home', label: '首页', icon: Home },
-  { path: '/app/assessments', label: '测评', icon: TestTube },
-  { path: '/app/training', label: '训练', icon: Dumbbell },
-  { path: '/app/progress', label: '进度', icon: TrendingUp },
-  { path: '/app/discover', label: '探索', icon: Compass },
+  { path: '/app/assessments', label: '测评中心', icon: TestTube },
+  { path: '/app/training', label: '训练中心', icon: Dumbbell },
+  { path: '/app/progress', label: '我的进度', icon: TrendingUp },
+]
+
+const exploreMenuItems = [
+  { path: '/app/library', label: '心理图书馆', icon: BookOpen, description: '文章、工具、资源' },
+  { path: '/app/community', label: '社区互动', icon: Users, description: '分享、讨论、专家' },
+  { path: '/app/growth', label: '个人成长', icon: Sparkles, description: '训练计划、习惯养成' },
 ]
 
 export default function SideNav() {
@@ -16,7 +21,7 @@ export default function SideNav() {
 
   return (
     <div 
-      className="fixed left-0 top-0 bottom-0 w-64 bg-slate-950 border-r border-violet-500/10 z-50"
+      className="fixed left-0 top-0 bottom-0 w-64 bg-slate-950 border-r border-violet-500/10 z-50 overflow-y-auto"
     >
       <div className="p-6">
         <button
@@ -58,7 +63,7 @@ export default function SideNav() {
 
         <nav className="space-y-2">
           <div className="space-y-2">
-            {menuItems.map((item) => {
+            {mainMenuItems.map((item) => {
               const Icon = item.icon
               const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/')
               
@@ -86,11 +91,45 @@ export default function SideNav() {
               )
             })}
           </div>
+
+          <div className="pt-4 pb-2">
+            <p className="px-4 text-xs text-white/30 uppercase tracking-wider">探索</p>
+          </div>
+
+          <div className="space-y-1">
+            {exploreMenuItems.map((item) => {
+              const Icon = item.icon
+              const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/')
+              
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={clsx(
+                    'w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group',
+                    isActive 
+                      ? 'bg-gradient-to-r from-violet-500/20 to-blue-500/20 text-violet-400 border border-violet-500/20'
+                      : 'text-white/50 hover:bg-white/5 hover:text-white'
+                  )}
+                >
+                  <div className={isActive ? 'drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]' : ''}>
+                    <Icon size={18} />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <span className="font-medium text-sm">{item.label}</span>
+                  </div>
+                  {isActive && (
+                    <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+                  )}
+                </button>
+              )
+            })}
+          </div>
         </nav>
       </div>
 
       <div 
-        className="absolute bottom-0 left-0 right-0 p-4 border-t border-violet-500/10 space-y-2"
+        className="absolute bottom-0 left-0 right-0 p-4 border-t border-violet-500/10 space-y-2 bg-slate-950"
       >
         <button 
           onClick={() => navigate('/app/settings')}
