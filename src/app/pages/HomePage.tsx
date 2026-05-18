@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Sparkles, Brain, TrendingUp, Heart, Compass, Zap, Shield, Award, Clock } from 'lucide-react'
+import { Sparkles, Brain, TrendingUp, Heart, Compass, Zap, Shield, Award, Clock, Target, Users, Lightbulb } from 'lucide-react'
 import { useAppStore } from '../../store'
 
 const FEATURED_ASSESSMENTS = [
@@ -15,19 +15,30 @@ const FEATURED_ASSESSMENTS = [
     borderColor: 'border-violet-500/30'
   },
   {
-    id: 'sas-standard',
-    icon: TrendingUp,
-    title: '焦虑自评量表',
-    description: '了解你的焦虑水平',
+    id: 'iq-ravens',
+    icon: Target,
+    title: '瑞文智商测试',
+    description: '测测你的智商水平',
     questions: 28,
-    duration: 5,
-    color: 'from-amber-500 to-orange-500',
-    bgColor: 'bg-amber-500/10',
-    borderColor: 'border-amber-500/30'
+    duration: 8,
+    color: 'from-cyan-500 to-blue-500',
+    bgColor: 'bg-cyan-500/10',
+    borderColor: 'border-cyan-500/30'
+  },
+  {
+    id: 'eq-goleman',
+    icon: Heart,
+    title: '情商测评',
+    description: '了解你的情商高低',
+    questions: 28,
+    duration: 6,
+    color: 'from-rose-500 to-pink-500',
+    bgColor: 'bg-rose-500/10',
+    borderColor: 'border-rose-500/30'
   },
   {
     id: 'ocean-bigfive',
-    icon: Heart,
+    icon: Users,
     title: '大五人格',
     description: '科学的人格模型',
     questions: 28,
@@ -35,6 +46,17 @@ const FEATURED_ASSESSMENTS = [
     color: 'from-emerald-500 to-teal-500',
     bgColor: 'bg-emerald-500/10',
     borderColor: 'border-emerald-500/30'
+  },
+  {
+    id: 'holland-sds',
+    icon: Lightbulb,
+    title: '职业兴趣测评',
+    description: '找到你的职业方向',
+    questions: 28,
+    duration: 6,
+    color: 'from-amber-500 to-orange-500',
+    bgColor: 'bg-amber-500/10',
+    borderColor: 'border-amber-500/30'
   },
   {
     id: 'ecr-attachment',
