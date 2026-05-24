@@ -74,8 +74,9 @@ interface AppStore {
 
   // Current Assessment
   currentAssessmentId: string | null
+  currentAssessmentMode: 'normal' | 'professional' | null
   currentAnswers: Answer[]
-  setCurrentAssessment: (id: string) => void
+  setCurrentAssessment: (id: string, mode?: 'normal' | 'professional') => void
   addAnswer: (answer: Answer) => void
   updateAnswer: (questionId: string, answer: Answer) => void
   clearCurrentAssessment: () => void
@@ -165,9 +166,11 @@ export const useAppStore = create<AppStore>()(
 
       // Current Assessment
       currentAssessmentId: null,
+      currentAssessmentMode: null,
       currentAnswers: [],
-      setCurrentAssessment: (id) => set({
+      setCurrentAssessment: (id, mode) => set({
         currentAssessmentId: id,
+        currentAssessmentMode: mode || null,
         currentAnswers: []
       }),
       addAnswer: (answer) => set((state) => ({
@@ -180,6 +183,7 @@ export const useAppStore = create<AppStore>()(
       })),
       clearCurrentAssessment: () => set({
         currentAssessmentId: null,
+        currentAssessmentMode: null,
         currentAnswers: [],
       }),
 

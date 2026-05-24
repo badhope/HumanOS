@@ -9,6 +9,7 @@ import { schwartzStandardAssessment } from './schwartz-standard'
 import { ecrAttachmentAssessment } from './ecr-attachment'
 import { hollandSDSAssessment } from './holland-sds'
 import { ideologyAssessment } from './ideology-9square'
+import { ideologyEnhancedAssessment } from './ideology-enhanced-config'
 import { iqAssessment } from './iq-ravens'
 import { eqAssessment } from './eq-goleman'
 import { darkAssessment } from './dark-triad'
@@ -67,6 +68,7 @@ export const standardAssessments = {
   'ecr-attachment': ecrAttachmentAssessment,
   'holland-sds': hollandSDSAssessment,
   'ideology-9square': ideologyAssessment,
+  'ideology-enhanced': ideologyEnhancedAssessment,
   'iq-ravens': iqAssessment,
   'eq-goleman': eqAssessment,
   'dark-triad': darkAssessment,

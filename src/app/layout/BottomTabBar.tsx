@@ -31,7 +31,7 @@ export default function BottomTabBar() {
       >
         {tabs.map((tab, index) => {
           const Icon = tab.icon
-          const isActive = location.pathname === tab.path
+          const isActive = location.pathname.startsWith(tab.path)
           
           return (
             <motion.button

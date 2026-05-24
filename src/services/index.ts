@@ -5,9 +5,23 @@
  */
 
 import visitorService from './visitorIdentity'
+import { apiService, apiClient } from './api'
 
-export { visitorService }
+export { visitorService, apiService, apiClient }
+
+export type {
+  Option,
+  Question,
+  Assessment,
+  Session,
+  SessionProgress,
+  Answer,
+  DimensionScores,
+  Result,
+  CalculationResult,
+} from './api'
 
 export default {
   visitorService,
+  apiService,
 }

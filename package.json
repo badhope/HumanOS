@@ -1,71 +1,10 @@
 {
   "name": "mindmirror",
-  "version": "3.0.0",
-  "description": "心镜 MindMirror - 照见自己，成为更好的自己。开源专业心理测评与成长平台，专业测评 + 训练系统 + 成长追踪",
-  "author": {
-    "name": "观心界团队",
-    "email": "contact@guanxinjie.dev",
-    "url": "https://github.com/badhope"
-  },
-  "module": "dist/index.html",
-  "exports": {
-    ".": "./dist/index.html"
-  },
-  "files": [
-    "dist",
-    "src"
-  ],
-  "license": "CC-BY-NC-4.0",
+  "version": "1.0.0",
+  "description": "心镜 MindMirror - 照见自己，成为更好的自己。开源专业心理测评与成长平台",
+  "author": "心镜团队",
+  "private": true,
   "type": "module",
-  "private": false,
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
-  "homepage": "https://mindmirror.dpdns.org",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/badhope/MindMirror.git"
-  },
-  "bugs": {
-    "url": "https://github.com/badhope/MindMirror/issues"
-  },
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/badhope"
-  },
-  "keywords": [
-    "assessment",
-    "assessment-platform",
-    "personality-test",
-    "emotional-intelligence",
-    "eq-test",
-    "iq-test",
-    "psychological-test",
-    "online-quiz",
-    "mbti",
-    "big-five",
-    "ocean",
-    "ideology",
-    "political-compass",
-    "personality-analysis",
-    "psychological-assessment",
-    "react",
-    "typescript",
-    "vite",
-    "tailwindcss",
-    "web-app",
-    "open-source",
-    "测评平台",
-    "人形图鉴",
-    "心理测评",
-    "人格测试",
-    "职业测评"
-  ],
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
-  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -75,29 +14,13 @@
     "lint:fix": "eslint src --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\"",
-    "clean": "rm -rf dist node_modules/.vite release",
-    "prepare": "husky install || true",
-    "deploy": "node deploy.mjs",
-    "deploy:all": "node deploy.mjs all",
-    "deploy:vercel": "node deploy.mjs vercel",
-    "deploy:netlify": "node deploy.mjs netlify",
-    "deploy:cloudflare": "node deploy.mjs cloudflare",
-    "deploy:surge": "node deploy.mjs surge",
-    "vercel": "vercel --prod",
-    "netlify": "netlify deploy --prod --dir=dist",
-    "cloudflare": "wrangler pages deploy dist",
-    "surge": "surge dist humanos.surge.sh",
-    "ecosystem": "node scripts/submit-ecosystem.js",
-    "platforms": "node scripts/auto-index-platforms.js",
-    "analyze": "npx vite-bundle-visualizer",
-    "check:integrity": "node scripts/integrity-check.mjs",
-    "quality": "npm run typecheck && npm run lint && npm run check:integrity"
+    "clean": "rm -rf dist node_modules/.vite",
+    "analyze": "npx vite-bundle-visualizer"
   },
   "dependencies": {
     "@react-three/drei": "^9.92.0",
     "@react-three/fiber": "^8.15.11",
     "@use-gesture/react": "^10.3.0",
-    "axios": "^1.15.0",
     "canvas-confetti": "^1.9.2",
     "clsx": "^2.0.0",
     "dompurify": "^3.4.2",
@@ -136,8 +59,6 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.4",
     "globals": "^17.4.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.1.0",
     "postcss": "^8.4.32",
     "prettier": "^3.1.0",
     "tailwindcss": "^3.3.6",

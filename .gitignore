@@ -1,11 +1,8 @@
 # Dependencies
 node_modules
-.pnp
-.pnp.js
 
 # Build
 dist
-dist-ssr
 *.local
 
 # Editor directories and files
@@ -13,19 +10,9 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
 
 # Logs
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-backend/logs/
 *.log
 
 # Environment
@@ -38,67 +25,14 @@ backend/logs/
 
 # Testing
 coverage
-tests/
-test_*.py
-test_*.cjs
 
 # Temporary files
 *.tmp
 *.temp
 
-# Test files
-__tests__
-*.test.ts
-*.test.tsx
-*.spec.ts
-*.spec.tsx
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-*.egg-info/
-dist/
-build/
-*.egg
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Archives
-*.tar.gz
-*.rar
-
-# Deploy folders
-HumanOS-web-deploy
-deploy-website/
-
-# IDE
-.trae
-
-# OS
-Thumbs.db
-.DS_Store
-
 # PWA dev
 sw.js
 workbox-*.js
 
-# Build artifacts (DO NOT COMMIT)
-Windows-Release/
-electron-release/
-release/
-release-app/
-dist/
+# Build artifacts
 dev-dist/
-
-# Screenshots and temporary images
-screenshot-*.png
-screenshot-*.jpg
-
-# Documentation (optional)
-# README_EN.md
-# TEMPLATE_GUIDE.md

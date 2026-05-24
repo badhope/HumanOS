@@ -1,11 +1,25 @@
+export type QuestionType = 
+  | 'core-principle' // 核心原则题目
+  | 'policy-position' // 政策立场题目
+  | 'personal-value' // 个人价值观题目
+  | 'trade-off' // 权衡取舍题目
+
 export interface StandardizedQuestion {
   id: string
   text: string
+  type: QuestionType
   dimension: 'economic' | 'social' | 'cultural' | 'international' | 'ecological'
   ideologyLoadings: Record<string, number>
   scoringDirection: 1 | -1
   reverseScored?: boolean
   controversyLevel: 'high' | 'extreme'
+  // 题目权重系统
+  baseWeight: number // 基础权重
+  discriminationPower: number // 区分能力权重
+  difficulty: number // 题目难度
+  // 题目质量指标
+  validityScore: number // 效度评分
+  reliabilityScore: number // 信度评分
 }
 
 export const STANDARDIZED_QUESTIONS: StandardizedQuestion[] = [

@@ -1,4 +1,3 @@
-import './utils/logger'
 import './utils/assessmentCache'
 import { preloadTopAssessments } from './utils/dynamicAssessmentLoader'
 import React from 'react'
@@ -25,10 +24,6 @@ const Router = getRouterMode()
 
 setTimeout(() => {
   preloadTopAssessments()
-  
-  if (import.meta.env.DEV) {
-    import('./utils/performanceBenchmark')
-  }
 }, 3000)
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

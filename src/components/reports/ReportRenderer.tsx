@@ -1,7 +1,7 @@
 import React, { Suspense, useState, useCallback } from 'react'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
-import LazyReportRouter from './lazy'
 import ResultLayerDisplay from './ResultLayerDisplay'
+import EnhancedReportTemplate from '../EnhancedReportTemplate'
 import type { AssessmentResult } from '../../types'
 
 interface ReportRendererProps {
@@ -102,11 +102,11 @@ export default function ReportRenderer(props: ReportRendererProps) {
     <div>
       <ReportErrorBoundary onError={handleError}>
         <Suspense fallback={<ReportLoadingFallback />}>
-          <LazyReportRouter
+          <EnhancedReportTemplate
             key={retryKey}
             result={props.result}
-            assessmentType={props.assessmentType}
             mode={props.mode}
+            assessmentType={props.assessmentType}
             ideologyScores={props.ideologyScores}
             primaryIdeology={props.primaryIdeology}
             matchScore={props.matchScore}

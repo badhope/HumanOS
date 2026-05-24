@@ -77,8 +77,7 @@ const ALL_ASSESSMENTS: Assessment[] = [
   { id: 'pes', title: '心理授权量表', description: '评估工作自主感', icon: TrendingUp, path: '/legacy/mode-select/pes-standard', questionCount: 24, duration: 5, category: '职业' },
 
   // 价值观类
-  { id: 'ideology', title: '政治坐标九维测试', description: '了解你的政治倾向', icon: Target, path: '/legacy/mode-select/ideology-9square', questionCount: 28, duration: 6, category: '价值观' },
-  { id: 'ideology-60', title: '政治坐标完整版', description: '深度政治立场分析', icon: Scale, path: '/legacy/mode-select/ideology-professional', questionCount: 60, duration: 12, category: '价值观' },
+  { id: 'ideology-enhanced', title: '意识形态罗盘 5×5', description: '了解你在不同社会议题上的立场', icon: Target, path: '/app/assessment/ideology-enhanced/mode-select', questionCount: 35, duration: 6, category: '意识形态', badge: '新版' },
   { id: 'schwartz', title: '施瓦茨价值观测试', description: '探索你的价值取向', icon: Sparkles, path: '/legacy/mode-select/schwartz-standard', questionCount: 28, duration: 6, category: '价值观' },
   { id: 'schwartz-57', title: '施瓦茨价值观完整版', description: '全面价值观分析', icon: Compass, path: '/legacy/mode-select/schwartz-professional', questionCount: 57, duration: 12, category: '价值观' },
   { id: 'mft', title: '道德基础量表', description: '了解你的道德观念', icon: Shield, path: '/legacy/mode-select/mft-standard', questionCount: 28, duration: 6, category: '价值观' },
@@ -102,8 +101,14 @@ const ALL_ASSESSMENTS: Assessment[] = [
 export default function AssessmentsPage() {
   const navigate = useNavigate()
 
-  const handleStartAssessment = (path: string) => {
-    navigate(path)
+  const handleStartAssessment = (assessmentId: string) => {
+    if (assessmentId === 'ideology-enhanced') {
+      navigate('/app/assessment/ideology-enhanced/mode-select')
+    } else if (assessmentId.startsWith('/legacy/')) {
+      navigate(assessmentId)
+    } else {
+      navigate(`/app/assessment/${assessmentId}`)
+    }
   }
 
   const categories = ['全部', '人格', '关系', '心理', '职业', '价值观', '趣味']
@@ -119,7 +124,7 @@ export default function AssessmentsPage() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-4xl mx-auto px-4 space-y-6">
       <div className="text-center py-4">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 mb-3">
           <Sparkles size={14} className="text-violet-400" />
@@ -161,7 +166,7 @@ export default function AssessmentsPage() {
           return (
             <button
               key={assessment.id}
-              onClick={() => handleStartAssessment(assessment.path)}
+              onClick={() => handleStartAssessment(assessment.id)}
               className="group relative overflow-hidden rounded-xl p-4 bg-white/5 border border-white/10 hover:border-violet-500/30 transition-all text-left"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

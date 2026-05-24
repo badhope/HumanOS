@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Award, TrendingUp, Lightbulb, Briefcase, Brain, BarChart3, GitBranch, Users, Target, Sparkles } from 'lucide-react'
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts'
-import { ComprehensiveChartSystem } from './charts'
+import { AdvancedRadarChart } from './charts'
 import type { AssessmentResult, ProfessionalAssessmentResult, Dimension } from '../types'
 
 function ScatterDistributionChart({
@@ -198,14 +198,12 @@ export default function EnhancedReportTemplate({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <ComprehensiveChartSystem
+          <AdvancedRadarChart
             dimensions={safeResult.dimensions as Dimension[]}
-            overallScore={safeResult.score}
-            assessmentType={assessmentType}
-            ideologyScores={isIdeologyTest ? ideologyScores : undefined}
-            primaryIdeology={isIdeologyTest ? primaryIdeology : undefined}
-            matchScore={isIdeologyTest ? matchScore : undefined}
             title="数据可视化分析"
+            showLegend={true}
+            animated={true}
+            colorScheme="violet"
           />
         </motion.div>
       ) : (

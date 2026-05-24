@@ -16,7 +16,8 @@ import AppLayout from './app/layout/AppLayout'
 import HomePage from './app/pages/HomePage'
 import Daily from './app/pages/Daily'
 import AssessmentsPage from './app/pages/AssessmentsPage'
-import Training from './app/pages/Training'
+import TrainingOverview from './app/pages/training/TrainingOverview'
+import TrainingTrackPage from './app/pages/training/TrainingTrackPage'
 import Progress from './app/pages/Progress'
 import SettingsPage from './app/pages/SettingsPage'
 import GrowthDashboard from './app/pages/GrowthDashboard'
@@ -31,6 +32,10 @@ import CommunityDiscussion from './app/pages/community/CommunityDiscussion'
 import CommunityExpert from './app/pages/community/CommunityExpert'
 import GrowthTraining from './app/pages/growth/GrowthTraining'
 import GrowthHabits from './app/pages/growth/GrowthHabits'
+import AssessmentIntro from './app/pages/assessment/AssessmentIntro'
+import AssessmentTaking from './app/pages/assessment/AssessmentTaking'
+import AssessmentResult from './app/pages/assessment/AssessmentResult'
+import IdeologyModeSelect from './app/pages/assessment/IdeologyModeSelect'
 
 const ModeSelect = lazy(() => import('./pages/ModeSelect'))
 const AssessmentConfirm = lazy(() => import('./pages/AssessmentConfirm'))
@@ -46,9 +51,6 @@ const IdeologyHistoryPage = lazy(() => import('./pages/IdeologyHistoryPage'))
 const IsmsPage = lazy(() => import('./pages/IsmsPage'))
 const PlatformStoryPage = lazy(() => import('./pages/PlatformStoryPage'))
 const OnePieceModeSelect = lazy(() => import('./pages/OnePieceModeSelect'))
-const QuestionOptimizer = lazy(() => import('./pages/QuestionOptimizer'))
-const ThemeAnalysisDemo = lazy(() => import('./pages/ThemeAnalysisDemo'))
-const ChartShowcase = lazy(() => import('./pages/ChartShowcase'))
 const Leaderboard = lazy(() => import('./pages/Leaderboard'))
 const SoulMatch = lazy(() => import('./pages/SoulMatch'))
 const Profile = lazy(() => import('./pages/Profile'))
@@ -90,7 +92,9 @@ export default function App() {
                     <Route path="home" element={<HomePage />} />
                     <Route path="daily" element={<Daily />} />
                     <Route path="assessments" element={<AssessmentsPage />} />
-                    <Route path="training" element={<Training />} />
+                    <Route path="training" element={<TrainingOverview />} />
+                    <Route path="training/track/:trackId" element={<TrainingTrackPage />} />
+                    <Route path="training/:programId" element={<UniversalTraining />} />
                     <Route path="progress" element={<Progress />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="getting-started" element={<GettingStarted />} />
@@ -106,7 +110,13 @@ export default function App() {
                     <Route path="growth" element={<GrowthDashboard />} />
                     <Route path="growth/training" element={<GrowthTraining />} />
                     <Route path="growth/habits" element={<GrowthHabits />} />
-                    <Route path="training/:programId" element={<UniversalTraining />} />
+                    <Route path="assessment/ideology-enhanced/mode-select" element={<IdeologyModeSelect />} />
+                    <Route path="assessment/ideology-enhanced" element={<AssessmentIntro />} />
+                    <Route path="assessment/ideology-enhanced/start" element={<AssessmentTaking />} />
+                    <Route path="assessment/ideology-enhanced/result/:resultId" element={<AssessmentResult />} />
+                    <Route path="assessment/:assessmentId" element={<AssessmentIntro />} />
+                    <Route path="assessment/:assessmentId/start" element={<AssessmentTaking />} />
+                    <Route path="assessment/:assessmentId/result/:resultId" element={<AssessmentResult />} />
                   </Route>
 
                   <Route path="/app/discover" element={<Navigate to="/app/assessments" replace />} />
@@ -130,9 +140,6 @@ export default function App() {
                   <Route path="/legacy/history/ideology" element={<IdeologyHistoryPage />} />
                   <Route path="/legacy/isms" element={<IsmsPage />} />
                   <Route path="/legacy/story" element={<PlatformStoryPage />} />
-                  <Route path="/legacy/tools/question-optimizer" element={<QuestionOptimizer />} />
-                  <Route path="/legacy/demos/theme-analysis" element={<ThemeAnalysisDemo />} />
-                  <Route path="/legacy/demos/charts" element={<ChartShowcase />} />
                   <Route path="/legacy/leaderboard" element={<Leaderboard />} />
                   <Route path="/legacy/soul-match" element={<SoulMatch />} />
                   <Route path="/legacy/profile" element={<Profile />} />
