@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Flame, Target, ChevronRight, Brain, Clock, Activity } from 'lucide-react'
-import { useAppStore, type MoodRecord, type TrainingRecord } from '../../store'
-import AdvancedRadarChart from '../../components/charts/AdvancedRadarChart'
+import { useAppStore, type MoodRecord, type TrainingRecord } from '../store'
+import AdvancedRadarChart from '../components/charts/AdvancedRadarChart'
 import AchievementsPanel from '../components/AchievementsPanel'
-import TrainingCalendarHeatmap from '../../components/TrainingCalendarHeatmap'
+import TrainingCalendarHeatmap from '../components/TrainingCalendarHeatmap'
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string }> = {
   orange: { bg: 'rgba(251, 146, 60, 0.1)', border: 'rgba(251, 146, 60, 0.2)', text: '#fb923c' },

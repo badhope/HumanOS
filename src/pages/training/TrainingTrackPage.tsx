@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Lock, Zap, Brain, Heart, Users, Briefcase, Sun } from 'lucide-react'
 import { useMemo } from 'react'
-import { useAppStore } from '../../../store'
+import { useAppStore } from '../../store'
 import { ALL_TRAINING_TRACKS, checkLevelUnlocked, type UserProgress } from '../../data/training-levels'
 
 const TRACK_GRADIENTS: Record<string, string> = {

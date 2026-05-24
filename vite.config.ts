@@ -26,9 +26,9 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'humanitysOS - 心镜 MindMirror',
-        short_name: '心镜 MindMirror',
-        description: '观照内心，自成一界 - 43种专业心理测评，探索真实的自己',
+        name: '心镜 MindMirror',
+        short_name: '心镜',
+        description: '心镜 MindMirror - 心理测评与成长平台',
         theme_color: '#581c87',
         background_color: '#0f172a',
         display: 'standalone',
@@ -101,22 +101,16 @@ export default defineConfig({
             return 'vendor'
           }
           if (id.includes('src/data/assessments')) return 'assessments-data'
-          if (id.includes('src/data/simulations')) return 'simulations-data'
-          if (id.includes('src/data/professional')) return 'professional-data'
-          if (id.includes('src/components/economy')) return 'economy-components'
           if (id.includes('src/components/charts')) return 'charts-components'
           if (id.includes('src/components/ui')) return 'ui-components'
           if (id.includes('src/components/animations')) return 'animation-components'
-          if (id.includes('src/components/reports')) {
-            const match = id.match(/\/(\w+)ProfessionalReport\.tsx$/)
-            return match ? `report-${match[1].toLowerCase()}` : 'report-components'
-          }
-          if (id.includes('src/components/')) return 'shared-components'
-          if (id.includes('src/hooks/')) return 'hooks'
-          if (id.includes('src/services/')) return 'services'
-          if (id.includes('src/utils/')) return 'utils'
-          if (id.includes('src/store/')) return 'store'
-          if (id.includes('src/types/')) return 'types'
+          if (id.includes('src/components/reports')) return 'report-components'
+          if (id.includes('src/components')) return 'shared-components'
+          if (id.includes('src/hooks')) return 'hooks'
+          if (id.includes('src/services')) return 'services'
+          if (id.includes('src/utils')) return 'utils'
+          if (id.includes('src/store')) return 'store'
+          if (id.includes('src/types')) return 'types'
         },
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',

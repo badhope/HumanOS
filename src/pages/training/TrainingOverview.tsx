@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useAppStore } from '../../../store'
-import { useResponsive } from '../../../hooks/useResponsive'
+import { useAppStore } from '../../store'
+import { useResponsive } from '../../hooks/useResponsive'
 import { ALL_TRAINING_TRACKS, checkLevelUnlocked, type UserProgress } from '../../data/training-levels'
 import { getRecommendedTrainings } from '../../data/training-library'
 import TrainingGuide from '../../components/training/TrainingGuide'

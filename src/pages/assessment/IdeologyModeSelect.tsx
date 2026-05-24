@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Sparkles, Target, Zap, CheckCircle, Clock, List, Shield, ArrowLeft } from 'lucide-react'
-import { useAppStore } from '../../../store'
+import { useAppStore } from '../../store'
 
 export default function IdeologyModeSelect() {
   const navigate = useNavigate()

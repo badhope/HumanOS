@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Crown, Zap, Sparkles } from 'lucide-react'
 import { getAssessmentById } from '@data/assessments'
-import LegacyHeader from '../app/components/LegacyHeader'
+import LegacyHeader from '../components/LegacyHeader'
 import { PageWrapper } from '@components/layout'
 
 const MAX_NORMAL_QUESTIONS = 28

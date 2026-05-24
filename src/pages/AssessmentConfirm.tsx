@@ -4,7 +4,7 @@ import { ArrowLeft, Clock, Target, Sparkles, Play, AlertCircle, ChevronDown, Che
 import { getAssessmentById } from '@data/assessments'
 import ProfessionalCredibility from '@components/professional-credibility/ProfessionalCredibility'
 import { useState } from 'react'
-import LegacyHeader from '../app/components/LegacyHeader'
+import LegacyHeader from '../components/LegacyHeader'
 import { PageWrapper } from '@components/layout'
 
 const MAX_NORMAL_QUESTIONS = 28

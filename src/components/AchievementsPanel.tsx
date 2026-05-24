@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Trophy, Lock, Star, Check } from 'lucide-react'
-import { useAppStore, type Achievement } from '../../store'
+import { useAppStore, type Achievement } from '../store'
 
 function AchievementCard({ achievement, index }: { achievement: Achievement; index: number }) {
   const isUnlocked = achievement.unlockedAt !== undefined

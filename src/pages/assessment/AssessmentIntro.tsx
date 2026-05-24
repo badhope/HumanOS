@@ -6,8 +6,8 @@ import {
   CheckCircle2, Star, Users, Target, Loader2
 } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { apiService, type Assessment } from '../../../services/api'
-import { useAppStore } from '../../../store'
+import { apiService, type Assessment } from '../../services/api'
+import { useAppStore } from '../../store'
 
 const CATEGORY_ICONS: Record<string, typeof Brain> = {
   '人格': Brain,

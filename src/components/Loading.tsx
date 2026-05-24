@@ -1,238 +1,137 @@
 import { motion } from 'framer-motion'
+import { Loader2, Sparkles, Star } from 'lucide-react'
 
-interface SkeletonProps {
-  className?: string
-  variant?: 'rect' | 'circle' | 'text'
-  width?: string | number
-  height?: string | number
+interface LoadingProps {
+  size?: 'small' | 'medium' | 'large'
+  variant?: 'spinner' | 'pulse' | 'dots'
+  text?: string
 }
 
-export function Skeleton({
-  className = '',
-  variant = 'rect',
-  width,
-  height,
-}: SkeletonProps) {
-  const variants = {
-    rect: 'rounded-lg',
-    circle: 'rounded-full',
-    text: 'rounded h-4',
+export function Loading({ size = 'medium', variant = 'spinner', text }: LoadingProps) {
+  const sizeMap = {
+    small: { container: 'h-4 w-4', icon: 16 },
+    medium: { container: 'h-8 w-8', icon: 24 },
+    large: { container: 'h-12 w-12', icon: 32 }
   }
 
-  return (
+  const { container, icon } = sizeMap[size]
+
+  const renderSpinner = () => (
     <motion.div
-      className={`bg-gradient-to-r from-white/5 via-white/10 to-white/5 bg-[length:200%_100%] animate-shimmer ${variants[variant]} ${className}`}
-      style={{ width, height }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    />
-  )
-}
-
-interface PageSkeletonProps {
-  type?: 'home' | 'assessment' | 'dashboard' | 'results'
-}
-
-export function PageSkeleton({ type = 'home' }: PageSkeletonProps) {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  }
-
-  if (type === 'home') {
-    return (
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="pt-24 pb-12"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <Skeleton variant="rect" className="w-48 h-8 mx-auto mb-6" />
-            <Skeleton variant="text" className="w-96 h-6 mx-auto mb-4" />
-            <Skeleton variant="text" className="w-80 h-6 mx-auto" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
-            {[1, 2, 3].map((i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                className="glass rounded-2xl p-6"
-              >
-                <Skeleton variant="rect" className="w-12 h-12 mb-4" />
-                <Skeleton variant="text" className="w-32 h-6 mb-2" />
-                <Skeleton variant="text" className="w-full h-4 mb-1" />
-                <Skeleton variant="text" className="w-3/4 h-4" />
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                className="glass rounded-2xl p-6"
-              >
-                <Skeleton variant="rect" className="w-full h-40 mb-4" />
-                <Skeleton variant="text" className="w-32 h-6 mb-2" />
-                <Skeleton variant="text" className="w-full h-4 mb-1" />
-                <Skeleton variant="text" className="w-2/3 h-4" />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-    )
-  }
-
-  if (type === 'assessment') {
-    return (
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="pt-24 pb-12"
-      >
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Skeleton variant="rect" className="w-32 h-4 mb-8" />
-          <Skeleton variant="rect" className="w-full h-8 mb-4" />
-          <Skeleton variant="rect" className="w-3/4 h-6 mb-8" />
-
-          <div className="space-y-4 mb-8">
-            {[1, 2, 3, 4].map((i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                className="glass rounded-xl p-4"
-              >
-                <Skeleton variant="rect" className="w-full h-12" />
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="flex justify-between">
-            <Skeleton variant="rect" className="w-24 h-10" />
-            <Skeleton variant="rect" className="w-24 h-10" />
-          </div>
-        </div>
-      </motion.div>
-    )
-  }
-
-  if (type === 'dashboard') {
-    return (
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="pt-24 pb-12"
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="glass rounded-2xl p-8 mb-10">
-            <div className="flex items-center gap-6">
-              <Skeleton variant="circle" className="w-20 h-20" />
-              <div className="flex-1">
-                <Skeleton variant="text" className="w-48 h-8 mb-2" />
-                <Skeleton variant="text" className="w-32 h-4" />
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            {[1, 2, 3].map((i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                className="glass rounded-2xl p-6"
-              >
-                <Skeleton variant="text" className="w-16 h-10 mb-2" />
-                <Skeleton variant="text" className="w-24 h-4" />
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <motion.div
-                key={i}
-                variants={itemVariants}
-                className="glass rounded-xl p-4"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <Skeleton variant="rect" className="w-12 h-12 rounded-xl" />
-                    <div>
-                      <Skeleton variant="text" className="w-32 h-5 mb-1" />
-                      <Skeleton variant="text" className="w-24 h-4" />
-                    </div>
-                  </div>
-                  <Skeleton variant="rect" className="w-20 h-8 rounded-full" />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-    )
-  }
-
-  return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="pt-24 pb-12"
+      className={container}
+      animate={{ rotate: 360 }}
+      transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Skeleton variant="rect" className="w-full h-64 mb-8" />
-        <Skeleton variant="rect" className="w-full h-96" />
-      </div>
+      <Loader2 className="w-full h-full text-violet-400" />
     </motion.div>
   )
-}
 
-interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg'
-  className?: string
-}
+  const renderPulse = () => (
+    <div className="flex gap-1">
+      {[0, 1, 2].map((i) => (
+        <motion.div
+          key={i}
+          className={`${container} bg-violet-400 rounded-full`}
+          style={{ height: icon / 2, width: icon / 2 }}
+          animate={{ scale: [0.5, 1, 0.5], opacity: [0.3, 1, 0.3] }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            delay: i * 0.2
+          }}
+        />
+      ))}
+    </div>
+  )
 
-export function LoadingSpinner({ size = 'md', className = '' }: LoadingSpinnerProps) {
-  const sizes = {
-    sm: 'w-4 h-4',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12',
-  }
+  const renderDots = () => (
+    <div className="flex gap-2">
+      {[0, 1, 2].map((i) => (
+        <motion.div
+          key={i}
+          className="w-2 h-2 bg-violet-400 rounded-full"
+          animate={{ y: [0, -8, 0] }}
+          transition={{
+            duration: 0.8,
+            repeat: Infinity,
+            delay: i * 0.2,
+            ease: 'easeInOut'
+          }}
+        />
+      ))}
+    </div>
+  )
 
   return (
-    <motion.div
-      className={`${sizes[size]} border-2 border-white/20 border-t-violet-500 rounded-full ${className}`}
-      animate={{ rotate: 360 }}
-      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-    />
+    <div className="flex flex-col items-center justify-center gap-3">
+      {variant === 'spinner' && renderSpinner()}
+      {variant === 'pulse' && renderPulse()}
+      {variant === 'dots' && renderDots()}
+      {text && <p className="text-white/60 text-sm">{text}</p>}
+    </div>
   )
 }
 
-interface PulsingDotProps {
-  className?: string
+interface PageLoadingProps {
+  title?: string
+  description?: string
 }
 
-export function PulsingDot({ className = '' }: PulsingDotProps) {
+export function PageLoading({ title = '加载中...', description }: PageLoadingProps) {
   return (
-    <motion.span
-      className={`inline-block w-2 h-2 rounded-full bg-violet-500 ${className}`}
-      animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-      transition={{ duration: 1, repeat: Infinity }}
-    />
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-900 to-slate-800">
+      <div className="text-center">
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          className="mb-6"
+        >
+          <div className="relative">
+            <Sparkles className="w-16 h-16 text-violet-400" />
+            <motion.div
+              className="absolute -top-2 -right-2"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+            >
+              <Star className="w-6 h-6 text-amber-400" />
+            </motion.div>
+          </div>
+        </motion.div>
+
+        <motion.h2
+          className="text-xl font-semibold text-white mb-2"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          {title}
+        </motion.h2>
+
+        {description && (
+          <motion.p
+            className="text-white/50 text-sm"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            {description}
+          </motion.p>
+        )}
+
+        <motion.div
+          className="mt-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+        >
+          <Loading variant="dots" size="large" />
+        </motion.div>
+      </div>
+    </div>
   )
 }
+
+export const PageSkeleton = PageLoading
+
+export default Loading

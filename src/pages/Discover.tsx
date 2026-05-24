@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
-import { CategoryCard } from '../../components/DiscoverCard'
-import { TabSlider } from '../../components/TabSlider'
-import { discoverCategories } from '../../data/discoverData'
+import { CategoryCard } from '../components/DiscoverCard'
+import { TabSlider } from '../components/TabSlider'
+import { discoverCategories } from '../data/discoverData'
 
 export default function Discover() {
   const [activeCategory, setActiveCategory] = useState<string>(discoverCategories[0].id)

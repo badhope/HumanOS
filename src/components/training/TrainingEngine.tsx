@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef, createContext, useContext } f
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Play, Pause, SkipForward, Volume2, VolumeX, Trophy, Timer, Heart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useAppStore } from '../../../store'
+import { useAppStore } from '../../store'
 
 type ExerciseType = 'breathing' | 'guided' | 'reflection' | 'rest' | 'countdown' | 'journal' | 'visualization' | 'affirmation'
 

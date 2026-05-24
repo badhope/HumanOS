@@ -57,7 +57,7 @@ import { useAppStore } from '@store'
 import { useSettingsStore } from '@store/settingsStore'
 import { getAssessmentById } from '@data/assessments'
 import { cn } from '@utils/cn'
-import { useI18n } from '../../i18n'
+import { useI18n } from '../i18n'
 
 interface ToggleSetting {
   id: string

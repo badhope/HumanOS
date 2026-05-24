@@ -19,6 +19,8 @@ npm-debug.log*
 .env
 .env.local
 .env.*.local
+configs/.env*
+!.env.example
 
 # TypeScript
 *.tsbuildinfo

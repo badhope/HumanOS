@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Sparkles, Brain, TrendingUp, Heart, Compass, Zap, Shield, Award, Clock, Target, Users, Lightbulb, ChevronRight, HelpCircle } from 'lucide-react'
-import { useAppStore } from '../../store'
+import { useAppStore } from '../store'
 
 const FEATURED_ASSESSMENTS = [
   {

@@ -4,11 +4,11 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Home, Trophy, Loader2 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { QRCodeSVG } from 'qrcode.react'
-import { useAppStore } from '../../../store'
-import { getAssessmentById } from '../../../data/assessments'
-import { apiService, type Result as ApiResult } from '../../../services/api'
-import ReportRenderer from '../../../components/reports/ReportRenderer'
-import ResultExportButton from '../../../components/ResultExportButton'
+import { useAppStore } from '../../store'
+import { getAssessmentById } from '../../data/assessments'
+import { apiService, type Result as ApiResult } from '../../services/api'
+import ReportRenderer from '../../components/reports/ReportRenderer'
+import ResultExportButton from '../../components/ResultExportButton'
 
 export default function AssessmentResult() {
   const { assessmentId, resultId } = useParams<{ assessmentId: string; resultId: string }>()

@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react'
 import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Sun, Sparkles, Gamepad2, Zap, Compass } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useAppStore, type TrainingRecord } from '../../store'
-import { useResponsive } from '../../hooks/useResponsive'
+import { useAppStore, type TrainingRecord } from '../store'
+import { useResponsive } from '../hooks/useResponsive'
 import {
   FOUNDATION_TRAININGS,
   COGNITION_TRAININGS_FULL,

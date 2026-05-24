@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 import TopNavBar from './TopNavBar'
 import SideNav from './SideNav'
 import SideDrawer from './SideDrawer'
-import { useResponsive } from '../hooks/useResponsive'
+import { useResponsive } from '../../hooks/useResponsive'
 import ParticleBackground from '../../components/ParticleBackground'
 
 interface AppLayoutProps {

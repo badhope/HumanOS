@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import UsageGuide from '../components/UsageGuide'
 import AssessmentCard from '../components/AssessmentCard'
 import { DailyTaskList } from '../components/DailyTaskList'
-import { useAppStore } from '../../store'
+import { useAppStore } from '../store'
 import { getDailyPsychology } from '../data/psychology-knowledge'
 
 const MOOD_EMOJIS = ['😢', '😔', '😐', '😊', '🎉']

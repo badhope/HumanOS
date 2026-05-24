@@ -10,56 +10,56 @@ import KeyboardShortcutsHelp from './components/KeyboardShortcutsHelp'
 import ShortcutInitializer from './components/ShortcutInitializer'
 import { ToastProvider } from './components/ui/Toast'
 import { ShortcutProvider } from './components/ShortcutProvider'
+
+import AppLayout from './components/layout/AppLayout'
+import HomePage from './pages/HomePage'
+import Daily from './pages/Daily'
+import AssessmentsPage from './pages/AssessmentsPage'
+import TrainingOverview from './pages/training/TrainingOverview'
+import TrainingTrackPage from './pages/training/TrainingTrackPage'
+import Progress from './pages/Progress'
+import SettingsPage from './pages/SettingsPage'
+import GrowthDashboard from './pages/GrowthDashboard'
+import GettingStarted from './pages/GettingStarted'
+import UniversalTraining from './pages/training/UniversalTraining'
+import LibraryArticles from './pages/library/LibraryArticles'
+import ArticleDetail from './pages/library/ArticleDetail'
+import LibraryTools from './pages/library/LibraryTools'
+import LibraryResources from './pages/library/LibraryResources'
+import CommunityShare from './pages/community/CommunityShare'
+import CommunityDiscussion from './pages/community/CommunityDiscussion'
+import CommunityExpert from './pages/community/CommunityExpert'
+import GrowthTraining from './pages/growth/GrowthTraining'
+import GrowthHabits from './pages/growth/GrowthHabits'
+import AssessmentIntro from './pages/assessment/AssessmentIntro'
+import AssessmentTaking from './pages/assessment/AssessmentTaking'
+import AssessmentResult from './pages/assessment/AssessmentResult'
+import IdeologyModeSelect from './pages/assessment/IdeologyModeSelect'
+import About from './pages/About'
+import AssessmentConfirm from './pages/AssessmentConfirm'
+import Assessment from './pages/Assessment'
+import Loading from './pages/Loading'
+import Results from './pages/Results'
+import Dashboard from './pages/Dashboard'
+import TheoryDetail from './pages/TheoryDetail'
+import PhilosophyHistoryPage from './pages/PhilosophyHistoryPage'
+import PsychologyHistoryPage from './pages/PsychologyHistoryPage'
+import IdeologyHistoryPage from './pages/IdeologyHistoryPage'
+import IsmsPage from './pages/IsmsPage'
+import PlatformStoryPage from './pages/PlatformStoryPage'
+import OnePieceModeSelect from './pages/OnePieceModeSelect'
+import Leaderboard from './pages/Leaderboard'
+import SoulMatch from './pages/SoulMatch'
+import Profile from './pages/Profile'
 import NotFound from './pages/NotFound'
-
-import AppLayout from './app/layout/AppLayout'
-import HomePage from './app/pages/HomePage'
-import Daily from './app/pages/Daily'
-import AssessmentsPage from './app/pages/AssessmentsPage'
-import TrainingOverview from './app/pages/training/TrainingOverview'
-import TrainingTrackPage from './app/pages/training/TrainingTrackPage'
-import Progress from './app/pages/Progress'
-import SettingsPage from './app/pages/SettingsPage'
-import GrowthDashboard from './app/pages/GrowthDashboard'
-import GettingStarted from './app/pages/GettingStarted'
-import UniversalTraining from './app/pages/training/UniversalTraining'
-import LibraryArticles from './app/pages/library/LibraryArticles'
-import ArticleDetail from './app/pages/library/ArticleDetail'
-import LibraryTools from './app/pages/library/LibraryTools'
-import LibraryResources from './app/pages/library/LibraryResources'
-import CommunityShare from './app/pages/community/CommunityShare'
-import CommunityDiscussion from './app/pages/community/CommunityDiscussion'
-import CommunityExpert from './app/pages/community/CommunityExpert'
-import GrowthTraining from './app/pages/growth/GrowthTraining'
-import GrowthHabits from './app/pages/growth/GrowthHabits'
-import AssessmentIntro from './app/pages/assessment/AssessmentIntro'
-import AssessmentTaking from './app/pages/assessment/AssessmentTaking'
-import AssessmentResult from './app/pages/assessment/AssessmentResult'
-import IdeologyModeSelect from './app/pages/assessment/IdeologyModeSelect'
-
-const ModeSelect = lazy(() => import('./pages/ModeSelect'))
-const AssessmentConfirm = lazy(() => import('./pages/AssessmentConfirm'))
-const Assessment = lazy(() => import('./pages/Assessment'))
-const Loading = lazy(() => import('./pages/Loading'))
-const Results = lazy(() => import('./pages/Results'))
-const Dashboard = lazy(() => import('./pages/Dashboard'))
-const About = lazy(() => import('./pages/About'))
-const TheoryDetail = lazy(() => import('./pages/TheoryDetail'))
-const PhilosophyHistoryPage = lazy(() => import('./pages/PhilosophyHistoryPage'))
-const PsychologyHistoryPage = lazy(() => import('./pages/PsychologyHistoryPage'))
-const IdeologyHistoryPage = lazy(() => import('./pages/IdeologyHistoryPage'))
-const IsmsPage = lazy(() => import('./pages/IsmsPage'))
-const PlatformStoryPage = lazy(() => import('./pages/PlatformStoryPage'))
-const OnePieceModeSelect = lazy(() => import('./pages/OnePieceModeSelect'))
-const Leaderboard = lazy(() => import('./pages/Leaderboard'))
-const SoulMatch = lazy(() => import('./pages/SoulMatch'))
-const Profile = lazy(() => import('./pages/Profile'))
+import ChartShowcase from './pages/ChartShowcase'
+import ModeSelect from './pages/ModeSelect'
+import Discover from './pages/Discover'
+import Training from './pages/Training'
 
 export default function App() {
   const theme = useAppStore((state) => state.theme)
   const location = useLocation()
-  
-  const isNewApp = location.pathname.startsWith('/app')
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -80,19 +80,21 @@ export default function App() {
             <div className="min-h-screen bg-slate-900 text-white">
               <ShortcutInitializer />
               
-              {!isNewApp && <GlobalMenu />}
-              {!isNewApp && <QuickSearchModal />}
-              {!isNewApp && <KeyboardShortcutsHelp />}
+              <GlobalMenu />
+              <QuickSearchModal />
+              <KeyboardShortcutsHelp />
 
               <Suspense fallback={<PageSkeleton />}>
                 <Routes>
-                  <Route path="/" element={<Navigate to="/app/home" replace />} />
-
-                  <Route path="/app" element={<AppLayout title="心镜" />}>
+                  <Route path="/" element={<Navigate to="/home" replace />} />
+                  
+                  <Route path="/" element={<AppLayout title="心镜" />}>
                     <Route path="home" element={<HomePage />} />
                     <Route path="daily" element={<Daily />} />
+                    <Route path="discover" element={<Discover />} />
                     <Route path="assessments" element={<AssessmentsPage />} />
-                    <Route path="training" element={<TrainingOverview />} />
+                    <Route path="training" element={<Training />} />
+                    <Route path="training/overview" element={<TrainingOverview />} />
                     <Route path="training/track/:trackId" element={<TrainingTrackPage />} />
                     <Route path="training/:programId" element={<UniversalTraining />} />
                     <Route path="progress" element={<Progress />} />
@@ -117,32 +119,27 @@ export default function App() {
                     <Route path="assessment/:assessmentId" element={<AssessmentIntro />} />
                     <Route path="assessment/:assessmentId/start" element={<AssessmentTaking />} />
                     <Route path="assessment/:assessmentId/result/:resultId" element={<AssessmentResult />} />
+                    <Route path="mode-select/:id" element={<ModeSelect />} />
+                    <Route path="confirm/:id" element={<AssessmentConfirm />} />
+                    <Route path="take/:id" element={<Assessment />} />
+                    <Route path="loading/:id" element={<Loading />} />
+                    <Route path="results/:id" element={<Results />} />
+                    <Route path="result/:hash" element={<Results />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="about" element={<About />} />
+                    <Route path="theory/:theoryId" element={<TheoryDetail />} />
+                    <Route path="history/philosophy" element={<PhilosophyHistoryPage />} />
+                    <Route path="history/psychology" element={<PsychologyHistoryPage />} />
+                    <Route path="history/ideology" element={<IdeologyHistoryPage />} />
+                    <Route path="isms" element={<IsmsPage />} />
+                    <Route path="story" element={<PlatformStoryPage />} />
+                    <Route path="leaderboard" element={<Leaderboard />} />
+                    <Route path="soul-match" element={<SoulMatch />} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="charts" element={<ChartShowcase />} />
+                    <Route path="mode-select/onepiece/:id" element={<OnePieceModeSelect />} />
                   </Route>
-
-                  <Route path="/app/discover" element={<Navigate to="/app/assessments" replace />} />
-                  <Route path="/assessments" element={<Navigate to="/app/assessments" replace />} />
-                  <Route path="/categories" element={<Navigate to="/app/assessments" replace />} />
-                  <Route path="/legacy/categories" element={<Navigate to="/app/assessments" replace />} />
-                  <Route path="/legacy/assessments" element={<Navigate to="/app/assessments" replace />} />
-                  <Route path="/legacy/home" element={<Navigate to="/app/daily" replace />} />
-                  <Route path="/legacy/mode-select/:id" element={<ModeSelect />} />
-                  <Route path="/legacy/mode-select/onepiece/:id" element={<OnePieceModeSelect />} />
-                  <Route path="/legacy/confirm/:id" element={<AssessmentConfirm />} />
-                  <Route path="/legacy/assessment/:id" element={<Assessment />} />
-                  <Route path="/legacy/loading/:id" element={<Loading />} />
-                  <Route path="/legacy/results/:id" element={<Results />} />
-                  <Route path="/legacy/result/:hash" element={<Results />} />
-                  <Route path="/legacy/dashboard" element={<Dashboard />} />
-                  <Route path="/legacy/about" element={<About />} />
-                  <Route path="/legacy/theory/:theoryId" element={<TheoryDetail />} />
-                  <Route path="/legacy/history/philosophy" element={<PhilosophyHistoryPage />} />
-                  <Route path="/legacy/history/psychology" element={<PsychologyHistoryPage />} />
-                  <Route path="/legacy/history/ideology" element={<IdeologyHistoryPage />} />
-                  <Route path="/legacy/isms" element={<IsmsPage />} />
-                  <Route path="/legacy/story" element={<PlatformStoryPage />} />
-                  <Route path="/legacy/leaderboard" element={<Leaderboard />} />
-                  <Route path="/legacy/soul-match" element={<SoulMatch />} />
-                  <Route path="/legacy/profile" element={<Profile />} />
+                  
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </Suspense>

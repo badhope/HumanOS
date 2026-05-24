@@ -2,9 +2,9 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useMemo } from 'react'
 import { Brain, Heart, Users, Target, Zap, BookOpen, TrendingUp, Clock, Award, ArrowLeft } from 'lucide-react'
-import AdvancedRadarChart from '../../components/charts/AdvancedRadarChart'
-import { useAppStore, type TrainingRecord } from '../../store'
-import type { CompletedAssessment } from '../../types'
+import AdvancedRadarChart from '../components/charts/AdvancedRadarChart'
+import { useAppStore, type TrainingRecord } from '../store'
+import type { CompletedAssessment } from '../types'
 
 const DIMENSIONS = [
   { key: 'emotion', name: '情绪稳定', icon: Heart, color: '#ec4899', desc: '应对焦虑、压力的能力' },
