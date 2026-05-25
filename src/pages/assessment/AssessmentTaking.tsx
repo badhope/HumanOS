@@ -6,8 +6,8 @@ import { useResponsive } from '../../hooks/useResponsive'
 import { apiService, type Question, type Session, type Answer } from '../../services/api'
 import { useAppStore } from '../../store'
 import { cn } from '../../utils/cn'
-import AnswerSheet from '../../components/AnswerSheet'
-import { AssessmentOption } from '../../components/AssessmentOption'
+import AnswerSheet from '../../components/assessment/AnswerSheet'
+import { AssessmentOption } from '../../components/assessment/AssessmentOption'
 import type { Variants } from 'framer-motion'
 
 const QUESTION_TIME_LIMIT = 3600
@@ -48,7 +48,7 @@ export default function AssessmentTaking() {
       if (!assessmentId || isInitializedRef.current) return
       
       if (isEnhancedIdeology && !currentAssessmentMode) {
-        navigate('/app/assessment/ideology-enhanced/mode-select')
+        navigate('/assessment/ideology-enhanced/mode-select')
         return
       }
 
@@ -221,7 +221,7 @@ export default function AssessmentTaking() {
           }
 
           setCalculating(false)
-          navigate(`/app/assessment/${assessmentId}/result/${result.result_id}`, {
+          navigate(`/assessment/${assessmentId}/result/${result.result_id}`, {
             state: { calculationResult: result }
           })
         } catch (error) {
@@ -261,7 +261,7 @@ export default function AssessmentTaking() {
           <h2 className="text-xl font-bold text-white mb-2">加载失败</h2>
           <p className="text-white/60 mb-6">{error || '无法加载测评题目'}</p>
           <button
-            onClick={() => navigate('/app/assessments')}
+            onClick={() => navigate('/assessments')}
             className="px-6 py-3 bg-violet-500 text-white rounded-xl font-semibold"
           >
             返回测评列表
@@ -458,7 +458,7 @@ export default function AssessmentTaking() {
               <button
                 onClick={() => {
                   setShowExitConfirm(false)
-                  navigate('/app/assessments')
+                  navigate('/assessments')
                 }}
                 className="flex-1 px-4 py-3 rounded-xl bg-red-500/20 text-red-400 font-medium hover:bg-red-500/30"
               >

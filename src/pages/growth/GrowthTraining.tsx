@@ -107,7 +107,7 @@ function TrainingCard({ training, colorConfig }: { training: TrainingProgram; co
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      onClick={() => navigate(`/app/training/${training.id}`)}
+      onClick={() => navigate(`/training/${training.id}`)}
       className={`p-4 rounded-xl border transition-all cursor-pointer hover:scale-[1.01] ${
         training.category === 'fun'
           ? 'bg-gradient-to-br from-orange-500/10 via-amber-500/10 to-rose-500/10 border-orange-500/10 hover:border-orange-500/30'
@@ -208,7 +208,7 @@ export default function GrowthTraining() {
         className="mb-4 sm:mb-6"
       >
         <button 
-          onClick={() => navigate('/app/discover')}
+          onClick={() => navigate('/discover')}
           className="flex items-center gap-1 text-sm text-white/60 hover:text-white mb-2 transition-colors"
         >
           <ArrowLeft size={16} />

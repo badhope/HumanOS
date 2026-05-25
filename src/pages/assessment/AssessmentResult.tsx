@@ -51,7 +51,7 @@ export default function AssessmentResult() {
 
   useEffect(() => {
     if (!resultId || !assessmentId) {
-      navigate('/app/assessments')
+      navigate('/assessments')
       return
     }
 
@@ -132,7 +132,7 @@ export default function AssessmentResult() {
           <h2 className="text-2xl font-bold text-white mb-2">正在加载测评结果...</h2>
           <p className="text-white/60 mb-6">请稍候，正在同步数据</p>
           <button
-            onClick={() => navigate('/app/assessments')}
+            onClick={() => navigate('/assessments')}
             className="px-6 py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors"
           >
             返回测评列表
@@ -152,7 +152,7 @@ export default function AssessmentResult() {
           <h2 className="text-2xl font-bold text-white mb-4">未找到测评结果</h2>
           <p className="text-white/60 mb-6">可能是页面刷新导致数据丢失，请重新完成测评</p>
           <button
-            onClick={() => navigate('/app/assessments')}
+            onClick={() => navigate('/assessments')}
             className="px-6 py-3 rounded-xl bg-violet-500 text-white"
           >
             返回测评列表
@@ -245,9 +245,9 @@ export default function AssessmentResult() {
           <motion.button
             onClick={() => {
               if (isEnhancedIdeology) {
-                navigate('/app/assessment/ideology-enhanced/mode-select')
+                navigate('/assessment/ideology-enhanced/mode-select')
               } else {
-                navigate(`/app/assessment/${assessmentId}`)
+                navigate(`/assessment/${assessmentId}`)
               }
             }}
             className="flex items-center gap-1.5 sm:gap-2 text-white/60 hover:text-white transition-colors text-xs sm:text-sm"
@@ -257,7 +257,7 @@ export default function AssessmentResult() {
           </motion.button>
           <span className="text-white/30 hidden sm:inline">|</span>
           <motion.button
-            onClick={() => navigate('/app/assessments')}
+            onClick={() => navigate('/assessments')}
             className="flex items-center gap-1.5 sm:gap-2 text-white/60 hover:text-white transition-colors text-xs sm:text-sm"
           >
             <Home className="w-4 h-4" />
@@ -265,7 +265,7 @@ export default function AssessmentResult() {
           </motion.button>
           <span className="text-white/30 hidden sm:inline">|</span>
           <motion.button
-            onClick={() => navigate('/app/training')}
+            onClick={() => navigate('/training')}
             className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 text-white text-xs sm:text-sm font-medium hover:shadow-lg hover:shadow-violet-500/25 transition-all"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -334,9 +334,9 @@ export default function AssessmentResult() {
           <motion.button
             onClick={() => {
               if (isEnhancedIdeology) {
-                navigate('/app/assessment/ideology-enhanced/mode-select')
+                navigate('/assessment/ideology-enhanced/mode-select')
               } else {
-                navigate(`/app/assessment/${assessmentId}`)
+                navigate(`/assessment/${assessmentId}`)
               }
             }}
             className="flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-4 rounded-xl glass text-white text-sm sm:text-base font-semibold hover:bg-white/10 border border-white/20 transition-all"
@@ -347,7 +347,7 @@ export default function AssessmentResult() {
           </motion.button>
 
           <motion.button
-            onClick={() => navigate('/app/training')}
+            onClick={() => navigate('/training')}
             className="flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white text-sm sm:text-base font-semibold hover:shadow-lg hover:shadow-amber-500/25 transition-all"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

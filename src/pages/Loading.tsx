@@ -19,7 +19,7 @@ export default function Loading() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate(`/legacy/results/${id}`)
+      navigate(`/results/${id}`)
     }, 2500)
 
     return () => clearTimeout(timer)

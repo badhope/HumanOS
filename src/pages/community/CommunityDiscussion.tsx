@@ -226,7 +226,7 @@ export default function CommunityDiscussion() {
           onClick={() => {
             if (activeCategory) setActiveCategory(null)
             else if (showNewPost) setShowNewPost(false)
-            else navigate('/app/discover')
+            else navigate('/discover')
           }}
           className="flex items-center gap-1 text-sm text-white/60 hover:text-white mb-2 transition-colors"
         >

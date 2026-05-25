@@ -57,7 +57,7 @@ import { useAppStore } from '@store'
 import { useSettingsStore } from '@store/settingsStore'
 import { getAssessmentById } from '@data/assessments'
 import { cn } from '@utils/cn'
-import { useI18n } from '../i18n'
+import { useI18n } from '../../i18n'
 
 interface ToggleSetting {
   id: string
@@ -477,7 +477,7 @@ export default function SettingsPage() {
       >
         <div className="flex items-center gap-5 p-5 md:p-6 max-w-6xl mx-auto">
           <motion.button
-            onClick={() => navigate('/app/daily')}
+            onClick={() => navigate('/daily')}
             className="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -801,7 +801,7 @@ export default function SettingsPage() {
                       >
                         <div 
                           className="flex items-center gap-4 flex-1 min-w-0 cursor-pointer"
-                          onClick={() => navigate(`/legacy/results/${record.id}`)}
+                          onClick={() => navigate(`/results/${record.id}`)}
                         >
                           <Calendar size={20} className="text-white/40 shrink-0" />
                           <div className="min-w-0 flex-1">

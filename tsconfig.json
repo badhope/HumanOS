@@ -12,27 +12,27 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-    "noImplicitAny": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@pages/*": ["src/pages/*"],
       "@hooks/*": ["src/hooks/*"],
-      "@store": ["src/store"],
       "@store/*": ["src/store/*"],
       "@utils/*": ["src/utils/*"],
       "@types/*": ["src/types/*"],
       "@assets/*": ["src/assets/*"],
       "@data/*": ["src/data/*"],
       "@services/*": ["src/services/*"]
-    }
+    },
+    "types": ["node"]
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

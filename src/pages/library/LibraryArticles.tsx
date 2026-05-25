@@ -331,7 +331,7 @@ export default function LibraryArticles() {
         className="mb-4 sm:mb-6"
       >
         <button 
-          onClick={() => navigate('/app/discover')}
+          onClick={() => navigate('/discover')}
           className="flex items-center gap-1 text-sm text-white/60 hover:text-white mb-2 transition-colors"
         >
           <ArrowLeft size={16} />
@@ -348,7 +348,7 @@ export default function LibraryArticles() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            onClick={() => navigate(`/app/library/article/${article.id}`, { state: { article } })}
+            onClick={() => navigate(`/library/article/${article.id}`, { state: { article } })}
             className="p-4 rounded-2xl bg-gradient-to-br from-white/8 to-white/2 border border-white/10 hover:border-blue-500/40 transition-all cursor-pointer group"
           >
             <div className="flex items-start gap-3">

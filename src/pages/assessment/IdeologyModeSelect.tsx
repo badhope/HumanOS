@@ -10,14 +10,14 @@ export default function IdeologyModeSelect() {
     // 设置当前评估和模式
     setCurrentAssessment('ideology-enhanced', mode)
     // 导航到评估介绍页面
-    navigate('/app/assessment/ideology-enhanced')
+    navigate('/assessment/ideology-enhanced')
   }
 
   return (
     <div className="min-h-screen bg-slate-900 text-white p-6">
       <div className="max-w-4xl mx-auto space-y-8 py-8">
         <button
-          onClick={() => navigate('/app/assessments')}
+          onClick={() => navigate('/assessments')}
           className="mb-8 flex items-center text-slate-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />

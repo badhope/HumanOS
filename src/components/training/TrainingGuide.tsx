@@ -154,7 +154,7 @@ export default function TrainingGuide() {
   const [selectedGuide, setSelectedGuide] = useState<string | null>(null)
 
   const handleStartTraining = (trainingId: string) => {
-    navigate(`/app/training/${trainingId}`)
+    navigate(`/training/${trainingId}`)
   }
 
   const handleStartFromGuide = (guide: ProblemGuide) => {

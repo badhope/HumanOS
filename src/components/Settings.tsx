@@ -36,7 +36,7 @@ export default function Settings({ isOpen = true, onClose }: SettingsProps) {
   
   const handleClose = () => {
     if (onClose) onClose()
-    else navigate('/app/daily')
+    else navigate('/daily')
   }
   const { t, language, setLanguage } = useI18n()
   const {
@@ -492,7 +492,7 @@ export default function Settings({ isOpen = true, onClose }: SettingsProps) {
                       exit={{ opacity: 0, x: -100 }}
                       className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors group"
                     >
-                      <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={() => navigate(`/legacy/results/${record.id}`)}>
+                      <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={() => navigate(`/results/${record.id}`)}>
                         <Calendar className="w-4 h-4 text-white/40 shrink-0" />
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-white truncate">

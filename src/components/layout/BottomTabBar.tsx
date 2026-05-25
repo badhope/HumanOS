@@ -5,11 +5,11 @@ import { clsx } from 'clsx'
 import { buttonPress, staggerContainer } from '../../utils/motionPresets'
 
 const tabs = [
-  { path: '/app/daily', label: '今日', icon: Home, preset: 'slideUp' as const },
-  { path: '/app/training', label: '训练', icon: Dumbbell, preset: 'bounce' as const },
-  { path: '/app/progress', label: '进度', icon: TrendingUp, preset: 'scale' as const },
-  { path: '/app/discover', label: '探索', icon: Compass, preset: 'elastic' as const },
-  { path: '/app/settings', label: '设置', icon: Settings, preset: 'fadeIn' as const },
+  { path: '/daily', label: '今日', icon: Home, preset: 'slideUp' as const },
+  { path: '/training', label: '训练', icon: Dumbbell, preset: 'bounce' as const },
+  { path: '/progress', label: '进度', icon: TrendingUp, preset: 'scale' as const },
+  { path: '/discover', label: '探索', icon: Compass, preset: 'elastic' as const },
+  { path: '/settings', label: '设置', icon: Settings, preset: 'fadeIn' as const },
 ]
 
 export default function BottomTabBar() {

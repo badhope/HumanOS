@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { HashRouter, BrowserRouter } from 'react-router-dom'
 import App from './App'
-import ErrorBoundary from './components/ErrorBoundary'
+import ErrorBoundary from './components/utils/ErrorBoundary'
 import './index.css'
 
 // 检测运行环境，选择适合的路由模式

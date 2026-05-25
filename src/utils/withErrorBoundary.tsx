@@ -1,6 +1,6 @@
 
 import React, { ComponentType } from 'react'
-import ErrorBoundary from '@components/ErrorBoundary'
+import ErrorBoundary from '@components/utils/ErrorBoundary'
 
 /**
  * 组件错误边界高阶组件 (HOC)

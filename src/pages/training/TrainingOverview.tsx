@@ -90,7 +90,7 @@ export default function TrainingOverview() {
           </div>
 
           <button 
-            onClick={() => navigate(`/app/training/${trainingRecords[trainingRecords.length - 1].programId}`)}
+            onClick={() => navigate(`/training/${trainingRecords[trainingRecords.length - 1].programId}`)}
             className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-500 to-blue-500 text-white font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity cursor-pointer"
           >
             <Play size={18} />
@@ -107,7 +107,7 @@ export default function TrainingOverview() {
           <h3 className="font-semibold mb-2">开始你的第一个训练</h3>
           <p className="text-sm text-white/50 mb-4">每天5分钟，看见更好的自己</p>
           <button 
-            onClick={() => navigate('/app/training/emotion-anchoring')}
+            onClick={() => navigate('/training/emotion-anchoring')}
             className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-500 to-blue-500 text-white font-medium flex items-center justify-center gap-2 cursor-pointer"
           >
             <Play size={18} />
@@ -160,7 +160,7 @@ export default function TrainingOverview() {
             return (
               <div
                 key={track.id}
-                onClick={() => navigate(`/app/training/track/${track.id}`)}
+                onClick={() => navigate(`/training/track/${track.id}`)}
                 className="rounded-2xl p-6 border bg-white/5 border-white/5 cursor-pointer hover:scale-[1.01] transition-all group"
               >
                 <div className="flex items-start justify-between mb-4">
@@ -211,7 +211,7 @@ export default function TrainingOverview() {
           {recommendedTrainings.map(training => (
             <div
               key={training.id}
-              onClick={() => navigate(`/app/training/${training.id}`)}
+              onClick={() => navigate(`/training/${training.id}`)}
               className="rounded-xl p-4 border bg-white/5 border-white/5 cursor-pointer hover:scale-[1.01] transition-all group"
             >
               <div className="flex items-start justify-between">
@@ -233,7 +233,7 @@ export default function TrainingOverview() {
       )}
 
       <button
-        onClick={() => navigate('/app/growth')}
+        onClick={() => navigate('/growth')}
         className="w-full bg-gradient-to-r from-violet-500/20 to-blue-500/20 rounded-2xl p-5 border border-violet-500/20 cursor-pointer hover:scale-[1.01] transition-transform text-left"
       >
         <div className="flex items-center justify-between">

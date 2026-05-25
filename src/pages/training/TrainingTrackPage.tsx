@@ -52,7 +52,7 @@ export default function TrainingTrackPage() {
         <div className="text-center py-20">
           <h2 className="text-xl font-semibold mb-2">训练轨道未找到</h2>
           <button
-            onClick={() => navigate('/app/training')}
+            onClick={() => navigate('/training')}
             className="text-violet-400 hover:text-violet-300"
           >
             返回训练中心
@@ -65,7 +65,7 @@ export default function TrainingTrackPage() {
   return (
     <div className="p-4 md:p-6 space-y-6">
       <button
-        onClick={() => navigate('/app/training')}
+        onClick={() => navigate('/training')}
         className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-4"
       >
         <ChevronLeft size={18} />
@@ -127,7 +127,7 @@ export default function TrainingTrackPage() {
                     return (
                       <div
                         key={training.id}
-                        onClick={() => navigate(`/app/training/${training.id}`)}
+                        onClick={() => navigate(`/training/${training.id}`)}
                         className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 cursor-pointer transition-all"
                       >
                         <div className="flex items-center gap-3">

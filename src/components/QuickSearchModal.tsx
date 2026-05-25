@@ -17,10 +17,10 @@ interface SearchResult {
 }
 
 const STATIC_PAGES: SearchResult[] = [
-  { id: 'home', type: 'page', title: '今日', description: '返回主页面', icon: <FileText className="w-4 h-4" />, path: '/app/daily', keywords: ['home', 'main', 'index', '主页', '首页', '今日'] },
-  { id: 'dashboard', type: 'page', title: '成长', description: '查看历史记录与统计', icon: <TrendingUp className="w-4 h-4" />, path: '/app/progress', keywords: ['dashboard', 'history', 'stats', '个人', '历史', '统计', '成长'] },
-  { id: 'discover', type: 'page', title: '探索', description: '发现测评与工具', icon: <Sparkles className="w-4 h-4" />, path: '/app/discover', keywords: ['专业', '心理', '测评', 'discover', 'bigfive', 'personality', '探索'] },
-  { id: 'training', type: 'page', title: '训练', description: '心理能力训练', icon: <Sparkles className="w-4 h-4" />, path: '/app/training', keywords: ['训练', '能力', 'training', '心理训练'] },
+  { id: 'home', type: 'page', title: '今日', description: '返回主页面', icon: <FileText className="w-4 h-4" />, path: '/daily', keywords: ['home', 'main', 'index', '主页', '首页', '今日'] },
+  { id: 'dashboard', type: 'page', title: '成长', description: '查看历史记录与统计', icon: <TrendingUp className="w-4 h-4" />, path: '/progress', keywords: ['dashboard', 'history', 'stats', '个人', '历史', '统计', '成长'] },
+  { id: 'discover', type: 'page', title: '探索', description: '发现测评与工具', icon: <Sparkles className="w-4 h-4" />, path: '/discover', keywords: ['专业', '心理', '测评', 'discover', 'bigfive', 'personality', '探索'] },
+  { id: 'training', type: 'page', title: '训练', description: '心理能力训练', icon: <Sparkles className="w-4 h-4" />, path: '/training', keywords: ['训练', '能力', 'training', '心理训练'] },
   { id: 'world-sim', type: 'page', title: '国家模拟器', description: '宏观经济政策模拟', icon: <Sparkles className="w-4 h-4" />, path: '/world', keywords: ['经济', '模拟', 'simulator', 'economy', '国家', 'policy'] },
 ]
 
@@ -38,7 +38,7 @@ export default function QuickSearchModal() {
       title: ass.title,
       description: `${ass.questionCount || 20}题 · 约 ${ass.duration} 分钟`,
       icon: <FileText className="w-4 h-4" />,
-      path: `/legacy/mode-select/${ass.id}`,
+      path: `/mode-select/${ass.id}`,
       category: ass.category,
       keywords: [ass.title, ass.id, ass.category],
     }))

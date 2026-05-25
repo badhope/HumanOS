@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Sparkles, Brain, TrendingUp, Heart, Compass, Zap, Shield, Award, Clock, Target, Users, Lightbulb, ChevronRight, HelpCircle } from 'lucide-react'
-import { useAppStore } from '../store'
+import { useAppStore } from '../../store'
 
 const FEATURED_ASSESSMENTS = [
   {
@@ -130,11 +130,11 @@ export default function HomePage() {
   const hasRecords = completedAssessments.length > 0
 
   const handleStartAssessment = () => {
-    navigate('/app/discover')
+    navigate('/assessments')
   }
 
   const handleSelectAssessment = (id: string) => {
-    navigate(`/legacy/mode-select/${id}`)
+    navigate(`/mode-select/${id}`)
   }
 
   return (
@@ -295,7 +295,7 @@ export default function HomePage() {
               return (
                 <button
                   key={topic.id}
-                  onClick={() => navigate('/app/discover')}
+                  onClick={() => navigate('/assessments')}
                   className="group relative overflow-hidden rounded-xl p-4 bg-white/5 border border-white/10 hover:border-white/20 transition-all text-left"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-10 transition-opacity`} />

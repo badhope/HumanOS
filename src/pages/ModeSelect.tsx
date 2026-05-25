@@ -2,7 +2,6 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Crown, Zap, Sparkles } from 'lucide-react'
 import { getAssessmentById } from '@data/assessments'
-import LegacyHeader from '../components/LegacyHeader'
 import { PageWrapper } from '@components/layout'
 
 const MAX_NORMAL_QUESTIONS = 28
@@ -15,12 +14,18 @@ export default function ModeSelect() {
   if (!assessment) {
     return (
       <PageWrapper type="standard" background="gradient">
-        <LegacyHeader title="测评不存在" />
-        <div className="pt-20">
+        <motion.h1
+          className="text-3xl font-bold text-white mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          测评不存在
+        </motion.h1>
+        <div className="pt-4">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-white mb-4">测评不存在</h2>
             <button
-              onClick={() => navigate('/app/discover')}
+              onClick={() => navigate('/discover')}
               className="px-6 py-3 rounded-xl bg-violet-500 text-white"
               type="button"
             >
@@ -77,14 +82,20 @@ export default function ModeSelect() {
     if (mode === 'professional') {
       return
     }
-    navigate(`/legacy/confirm/${id}?mode=${mode}`)
+    navigate(`/confirm/${id}?mode=${mode}`)
   }
 
   return (
     <PageWrapper type="standard" background="gradient">
-      <LegacyHeader title={assessment.title || '选择版本'} />
+      <motion.h1
+        className="text-3xl font-bold text-white mb-8"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        {assessment.title || '选择版本'}
+      </motion.h1>
       
-      <div className="pt-12 pb-20">
+      <div className="pt-4 pb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

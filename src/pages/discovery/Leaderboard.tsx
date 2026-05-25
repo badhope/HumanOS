@@ -236,7 +236,7 @@ export default function Leaderboard() {
                       <Button
                         variant="primary"
                         className="mt-6"
-                        onClick={() => handleNavigate('/legacy/mode-select/dark-triad')}
+                        onClick={() => handleNavigate('/mode-select/dark-triad')}
                       >
                         去做测评
                       </Button>

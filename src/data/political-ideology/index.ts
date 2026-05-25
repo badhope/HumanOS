@@ -11,7 +11,7 @@ export * from './mode-configuration'
 export * from './performance-validation'
 
 export { default as PoliticalIdeologySpectrum } from '../../components/charts/PoliticalIdeologySpectrum'
-export { default as ModeSelector } from '../../components/ModeSelector'
+export { default as ModeSelector } from '../../components/assessment/ModeSelector'
 
 export * from '../../hooks/useAssessmentMode'
 

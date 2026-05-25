@@ -1,3 +1,6 @@
+import * as BasicLoaders from './loaders/BasicLoaders'
+import * as PageLoaders from './loaders/PageLoadingOverlay'
+
 export {
   LoadingSpinner,
   LoadingPulse,
@@ -43,16 +46,16 @@ export {
 export type { LoadingType } from './loaders/PageLoadingOverlay'
 
 const LoadingAnimations = {
-  Spinner: LoadingSpinner,
-  Pulse: LoadingPulse,
-  Dots: LoadingDots,
-  Bars: LoadingBars,
-  Ripple: LoadingRipple,
-  Orbit: LoadingOrbit,
-  Gradient: LoadingGradient,
-  Morph: LoadingMorph,
-  Stars: LoadingStars,
-  Overlay: PageLoadingOverlay,
+  Spinner: BasicLoaders.LoadingSpinner,
+  Pulse: BasicLoaders.LoadingPulse,
+  Dots: BasicLoaders.LoadingDots,
+  Bars: BasicLoaders.LoadingBars,
+  Ripple: BasicLoaders.LoadingRipple,
+  Orbit: BasicLoaders.LoadingOrbit,
+  Gradient: BasicLoaders.LoadingGradient,
+  Morph: BasicLoaders.LoadingMorph,
+  Stars: BasicLoaders.LoadingStars,
+  Overlay: PageLoaders.PageLoadingOverlay,
 }
 
 export default LoadingAnimations

@@ -4,7 +4,6 @@ import { ArrowLeft, Clock, Target, Sparkles, Play, AlertCircle, ChevronDown, Che
 import { getAssessmentById } from '@data/assessments'
 import ProfessionalCredibility from '@components/professional-credibility/ProfessionalCredibility'
 import { useState } from 'react'
-import LegacyHeader from '../components/LegacyHeader'
 import { PageWrapper } from '@components/layout'
 
 const MAX_NORMAL_QUESTIONS = 28
@@ -24,7 +23,7 @@ export default function AssessmentConfirm() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-4">测评不存在</h2>
           <button
-            onClick={() => navigate('/app/discover')}
+            onClick={() => navigate('/discover')}
             className="px-6 py-3 rounded-xl bg-violet-500 text-white"
             type="button"
           >
@@ -36,7 +35,7 @@ export default function AssessmentConfirm() {
   }
 
   const handleStart = () => {
-    navigate(`/legacy/assessment/${id}?mode=${selectedMode}`)
+    navigate(`/assessment/${id}?mode=${selectedMode}`)
   }
 
   const totalQuestionCount = assessment.questions?.length || 0
@@ -73,9 +72,15 @@ export default function AssessmentConfirm() {
 
   return (
     <PageWrapper type="narrow" background="gradient">
-      <LegacyHeader title={assessment.title || '开始测评'} />
+      <motion.h1
+        className="text-3xl font-bold text-white mb-4"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        {assessment.title || '开始测评'}
+      </motion.h1>
       
-      <div className="pt-8 w-full">
+      <div className="pt-4 w-full">
         <motion.div
           className="flex items-center gap-4 mb-8"
           initial={{ opacity: 0, x: -20 }}

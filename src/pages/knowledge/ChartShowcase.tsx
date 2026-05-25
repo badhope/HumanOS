@@ -7,7 +7,7 @@ import {
   IdeologyHexagonChart,
   DimensionHeatmap,
   ComprehensiveChartSystem,
-} from '../components/charts'
+} from '../../components/charts'
 
 const sampleDimensions = [
   { name: '经济制度', score: 72, maxScore: 100, description: '倾向于混合经济模式' },

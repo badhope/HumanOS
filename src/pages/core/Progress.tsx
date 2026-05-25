@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { Flame, Target, ChevronRight, Brain, Clock, Activity } from 'lucide-react'
-import { useAppStore, type MoodRecord, type TrainingRecord } from '../store'
-import AdvancedRadarChart from '../components/charts/AdvancedRadarChart'
-import AchievementsPanel from '../components/AchievementsPanel'
-import TrainingCalendarHeatmap from '../components/TrainingCalendarHeatmap'
+import { useAppStore, type MoodRecord, type TrainingRecord } from '../../store'
+import AdvancedRadarChart from '../../components/charts/AdvancedRadarChart'
+import AchievementsPanel from '../../components/AchievementsPanel'
+import TrainingCalendarHeatmap from '../../components/TrainingCalendarHeatmap'
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string }> = {
   orange: { bg: 'rgba(251, 146, 60, 0.1)', border: 'rgba(251, 146, 60, 0.2)', text: '#fb923c' },
@@ -191,7 +191,7 @@ export default function Progress() {
             能力均衡度
           </h3>
           <button
-            onClick={() => navigate('/app/growth')}
+            onClick={() => navigate('/growth')}
             className="text-xs text-violet-400 flex items-center gap-0.5 hover:text-violet-300"
           >
             详细分析 <ChevronRight size={12} />
@@ -221,7 +221,7 @@ export default function Progress() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        onClick={() => navigate('/app/growth')}
+        onClick={() => navigate('/growth')}
         className="bg-gradient-to-r from-violet-500/20 to-blue-500/20 rounded-2xl p-5 border border-violet-500/20 cursor-pointer hover:scale-[1.01] transition-transform"
       >
         <div className="flex items-center justify-between">

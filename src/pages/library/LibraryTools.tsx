@@ -321,7 +321,7 @@ export default function LibraryTools() {
         className="mb-4 sm:mb-6"
       >
         <button 
-          onClick={() => activeTool ? setActiveTool(null) : navigate('/app/discover')}
+          onClick={() => activeTool ? setActiveTool(null) : navigate('/discover')}
           className="flex items-center gap-1 text-sm text-white/60 hover:text-white mb-2 transition-colors"
         >
           <ArrowLeft size={16} />

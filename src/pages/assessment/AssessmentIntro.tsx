@@ -47,7 +47,7 @@ export default function AssessmentIntro() {
   // 如果是增强版意识形态评估但没有选择模式，重定向到模式选择页面
   useEffect(() => {
     if (isEnhancedIdeology && !currentAssessmentMode) {
-      navigate('/app/assessment/ideology-enhanced/mode-select')
+      navigate('/assessment/ideology-enhanced/mode-select')
     }
   }, [isEnhancedIdeology, currentAssessmentMode, navigate])
 
@@ -92,7 +92,7 @@ export default function AssessmentIntro() {
             {error || '测评未找到'}
           </h2>
           <button
-            onClick={() => navigate('/app/assessments')}
+            onClick={() => navigate('/assessments')}
             className="px-6 py-3 rounded-xl bg-violet-500 text-white"
           >
             返回测评列表
@@ -106,7 +106,7 @@ export default function AssessmentIntro() {
   const gradientColor = CATEGORY_COLORS[assessment.category] || 'from-violet-500 to-purple-500'
 
   const handleStartAssessment = () => {
-    navigate(`/app/assessment/${actualAssessmentId}/start`)
+    navigate(`/assessment/${actualAssessmentId}/start`)
   }
 
   const modeLabel = currentAssessmentMode === 'professional' ? '专业版' : '普通版'
@@ -126,7 +126,7 @@ export default function AssessmentIntro() {
 
       <div className="relative z-10 p-4">
         <button
-          onClick={() => navigate('/app/assessments')}
+          onClick={() => navigate('/assessments')}
           className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
         >
           <ArrowLeft size={20} />

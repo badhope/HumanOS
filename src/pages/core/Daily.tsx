@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Sparkles, CheckCircle, ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import UsageGuide from '../components/UsageGuide'
-import AssessmentCard from '../components/AssessmentCard'
-import { DailyTaskList } from '../components/DailyTaskList'
-import { useAppStore } from '../store'
-import { getDailyPsychology } from '../data/psychology-knowledge'
+import UsageGuide from '../../components/UsageGuide'
+import AssessmentCard from '../../components/assessment/AssessmentCard'
+import { DailyTaskList } from '../../components/DailyTaskList'
+import { useAppStore } from '../../store'
+import { getDailyPsychology } from '../../data/psychology-knowledge'
 
 const MOOD_EMOJIS = ['😢', '😔', '😐', '😊', '🎉']
 const MOOD_LABELS = ['很糟糕', '不太好', '一般般', '还不错', '超棒！']
@@ -283,7 +283,7 @@ export default function Daily() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 + i * 0.15 }}
-                    onClick={() => navigate(`/app/training/${plan.id}`)}
+                    onClick={() => navigate(`/training/${plan.id}`)}
                     className="group p-4 rounded-xl bg-gradient-to-r from-white/5 to-white/2 border border-white/10 hover:border-violet-500/40 transition-all cursor-pointer relative overflow-hidden"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}

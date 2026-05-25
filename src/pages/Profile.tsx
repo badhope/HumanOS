@@ -250,7 +250,7 @@ export default function Profile() {
               </div>
               <p className="text-slate-400 mb-4">还没有完成任何测评</p>
               <button
-                onClick={() => navigate('/app/discover')}
+                onClick={() => navigate('/discover')}
                 className="px-6 py-2 rounded-xl bg-gradient-to-r from-violet-500 to-pink-500 text-white font-medium hover:shadow-lg hover:shadow-violet-500/25 transition-all"
               >
                 开始探索
@@ -272,7 +272,7 @@ export default function Profile() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.03 }}
                     className="group glass rounded-2xl p-4 border border-white/10 hover:border-violet-500/30 transition-all cursor-pointer"
-                    onClick={() => navigate(`/legacy/results/${record.id}`)}
+                    onClick={() => navigate(`/results/${record.id}`)}
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-pink-500/20 flex items-center justify-center text-2xl">

@@ -7,7 +7,7 @@ export default function UniversalTraining() {
   const program = getTrainingById(programId || '')
 
   if (!program) {
-    return <Navigate to="/app/training" replace />
+    return <Navigate to="/training" replace />
   }
 
   return <TrainingEngine program={program} />

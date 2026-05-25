@@ -1,6 +1,6 @@
 
 import { useContext } from 'react'
-import { ShortcutContext } from '../components/ShortcutProvider'
+import { ShortcutContext } from '../components/utils/ShortcutProvider'
 
 /**
  * 快捷键上下文 Hook

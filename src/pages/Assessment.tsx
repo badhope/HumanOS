@@ -21,15 +21,14 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, Home, CheckCircle2, Shuffle } from 'lucide-react'
-import LegacyHeader from '../components/LegacyHeader'
 import { useResponsive } from '../hooks/useResponsive'
 import { getAssessmentById } from '@data/assessments'
 import { LoadingState, ErrorState } from '@components/ui/LoadingState'
 import { useAppStore } from '../store'
 import type { Answer, Question, ProfessionalQuestion } from '../types'
 import { cn } from '@utils/cn'
-import AnswerSheet from '@components/AnswerSheet'
-import { AssessmentOption } from '@components/AssessmentOption'
+import AnswerSheet from '@components/assessment/AnswerSheet'
+import { AssessmentOption } from '@components/assessment/AssessmentOption'
 import { 
   smartRandomizeQuestions, 
   type RandomizedQuestion,
@@ -150,7 +149,7 @@ export default function Assessment() {
 
   useEffect(() => {
     if (!assessment) {
-      navigate('/app/discover')
+      navigate('/discover')
       return
     }
 
@@ -391,7 +390,7 @@ export default function Assessment() {
           }
 
           setCalculating(false)
-          navigate(`/legacy/results/${recordId}`, {
+          navigate(`/results/${recordId}`, {
             state: { calculationResult: adaptedResult }
           })
         } catch (error) {
@@ -422,7 +421,7 @@ export default function Assessment() {
     if (timerRef.current) {
       clearInterval(timerRef.current)
     }
-    navigate('/app/discover')
+    navigate('/discover')
   }, [navigate])
 
   const goHome = useCallback(() => {
@@ -574,7 +573,13 @@ export default function Assessment() {
         </motion.div>
       </div>
       
-      <LegacyHeader title={(assessment as any)?.title || '答题中'} />
+      <motion.h1
+        className="text-2xl font-bold text-white mb-2"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        {(assessment as any)?.title || '答题中'}
+      </motion.h1>
 
       {showDraftRecovery && (
         <motion.div
@@ -890,7 +895,7 @@ export default function Assessment() {
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2">答题超时</h3>
               <p className="text-white/60 text-sm sm:text-base mb-4 sm:mb-6">很抱歉，您未在规定时间内完成答题</p>
               <button
-                onClick={() => navigate('/app/discover')}
+                onClick={() => navigate('/discover')}
                 className="w-full px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-violet-500 text-white hover:bg-violet-600 transition-colors text-sm sm:text-base"
                 type="button"
               >

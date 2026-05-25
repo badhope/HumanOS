@@ -81,7 +81,7 @@ function ErrorFallback({ error, onReset }: { error: Error | null, onReset: () =>
           </button>
           
           <button
-            onClick={() => navigate('/app/daily')}
+            onClick={() => navigate('/daily')}
             className="flex items-center justify-center gap-2 px-4 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-medium transition-colors"
           >
             <Home className="w-4 h-4" />

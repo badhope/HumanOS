@@ -18,7 +18,7 @@ const defaultTasks: DailyTask[] = [
     title: '心情打卡',
     description: '记录今日心情，追踪情绪变化',
     icon: <Sparkles size={18} />,
-    path: '/app/daily',
+    path: '/daily',
     priority: 'high'
   },
   {
@@ -26,7 +26,7 @@ const defaultTasks: DailyTask[] = [
     title: '完成1个训练',
     description: '今日训练计划，提升心理能力',
     icon: <Dumbbell size={18} />,
-    path: '/app/training',
+    path: '/training',
     priority: 'high'
   },
   {
@@ -34,7 +34,7 @@ const defaultTasks: DailyTask[] = [
     title: '入门教程',
     description: '了解系统功能，快速上手',
     icon: <BookMarked size={18} />,
-    path: '/app/getting-started',
+    path: '/getting-started',
     priority: 'medium'
   },
   {
@@ -42,7 +42,7 @@ const defaultTasks: DailyTask[] = [
     title: '探索测评',
     description: '发现更多测评，了解自己',
     icon: <BookOpen size={18} />,
-    path: '/app/discover',
+    path: '/discover',
     priority: 'medium'
   },
   {
@@ -50,7 +50,7 @@ const defaultTasks: DailyTask[] = [
     title: '查看进度',
     description: '回顾成长轨迹，见证变化',
     icon: <TrendingUp size={18} />,
-    path: '/app/progress',
+    path: '/progress',
     priority: 'medium'
   },
   {
@@ -58,7 +58,7 @@ const defaultTasks: DailyTask[] = [
     title: '设定小目标',
     description: '今日小目标，明天大成就',
     icon: <Target size={18} />,
-    path: '/app/growth',
+    path: '/growth',
     priority: 'normal'
   }
 ]

@@ -16,7 +16,7 @@ export default function ArticleDetail() {
       <div className="px-3 sm:px-4 pb-4 flex flex-col items-center justify-center min-h-[60vh]">
         <p className="text-white/60 mb-4">文章不存在</p>
         <button 
-          onClick={() => navigate('/app/library/articles')}
+          onClick={() => navigate('/library/articles')}
           className="px-4 py-2 rounded-lg bg-violet-500/20 text-violet-400 hover:bg-violet-500/30 transition-colors"
         >
           返回文章列表
@@ -33,7 +33,7 @@ export default function ArticleDetail() {
         className="mb-4 sm:mb-6"
       >
         <button 
-          onClick={() => navigate('/app/library/articles')}
+          onClick={() => navigate('/library/articles')}
           className="flex items-center gap-1 text-sm text-white/60 hover:text-white mb-2 transition-colors"
         >
           <ArrowLeft size={16} />

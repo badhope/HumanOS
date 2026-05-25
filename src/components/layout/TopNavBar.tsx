@@ -13,7 +13,7 @@ export default function TopNavBar({ title, onMenuClick }: TopNavBarProps) {
     <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-violet-500/10 pt-safe">
       <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 max-w-md mx-auto">
         <button
-          onClick={() => navigate('/app/home')}
+          onClick={() => navigate('/home')}
           className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1 hover:opacity-80 transition-opacity"
         >
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30 flex items-center justify-center flex-shrink-0">

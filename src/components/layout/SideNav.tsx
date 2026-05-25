@@ -3,16 +3,16 @@ import { Home, TestTube, Dumbbell, TrendingUp, BookOpen, Users, Sparkles, User, 
 import { clsx } from 'clsx'
 
 const mainMenuItems = [
-  { path: '/app/home', label: '首页', icon: Home },
-  { path: '/app/assessments', label: '测评中心', icon: TestTube },
-  { path: '/app/training', label: '训练中心', icon: Dumbbell },
-  { path: '/app/progress', label: '我的进度', icon: TrendingUp },
+  { path: '/home', label: '首页', icon: Home },
+  { path: '/assessments', label: '测评中心', icon: TestTube },
+  { path: '/training', label: '训练中心', icon: Dumbbell },
+  { path: '/progress', label: '我的进度', icon: TrendingUp },
 ]
 
 const exploreMenuItems = [
-  { path: '/app/library', label: '心理图书馆', icon: BookOpen, description: '文章、工具、资源' },
-  { path: '/app/community', label: '社区互动', icon: Users, description: '分享、讨论、专家' },
-  { path: '/app/growth', label: '个人成长', icon: Sparkles, description: '训练计划、习惯养成' },
+  { path: '/library', label: '心理图书馆', icon: BookOpen, description: '文章、工具、资源' },
+  { path: '/community', label: '社区互动', icon: Users, description: '分享、讨论、专家' },
+  { path: '/growth', label: '个人成长', icon: Sparkles, description: '训练计划、习惯养成' },
 ]
 
 export default function SideNav() {
@@ -25,7 +25,7 @@ export default function SideNav() {
     >
       <div className="p-6">
         <button
-          onClick={() => navigate('/app/home')}
+          onClick={() => navigate('/home')}
           className="flex items-center gap-3 mb-8 hover:opacity-80 transition-opacity w-full"
         >
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/30 flex items-center justify-center flex-shrink-0">
@@ -132,17 +132,17 @@ export default function SideNav() {
         className="absolute bottom-0 left-0 right-0 p-4 border-t border-violet-500/10 space-y-2 bg-slate-950"
       >
         <button 
-          onClick={() => navigate('/app/settings')}
+          onClick={() => navigate('/settings')}
           className={clsx(
             'w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300',
-            location.pathname === '/app/settings'
+            location.pathname === '/settings'
               ? 'bg-gradient-to-r from-violet-500/20 to-blue-500/20 text-violet-400 border border-violet-500/20'
               : 'text-white/50 hover:bg-white/5 hover:text-white'
           )}
         >
-          <Settings size={18} className={location.pathname === '/app/settings' ? 'drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]' : ''} />
+          <Settings size={18} className={location.pathname === '/settings' ? 'drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]' : ''} />
           <span className="text-sm">设置</span>
-          {location.pathname === '/app/settings' && (
+          {location.pathname === '/settings' && (
             <div 
               className="ml-auto w-1.5 h-1.5 rounded-full bg-violet-400"
             />

@@ -103,7 +103,7 @@ export default function GrowthDashboard() {
     >
       <div className="py-4 md:hidden">
         <motion.button
-          onClick={() => navigate('/app/progress')}
+          onClick={() => navigate('/progress')}
           className="flex items-center gap-2 text-white/60 hover:text-white mb-4 transition-colors"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

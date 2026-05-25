@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react'
 import { ChevronRight, Lock, Play, Brain, Heart, Users, Briefcase, Sun, Sparkles, Gamepad2, Zap, Compass } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useAppStore, type TrainingRecord } from '../store'
-import { useResponsive } from '../hooks/useResponsive'
+import { useAppStore, type TrainingRecord } from '../../store'
+import { useResponsive } from '../../hooks/useResponsive'
 import {
   FOUNDATION_TRAININGS,
   COGNITION_TRAININGS_FULL,
@@ -11,13 +11,13 @@ import {
   SOCIAL_TRAININGS_FULL,
   FUN_TRAININGS_FULL,
   getRecommendedTrainings,
-} from '../data/training-library'
+} from '../../data/training-library'
 import {
   ALL_TRAINING_TRACKS,
   checkLevelUnlocked,
   type UserProgress
-} from '../data/training-levels'
-import TrainingGuide from '../components/training/TrainingGuide'
+} from '../../data/training-levels'
+import TrainingGuide from '../../components/training/TrainingGuide'
 
 type TabType = 'guide' | 'recommended' | 'emotion' | 'cognition' | 'attachment' | 'social' | 'career' | 'fun'
 
@@ -128,7 +128,7 @@ export default function Training() {
           </div>
 
           <button 
-            onClick={() => navigate('/app/training/emotion-anchoring')}
+            onClick={() => navigate('/training/emotion-anchoring')}
             className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-500 to-blue-500 text-white font-medium flex items-center justify-center gap-2 hover:opacity-90 transition-opacity cursor-pointer"
           >
             <Play size={18} />
@@ -143,7 +143,7 @@ export default function Training() {
           <h3 className="font-semibold mb-2">开始你的第一个训练</h3>
           <p className="text-sm text-white/50 mb-4">每天5分钟，看见更好的自己</p>
           <button 
-            onClick={() => navigate('/app/training/emotion-anchoring')}
+            onClick={() => navigate('/training/emotion-anchoring')}
             className="w-full py-3 rounded-xl bg-gradient-to-r from-violet-500 to-blue-500 text-white font-medium flex items-center justify-center gap-2 cursor-pointer"
           >
             <Play size={18} />
@@ -180,7 +180,7 @@ export default function Training() {
             return (
               <div
                 key={plan.id}
-                onClick={() => unlocked && navigate(`/app/training/${plan.id}`)}
+                onClick={() => unlocked && navigate(`/training/${plan.id}`)}
                 className={`rounded-xl p-4 border transition-all ${
                   unlocked 
                     ? `cursor-pointer hover:scale-[1.01] ${
@@ -241,7 +241,7 @@ export default function Training() {
       </div>
 
       <button
-        onClick={() => navigate('/app/growth')}
+        onClick={() => navigate('/growth')}
         className="w-full bg-gradient-to-r from-violet-500/20 to-blue-500/20 rounded-2xl p-5 border border-violet-500/20 cursor-pointer hover:scale-[1.01] transition-transform text-left"
       >
         <div className="flex items-center justify-between">
