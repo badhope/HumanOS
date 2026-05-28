@@ -1,33 +1,9 @@
-export interface DimensionDescription {
-  name: string;
-  high: {
-    title: string;
-    description: string;
-    tags: string[];
-    suggestions: string[];
-  };
-  medium: {
-    title: string;
-    description: string;
-    tags: string[];
-    suggestions: string[];
-  };
-  low: {
-    title: string;
-    description: string;
-    tags: string[];
-    suggestions: string[];
-  };
-}
+/**
+ * 为所有测评添加完整的多维度描述
+ * 这个文件将添加到 assessmentDescriptions.ts 中
+ */
 
-export interface AssessmentDescriptions {
-  [assessmentId: string]: {
-    [dimension: string]: DimensionDescription;
-  };
-}
-
-export const assessmentDescriptions: AssessmentDescriptions = {
-
+export const completeAssessmentDescriptions = {
   // ========================================
   // SAS焦虑自评量表 - 4个维度
   // ========================================
@@ -1058,113 +1034,8 @@ export const assessmentDescriptions: AssessmentDescriptions = {
         suggestions: ['继续保持积极的领导风格', '在需要时给予更多自主空间', '培养团队独立解决问题的能力', '领导参与是有价值的']
       }
     }
-    }
-  }
-
-export function getDimensionDescriptionForAssessment(
-  assessmentId: string,
-  dimension: string,
-  score: number
-): {
-  name: string;
-  title: string;
-  description: string;
-  tags: string[];
-  suggestions: string[];
-} {
-  const assessmentDesc = assessmentDescriptions[assessmentId];
-  if (!assessmentDesc) {
-    return getGenericDescription(dimension, score);
-  }
-
-  const dimensionDesc = assessmentDesc[dimension];
-  if (!dimensionDesc) {
-    return getGenericDescription(dimension, score);
-  }
-
-  if (score >= 60) {
-    return {
-      name: dimensionDesc.name,
-      title: dimensionDesc.high.title,
-      description: dimensionDesc.high.description,
-      tags: dimensionDesc.high.tags,
-      suggestions: dimensionDesc.high.suggestions
-    };
-  } else if (score >= 40) {
-    return {
-      name: dimensionDesc.name,
-      title: dimensionDesc.medium.title,
-      description: dimensionDesc.medium.description,
-      tags: dimensionDesc.medium.tags,
-      suggestions: dimensionDesc.medium.suggestions
-    };
-  } else {
-    return {
-      name: dimensionDesc.name,
-      title: dimensionDesc.low.title,
-      description: dimensionDesc.low.description,
-      tags: dimensionDesc.low.tags,
-      suggestions: dimensionDesc.low.suggestions
-    };
   }
 }
 
-function getGenericDescription(dimension: string, score: number): {
-  name: string;
-  title: string;
-  description: string;
-  tags: string[];
-  suggestions: string[];
-} {
-  const genericDescriptions: Record<string, { name: string; high: any; medium: any; low: any }> = {
-    general: {
-      name: '综合表现',
-      high: {
-        title: '表现出色',
-        description: '您在这方面表现优秀，展现出很强的能力和特质。',
-        tags: ['优秀', '能力强', '特质突出'],
-        suggestions: ['继续保持', '发挥优势', '帮助他人']
-      },
-      medium: {
-        title: '表现良好',
-        description: '您在这方面表现良好，有进一步发展的空间。',
-        tags: ['良好', '有潜力', '可提升'],
-        suggestions: ['继续努力', '培养优势', '寻求反馈']
-      },
-      low: {
-        title: '需要提升',
-        description: '您在这方面有提升空间，可以通过练习和学習来改善。',
-        tags: ['待提升', '需努力', '有挑战'],
-        suggestions: ['多加练习', '寻求指导', '耐心坚持']
-      }
-    }
-  };
-
-  const desc = genericDescriptions[dimension] || genericDescriptions.general;
-
-  if (score >= 60) {
-    return {
-      name: desc.name,
-      title: desc.high.title,
-      description: desc.high.description,
-      tags: desc.high.tags,
-      suggestions: desc.high.suggestions
-    };
-  } else if (score >= 40) {
-    return {
-      name: desc.name,
-      title: desc.medium.title,
-      description: desc.medium.description,
-      tags: desc.medium.tags,
-      suggestions: desc.medium.suggestions
-    };
-  } else {
-    return {
-      name: desc.name,
-      title: desc.low.title,
-      description: desc.low.description,
-      tags: desc.low.tags,
-      suggestions: desc.low.suggestions
-    };
-  }
-}
+// 导出完整描述供后续使用
+export default completeAssessmentDescriptions
