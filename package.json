@@ -15,7 +15,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\"",
     "clean": "rm -rf dist node_modules/.vite",
-    "analyze": "npx vite-bundle-visualizer"
+    "analyze": "npx vite-bundle-visualizer",
+    "test:calculators": "tsx tests/calculators.test.ts"
   },
   "dependencies": {
     "@react-three/drei": "^9.92.0",

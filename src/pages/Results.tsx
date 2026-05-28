@@ -56,7 +56,7 @@ export default function Results() {
   
   // 安全地从 location.state 中提取结果，防止恶意注入
   const stateResult = (() => {
-    let candidate = locationState?.calculationResult || locationState?.result || locationState
+    const candidate = locationState?.calculationResult || locationState?.result || locationState
     // 验证候选对象的安全性
     if (!isValidResult(candidate)) {
       return null

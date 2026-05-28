@@ -55,7 +55,7 @@ export const useAssessmentStateMachine = create<AssessmentStateMachineStore>((se
       console.log('sessionData:', sessionData)
       const storageKey = 'mm_ans_' + sessionData.session_id
       const saved = localStorage.getItem(storageKey)
-      let savedAnswers = new Map<string, Answer>()
+      const savedAnswers = new Map<string, Answer>()
 
       if (saved) {
         try {
