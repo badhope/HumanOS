@@ -1,21 +1,22 @@
-import { memo } from 'react'
-import { motion } from 'framer-motion'
-import { cn } from '@utils/cn'
-import { Check } from 'lucide-react'
-import type { Variants } from 'framer-motion'
+import { memo } from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '@utils/cn';
+import { Check } from 'lucide-react';
+import type { Variants } from 'framer-motion';
 
 interface AssessmentOptionProps {
   option: {
-    id?: string
-    text: string
-    value?: number
-    trait?: string | Record<string, number>
-    dimension?: string
-  }
-  index: number
-  selected: boolean
-  onClick: (optionId: string) => void
-  variants: Variants
+    id?: string;
+    text: string;
+    value?: number;
+    trait?: string | Record<string, number>;
+    dimension?: string;
+  };
+  index: number;
+  selected: boolean;
+  onClick: (optionId: string) => void;
+  variants: Variants;
+  isMobile?: boolean;
 }
 
 export const AssessmentOption = memo(function AssessmentOption({
@@ -24,48 +25,55 @@ export const AssessmentOption = memo(function AssessmentOption({
   selected,
   onClick,
   variants,
+  isMobile = false,
 }: AssessmentOptionProps) {
-  const optionId = option.id || index.toString()
+  const optionId = option.id || index.toString();
 
   return (
     <motion.button
       key={optionId}
       onClick={() => onClick(optionId)}
       className={cn(
-        'w-full p-3 sm:p-4 rounded-xl text-left transition-all duration-200 flex items-start gap-2.5 sm:gap-4 relative overflow-hidden',
+        'w-full rounded-xl text-left transition-all duration-200 flex items-center gap-3 sm:gap-4 relative overflow-hidden',
+        'min-h-[56px] sm:min-h-[64px] touch-manipulation',
         selected
           ? 'bg-gradient-to-r from-violet-500/20 to-pink-500/15 border border-violet-500/50 text-white shadow-lg shadow-violet-500/20'
-          : 'bg-white/5 text-white/80 hover:bg-white/10 hover:text-white border border-transparent hover:border-violet-500/20'
+          : 'bg-white/5 text-white/80 hover:bg-white/10 hover:text-white border border-transparent hover:border-violet-500/20 active:bg-white/15'
       )}
       variants={variants}
       initial="hidden"
       animate="visible"
       custom={index}
-      whileHover={{ 
+      whileHover={!isMobile ? {
         y: -2,
         transition: { duration: 0.15 }
-      }}
-      whileTap={{ 
+      } : {}}
+      whileTap={{
         scale: 0.98,
         y: 1,
         transition: { duration: 0.1 }
       }}
       type="button"
+      tabIndex={0}
+      role="option"
+      aria-selected={selected}
+      aria-label={`选项 ${String.fromCharCode(65 + index)}: ${option.text}`}
     >
       {selected && (
         <motion.div
-          className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-violet-500 to-pink-500"
+          className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-1 bg-gradient-to-b from-violet-500 to-pink-500"
           initial={{ scaleY: 0 }}
           animate={{ scaleY: 1 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
         />
       )}
-      
+
       <div className={cn(
-        'w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 font-medium sm:font-semibold relative z-10 transition-all duration-200 text-xs sm:text-sm',
-        selected 
-          ? 'bg-gradient-to-br from-violet-500 to-pink-500 text-white shadow-lg shadow-violet-500/30' 
-          : 'bg-white/10 text-white/60 group-hover:bg-white/15'
+        'rounded-full flex items-center justify-center flex-shrink-0 font-semibold relative z-10 transition-all duration-200',
+        'w-9 h-9 sm:w-10 sm:h-10 text-sm sm:text-base',
+        selected
+          ? 'bg-gradient-to-br from-violet-500 to-pink-500 text-white shadow-lg shadow-violet-500/30'
+          : 'bg-white/10 text-white/60 hover:bg-white/15'
       )}>
         {selected ? (
           <motion.div
@@ -73,22 +81,38 @@ export const AssessmentOption = memo(function AssessmentOption({
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 500, damping: 15 }}
           >
-            <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <Check className="w-4 h-4 sm:w-5 sm:h-5" />
           </motion.div>
         ) : (
-          String.fromCharCode(65 + index)
+          <span className="select-none">{String.fromCharCode(65 + index)}</span>
         )}
       </div>
-      
-      <span className="flex-1 pt-0.5 relative z-10 leading-relaxed text-xs sm:text-sm">
+
+      <span className={cn(
+        'flex-1 relative z-10 leading-relaxed',
+        'text-sm sm:text-base',
+        'px-1 sm:px-2'
+      )}>
         {option.text}
       </span>
+
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        initial={false}
+        animate={{
+          opacity: selected ? 1 : 0,
+        }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="absolute top-1/4 -right-8 w-16 h-16 bg-violet-500/10 rounded-full blur-xl" />
+        <div className="absolute bottom-1/4 -right-4 w-12 h-12 bg-pink-500/10 rounded-full blur-xl" />
+      </motion.div>
     </motion.button>
-  )
+  );
 }, (prevProps, nextProps) => {
   return (
     prevProps.selected === nextProps.selected &&
     prevProps.option.id === nextProps.option.id &&
     prevProps.option.text === nextProps.option.text
-  )
-})
+  );
+});
