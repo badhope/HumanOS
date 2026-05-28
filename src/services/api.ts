@@ -1,15 +1,7 @@
-/**
- * MindMirror API 服务
- * 使用本地数据，无需后端
- */
-
 import { ideologyEnhancedAssessment, getQuestionsForVersion } from '../data/assessments/ideology-enhanced'
 import type { EnhancedQuestion } from '../data/assessments/ideology-enhanced'
+import { getStandardAssessment } from '../data/assessments'
 
-
-/**
- * 类型定义
- */
 export interface Option {
   id: string
   text: string
@@ -19,9 +11,9 @@ export interface Option {
 
 export interface Question {
   id: string
-  type: 'core-principle' | 'policy-stand' | 'value-question' | 'trade-off'
+  type: 'core-principle' | 'policy-stand' | 'value-question' | 'trade-off' | 'single' | 'likert-5' | 'likert-7'
   text: string
-  dimension: 'economic' | 'social' | 'cultural' | 'diplomatic' | 'ecological'
+  dimension: string
   weight: number
   discrimination: number
   difficulty: number
@@ -65,32 +57,24 @@ export interface Result {
   answers: Record<string, number>
 }
 
-// 本地存储的会话数据
 const sessions = new Map<string, Session>()
 const results = new Map<string, Result>()
 let sessionCounter = 0
 
-
-/**
- * 辅助函数：生成唯一ID
- */
-function generateId(): string {
+function generateId() {
   return `${Date.now()}-${++sessionCounter}`
 }
 
-/**
- * 辅助函数：将本地问题格式转换为API格式
- */
-function formatQuestion(q: EnhancedQuestion): Question {
+function formatQuestion(q) {
   return {
     id: q.id,
-    type: q.type,
+    type: q.type || 'single',
     text: q.text,
-    dimension: q.dimension,
-    weight: q.weight,
-    discrimination: q.discrimination,
-    difficulty: q.difficulty,
-    reverse_scored: q.reverseScored || false,
+    dimension: q.dimension || 'general',
+    weight: q.weight || 1,
+    discrimination: q.discrimination || 0.5,
+    difficulty: q.difficulty || 0.5,
+    reverse_scored: q.reverseScored || q.reverse_scored || false,
     options: q.options.map((o, idx) => ({
       id: o.id,
       text: o.text,
@@ -100,17 +84,8 @@ function formatQuestion(q: EnhancedQuestion): Question {
   }
 }
 
-
-/**
- * API 服务
- */
 export const apiService = {
-  // ============ 测评相关 ============
-
-  /**
-   * 获取测评信息
-   */
-  getAssessment: async (assessmentId: string) => {
+  getAssessment: async (assessmentId) => {
     if (assessmentId === 'ideology-enhanced') {
       return {
         id: ideologyEnhancedAssessment.id,
@@ -121,38 +96,53 @@ export const apiService = {
         difficulty: ideologyEnhancedAssessment.difficulty,
         duration: ideologyEnhancedAssessment.duration,
         quality: ideologyEnhancedAssessment.quality,
-      } as Assessment
+      }
     }
+
+    const assessment = getStandardAssessment(assessmentId)
+    if (assessment) {
+      return {
+        id: assessment.id,
+        title: assessment.title,
+        description: assessment.description,
+        category: assessment.category,
+        subcategory: assessment.subcategory,
+        difficulty: assessment.difficulty,
+        duration: assessment.duration,
+        quality: assessment.quality,
+      }
+    }
+
     throw new Error(`测评 ${assessmentId} 不存在`)
   },
 
-  /**
-   * 获取测评题目
-   */
-  getAssessmentQuestions: async (
-    assessmentId: string,
-    mode: 'normal' | 'professional' = 'normal'
-  ): Promise<Question[]> => {
-    if (assessmentId !== 'ideology-enhanced') {
-      throw new Error(`测评 ${assessmentId} 不存在`)
+  getAssessmentQuestions: async (assessmentId, mode = 'normal') => {
+    if (assessmentId === 'ideology-enhanced') {
+      const localQuestions = getQuestionsForVersion(mode)
+      return localQuestions.map(formatQuestion)
     }
 
-    const localQuestions = getQuestionsForVersion(mode)
-    return localQuestions.map(formatQuestion)
+    const assessment = getStandardAssessment(assessmentId)
+    if (assessment && assessment.questions) {
+      let questions = assessment.questions
+      
+      if (mode === 'professional' && assessment.professionalQuestions) {
+        questions = assessment.professionalQuestions.professional || questions
+      } else if (mode === 'normal' && assessment.professionalQuestions) {
+        questions = assessment.professionalQuestions.normal || questions
+      }
+
+      const maxQuestions = mode === 'professional' ? questions.length : Math.min(28, questions.length)
+      return questions.slice(0, maxQuestions).map(formatQuestion)
+    }
+
+    throw new Error(`测评 ${assessmentId} 不存在`)
   },
 
-  // ============ 会话相关 ============
-
-  /**
-   * 创建测评会话
-   */
-  createSession: async (
-    assessmentId: string,
-    mode: 'normal' | 'professional' = 'normal'
-  ): Promise<Session> => {
+  createSession: async (assessmentId, mode = 'normal') => {
     const questions = await this.getAssessmentQuestions(assessmentId, mode)
     
-    const session: Session = {
+    const session = {
       session_id: generateId(),
       assessment_id: assessmentId,
       mode,
@@ -165,10 +155,7 @@ export const apiService = {
     return session
   },
 
-  /**
-   * 获取会话进度
-   */
-  getSession: async (sessionId: string): Promise<SessionProgress> => {
+  getSession: async (sessionId) => {
     const session = sessions.get(sessionId)
     
     if (!session) {
@@ -182,17 +169,7 @@ export const apiService = {
     }
   },
 
-  // ============ 答案相关 ============
-
-  /**
-   * 保存答案
-   */
-  saveAnswer: async (
-    sessionId: string,
-    questionId: string,
-    optionId: string,
-    value: number
-  ): Promise<{ success: boolean; answer_id: string; saved_count: number }> => {
+  saveAnswer: async (sessionId, questionId, optionId, value) => {
     const session = sessions.get(sessionId)
     
     if (!session) {
@@ -212,30 +189,18 @@ export const apiService = {
     }
   },
 
-  /**
-   * 更新答案
-   */
-  updateAnswer: async (
-    sessionId: string,
-    questionId: string,
-    optionId: string,
-    value: number
-  ): Promise<{ success: boolean }> => {
+  updateAnswer: async (sessionId, questionId, optionId, value) => {
     const result = await this.saveAnswer(sessionId, questionId, optionId, value)
     return { success: result.success }
   },
 
-  /**
-   * 提交测评
-   */
-  submitAssessment: async (sessionId: string): Promise<Result> => {
+  submitAssessment: async (sessionId) => {
     const session = sessions.get(sessionId)
     
     if (!session) {
       throw new Error(`会话 ${sessionId} 不存在`)
     }
 
-    // 计算结果
     const result = this.calculateResult(session)
     
     results.set(result.id, result)
@@ -244,50 +209,38 @@ export const apiService = {
     return result
   },
 
-  /**
-   * 计算测评结果
-   */
-  calculateResult: (session: Session): Result => {
+  calculateResult: (session) => {
     const answers = session.answers || new Map()
     
-    // 按维度分组计算分数
-    const scores: Record<string, number[]> = {}
-    const dimensionScores: Record<string, number> = {}
+    const scores = {}
+    const dimensionScores = {}
 
-    // 初始化各维度
-    const dimensions = ['economic', 'social', 'cultural', 'diplomatic']
+    const dimensions = new Set(session.questions.map(q => q.dimension))
     dimensions.forEach(dim => {
       scores[dim] = []
     })
 
-    // 计算每个维度的分数
     session.questions.forEach(q => {
       const answer = answers.get(q.id)
       if (answer) {
         const dim = q.dimension
         if (scores[dim]) {
-          // 如果是反向计分，需要反转分数
-          const value = q.reverse_scored 
-            ? (6 - answer.value) 
-            : answer.value
+          const value = q.reverse_scored ? (6 - answer.value) : answer.value
           scores[dim].push(value * q.weight)
         }
       }
     })
 
-    // 计算平均分（0-100）
     dimensions.forEach(dim => {
       const dimScores = scores[dim]
       if (dimScores.length > 0) {
         const avg = dimScores.reduce((a, b) => a + b, 0) / dimScores.length
-        // 将1-5分转换为0-100分
         dimensionScores[dim] = ((avg - 1) / 4) * 100
       } else {
         dimensionScores[dim] = 50
       }
     })
 
-    // 生成标签
     const labels = this.generateLabels(dimensionScores)
 
     return {
@@ -301,71 +254,28 @@ export const apiService = {
     }
   },
 
-  /**
-   * 生成标签
-   */
-  generateLabels: (scores: Record<string, number>): Record<string, string> => {
-    const labels: Record<string, string> = {}
+  generateLabels: (scores) => {
+    const labels = {}
 
-    // 经济维度
-    if (scores.economic < 30) {
-      labels.economic = '极左翼'
-    } else if (scores.economic < 45) {
-      labels.economic = '左翼'
-    } else if (scores.economic < 55) {
-      labels.economic = '中立'
-    } else if (scores.economic < 70) {
-      labels.economic = '右翼'
-    } else {
-      labels.economic = '极右翼'
-    }
-
-    // 社会维度
-    if (scores.social < 30) {
-      labels.social = '极权主义'
-    } else if (scores.social < 45) {
-      labels.social = '威权主义'
-    } else if (scores.social < 55) {
-      labels.social = '中立'
-    } else if (scores.social < 70) {
-      labels.social = '自由主义'
-    } else {
-      labels.social = '极端自由'
-    }
-
-    // 文化维度
-    if (scores.cultural < 30) {
-      labels.cultural = '极端保守'
-    } else if (scores.cultural < 45) {
-      labels.cultural = '保守主义'
-    } else if (scores.cultural < 55) {
-      labels.cultural = '温和主义'
-    } else if (scores.cultural < 70) {
-      labels.cultural = '进步主义'
-    } else {
-      labels.cultural = '极端进步'
-    }
-
-    // 外交维度
-    if (scores.diplomatic < 30) {
-      labels.diplomatic = '孤立主义'
-    } else if (scores.diplomatic < 45) {
-      labels.diplomatic = '民族主义'
-    } else if (scores.diplomatic < 55) {
-      labels.diplomatic = '国际主义'
-    } else if (scores.diplomatic < 70) {
-      labels.diplomatic = '全球主义'
-    } else {
-      labels.diplomatic = '世界主义'
-    }
+    Object.keys(scores).forEach(dim => {
+      const score = scores[dim]
+      if (score < 30) {
+        labels[dim] = '低'
+      } else if (score < 45) {
+        labels[dim] = '偏低'
+      } else if (score < 55) {
+        labels[dim] = '中等'
+      } else if (score < 70) {
+        labels[dim] = '偏高'
+      } else {
+        labels[dim] = '高'
+      }
+    })
 
     return labels
   },
 
-  /**
-   * 获取结果
-   */
-  getResult: async (resultId: string): Promise<Result> => {
+  getResult: async (resultId) => {
     const result = results.get(resultId)
     
     if (!result) {
