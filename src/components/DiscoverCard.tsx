@@ -13,7 +13,7 @@ interface CategoryCardProps {
   subcategories: DiscoverSubcategory[]
 }
 
-const CategoryCard = memo(function CategoryCard({ name, icon: Icon, bgGradient, borderColor, subcategories }: CategoryCardProps) {: CategoryCardProps) {
+const CategoryCard = memo(function CategoryCard({ name, icon: Icon, bgGradient, borderColor, subcategories }: CategoryCardProps) {
   const [isExpanded, setIsExpanded] = useState(true)
 
   const toggleExpand = useCallback(() => {
