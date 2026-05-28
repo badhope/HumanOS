@@ -44,11 +44,15 @@ export const useAssessmentStateMachine = create<AssessmentStateMachineStore>((se
   isTimeout: false,
 
   initialize: async (assessmentId: string, mode: 'normal' | 'professional') => {
+    console.log('assessmentStateMachine initialize called with:', { assessmentId, mode })
     const { apiService } = await import('../services/api')
+    console.log('apiService loaded')
     set({ state: 'initializing', error: null })
 
     try {
+      console.log('Calling apiService.createSession')
       const sessionData = await apiService.createSession(assessmentId, mode)
+      console.log('sessionData:', sessionData)
       const storageKey = 'mm_ans_' + sessionData.session_id
       const saved = localStorage.getItem(storageKey)
       let savedAnswers = new Map<string, Answer>()
@@ -75,11 +79,11 @@ export const useAssessmentStateMachine = create<AssessmentStateMachineStore>((se
         isTimeout: false,
       })
     } catch (err) {
-      console.error('Failed to initialize session:', err)
+      console.error('Failed to initialize session:', err, 'typeof err:', typeof err, 'err.message:', err instanceof Error ? err.message : 'no message');
       set({
         state: 'error',
-        error: typeof err === 'string' ? err : '无法加载测评题目，请稍后重试',
-      })
+        error: err instanceof Error ? err.message : '无法加载测评题目，请稍后重试',
+      });
     }
   },
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useMemo, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
 import { useResponsive } from '../../hooks/useResponsive';
@@ -14,9 +14,14 @@ import type { Variants } from 'framer-motion';
 const QUESTION_TIME_LIMIT = 3600;
 
 export default function AssessmentTaking() {
-  const { assessmentId } = useParams<{ assessmentId: string }>();
+  const { assessmentId: paramAssessmentId } = useParams<{ assessmentId: string }>();
+  const location = useLocation();
   const navigate = useNavigate();
   const { isMobile } = useResponsive();
+  
+  // Extract assessmentId from pathname
+  const pathParts = location.pathname.split('/');
+  const assessmentId = paramAssessmentId || (pathParts.length > 2 ? pathParts[2] : null);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,8 +56,10 @@ export default function AssessmentTaking() {
   const currentAssessmentMode = useAppStore((state) => state.currentAssessmentMode);
   const addCompletedAssessment = useAppStore((state) => state.addCompletedAssessment);
 
+  console.log('assessmentId from useParams:', assessmentId);
   const isEnhancedIdeology = assessmentId === 'ideology-enhanced';
   const effectiveMode = isEnhancedIdeology ? (currentAssessmentMode || 'normal') : 'normal';
+  console.log('AssessmentTaking:', { assessmentId, isEnhancedIdeology, currentAssessmentMode, effectiveMode });
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -69,17 +76,13 @@ export default function AssessmentTaking() {
   useEffect(() => {
     if (!assessmentId) return;
 
-    if (isEnhancedIdeology && !currentAssessmentMode) {
-      navigate('/assessment/ideology-enhanced/mode-select');
-      return;
-    }
-
+    console.log('Running initialize with:', assessmentId, effectiveMode);
     initialize(assessmentId, effectiveMode as 'normal' | 'professional');
 
     return () => {
       reset();
     };
-  }, [assessmentId, effectiveMode, isEnhancedIdeology, currentAssessmentMode, navigate, initialize, reset]);
+  }, [assessmentId, effectiveMode, navigate, initialize, reset]);
 
   useEffect(() => {
     if (state !== 'answering' || !session) return;
@@ -211,6 +214,23 @@ export default function AssessmentTaking() {
     isDraggingRef.current = false;
   };
 
+  // 所有的 Hook 和变量必须在条件语句之前定义
+  const question = questions[currentQuestionIndex];
+  const answeredCount = answers.size;
+  const progress = (answeredCount / questions.length) * 100;
+
+  const optionVariants = useMemo<Variants>(
+    () => ({
+      hidden: { opacity: 0, y: 20 },
+      visible: (i: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: { delay: i * 0.05, duration: 0.2 },
+      }),
+    }),
+    []
+  );
+
   if (state === 'initializing') {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
@@ -239,22 +259,6 @@ export default function AssessmentTaking() {
       </div>
     );
   }
-
-  const question = questions[currentQuestionIndex];
-  const answeredCount = answers.size;
-  const progress = (answeredCount / questions.length) * 100;
-
-  const optionVariants = useMemo<Variants>(
-    () => ({
-      hidden: { opacity: 0, y: 20 },
-      visible: (i: number) => ({
-        opacity: 1,
-        y: 0,
-        transition: { delay: i * 0.05, duration: 0.2 },
-      }),
-    }),
-    []
-  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/20 to-slate-950">

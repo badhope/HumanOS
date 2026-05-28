@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import {
   Clock, List, ArrowLeft,
@@ -31,9 +31,14 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export default function AssessmentIntro() {
-  const { assessmentId } = useParams<{ assessmentId: string }>();
+  const { assessmentId: paramAssessmentId } = useParams<{ assessmentId: string }>();
+  const location = useLocation();
   const navigate = useNavigate();
   const { isMobile } = useResponsive();
+  
+  // Extract assessmentId from pathname
+  const pathParts = location.pathname.split('/');
+  const assessmentId = paramAssessmentId || (pathParts.length > 2 ? pathParts[2] : null);
 
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [loading, setLoading] = useState(true);

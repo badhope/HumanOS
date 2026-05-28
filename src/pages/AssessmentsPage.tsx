@@ -68,13 +68,15 @@ const ALL_ASSESSMENTS: Assessment[] = [
 export default function AssessmentsPage() {
   const navigate = useNavigate()
 
-  const handleStartAssessment = (assessmentId: string) => {
-    if (assessmentId === 'ideology-enhanced') {
+  const handleStartAssessment = (assessment: any) => {
+    if (assessment.id === 'ideology-enhanced') {
       navigate('/assessment/ideology-enhanced/mode-select')
-    } else if (assessmentId.startsWith('/')) {
-      navigate(assessmentId)
+    } else if (assessment.path && assessment.path.startsWith('/mode-select/')) {
+      // 从 path 中提取真实的 assessmentId (移除 '/mode-select/' 前缀)
+      const realId = assessment.path.replace('/mode-select/', '')
+      navigate(`/assessment/${realId}`)
     } else {
-      navigate(`/assessment/${assessmentId}`)
+      navigate(`/assessment/${assessment.id}`)
     }
   }
 
@@ -133,7 +135,7 @@ export default function AssessmentsPage() {
           return (
             <button
               key={assessment.id}
-              onClick={() => handleStartAssessment(assessment.id)}
+              onClick={() => handleStartAssessment(assessment)}
               className="group relative overflow-hidden rounded-xl p-4 bg-white/5 border border-white/10 hover:border-violet-500/30 transition-all text-left"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
