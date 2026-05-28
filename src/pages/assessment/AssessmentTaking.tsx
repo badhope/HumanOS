@@ -1,9 +1,9 @@
-import { useEffect, useRef, useMemo, useCallback } from 'react';
+import { useEffect, useRef, useMemo, useCallback, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, X, Grid3x3, Clock, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
 import { useResponsive } from '../../hooks/useResponsive';
-import { apiService, type Answer } from '../../services/api';
+import { apiService } from '../../services/api';
 import { useAppStore } from '../../store';
 import { useAssessmentStateMachine, AssessmentState } from '../../store/assessmentStateMachine';
 import { cn } from '../../utils/cn';
@@ -18,6 +18,9 @@ export default function AssessmentTaking() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isMobile } = useResponsive();
+  
+  // 答题卡状态
+  const [isAnswerSheetOpen, setIsAnswerSheetOpen] = useState(false);
   
   // Extract assessmentId from pathname
   const pathParts = location.pathname.split('/');
@@ -119,40 +122,33 @@ export default function AssessmentTaking() {
       clearInterval(timerRef.current);
     }
 
-    try {
-      const result = await apiService.submitAssessment(
-        session.session_id,
-        assessmentId,
-        effectiveMode as 'normal' | 'professional'
-      );
+    set({ state: 'submitting' });
 
+    try {
+      const result = await apiService.submitAssessment(session.session_id);
+      
       addCompletedAssessment({
-        id: result.result_id,
+        id: result.result_id || result.id,
         assessmentId: assessmentId,
-        answers: Array.from(answers.values()).map((a) => ({
+        answers: Array.from(answers.values()).map((a: any) => ({
           questionId: a.question_id,
           selectedOptionId: a.selected_option_id,
           value: a.value,
         })),
-        result: {
-          dimension_scores: result.dimension_scores,
-          left_right_score: result.left_right_score,
-          auth_lib_score: result.auth_lib_score,
-          accuracy: result.accuracy,
-          mode: effectiveMode,
-        },
+        result: result,
         completedAt: new Date(),
         mode: effectiveMode as 'normal' | 'professional',
       });
 
-      navigate(`/assessment/${assessmentId}/result/${result.result_id}`, {
+      navigate(`/assessment/${assessmentId}/result/${result.result_id || result.id}`, {
         state: { calculationResult: result },
       });
     } catch (error) {
       console.error('提交失败:', error);
       setError('提交失败，请稍后重试');
+      set({ state: 'answering' });
     }
-  }, [session, assessmentId, effectiveMode, answers, addCompletedAssessment, navigate, setError]);
+  }, [session, assessmentId, answers, addCompletedAssessment, navigate, set, setError]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -291,7 +287,7 @@ export default function AssessmentTaking() {
               </div>
 
               <button
-                onClick={() => navigate('/assessment/' + assessmentId)}
+                onClick={() => setIsAnswerSheetOpen(true)}
                 className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
               >
                 <Grid3x3 size={20} className="text-white/60" />
@@ -436,6 +432,18 @@ export default function AssessmentTaking() {
           </motion.div>
         </div>
       )}
+
+      <AnswerSheet
+        isOpen={isAnswerSheetOpen}
+        onClose={() => setIsAnswerSheetOpen(false)}
+        questions={questions}
+        answers={Array.from(answers.values())}
+        currentQuestion={currentQuestionIndex}
+        onQuestionSelect={(index) => {
+          goToQuestion(index);
+          setIsAnswerSheetOpen(false);
+        }}
+      />
     </div>
   );
 }

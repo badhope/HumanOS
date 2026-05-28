@@ -153,48 +153,167 @@ async function getAssessmentQuestionsHelper(assessmentId, mode = 'normal') {
 }
 
 function calculateResultHelper(session) {
-  const answers = session.answers || new Map();
+  // session.answers 是 Map<string, { questionId: string; optionId: string; value: number }>
+  const answersMap = session.answers || new Map();
 
-  const scores = {};
-  const dimensionScores = {};
+  // 转换为兼容格式
+  const answers: Record<string, number> = {};
+  answersMap.forEach((answer, questionId) => {
+    answers[questionId] = answer.value;
+  });
 
-  const dimensions = new Set(session.questions.map((q) => q.dimension));
+  const scores: Record<string, number[]> = {};
+  const dimensionScores: Record<string, number> = {};
+
+  // 收集所有维度
+  const dimensions = new Set<string>();
+  session.questions.forEach((q) => {
+    dimensions.add(q.dimension || 'general');
+  });
+  
   dimensions.forEach((dim) => {
     scores[dim] = [];
   });
 
+  // 计算每个维度的得分
   session.questions.forEach((q) => {
-    const answer = answers.get(q.id);
-    if (answer) {
-      const dim = q.dimension;
-      if (scores[dim]) {
-        const value = q.reverse_scored ? 6 - answer.value : answer.value;
-        scores[dim].push(value * q.weight);
+    const dim = q.dimension || 'general';
+    const answer = answers[q.id] || answersMap.get(q.id);
+    
+    if (answer !== undefined) {
+      let value = typeof answer === 'object' ? answer.value : answer;
+      
+      // 反向计分
+      if (q.reverse_scored) {
+        // 假设选项最大值为5，则反向计分为 6 - value
+        value = 6 - value;
       }
+      
+      const weight = q.weight || 1;
+      scores[dim].push(value * weight);
     }
   });
 
+  // 计算每个维度的平均分并转换为 0-100
+  const dimensionsArray: Array<{name: string; score: number; description?: string}> = [];
+  
   dimensions.forEach((dim) => {
     const dimScores = scores[dim];
+    let dimensionScore = 50; // 默认值
+    
     if (dimScores.length > 0) {
       const avg = dimScores.reduce((a, b) => a + b, 0) / dimScores.length;
-      dimensionScores[dim] = ((avg - 1) / 4) * 100;
-    } else {
-      dimensionScores[dim] = 50;
+      // 将 1-5 量表转换为 0-100
+      dimensionScore = ((avg - 1) / 4) * 100;
     }
+    
+    dimensionScores[dim] = dimensionScore;
+    dimensionsArray.push({
+      name: dim,
+      score: dimensionScore,
+      description: getDimensionDescription(dim, dimensionScore)
+    });
   });
 
   const labels = generateLabelsHelper(dimensionScores);
+  
+  // 计算综合得分
+  const allScores = Object.values(dimensionScores);
+  const overallScore = allScores.length > 0 
+    ? allScores.reduce((a, b) => a + b, 0) / allScores.length 
+    : 50;
 
   return {
     id: generateId(),
+    result_id: generateId(),
     assessment_id: session.assessment_id,
     session_id: session.session_id,
+    mode: session.mode,
     scores: dimensionScores,
     labels,
     completed_at: new Date().toISOString(),
-    answers: Object.fromEntries(answers),
+    answers,
+    dimensions: dimensionsArray,
+    score: overallScore,
+    percentile: Math.round(100 - overallScore),
+    accuracy: calculateAccuracy(session.questions.length, Object.keys(answers).length),
   };
+}
+
+function getDimensionDescription(dimension: string, score: number): string {
+  const descriptions: Record<string, { high: string; medium: string; low: string }> = {
+    'social_anxiety': {
+      high: '您的社交焦虑水平较高，在社交场合容易感到紧张和不安',
+      medium: '您有一定的社交焦虑，在某些场合可能会感到紧张',
+      low: '您能够从容应对各种社交场合，社交焦虑水平较低'
+    },
+    'somatic_anxiety': {
+      high: '您经常出现焦虑的躯体症状，如心慌、出汗等',
+      medium: '您偶尔会出现焦虑相关的躯体反应',
+      low: '您的身体状态较为放松，焦虑躯体症状较少'
+    },
+    'cognitive_anxiety': {
+      high: '您容易过度担忧，脑子里总是想各种可能出问题的事情',
+      medium: '您有时会过度担心，但能够自我调节',
+      low: '您心态平和，不容易被担忧困扰'
+    },
+    'sleep_anxiety': {
+      high: '您的睡眠质量较差，经常受到失眠或噩梦的困扰',
+      medium: '您的睡眠一般，有时会受到影响',
+      low: '您的睡眠质量良好，能够安稳入睡'
+    },
+    'general': {
+      high: '您在此维度得分较高',
+      medium: '您在此维度得分中等',
+      low: '您在此维度得分较低'
+    },
+    'economic': {
+      high: '您在经济议题上倾向于保护主义',
+      medium: '您在经济议题上持中立或平衡立场',
+      low: '您在经济议题上倾向于自由主义'
+    },
+    'social': {
+      high: '您在社会议题上倾向于权威主义',
+      medium: '您对社会议题持中立立场',
+      low: '您在社会议题上倾向于自由主义'
+    },
+    'cultural': {
+      high: '您在文化议题上倾向于传统保守',
+      medium: '您在文化议题上持平衡立场',
+      low: '您在文化议题上倾向于开放进步'
+    },
+    'diplomatic': {
+      high: '您在外交议题上倾向于民族主义',
+      medium: '您在外交议题上持平衡立场',
+      low: '您在外交议题上倾向于全球主义'
+    },
+    'governance': {
+      high: '您倾向于强政府模式',
+      medium: '您对政府角色持平衡态度',
+      low: '您倾向于小政府模式'
+    },
+    'civil_liberty': {
+      high: '您高度重视公民自由',
+      medium: '您在公民自由与安全间寻求平衡',
+      low: '您更重视社会秩序'
+    },
+    'technological': {
+      high: '您对技术发展持谨慎态度',
+      medium: '您对技术发展持平衡观点',
+      low: '您是技术乐观主义者'
+    }
+  };
+  
+  const dimDesc = descriptions[dimension] || descriptions['general'];
+  if (score >= 60) return dimDesc.high;
+  if (score >= 40) return dimDesc.medium;
+  return dimDesc.low;
+}
+
+function calculateAccuracy(totalQuestions: number, answeredQuestions: number): number {
+  if (totalQuestions === 0) return 0;
+  const ratio = answeredQuestions / totalQuestions;
+  return Math.round(ratio * 100);
 }
 
 function generateLabelsHelper(scores) {

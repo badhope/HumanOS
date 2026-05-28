@@ -1,8 +1,8 @@
 import { memo, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Check } from 'lucide-react'
-import type { Answer, Question } from '../types'
-import { cn } from '@utils/cn'
+import type { Answer, Question } from '../../types'
+import { cn } from '../../utils/cn'
 
 interface AnswerSheetProps {
   isOpen: boolean
@@ -66,7 +66,10 @@ function AnswerSheet({
   onQuestionSelect,
 }: AnswerSheetProps) {
   const answeredIds = useMemo(() => {
-    return new Set(answers.map(a => a.questionId))
+    return new Set(answers.map(a => {
+      // 支持多种格式：Answer 类型或直接有 questionId 的对象
+      return a.questionId || (a as any).question_id;
+    }))
   }, [answers])
 
   const answeredCount = answers.length
