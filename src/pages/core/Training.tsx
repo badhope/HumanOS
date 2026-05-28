@@ -18,6 +18,8 @@ import {
   type UserProgress
 } from '../../data/training-levels'
 import TrainingGuide from '../../components/training/TrainingGuide'
+import BottomTabBar from '../../components/layout/BottomTabBar'
+import ParticleBackground from '../../components/ParticleBackground'
 
 type TabType = 'guide' | 'recommended' | 'emotion' | 'cognition' | 'attachment' | 'social' | 'career' | 'fun'
 
@@ -93,20 +95,26 @@ export default function Training() {
 
   if (activeTab === 'guide') {
     return (
-      <div className="p-4 md:p-6">
-        <TrainingGuide />
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/10 to-slate-950 relative">
+        <ParticleBackground variant="stars" particleCount={60} showConnections={false} />
+        <div className="relative z-10 p-4 md:p-6 pb-20">
+          <TrainingGuide />
+        </div>
+        <BottomTabBar />
       </div>
     )
   }
 
   return (
-    <div className="p-4 md:p-6 space-y-6">
-      <div className="py-4 md:hidden md:text-left">
-        <h2 className="text-2xl md:text-3xl font-bold mb-2">
-          💪 我的训练
-        </h2>
-        <p className="text-white/50">心灵健身房</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/10 to-slate-950 relative">
+      <ParticleBackground variant="stars" particleCount={60} showConnections={false} />
+      <div className="relative z-10 p-4 md:p-6 space-y-6 pb-20">
+        <div className="py-4 md:hidden md:text-left">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">
+            💪 我的训练
+          </h2>
+          <p className="text-white/50">心灵健身房</p>
+        </div>
 
       {lastTraining ? (
         <div className="bg-gradient-to-br from-violet-500/20 via-pink-500/20 to-orange-500/20 rounded-2xl p-5 border border-violet-500/20">
@@ -256,6 +264,8 @@ export default function Training() {
           <ChevronRight size={20} className="text-violet-400" />
         </div>
       </button>
+      </div>
+      <BottomTabBar />
     </div>
   )
 }

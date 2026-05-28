@@ -35,7 +35,7 @@ export default function AssessmentConfirm() {
   }
 
   const handleStart = () => {
-    navigate(`/assessment/${id}?mode=${selectedMode}`)
+    navigate(`/assessment/${id}/start?mode=${selectedMode}`)
   }
 
   const totalQuestionCount = assessment.questions?.length || 0

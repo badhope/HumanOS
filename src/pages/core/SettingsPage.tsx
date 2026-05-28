@@ -58,6 +58,8 @@ import { useSettingsStore } from '@store/settingsStore'
 import { getAssessmentById } from '@data/assessments'
 import { cn } from '@utils/cn'
 import { useI18n } from '../../i18n'
+import BottomTabBar from '../../components/layout/BottomTabBar'
+import ParticleBackground from '../../components/ParticleBackground'
 
 interface ToggleSetting {
   id: string
@@ -469,60 +471,62 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen pb-20">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-10 backdrop-blur-xl border-b border-white/10"
-      >
-        <div className="flex items-center gap-5 p-5 md:p-6 max-w-6xl mx-auto">
-          <motion.button
-            onClick={() => navigate('/daily')}
-            className="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <ArrowLeft size={24} className="text-white/70" />
-          </motion.button>
-          <div>
-            <h1 className="text-2xl font-bold text-white">设置</h1>
-            <p className="text-sm text-white/50">个性化你的体验</p>
-          </div>
-        </div>
-
-        <div className="flex gap-3 px-5 pb-5 max-w-6xl mx-auto overflow-x-auto scrollbar-hide">
-          {sections.map((section) => {
-            const Icon = section.icon
-            const isActive = activeSection === section.id
-            return (
-              <motion.div
-                key={section.id}
-                onClick={() => setActiveSection(section.id)}
-                className={cn(
-                  'flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full whitespace-nowrap transition-all shrink-0 select-none',
-                  isActive
-                    ? `bg-gradient-to-r ${section.color} text-white shadow-lg`
-                    : 'bg-white/5 text-white/60 hover:bg-white/10'
-                )}
-              >
-                <Icon size={16} className="sm:w-5 sm:h-5" />
-                <span className="text-sm sm:text-base font-medium truncate max-w-[60px] sm:max-w-none">{section.label}</span>
-              </motion.div>
-            )
-          })}
-        </div>
-      </motion.div>
-
-      <div className="p-4 md:p-6 max-w-6xl mx-auto">
-        <AnimatePresence mode="wait">
-          {activeSection === 'personal' && (
-            <motion.div
-              key="personal"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="space-y-6"
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/10 to-slate-950 relative">
+      <ParticleBackground variant="stars" particleCount={60} showConnections={false} />
+      <div className="relative z-10 pb-20">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="sticky top-0 z-10 backdrop-blur-xl border-b border-white/10"
+        >
+          <div className="flex items-center gap-5 p-5 md:p-6 max-w-6xl mx-auto">
+            <motion.button
+              onClick={() => navigate('/daily')}
+              className="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
+              <ArrowLeft size={24} className="text-white/70" />
+            </motion.button>
+            <div>
+              <h1 className="text-2xl font-bold text-white">设置</h1>
+              <p className="text-sm text-white/50">个性化你的体验</p>
+            </div>
+          </div>
+
+          <div className="flex gap-3 px-5 pb-5 max-w-6xl mx-auto overflow-x-auto scrollbar-hide">
+            {sections.map((section) => {
+              const Icon = section.icon
+              const isActive = activeSection === section.id
+              return (
+                <motion.div
+                  key={section.id}
+                  onClick={() => setActiveSection(section.id)}
+                  className={cn(
+                    'flex items-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-full whitespace-nowrap transition-all shrink-0 select-none',
+                    isActive
+                      ? `bg-gradient-to-r ${section.color} text-white shadow-lg`
+                      : 'bg-white/5 text-white/60 hover:bg-white/10'
+                  )}
+                >
+                  <Icon size={16} className="sm:w-5 sm:h-5" />
+                  <span className="text-sm sm:text-base font-medium truncate max-w-[60px] sm:max-w-none">{section.label}</span>
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.div>
+
+        <div className="p-4 md:p-6 max-w-6xl mx-auto">
+          <AnimatePresence mode="wait">
+            {activeSection === 'personal' && (
+              <motion.div
+                key="personal"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6"
+              >
               <div className="rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-white/10 p-6">
                 <div className="flex items-center justify-between mb-6">
                   <SectionHeader icon={User} title="个人资料" description="管理你的个人信息" color="from-blue-500 to-cyan-500" />
@@ -941,6 +945,8 @@ export default function SettingsPage() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
+      <BottomTabBar />
     </div>
   )
 }

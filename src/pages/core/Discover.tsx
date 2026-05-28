@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { CategoryCard } from '../../components/DiscoverCard'
 import { TabSlider } from '../../components/TabSlider'
 import { discoverCategories } from '../../data/discoverData'
+import BottomTabBar from '../../components/layout/BottomTabBar'
+import ParticleBackground from '../../components/ParticleBackground'
 
 export default function Discover() {
   const [activeCategory, setActiveCategory] = useState<string>(discoverCategories[0].id)
@@ -17,65 +19,69 @@ export default function Discover() {
   const activeCategoryData = discoverCategories.find(cat => cat.id === activeCategory)
 
   return (
-    <div className="px-3 sm:px-4 pb-4">
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-4 sm:mb-6"
-      >
-        <h1 className="text-xl sm:text-2xl font-bold mb-1">🔮 探索</h1>
-        <p className="text-xs sm:text-sm text-white/60">发现适合你的心理测评</p>
-      </motion.div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/10 to-slate-950 relative">
+      <ParticleBackground variant="stars" particleCount={60} showConnections={false} />
+      <div className="relative z-10 px-3 sm:px-4 pb-20">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-4 sm:mb-6 pt-4"
+        >
+          <h1 className="text-xl sm:text-2xl font-bold mb-1">🔮 探索</h1>
+          <p className="text-xs sm:text-sm text-white/60">发现适合你的心理测评</p>
+        </motion.div>
 
-      <TabSlider 
-        tabs={tabs}
-        activeTab={activeCategory}
-        onTabChange={setActiveCategory}
-      />
+        <TabSlider 
+          tabs={tabs}
+          activeTab={activeCategory}
+          onTabChange={setActiveCategory}
+        />
 
-      <AnimatePresence mode="wait">
-        {activeCategoryData && (
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-          >
-            <CategoryCard
-              name={activeCategoryData.name}
-              icon={activeCategoryData.icon}
-              color={activeCategoryData.color}
-              bgGradient={activeCategoryData.bgGradient}
-              borderColor={activeCategoryData.borderColor}
-              subcategories={activeCategoryData.subcategories}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <AnimatePresence mode="wait">
+          {activeCategoryData && (
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            >
+              <CategoryCard
+                name={activeCategoryData.name}
+                icon={activeCategoryData.icon}
+                color={activeCategoryData.color}
+                bgGradient={activeCategoryData.bgGradient}
+                borderColor={activeCategoryData.borderColor}
+                subcategories={activeCategoryData.subcategories}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-violet-500/10 to-pink-500/10 border border-violet-500/20"
-      >
-        <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-violet-500/20 flex items-center justify-center flex-shrink-0">
-            <span className="text-sm sm:text-base">🎯</span>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-violet-500/10 to-pink-500/10 border border-violet-500/20"
+        >
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-violet-500/20 flex items-center justify-center flex-shrink-0">
+              <span className="text-sm sm:text-base">🎯</span>
+            </div>
+            <div className="min-w-0">
+              <div className="text-sm sm:text-base font-medium truncate">探索更多</div>
+              <div className="text-[10px] sm:text-xs text-white/40">持续更新中</div>
+            </div>
           </div>
-          <div className="min-w-0">
-            <div className="text-sm sm:text-base font-medium truncate">探索更多</div>
-            <div className="text-[10px] sm:text-xs text-white/40">持续更新中</div>
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-white/5">📊 专业测评</span>
+            <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-white/5">📚 精选文章</span>
+            <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-white/5">👥 社区互动</span>
+            <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-white/5">🌱 个人成长</span>
           </div>
-        </div>
-        <div className="flex flex-wrap gap-1.5 sm:gap-2">
-          <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-white/5">📊 专业测评</span>
-          <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-white/5">📚 精选文章</span>
-          <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-white/5">👥 社区互动</span>
-          <span className="px-2 py-1 text-[10px] sm:text-xs rounded-full bg-white/5">🌱 个人成长</span>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
+      <BottomTabBar />
     </div>
   )
 }

@@ -7,6 +7,8 @@ import AssessmentCard from '../../components/assessment/AssessmentCard'
 import { DailyTaskList } from '../../components/DailyTaskList'
 import { useAppStore } from '../../store'
 import { getDailyPsychology } from '../../data/psychology-knowledge'
+import BottomTabBar from '../../components/layout/BottomTabBar'
+import ParticleBackground from '../../components/ParticleBackground'
 
 const MOOD_EMOJIS = ['😢', '😔', '😐', '😊', '🎉']
 const MOOD_LABELS = ['很糟糕', '不太好', '一般般', '还不错', '超棒！']
@@ -69,27 +71,29 @@ export default function Daily() {
   const showAssessmentCard = !hasCompletedAssessment && !hasDismissedAssessmentCard
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="p-4 md:p-6 space-y-8 pb-24"
-    >
-      <motion.div 
-        className="py-2 md:py-0 md:mb-6 md:text-left"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/10 to-slate-950 relative">
+      <ParticleBackground variant="stars" particleCount={60} showConnections={false} />
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        className="relative z-10 p-4 md:p-6 space-y-8 pb-20"
       >
-        <motion.h2 
-          className="text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+        <motion.div 
+          className="py-2 md:py-0 md:mb-6 md:text-left"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
         >
-          {greeting} 👋
-        </motion.h2>
-        <p className="text-white/60">今天感觉怎么样？</p>
-      </motion.div>
+          <motion.h2 
+            className="text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-violet-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            {greeting} 👋
+          </motion.h2>
+          <p className="text-white/60">今天感觉怎么样？</p>
+        </motion.div>
 
       <motion.div
         custom={0}
@@ -384,6 +388,8 @@ export default function Daily() {
           </motion.p>
         </div>
       </motion.div>
-    </motion.div>
+      </motion.div>
+      <BottomTabBar />
+    </div>
   )
 }

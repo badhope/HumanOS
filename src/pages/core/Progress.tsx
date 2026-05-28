@@ -5,6 +5,8 @@ import { useAppStore, type MoodRecord, type TrainingRecord } from '../../store'
 import AdvancedRadarChart from '../../components/charts/AdvancedRadarChart'
 import AchievementsPanel from '../../components/AchievementsPanel'
 import TrainingCalendarHeatmap from '../../components/TrainingCalendarHeatmap'
+import BottomTabBar from '../../components/layout/BottomTabBar'
+import ParticleBackground from '../../components/ParticleBackground'
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string }> = {
   orange: { bg: 'rgba(251, 146, 60, 0.1)', border: 'rgba(251, 146, 60, 0.2)', text: '#fb923c' },
@@ -76,23 +78,25 @@ export default function Progress() {
   const totalMinutes = Math.floor(trainingRecords.reduce((s: number, r: TrainingRecord) => s + r.duration, 0) / 60)
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="p-4 md:p-6 space-y-6"
-    >
-      <div className="py-4 md:hidden">
-        <motion.h2 
-          className="text-2xl md:text-3xl font-bold mb-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.1 }}
-        >
-          📈 我的进度
-        </motion.h2>
-        <p className="text-white/50">数据概览</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/10 to-slate-950 relative">
+      <ParticleBackground variant="stars" particleCount={60} showConnections={false} />
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        className="relative z-10 p-4 md:p-6 space-y-6 pb-20"
+      >
+        <div className="py-4 md:hidden">
+          <motion.h2 
+            className="text-2xl md:text-3xl font-bold mb-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+          >
+            📈 我的进度
+          </motion.h2>
+          <p className="text-white/50">数据概览</p>
+        </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -233,9 +237,11 @@ export default function Progress() {
               6大核心能力维度 · AI 智能洞察
             </p>
           </div>
-          <ChevronRight size={20} className="text-violet-400" />
+          <ChevronRight size={20} className="text-violet-400" /></div>
         </div>
       </motion.div>
-    </motion.div>
+      </motion.div>
+      <BottomTabBar />
+    </div>
   )
 }

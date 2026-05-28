@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { Sparkles, Brain, TrendingUp, Heart, Compass, Zap, Shield, Award, Clock, Target, Users, Lightbulb, ChevronRight, HelpCircle } from 'lucide-react'
 import { useAppStore } from '../../store'
+import BottomTabBar from '../../components/layout/BottomTabBar'
+import ParticleBackground from '../../components/ParticleBackground'
 
 const FEATURED_ASSESSMENTS = [
   {
@@ -130,16 +132,17 @@ export default function HomePage() {
   const hasRecords = completedAssessments.length > 0
 
   const handleStartAssessment = () => {
-    navigate('/assessments')
+    navigate('/discover')
   }
 
   const handleSelectAssessment = (id: string) => {
-    navigate(`/mode-select/${id}`)
+    navigate(`/assessment/${id}`)
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="px-3 sm:px-4 md:px-6 py-4 md:py-8 space-y-6 md:space-y-8 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-violet-950/10 to-slate-950 relative">
+      <ParticleBackground variant="stars" particleCount={60} showConnections={false} />
+      <div className="relative z-10 px-3 sm:px-4 md:px-6 py-4 md:py-8 space-y-6 md:space-y-8 max-w-4xl mx-auto pb-20">
         <div className="text-center pt-2 pb-4 sm:pt-4 sm:pb-6">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 mb-3 sm:mb-4">
             <Sparkles size={10} className="text-violet-400 sm:size-3" />
@@ -262,10 +265,10 @@ export default function HomePage() {
                     <Icon size={14} className="sm:text-[18px] text-white" />
                   </div>
 
-                  <h4 className="font-semibold text-white text-xs sm:text-sm mb-0.5 sm:mb-1 group-hover:text-violet-300 transition-colors truncate">
+                  <h4 className="font-semibold text-white text-xs sm:text-sm mb-0.5 sm:mb-1 group-hover:text-violet-300 transition-colors break-words">
                     {item.title}
                   </h4>
-                  <p className="text-[10px] sm:text-xs text-white/40 truncate">
+                  <p className="text-[10px] sm:text-xs text-white/40 break-words">
                     {item.description}
                   </p>
                   <div className="flex items-center gap-2 text-[10px] sm:text-xs text-white/40 mt-1 sm:mt-2">
@@ -359,6 +362,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+      <BottomTabBar />
     </div>
   )
 }
