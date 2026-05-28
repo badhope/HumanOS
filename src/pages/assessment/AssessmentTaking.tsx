@@ -54,6 +54,7 @@ export default function AssessmentTaking() {
     setTimeout: markTimeout,
     setError,
     reset,
+    pause,
   } = useAssessmentStateMachine();
 
   const currentAssessmentMode = useAppStore((state) => state.currentAssessmentMode);
@@ -122,9 +123,9 @@ export default function AssessmentTaking() {
       clearInterval(timerRef.current);
     }
 
-    set({ state: 'submitting' });
-
     try {
+      await submit(); // 使用 store 中已有的 submit 函数
+      
       const result = await apiService.submitAssessment(session.session_id);
       
       addCompletedAssessment({
@@ -146,9 +147,8 @@ export default function AssessmentTaking() {
     } catch (error) {
       console.error('提交失败:', error);
       setError('提交失败，请稍后重试');
-      set({ state: 'answering' });
     }
-  }, [session, assessmentId, answers, addCompletedAssessment, navigate, set, setError]);
+  }, [session, assessmentId, answers, addCompletedAssessment, navigate, submit, setError]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -380,7 +380,7 @@ export default function AssessmentTaking() {
                   : "bg-white/10 text-white hover:bg-white/20"
               )}
             >
-              <ArrowLeft size={18} className="sm:size-20" />
+              <ArrowLeft size={18} />
               <span className="hidden sm:inline">上一题</span>
             </button>
 
@@ -393,7 +393,7 @@ export default function AssessmentTaking() {
                 onClick={handleSubmit}
                 className="flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
               >
-                <CheckCircle2 size={18} className="sm:size-20" />
+                <CheckCircle2 size={18} />
                 <span>提交</span>
               </button>
             ) : (
@@ -402,7 +402,7 @@ export default function AssessmentTaking() {
                 className="flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-medium bg-white/10 text-white hover:bg-white/20 transition-colors"
               >
                 <span className="hidden sm:inline">下一题</span>
-                <ArrowRight size={18} className="sm:size-20" />
+                <ArrowRight size={18} />
               </button>
             )}
           </div>

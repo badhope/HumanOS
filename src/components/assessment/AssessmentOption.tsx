@@ -89,7 +89,7 @@ export const AssessmentOption = memo(function AssessmentOption({
       </div>
 
       <span className={cn(
-        'flex-1 relative z-10 leading-relaxed',
+        'flex-1 relative z-10 leading-relaxed break-words overflow-hidden',
         'text-sm sm:text-base',
         'px-1 sm:px-2'
       )}>
