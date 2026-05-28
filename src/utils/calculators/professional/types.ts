@@ -1,31 +1,19 @@
 import type { Answer, ProfessionalAssessmentResult, SubscaleScore } from '../../../types'
 import {
-  calculateTScore,
-  calculatePercentileFromTScore,
-  getScoreRange,
+  rawToTScore,
+  calculatePercentile,
   calculateConfidenceInterval,
   calculateDimensionBalance,
-  MBTI_MATH_SYSTEM,
-  BIGFIVE_MATH_SYSTEM,
-  SAS_MATH_SYSTEM,
-  EQ_MATH_SYSTEM,
-  HOLLAND_MATH_SYSTEM,
-  ATTACHMENT_MATH_SYSTEM,
-} from '../../mathSystem'
+  STANDARD_NORMS,
+} from '../../professionalScoring'
 import { createRiskAssessment } from '../../professionalScoring'
 
 export {
-  calculateTScore,
-  calculatePercentileFromTScore,
-  getScoreRange,
+  rawToTScore as calculateTScore,
+  calculatePercentile as calculatePercentileFromTScore,
   calculateConfidenceInterval,
   calculateDimensionBalance,
-  MBTI_MATH_SYSTEM,
-  BIGFIVE_MATH_SYSTEM,
-  SAS_MATH_SYSTEM,
-  EQ_MATH_SYSTEM,
-  HOLLAND_MATH_SYSTEM,
-  ATTACHMENT_MATH_SYSTEM,
+  STANDARD_NORMS,
 }
 
 export type { Answer, ProfessionalAssessmentResult, SubscaleScore }

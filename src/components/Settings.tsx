@@ -20,7 +20,7 @@ import {
   AlertCircle,
   Calendar,
 } from 'lucide-react'
-import { useAppStore, type CompletedAssessment } from '@store'
+import { useAppStore, type CompletedAssessment } from '../store'
 import { getAssessmentById } from '@data/assessments'
 import { cn } from '@utils/cn'
 import { useI18n } from '../i18n'

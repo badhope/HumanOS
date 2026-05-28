@@ -43,9 +43,10 @@ import {
   SBTIPersonalityReport
 } from './report-templates/FunReports'
 import type { SASResult, ECRResult, HollandResult } from '../utils/calculators'
+import type { GenericReportResult } from './report-templates/types'
 
 interface ReportTemplateProps {
-  result: ReportResult
+  result: GenericReportResult
   assessmentType: string
   mode?: string
 }

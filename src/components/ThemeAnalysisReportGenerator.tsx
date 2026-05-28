@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import {
   themeAnalysisFramework,
   type ComprehensiveThemeReport,
-} from '../utils/themeAnalysisFramework'
+} from '../utils/theme-analysis/framework'
 
 interface ThemeAnalysisReportGeneratorProps {
   themeName: string
