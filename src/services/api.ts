@@ -1,5 +1,6 @@
 import { ideologyEnhancedAssessment as enhancedConfig, getQuestionsForVersion } from '../data/assessments/ideology-enhanced'
 import { standardAssessments } from '../data/assessments'
+import { getDimensionDescriptionForAssessment } from '../utils/assessmentDescriptions'
 import type { EnhancedQuestion } from '../data/assessments/ideology-enhanced'
 
 export interface Option {
@@ -195,7 +196,14 @@ function calculateResultHelper(session) {
   });
 
   // 计算每个维度的平均分并转换为 0-100
-  const dimensionsArray: Array<{name: string; score: number; description?: string}> = [];
+  const dimensionsArray: Array<{
+    name: string;
+    score: number;
+    description?: string;
+    title?: string;
+    tags?: string[];
+    suggestions?: string[];
+  }> = [];
   
   dimensions.forEach((dim) => {
     const dimScores = scores[dim];
@@ -208,10 +216,21 @@ function calculateResultHelper(session) {
     }
     
     dimensionScores[dim] = dimensionScore;
+    
+    // 使用新的描述系统获取详细描述
+    const detailedDesc = getDimensionDescriptionForAssessment(
+      session.assessment_id,
+      dim,
+      dimensionScore
+    );
+    
     dimensionsArray.push({
       name: dim,
       score: dimensionScore,
-      description: getDimensionDescription(dim, dimensionScore)
+      title: detailedDesc.title,
+      description: detailedDesc.description,
+      tags: detailedDesc.tags,
+      suggestions: detailedDesc.suggestions
     });
   });
 
