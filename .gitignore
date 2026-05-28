@@ -38,3 +38,8 @@ workbox-*.js
 
 # Build artifacts
 dev-dist/
+
+# Test and documentation files (temporary)
+dogfood-output/
+test_mindmirror_full_flow.py
+test-reports/
