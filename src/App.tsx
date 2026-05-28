@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { PageSkeleton } from './components/utils/Loading'
 import { I18nProvider } from './i18n'
