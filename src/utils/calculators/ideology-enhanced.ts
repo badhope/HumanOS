@@ -85,7 +85,7 @@ export function calculateIdeologyEnhanced(
   })
 
   const answeredQuestions = enhancedIdeologyQuestions.filter((q) =>
-    answerMap.hasOwnProperty(q.id)
+    Object.prototype.hasOwnProperty.call(answerMap, q.id)
   )
 
   const { rawScores, questionBreakdown, totalWeight } = calculateWeightedScores(
