@@ -48,21 +48,13 @@ export interface AppSettings {
   resetSettings: () => void
 }
 
-const defaultSettings: Omit<AppSettings, keyof {
-  setTheme: never
-  toggleAnimations: never
-  setAccentColor: never
-  setFontSize: never
-  togglePushNotifications: never
-  toggleDailyReminder: never
-  toggleAchievementNotifications: never
-  toggleSoundEffects: never
-  toggleAutoBackup: never
-  toggleHighContrast: never
-  toggleReducedMotion: never
-  togglePrivacyMode: never
-  resetSettings: never
-}> = {
+const defaultSettings: Omit<AppSettings, 
+  'setTheme' | 'toggleAnimations' | 'setAccentColor' | 'setFontSize' | 
+  'togglePushNotifications' | 'toggleDailyReminder' | 'toggleAchievementNotifications' | 
+  'toggleSoundEffects' | 'toggleAutoBackup' | 'toggleHighContrast' | 
+  'toggleReducedMotion' | 'togglePrivacyMode' | 'toggleBatterySaver' | 
+  'toggleOfflineMode' | 'toggleCacheOptimization' | 'resetSettings'
+> = {
   theme: 'dark',
   animationsEnabled: true,
   accentColor: 'violet',
@@ -82,7 +74,7 @@ const defaultSettings: Omit<AppSettings, keyof {
 
 export const useSettingsStore = create<AppSettings>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       ...defaultSettings,
 
       setTheme: (theme) => {

@@ -39,7 +39,7 @@ export interface Session {
   mode: 'normal' | 'professional'
   questions: Question[]
   total_questions: number
-  answers?: Map<string, { questionId: string; optionId: string; value: number }>
+  answers: Map<string, { questionId: string; optionId: string; value: number }>
 }
 
 export interface SessionProgress {
@@ -363,7 +363,7 @@ function generateLabelsHelper(scores) {
 export const apiService = {
   getAssessment: getAssessmentHelper,
   getAssessmentQuestions: getAssessmentQuestionsHelper,
-  createSession: async (assessmentId, mode = 'normal') => {
+  createSession: async (assessmentId: string, mode: 'normal' | 'professional' = 'normal') => {
     const questions = await getAssessmentQuestionsHelper(assessmentId, mode);
     const session = {
       session_id: generateId(),
@@ -376,24 +376,21 @@ export const apiService = {
     sessions.set(session.session_id, session);
     return session;
   },
-  getSession: async (sessionId) => {
+  getSession: async (sessionId: string) => {
     const session = sessions.get(sessionId);
     if (!session) {
       throw new Error(`会话 ${sessionId} 不存在`);
     }
     return {
       session_id: sessionId,
-      answered_count: session.answers?.size || 0,
+      answered_count: session.answers.size,
       total_questions: session.total_questions,
     };
   },
-  saveAnswer: async (sessionId, questionId, optionId, value) => {
+  saveAnswer: async (sessionId: string, questionId: string, optionId: string, value: number) => {
     const session = sessions.get(sessionId);
     if (!session) {
       throw new Error(`会话 ${sessionId} 不存在`);
-    }
-    if (!session.answers) {
-      session.answers = new Map();
     }
     session.answers.set(questionId, { questionId, optionId, value });
     return {
@@ -402,21 +399,22 @@ export const apiService = {
       saved_count: session.answers.size,
     };
   },
-  updateAnswer: async (sessionId, questionId, optionId, value) => {
+  updateAnswer: async (sessionId: string, questionId: string, optionId: string, value: number) => {
     const result = await apiService.saveAnswer(sessionId, questionId, optionId, value);
     return { success: result.success };
   },
-  submitAssessment: async (sessionId) => {
+  submitAssessment: async (sessionId: string) => {
     const session = sessions.get(sessionId);
     if (!session) {
       throw new Error(`会话 ${sessionId} 不存在`);
     }
     
+    const answers = session.answers || new Map();
     let result;
     const assessment = standardAssessments[session.assessment_id as keyof typeof standardAssessments];
     
     if (assessment && assessment.resultCalculator) {
-      const answersArray = Array.from(session.answers.entries()).map(([key, value]) => ({
+      const answersArray = Array.from(answers.entries()).map(([key, value]) => ({
         questionId: key,
         ...value
       }));
@@ -430,8 +428,8 @@ export const apiService = {
           session_id: session.session_id,
           mode: session.mode,
           completed_at: new Date().toISOString(),
-          answers: Object.fromEntries(session.answers.entries()),
-          accuracy: calculateAccuracy(session.questions.length, session.answers.size),
+          answers: Object.fromEntries(answers.entries()),
+          accuracy: calculateAccuracy(session.questions.length, answers.size),
         };
       } catch (err) {
         console.warn('自定义计算器执行失败，使用通用计算器:', err);
@@ -447,7 +445,7 @@ export const apiService = {
   },
   calculateResult: calculateResultHelper,
   generateLabels: generateLabelsHelper,
-  getResult: async (resultId) => {
+  getResult: async (resultId: string) => {
     const result = results.get(resultId);
     if (!result) {
       throw new Error(`结果 ${resultId} 不存在`);

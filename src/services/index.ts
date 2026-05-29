@@ -5,9 +5,9 @@
  */
 
 import visitorService from './visitorIdentity'
-import { apiService, apiClient } from './api'
+import apiService from './api'
 
-export { visitorService, apiService, apiClient }
+export { visitorService, apiService }
 
 export type {
   Option,
@@ -15,10 +15,7 @@ export type {
   Assessment,
   Session,
   SessionProgress,
-  Answer,
-  DimensionScores,
   Result,
-  CalculationResult,
 } from './api'
 
 export default {

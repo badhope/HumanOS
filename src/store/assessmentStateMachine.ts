@@ -1,5 +1,14 @@
 import { create } from 'zustand'
-import type { Question, Answer, Session } from '../services/api'
+import type { Question, Session } from '../services/api'
+
+export interface Answer {
+  id: string
+  session_id: string
+  question_id: string
+  selected_option_id: string
+  value: number
+  created_at: string
+}
 
 export type AssessmentState = 'idle' | 'initializing' | 'answering' | 'paused' | 'submitting' | 'completed' | 'error'
 
