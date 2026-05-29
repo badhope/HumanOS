@@ -98,9 +98,16 @@ export const useAssessmentStateMachine = create<AssessmentStateMachineStore>((se
 
     set({ selectedOption: optionId })
 
+    const generateId = () => {
+      if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+        return crypto.randomUUID()
+      }
+      return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    }
+
     const newAnswers = new Map(answers)
     newAnswers.set(question.id, {
-      id: crypto.randomUUID(),
+      id: generateId(),
       session_id: get().session?.session_id || '',
       question_id: question.id,
       selected_option_id: optionId,

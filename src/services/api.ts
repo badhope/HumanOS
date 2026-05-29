@@ -97,6 +97,9 @@ async function getAssessmentHelper(assessmentId) {
       difficulty: enhancedConfig.difficulty,
       duration: enhancedConfig.duration,
       quality: enhancedConfig.quality,
+      professional_question_count: 56,
+      normal_question_count: 28,
+      ...enhancedConfig,
     };
   }
 
@@ -104,6 +107,7 @@ async function getAssessmentHelper(assessmentId) {
   const assessment = standardAssessments[assessmentId as keyof typeof standardAssessments];
   if (assessment) {
     return {
+      ...assessment,
       id: assessment.id,
       title: assessment.title,
       description: assessment.description,

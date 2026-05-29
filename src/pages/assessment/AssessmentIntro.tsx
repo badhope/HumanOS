@@ -114,9 +114,23 @@ export default function AssessmentIntro() {
   };
 
   const modeLabel = currentAssessmentMode === 'professional' ? '专业版' : '普通版';
-  const questionCount = isEnhancedIdeology && currentAssessmentMode === 'professional'
-    ? assessment.professional_question_count
-    : assessment.normal_question_count;
+  
+  // 计算题目数量
+  let questionCount = 0;
+  if (isEnhancedIdeology && currentAssessmentMode === 'professional') {
+    questionCount = (assessment as any).professional_question_count || 28;
+  } else if (assessment.questions && Array.isArray(assessment.questions)) {
+    // 如果有questions数组，直接用长度
+    questionCount = assessment.questions.length;
+  } else if ((assessment as any).questionCount) {
+    // 如果有questionCount字段
+    questionCount = (assessment as any).questionCount;
+  } else {
+    // 默认值
+    questionCount = 24;
+  }
+  
+  // 计算估计时间
   const estimatedTime = isEnhancedIdeology
     ? (currentAssessmentMode === 'professional' ? '~12分钟' : '~6分钟')
     : `~${assessment.duration}分钟`;

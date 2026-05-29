@@ -29,7 +29,7 @@ def test_complete_flow():
             # 测试1: 首页加载
             # ========================================
             print("\n[测试1] 首页加载...")
-            page.goto('http://localhost:5173')
+            page.goto('http://localhost:5174')
             page.wait_for_load_state('networkidle')
             time.sleep(2)  # 等待动画完成
 
@@ -214,7 +214,7 @@ def test_complete_flow():
             print("\n[测试9] 测试设置页面...")
 
             # 导航到设置
-            page.goto('http://localhost:5173/settings')
+            page.goto('http://localhost:5174/settings')
             page.wait_for_load_state('networkidle')
             time.sleep(1)
 
@@ -227,7 +227,7 @@ def test_complete_flow():
             print("\n[测试10] 测试测评列表页面...")
 
             # 导航到测评列表
-            page.goto('http://localhost:5173/assessments')
+            page.goto('http://localhost:5174/discover')
             page.wait_for_load_state('networkidle')
             time.sleep(1)
 
