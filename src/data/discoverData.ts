@@ -32,7 +32,7 @@ export interface DiscoverCategory {
 }
 
 const personalityItems: DiscoverItem[] = [
-  { id: 'sbti', title: 'MBTI 16型人格测试', description: '了解你的人格类型', icon: Brain, path: '/mode-select/sbti-personality', badge: '热门', questionCount: 24, duration: 5 },
+  { id: 'sbti', title: 'SBTI 趣味人格测试', description: '了解你的人格类型', icon: Brain, path: '/mode-select/sbti-personality', badge: '热门', questionCount: 24, duration: 5 },
   { id: 'bigfive', title: '大五人格测试', description: '全面了解你的人格特质', icon: Sparkles, path: '/mode-select/ocean-bigfive', questionCount: 28, duration: 6 },
   { id: 'darktriad', title: '黑暗三人格测试', description: '探索你的阴暗面', icon: Flame, path: '/mode-select/dark-triad', questionCount: 28, duration: 6 },
   { id: 'hardiness', title: '心理韧性测试', description: '评估你的抗压能力', icon: Shield, path: '/mode-select/hardiness-standard', questionCount: 28, duration: 6 },
