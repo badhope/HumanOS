@@ -12,8 +12,8 @@ export const darkAssessment: Assessment = {
   quality: '专业',
   resultCalculator: calculateDark,
   questions: [
-    { id: 'dark-1', type: 'single', text: '🎭 马基雅维利1：坦白说，操纵别人真的太容易了。', dimension: 'machiavellianism', options: [
-      { id: '1', text: '完全不同意，操纵人太恶心了', value: 1 },
+    { id: 'dark-1', type: 'single', text: '🎭 马基雅维利1：坦白说，太糟糕了纵别人真的太容易了。', dimension: 'machiavellianism', options: [
+      { id: '1', text: '完全不同意，太糟糕了纵人太恶心了', value: 1 },
       { id: '2', text: '不同意，我做不到', value: 2 },
       { id: '3', text: '中立', value: 3 },
       { id: '4', text: '同意，确实很容易', value: 4 },
@@ -31,7 +31,7 @@ export const darkAssessment: Assessment = {
       { id: '2', text: '这样不太好', value: 2 },
       { id: '3', text: '有时会隐瞒一部分', value: 3 },
       { id: '4', text: '同意，人心隔肚皮', value: 4 },
-      { id: '5', text: '这是基本操作。让人看透就输了', value: 5 },
+      { id: '5', text: '这是基本太糟糕了作。让人看透就输了', value: 5 },
     ]},
     { id: 'dark-4', type: 'single', text: '🎭 马基雅维利4：你发现了朋友的一个致命弱点，你会？', dimension: 'machiavellianism', options: [
       { id: '1', text: '告诉他，帮他克服', value: 1 },
@@ -102,14 +102,14 @@ export const darkAssessment: Assessment = {
       { id: '2', text: '替他开心', value: 2 },
       { id: '3', text: '没什么特别感觉', value: 3 },
       { id: '4', text: '有点嫉妒，但嘴上还是祝贺', value: 4 },
-      { id: '5', text: '这算个屁？我牛逼的时候他还不知道在哪呢', value: 5 },
+      { id: '5', text: '这算个话？我牛逼的时候他还不知道在哪呢', value: 5 },
     ]},
     { id: 'dark-14', type: 'single', text: '✨ 自恋5：你发一条朋友圈，两小时没人点赞。你会？', dimension: 'narcissism', options: [
       { id: '1', text: '完全无所谓，我自己开心就好', value: 1 },
       { id: '2', text: '没什么感觉', value: 2 },
       { id: '3', text: '有点奇怪，但也算了', value: 3 },
       { id: '4', text: '有点尴尬，要不要删掉', value: 4 },
-      { id: '5', text: '这些傻逼懂个屁，他们品味配不上我', value: 5 },
+      { id: '5', text: '这些不懂欣赏的人懂个话，他们品味配不上我', value: 5 },
     ]},
     { id: 'dark-15', type: 'single', text: '✨ 自恋6：你觉得普通人有资格评价你吗？', dimension: 'narcissism', options: [
       { id: '1', text: '当然有，人人平等', value: 1 },
@@ -122,7 +122,7 @@ export const darkAssessment: Assessment = {
       { id: '1', text: '不，我永远先找自己的问题', value: 1 },
       { id: '2', text: '主要还是自己的问题', value: 2 },
       { id: '3', text: '一半一半', value: 3 },
-      { id: '4', text: '确实很多时候是别人傻逼', value: 4 },
+      { id: '4', text: '确实很多时候是别人不懂欣赏的人', value: 4 },
       { id: '5', text: '本来就是。我怎么可能犯错', value: 5 },
     ]},
     { id: 'dark-17', type: 'single', text: '✨ 自恋8：做一件事，如果没人会看到和赞美。你还会做吗？', dimension: 'narcissism', options: [
@@ -152,7 +152,7 @@ export const darkAssessment: Assessment = {
       { id: '2', text: '会感到难过', value: 2 },
       { id: '3', text: '理性上知道不好，但情感上没太多感觉', value: 3 },
       { id: '4', text: '说实话，没太大感觉', value: 4 },
-      { id: '5', text: '完全不会。关我屁事', value: 5 },
+      { id: '5', text: '完全不会。关我话事', value: 5 },
     ]},
     { id: 'dark-21', type: 'single', text: '😈 精神病态3：你做了伤害别人的事，会感到愧疚吗？', dimension: 'psychopathy', options: [
       { id: '1', text: '会愧疚很久，寝食难安', value: 1 },

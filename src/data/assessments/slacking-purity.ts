@@ -43,7 +43,7 @@ export const slackingPurityAssessment: Assessment = {
       { id: '4', text: 'Win+D秒回桌面，假装在刷新', value: 4 },
       { id: '5', text: '根本不会发现，我装了老板键雷达', value: 5 },
     ]},
-    { id: 'slack-3', type: 'likert-5', text: '上班期间上厕所，你的操作是？', reverseScored: false, dimension: 'toiletEscape', options: [
+    { id: 'slack-3', type: 'likert-5', text: '上班期间上厕所，你的太糟糕了作是？', reverseScored: false, dimension: 'toiletEscape', options: [
       { id: '1', text: '速战速决，5分钟内回到工位', value: 1 },
       { id: '2', text: '正常节奏，10分钟左右', value: 2 },
       { id: '3', text: '15分钟起步，顺便刷完朋友圈', value: 3 },
@@ -71,7 +71,7 @@ export const slackingPurityAssessment: Assessment = {
       { id: '4', text: '4次以上，每层楼都逛了', value: 4 },
       { id: '5', text: '住在茶水间了，刚泡完咖啡', value: 5 },
     ]},
-    { id: 'slack-7', type: 'likert-5', text: '你的鼠标键盘操作速度？', reverseScored: false, dimension: 'pretendWorking', options: [
+    { id: 'slack-7', type: 'likert-5', text: '你的鼠标键盘太糟糕了作速度？', reverseScored: false, dimension: 'pretendWorking', options: [
       { id: '1', text: '正常速度，该干嘛干嘛', value: 1 },
       { id: '2', text: '有人路过时会敲得快一点', value: 2 },
       { id: '3', text: '老板在就疯狂敲键盘', value: 3 },
@@ -102,7 +102,7 @@ export const slackingPurityAssessment: Assessment = {
     { id: 'slack-11', type: 'likert-5', text: '带薪拉屎的时间，你一般控制在？', reverseScored: false, dimension: 'toiletEscape', options: [
       { id: '1', text: '5分钟以内，绝不占用工作时间', value: 1 },
       { id: '2', text: '10分钟，正常生理需求', value: 2 },
-      { id: '3', text: '20分钟，这是基本操作', value: 3 },
+      { id: '3', text: '20分钟，这是基本太糟糕了作', value: 3 },
       { id: '4', text: '30分钟以上，赚回本钱', value: 4 },
       { id: '5', text: '腿麻站不起来了，叫人来扶', value: 5 },
     ]},

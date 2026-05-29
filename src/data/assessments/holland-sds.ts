@@ -37,14 +37,14 @@ export const hollandSDSAssessment: Assessment = {
       { id: '0', text: '用脑思考，不用动手', value: 0 },
       { id: '1', text: '指挥别人去做', value: 1 },
       { id: '2', text: '和大家一起做', value: 2 },
-      { id: '3', text: '自己动手操作', value: 3 },
+      { id: '3', text: '自己动手太糟糕了作', value: 3 },
       { id: '4', text: '亲手做出实实在在的东西', value: 4 },
     ]},
     { id: 'holland-r5', type: 'likert-5', text: '以下哪种工作最吸引我', reverseScored: false, dimension: 'R', options: [
       { id: '0', text: '在办公室写报告', value: 0 },
       { id: '1', text: '给别人做培训', value: 1 },
       { id: '2', text: '做数据分析', value: 2 },
-      { id: '3', text: '操作精密仪器', value: 3 },
+      { id: '3', text: '太糟糕了作精密仪器', value: 3 },
       { id: '4', text: '建造、制造或维修实物', value: 4 },
     ]},
     { id: 'holland-r6', type: 'likert-5', text: '对于户外运动，我', reverseScored: false, dimension: 'R', options: [

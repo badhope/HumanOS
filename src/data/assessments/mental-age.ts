@@ -114,7 +114,7 @@ export const mentalAgeAssessment: Assessment = {
       { id: '1', value: 1, text: '我哪里变了？你说清楚！' },
       { id: '2', value: 2, text: '真的吗？我改还不行吗' },
       { id: '3', value: 3, text: '人总是会变的嘛' },
-      { id: '4', value: 4, text: '变就变了，关你屁事' },
+      { id: '4', value: 4, text: '变就变了，关你话事' },
       { id: '5', value: 5, text: '呵，你才发现啊' },
     ]},
     { id: 'age-16', type: 'single', text: '对于"成功"的定义，你更认同？', dimension: 'resilience', options: [
@@ -128,7 +128,7 @@ export const mentalAgeAssessment: Assessment = {
       { id: '1', value: 1, text: '完了完了我也焦虑了' },
       { id: '2', value: 2, text: '有点慌，我也落后了' },
       { id: '3', value: 3, text: '每个人节奏不一样' },
-      { id: '4', value: 4, text: '贩卖焦虑的傻逼' },
+      { id: '4', value: 4, text: '贩卖焦虑的不懂欣赏的人' },
       { id: '5', value: 5, text: '年龄只是个数字而已' },
     ]},
     { id: 'age-18', type: 'single', text: '如果能回到过去，你想回到几岁？', dimension: 'resilience', options: [

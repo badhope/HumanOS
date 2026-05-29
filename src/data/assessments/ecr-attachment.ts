@@ -117,7 +117,7 @@ export const ecrAttachmentAssessment: Assessment = {
       { id: '3', text: '特别作的时候才会瞎想', value: 3 },
       { id: '4', text: '姨妈期/低谷期偶尔会矫情', value: 4 },
       { id: '5', text: '经常会因为小事失落', value: 5 },
-      { id: '6', text: '屁大点事都能上升到不爱', value: 6 },
+      { id: '6', text: '话大点事都能上升到不爱', value: 6 },
       { id: '7', text: '呼吸声不对都是不爱我的证据', value: 7 },
     ]},
     { id: 'ecr-13', type: 'likert-7', text: '没有爱情的话，我觉得人生很空虚', reverseScored: false, dimension: 'anxiety_need', options: [
@@ -244,7 +244,7 @@ export const ecrAttachmentAssessment: Assessment = {
       { id: '4', text: '我也不知道为什么会这样', value: 4 },
       { id: '5', text: '经常在心里默默盘算分手', value: 5 },
       { id: '6', text: '好几次都是最甜的时候提分手', value: 6 },
-      { id: '7', text: '这是我的固定操作，每次都这样', value: 7 },
+      { id: '7', text: '这是我的固定太糟糕了作，每次都这样', value: 7 },
     ]},
     { id: 'ecr-27', type: 'likert-7', text: '我不喜欢伴侣对我的生活干涉太多', reverseScored: false, dimension: 'avoidance_close', options: [
       { id: '1', text: '管越多证明越爱我呀', value: 1 },

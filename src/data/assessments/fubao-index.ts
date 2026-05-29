@@ -102,7 +102,7 @@ export const fubaoIndexAssessment: Assessment = {
       { id: '5', text: '拜完堂立刻回公司改bug', value: 5 },
     ]},
     { id: 'fb-11', type: 'likert-5', text: '"与其躺平，不如奋斗"，您怎么看？', dimension: 'struggleBelief', options: [
-      { id: '1', text: '躺平是我的选择，关你屁事', value: 1 },
+      { id: '1', text: '躺平是我的选择，关你话事', value: 1 },
       { id: '2', text: '奋斗不如躺平', value: 2 },
       { id: '3', text: '边躺平边奋斗', value: 3 },
       { id: '4', text: '年轻人确实该奋斗', value: 4 },
@@ -130,7 +130,7 @@ export const fubaoIndexAssessment: Assessment = {
       { id: '5', text: '主动申请不要工资，免费干活', value: 5 },
     ]},
     { id: 'fb-15', type: 'likert-5', text: '公司年会老板说"大家都是兄弟"，您觉得？', dimension: 'gratitudeLevel', options: [
-      { id: '1', text: '这话谁信谁傻逼', value: 1 },
+      { id: '1', text: '这话谁信谁不懂欣赏的人', value: 1 },
       { id: '2', text: '场面话而已', value: 2 },
       { id: '3', text: '听听就好', value: 3 },
       { id: '4', text: '老板人真好', value: 4 },
@@ -340,7 +340,7 @@ export const fubaoIndexAssessment: Assessment = {
       { id: '5', text: '秒回，立刻打开电脑', value: 5 },
     ]},
     { id: 'fb-45', type: 'likert-5', text: '公司说"要和公司共同成长"，您觉得？', dimension: 'gratitudeLevel', options: [
-      { id: '1', text: '成长个屁，加薪才是真的', value: 1 },
+      { id: '1', text: '成长个话，加薪才是真的', value: 1 },
       { id: '2', text: '都是画饼话术', value: 2 },
       { id: '3', text: '半信半疑', value: 3 },
       { id: '4', text: '确实应该共同进步', value: 4 },

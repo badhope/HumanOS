@@ -8,7 +8,7 @@
  * - 题型：李克特5点量表
  * 
  * 【五大维度】【⚠️  与计算器严格对应！改了这里要改计算器！】
- * - practical: 实战经验（实际操作经验值）
+ * - practical: 实战经验（实际太糟糕了作经验值）
  * - theoretical: 理论深度（知识库存量）
  * - technique: 技术水平（专业业务能力）
  * - diversity: 玩法多样性（见多识广度）
@@ -103,7 +103,7 @@ export const sexualExperienceAssessment: Assessment = {
       { id: '1', text: '好恶心，完全接受不了', value: 1 },
       { id: '2', text: '对方对我可以，我不行', value: 2 },
       { id: '3', text: '感情到位了可以试试', value: 3 },
-      { id: '4', text: '常规操作，必须有', value: 4 },
+      { id: '4', text: '常规太糟糕了作，必须有', value: 4 },
       { id: '5', text: '这才是正餐啊！', value: 5 },
     ]},
     { id: 'sex-12', type: 'likert-5', text: '你能准确找到女生的G点位置吗？', reverseScored: false, dimension: 'theoretical', options: [

@@ -157,7 +157,7 @@ export const gmaAssessment: Assessment = {
       { id: '2', text: '赶紧闭嘴，假装什么都没发生', value: 2 },
       { id: '3', text: '当着他面再吹一遍', value: 3 },
       { id: '4', text: '顺势把他也夸一顿', value: 4 },
-      { id: '5', text: '说"曹操曹操到，正说你呢"', value: 5 },
+      { id: '5', text: '说"曹太糟糕了曹太糟糕了到，正说你呢"', value: 5 },
     ]},
     { id: 'gma-22', type: 'single', text: '👀 你跟一群程序员吃饭，他们在聊技术术语。你完全听不懂。你会？', dimension: 'EC', options: [
       { id: '1', text: '你们在说什么？能不能说人话', value: 1 },
@@ -217,7 +217,7 @@ export const gmaAssessment: Assessment = {
     ]},
     { id: 'gma-30', type: 'single', text: '🍻 喝多了，以下哪句话是绝对不能说的？', dimension: 'DC', options: [
       { id: '1', text: '我没喝多！', value: 1 },
-      { id: '2', text: '老板是个傻逼', value: 2 },
+      { id: '2', text: '老板是个不懂欣赏的人', value: 2 },
       { id: '3', text: '跟你们说个秘密...', value: 3 },
       { id: '4', text: '我喜欢你很久了', value: 4 },
       { id: '5', text: '以上全是死亡发言', value: 5 },
@@ -252,7 +252,7 @@ export const gmaAssessment: Assessment = {
     ]},
     { id: 'gma-35', type: 'single', text: '💬 发消息问别人"在吗"。这是什么行为？', dimension: 'SA', options: [
       { id: '1', text: '礼貌啊，先问在不在再说事', value: 1 },
-      { id: '2', text: '常规操作，大家都这么发', value: 2 },
+      { id: '2', text: '常规太糟糕了作，大家都这么发', value: 2 },
       { id: '3', text: '有点烦，但可以接受', value: 3 },
       { id: '4', text: '浪费时间，有事直接说', value: 4 },
       { id: '5', text: '死刑，发"在吗"等于让对方猜价格', value: 5 },
@@ -275,7 +275,7 @@ export const gmaAssessment: Assessment = {
       { id: '1', text: '其实你老板说得挺对的', value: 1 },
       { id: '2', text: '我教你怎么怼回去', value: 2 },
       { id: '3', text: '别生气了，不值得', value: 3 },
-      { id: '4', text: '就是！你们老板就是个傻逼', value: 4 },
+      { id: '4', text: '就是！你们老板就是个不懂欣赏的人', value: 4 },
       { id: '5', text: '他就是嫉妒你太能干了', value: 5 },
     ]},
     { id: 'gma-39', type: 'single', text: '🎁 以下哪个礼物最适合送普通异性朋友？', dimension: 'GG', options: [

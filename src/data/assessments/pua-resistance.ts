@@ -23,9 +23,9 @@ import { calculatePUA } from '../../utils/calculators/pua-calculator'
 export const puaResistanceAssessment: Assessment = {
   id: 'pua-resistance',
   title: 'PUA 耐受度 S.H.I.E.L.D 测评',
-  description: '帮助你了解自己在面对情感操纵时的应对方式，增强自我保护意识',
+  description: '帮助你了解自己在面对情感太糟糕了纵时的应对方式，增强自我保护意识',
   category: '社交关系',
-  subcategory: '反操纵能力',
+  subcategory: '反太糟糕了纵能力',
   difficulty: 'standard',
   duration: 7,
   quality: '专业',
@@ -64,7 +64,7 @@ export const puaResistanceAssessment: Assessment = {
       { id: '2', text: '谢谢，但我有自己的想法', value: 2 },
       { id: '3', text: '你们说的也有道理', value: 3 },
       { id: '4', text: '父母总不会害我的', value: 4 },
-      { id: '5', text: '我真是不孝，让你们操心了', value: 5 },
+      { id: '5', text: '我真是不孝，让你们太糟糕了心了', value: 5 },
     ]},
     { id: 'pua-6', type: 'likert-5', text: '"你还不够成熟，太情绪化了"听到这句话您会？', dimension: 'criticalThinking', options: [
       { id: '1', text: '成熟就是让你随便拿捏？', value: 1 },
@@ -207,7 +207,7 @@ export const puaResistanceAssessment: Assessment = {
       { id: '5', text: '对不起，我不该怀疑你的', value: 5 },
     ]},
     { id: 'pua-26', type: 'likert-5', text: '"你都这个年纪了，别挑了差不多就行了"，您会？', dimension: 'emotionalIndependence', options: [
-      { id: '1', text: '我这个年纪怎么了？关你屁事', value: 1 },
+      { id: '1', text: '我这个年纪怎么了？关你话事', value: 1 },
       { id: '2', text: '我的事我自己做主', value: 2 },
       { id: '3', text: '好像也是这个道理', value: 3 },
       { id: '4', text: '是我太挑剔了', value: 4 },
@@ -217,11 +217,11 @@ export const puaResistanceAssessment: Assessment = {
       { id: '1', text: '为我好就好好说话，骂人算什么', value: 1 },
       { id: '2', text: '那你能不能换种方式', value: 2 },
       { id: '3', text: '忠言逆耳，骂得对', value: 3 },
-      { id: '4', text: '真的有人会为了骂我操心', value: 4 },
+      { id: '4', text: '真的有人会为了骂我太糟糕了心', value: 4 },
       { id: '5', text: '谢谢你骂醒我', value: 5 },
     ]},
     { id: 'pua-28', type: 'likert-5', text: '"为什么别人都没问题就你有问题"，听到这句话您会？', dimension: 'boundaryAwareness', options: [
-      { id: '1', text: '别人有没有问题关我屁事，我就是有问题', value: 1 },
+      { id: '1', text: '别人有没有问题关我话事，我就是有问题', value: 1 },
       { id: '2', text: '别人是别人我是我', value: 2 },
       { id: '3', text: '可能我真的比较敏感', value: 3 },
       { id: '4', text: '我尽量改吧', value: 4 },
