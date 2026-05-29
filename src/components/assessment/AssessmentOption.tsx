@@ -17,6 +17,7 @@ interface AssessmentOptionProps {
   onClick: (optionId: string) => void;
   variants: Variants;
   isMobile?: boolean;
+  disabled?: boolean;
 }
 
 export const AssessmentOption = memo(function AssessmentOption({
@@ -26,17 +27,20 @@ export const AssessmentOption = memo(function AssessmentOption({
   onClick,
   variants,
   isMobile = false,
+  disabled = false,
 }: AssessmentOptionProps) {
   const optionId = option.id || index.toString();
 
   return (
     <motion.button
       key={optionId}
-      onClick={() => onClick(optionId)}
+      onClick={() => !disabled && onClick(optionId)}
       className={cn(
         'w-full rounded-xl text-left transition-all duration-200 flex items-center gap-3 sm:gap-4 relative overflow-hidden',
         'min-h-[56px] sm:min-h-[64px] touch-manipulation',
-        selected
+        disabled
+          ? 'bg-white/3 text-white/30 cursor-not-allowed border border-transparent'
+          : selected
           ? 'bg-gradient-to-r from-violet-500/20 to-pink-500/15 border border-violet-500/50 text-white shadow-lg shadow-violet-500/20'
           : 'bg-white/5 text-white/80 hover:bg-white/10 hover:text-white border border-transparent hover:border-violet-500/20 active:bg-white/15'
       )}
@@ -44,20 +48,22 @@ export const AssessmentOption = memo(function AssessmentOption({
       initial="hidden"
       animate="visible"
       custom={index}
-      whileHover={!isMobile ? {
+      whileHover={!isMobile && !disabled ? {
         y: -2,
         transition: { duration: 0.15 }
       } : {}}
-      whileTap={{
+      whileTap={!disabled ? {
         scale: 0.98,
         y: 1,
         transition: { duration: 0.1 }
-      }}
+      } : {}}
       type="button"
-      tabIndex={0}
+      tabIndex={disabled ? -1 : 0}
       role="option"
       aria-selected={selected}
+      aria-disabled={disabled}
       aria-label={`选项 ${String.fromCharCode(65 + index)}: ${option.text}`}
+      disabled={disabled}
     >
       {selected && (
         <motion.div

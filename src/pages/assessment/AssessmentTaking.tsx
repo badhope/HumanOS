@@ -92,22 +92,23 @@ export default function AssessmentTaking() {
   useEffect(() => {
     if (state !== 'answering' || !session) return;
 
-    const handleTimerTick = () => {
-      const currentTimeLeft = timeLeft;
-      if (currentTimeLeft <= 1) {
-        if (timerRef.current) {
-          clearInterval(timerRef.current);
-          timerRef.current = null;
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev: number) => {
+        if (prev <= 1) {
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+          }
+          markTimeout();
+          // 使用 setTimeout 确保计时器完全停止后再调用 submit
+          setTimeout(() => {
+            handleSubmit();
+          }, 100);
+          return 0;
         }
-        setTimeLeft(0);
-        markTimeout();
-        handleSubmit();
-        return;
-      }
-      setTimeLeft(currentTimeLeft - 1);
-    };
-
-    timerRef.current = setInterval(handleTimerTick, 1000);
+        return prev - 1;
+      });
+    }, 1000);
 
     return () => {
       if (timerRef.current) {
@@ -115,19 +116,19 @@ export default function AssessmentTaking() {
         timerRef.current = null;
       }
     };
-  }, [state, session, timeLeft, setTimeLeft, markTimeout, handleSubmit]);
+  }, [state, session, setTimeLeft, markTimeout, handleSubmit]);
 
   const handleSelectOption = useCallback(async (optionId: string, value: number) => {
-    if (!session || !questions[currentQuestionIndex]) return;
+    if (!session || !questions[currentQuestionIndex] || state === 'submitting') return;
 
     selectOption(optionId, value);
     await saveAnswer(questions[currentQuestionIndex].id, optionId, value);
-  }, [session, questions, currentQuestionIndex, selectOption, saveAnswer]);
+  }, [session, questions, currentQuestionIndex, selectOption, saveAnswer, state]);
 
   const handleSubmit = useCallback(async () => {
+    // 使用 get() 获取所有最新状态，避免闭包问题
     const currentSession = session;
     const currentAssessmentId = assessmentId;
-    const currentAnswers = answers;
     const currentEffectiveMode = effectiveMode;
 
     if (!currentSession || !currentAssessmentId) return;
@@ -141,6 +142,9 @@ export default function AssessmentTaking() {
 
     try {
       const result = await apiService.submitAssessment(currentSession.session_id);
+      
+      // 从 store 获取最新的 answers
+      const { answers: currentAnswers } = useAssessmentStateMachine.getState();
       
       addCompletedAssessment({
         id: result.result_id || result.id,
@@ -163,7 +167,7 @@ export default function AssessmentTaking() {
       setError('提交失败，请稍后重试');
       setAnswering();
     }
-  }, [session, assessmentId, answers, effectiveMode, addCompletedAssessment, navigate, setError, setSubmitting, setAnswering]);
+  }, [session, assessmentId, effectiveMode, addCompletedAssessment, navigate, setError, setSubmitting, setAnswering]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -172,6 +176,7 @@ export default function AssessmentTaking() {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (state === 'submitting') return;
     startXRef.current = e.touches[0].clientX;
     currentXRef.current = startXRef.current;
     isDraggingRef.current = true;
@@ -183,7 +188,7 @@ export default function AssessmentTaking() {
   };
 
   const handleTouchEnd = () => {
-    if (!isDraggingRef.current) return;
+    if (!isDraggingRef.current || state === 'submitting') return;
     isDraggingRef.current = false;
 
     const deltaX = currentXRef.current - startXRef.current;
@@ -197,6 +202,7 @@ export default function AssessmentTaking() {
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (state === 'submitting') return;
     startXRef.current = e.clientX;
     currentXRef.current = startXRef.current;
     isDraggingRef.current = true;
@@ -208,7 +214,7 @@ export default function AssessmentTaking() {
   };
 
   const handleMouseUp = () => {
-    if (!isDraggingRef.current) return;
+    if (!isDraggingRef.current || state === 'submitting') return;
     isDraggingRef.current = false;
 
     const deltaX = currentXRef.current - startXRef.current;
@@ -303,14 +309,16 @@ export default function AssessmentTaking() {
 
               <button
                 onClick={() => setIsAnswerSheetOpen(true)}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+                disabled={state === 'submitting'}
+                className="p-2 rounded-lg transition-colors disabled:cursor-not-allowed disabled:opacity-50 bg-white/5 hover:bg-white/10"
               >
                 <Grid3x3 size={20} className="text-white/60" />
               </button>
 
               <button
                 onClick={() => navigate('/assessments')}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+                disabled={state === 'submitting'}
+                className="p-2 rounded-lg transition-colors disabled:cursor-not-allowed disabled:opacity-50 bg-white/5 hover:bg-white/10"
               >
                 <X size={20} className="text-white/60" />
               </button>
@@ -375,6 +383,7 @@ export default function AssessmentTaking() {
                   onClick={(id) => handleSelectOption(id, option.value)}
                   variants={optionVariants}
                   isMobile={isMobile}
+                  disabled={state === 'submitting'}
                 />
               ))}
             </div>
@@ -387,10 +396,10 @@ export default function AssessmentTaking() {
           <div className="flex items-center gap-3">
             <button
               onClick={goToPrevious}
-              disabled={currentQuestionIndex === 0}
+              disabled={currentQuestionIndex === 0 || state === 'submitting'}
               className={cn(
                 "flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-medium transition-all",
-                currentQuestionIndex === 0
+                currentQuestionIndex === 0 || state === 'submitting'
                   ? "bg-white/5 text-white/30 cursor-not-allowed"
                   : "bg-white/10 text-white hover:bg-white/20"
               )}
@@ -406,15 +415,31 @@ export default function AssessmentTaking() {
             {currentQuestionIndex === questions.length - 1 ? (
               <button
                 onClick={handleSubmit}
-                className="flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
+                disabled={state === 'submitting'}
+                className={cn(
+                  "flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-medium transition-all",
+                  state === 'submitting'
+                    ? "bg-violet-500/50 text-white cursor-not-allowed"
+                    : "bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:opacity-90"
+                )}
               >
-                <CheckCircle2 size={18} className="sm:size-20" />
-                <span>提交</span>
+                {state === 'submitting' ? (
+                  <Loader2 size={18} className="sm:size-20 animate-spin" />
+                ) : (
+                  <CheckCircle2 size={18} className="sm:size-20" />
+                )}
+                <span>{state === 'submitting' ? '提交中...' : '提交'}</span>
               </button>
             ) : (
               <button
                 onClick={goToNext}
-                className="flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-medium bg-white/10 text-white hover:bg-white/20 transition-colors"
+                disabled={state === 'submitting'}
+                className={cn(
+                  "flex items-center gap-2 px-4 sm:px-6 py-3 rounded-xl font-medium transition-all",
+                  state === 'submitting'
+                    ? "bg-white/5 text-white/30 cursor-not-allowed"
+                    : "bg-white/10 text-white hover:bg-white/20"
+                )}
               >
                 <span className="hidden sm:inline">下一题</span>
                 <ArrowRight size={18} className="sm:size-20" />
