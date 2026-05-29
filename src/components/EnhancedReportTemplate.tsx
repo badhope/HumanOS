@@ -141,9 +141,7 @@ export default function EnhancedReportTemplate({
               维度分析
             </h3>
             <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <AdvancedRadarChart data={radarData} />
-              </ResponsiveContainer>
+              <AdvancedRadarChart dimensions={dimensions} />
             </div>
           </div>
         )}

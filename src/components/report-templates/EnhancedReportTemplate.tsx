@@ -28,8 +28,17 @@ function EnhancedReportTemplate({ result, assessment }: EnhancedReportProps) {
 
   const renderContent = (content: string) => {
     try {
-      return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content, { USE_PROFILES: { html: true }, ALLOWED_TAGS: ['div', 'span', 'p', 'strong', 'em', 'b', 'i', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }) }} />
-    } catch {
+      let processedContent = content
+      const resultKeys = Object.keys(result)
+      resultKeys.forEach(key => {
+        const value = result[key]
+        if (typeof value === 'string' || typeof value === 'number') {
+          processedContent = processedContent.replace(new RegExp(`\\\${result\\.${key}}`, 'g'), String(value))
+        }
+      })
+      return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(processedContent, { USE_PROFILES: { html: true }, ALLOWED_TAGS: ['div', 'span', 'p', 'strong', 'em', 'b', 'i', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'class'] }) }} />
+    } catch (err) {
+      console.error('[EnhancedReportTemplate] renderContent error:', err)
       return <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content, { USE_PROFILES: { html: true }, ALLOWED_TAGS: ['div', 'span', 'p', 'strong', 'em', 'b', 'i', 'br', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }) }} />
     }
   }

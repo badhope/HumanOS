@@ -411,7 +411,36 @@ export const apiService = {
     if (!session) {
       throw new Error(`会话 ${sessionId} 不存在`);
     }
-    const result = calculateResultHelper(session);
+    
+    let result;
+    const assessment = standardAssessments[session.assessment_id as keyof typeof standardAssessments];
+    
+    if (assessment && assessment.resultCalculator) {
+      const answersArray = Array.from(session.answers.entries()).map(([key, value]) => ({
+        questionId: key,
+        ...value
+      }));
+      try {
+        const customResult = assessment.resultCalculator(answersArray);
+        result = {
+          ...customResult,
+          id: generateId(),
+          result_id: generateId(),
+          assessment_id: session.assessment_id,
+          session_id: session.session_id,
+          mode: session.mode,
+          completed_at: new Date().toISOString(),
+          answers: Object.fromEntries(session.answers.entries()),
+          accuracy: calculateAccuracy(session.questions.length, session.answers.size),
+        };
+      } catch (err) {
+        console.warn('自定义计算器执行失败，使用通用计算器:', err);
+        result = calculateResultHelper(session);
+      }
+    } else {
+      result = calculateResultHelper(session);
+    }
+    
     results.set(result.id, result);
     sessions.delete(sessionId);
     return result;

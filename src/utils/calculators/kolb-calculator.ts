@@ -36,7 +36,7 @@ export function calculateKolb(answers: Answer[]): AssessmentResult {
   const answerMap: Record<string, number> = {}
   answers.forEach(a => {
     const value = typeof a.value === 'number' ? a.value : parseInt(String(a.value || 3))
-    const qid = a.questionId.replace('kolbn', 'kolb')
+    const qid = String(a.questionId).replace(/^kolbn?/, 'kolb')
     answerMap[qid] = value
   })
 
@@ -68,15 +68,25 @@ export function calculateKolb(answers: Answer[]): AssessmentResult {
                           scores['abstract-conceptualization'] + scores['active-experimentation']) / 4)
   const traits = generateTraits(scores, style)
 
-  return {
-    type: 'kolb',
-    title: '学习风格测评完成',
-    subtitle: `${styleNames[style]}学习者`,
-    summary: `你是典型的「${styleNames[style]}」学习者。${styleDescriptions[style]}`,
-    overallScore,
-    dimensions,
-    traits,
-  }
+  const dimensionResults: Record<string, { score: number; name: string }> = {}
+    Object.entries(dimensionMap).forEach(([mode, ids]) => {
+      dimensionResults[mode] = {
+        score: scores[mode],
+        name: modeNames[mode as LearningMode],
+      }
+    })
+
+    return {
+      type: 'kolb',
+      title: '学习风格测评完成',
+      subtitle: `${styleNames[style]}学习者`,
+      summary: `你是典型的「${styleNames[style]}」学习者。${styleDescriptions[style]}`,
+      overallScore,
+      dimensions,
+      traits,
+      dimensionResults,
+      learningStyle: styleNames[style],
+    }
 }
 
 function generateTraits(scores: Record<string, number>, style: LearningStyle) {
