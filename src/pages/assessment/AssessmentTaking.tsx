@@ -92,23 +92,30 @@ export default function AssessmentTaking() {
   useEffect(() => {
     if (state !== 'answering' || !session) return;
 
-    timerRef.current = setInterval(() => {
-      setTimeLeft((prev: number) => {
-        if (prev <= 1) {
-          markTimeout();
-          handleSubmit();
-          return 0;
+    const handleTimerTick = () => {
+      const currentTimeLeft = timeLeft;
+      if (currentTimeLeft <= 1) {
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
         }
-        return prev - 1;
-      });
-    }, 1000);
+        setTimeLeft(0);
+        markTimeout();
+        handleSubmit();
+        return;
+      }
+      setTimeLeft(currentTimeLeft - 1);
+    };
+
+    timerRef.current = setInterval(handleTimerTick, 1000);
 
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
+        timerRef.current = null;
       }
     };
-  }, [state, session, setTimeLeft, markTimeout]);
+  }, [state, session, timeLeft, setTimeLeft, markTimeout, handleSubmit]);
 
   const handleSelectOption = useCallback(async (optionId: string, value: number) => {
     if (!session || !questions[currentQuestionIndex]) return;
@@ -118,31 +125,37 @@ export default function AssessmentTaking() {
   }, [session, questions, currentQuestionIndex, selectOption, saveAnswer]);
 
   const handleSubmit = useCallback(async () => {
-    if (!session || !assessmentId) return;
+    const currentSession = session;
+    const currentAssessmentId = assessmentId;
+    const currentAnswers = answers;
+    const currentEffectiveMode = effectiveMode;
+
+    if (!currentSession || !currentAssessmentId) return;
 
     if (timerRef.current) {
       clearInterval(timerRef.current);
+      timerRef.current = null;
     }
 
     setSubmitting();
 
     try {
-      const result = await apiService.submitAssessment(session.session_id);
+      const result = await apiService.submitAssessment(currentSession.session_id);
       
       addCompletedAssessment({
         id: result.result_id || result.id,
-        assessmentId: assessmentId,
-        answers: Array.from(answers.values()).map((a: any) => ({
+        assessmentId: currentAssessmentId,
+        answers: Array.from(currentAnswers.values()).map((a: any) => ({
           questionId: a.question_id,
           selectedOptionId: a.selected_option_id,
           value: a.value,
         })),
         result: result,
         completedAt: new Date(),
-        mode: effectiveMode as 'normal' | 'professional',
+        mode: currentEffectiveMode as 'normal' | 'professional',
       });
 
-      navigate(`/assessment/${assessmentId}/result/${result.result_id || result.id}`, {
+      navigate(`/assessment/${currentAssessmentId}/result/${result.result_id || result.id}`, {
         state: { calculationResult: result },
       });
     } catch (error) {
@@ -150,7 +163,7 @@ export default function AssessmentTaking() {
       setError('提交失败，请稍后重试');
       setAnswering();
     }
-  }, [session, assessmentId, answers, addCompletedAssessment, navigate, setError, setSubmitting, setAnswering]);
+  }, [session, assessmentId, answers, effectiveMode, addCompletedAssessment, navigate, setError, setSubmitting, setAnswering]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
