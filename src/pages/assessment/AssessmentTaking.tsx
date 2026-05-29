@@ -54,6 +54,7 @@ export default function AssessmentTaking() {
     setTimeout: markTimeout,
     setError,
     reset,
+    setState,
   } = useAssessmentStateMachine();
 
   const currentAssessmentMode = useAppStore((state) => state.currentAssessmentMode);
@@ -122,7 +123,7 @@ export default function AssessmentTaking() {
       clearInterval(timerRef.current);
     }
 
-    set({ state: 'submitting' });
+    setState({ state: 'submitting' });
 
     try {
       const result = await apiService.submitAssessment(session.session_id);
@@ -146,9 +147,9 @@ export default function AssessmentTaking() {
     } catch (error) {
       console.error('提交失败:', error);
       setError('提交失败，请稍后重试');
-      set({ state: 'answering' });
+      setState({ state: 'answering' });
     }
-  }, [session, assessmentId, answers, addCompletedAssessment, navigate, set, setError]);
+  }, [session, assessmentId, answers, addCompletedAssessment, navigate, setError, setState]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

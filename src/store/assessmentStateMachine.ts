@@ -30,6 +30,7 @@ export interface AssessmentStateMachineStore {
   setTimeLeft: (time: number) => void
   setTimeout: () => void
   clearTimeout: () => void
+  setState: (partial: Partial<AssessmentStateMachineStore>) => void
 }
 
 export const useAssessmentStateMachine = create<AssessmentStateMachineStore>((set, get) => ({
@@ -196,6 +197,8 @@ export const useAssessmentStateMachine = create<AssessmentStateMachineStore>((se
   setTimeout: () => set({ isTimeout: true }),
 
   clearTimeout: () => set({ isTimeout: false }),
+
+  setState: (partial: Partial<AssessmentStateMachineStore>) => set(partial),
 }))
 
 export default useAssessmentStateMachine
