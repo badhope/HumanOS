@@ -74,13 +74,13 @@ export class PluginRegistryManager {
 
   registerPlugin(plugin: Plugin): boolean {
     if (this.registry.plugins.has(plugin.id)) {
-      this.addError({
-        pluginId: plugin.id,
-        code: 'DUPLICATE_PLUGIN',
-        message: 'Plugin with this ID already registered',
-        timestamp: Date.now()
-      });
-      return false;
+      const existing = this.registry.plugins.get(plugin.id)!;
+      if (existing.version === plugin.version && existing.name === plugin.name) {
+        return true;
+      }
+      this.registry.plugins.set(plugin.id, plugin);
+      this.saveRegistry();
+      return true;
     }
 
     this.registry.plugins.set(plugin.id, plugin);
