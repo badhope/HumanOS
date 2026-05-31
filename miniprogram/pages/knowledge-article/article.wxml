@@ -1,0 +1,9 @@
+<view class="container" wx:if="{{article}}">
+  <view class="article-header">
+    <view class="article-title">{{article.title}}</view>
+  </view>
+
+  <view class="article-content">
+    <view class="article-text">{{article.content}}</view>
+  </view>
+</view>

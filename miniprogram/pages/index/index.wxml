@@ -1,0 +1,104 @@
+<wxs module="dateUtil" src="../../utils/date.wxs" />
+<view class="container">
+  <view class="welcome-card">
+    <view class="greeting">{{greeting}}</view>
+    <view class="nickname">{{nickname}}</view>
+    <view class="subtext">探索你的内心世界</view>
+  </view>
+
+  <view class="quick-actions">
+    <view class="action-item" bindtap="goToLibrary">
+      <view class="action-icon">📋</view>
+      <view class="action-text">测评库</view>
+    </view>
+    <view class="action-item" bindtap="goToArchive">
+      <view class="action-icon">📊</view>
+      <view class="action-text">档案</view>
+    </view>
+    <view class="action-item" bindtap="goToKnowledge">
+      <view class="action-icon">📚</view>
+      <view class="action-text">知识</view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">数据概览</view>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <view class="stat-value">{{stats.total}}</view>
+        <view class="stat-label">完成测评</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-value">{{stats.streak}}</view>
+        <view class="stat-label">连续天数</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-value">{{stats.lastWeek}}</view>
+        <view class="stat-label">近7天</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section" wx:if="{{featuredAssessments.length > 0}}">
+    <view class="section-header">
+      <view class="section-title">推荐测评</view>
+      <view class="section-more" bindtap="goToLibrary">查看全部</view>
+    </view>
+    <view class="assessment-list">
+      <view
+        class="assessment-card"
+        wx:for="{{featuredAssessments}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goToAssessment"
+      >
+        <view class="assessment-icon" style="background: {{item.color}}15;">
+          {{item.icon}}
+        </view>
+        <view class="assessment-info">
+          <view class="assessment-name">{{item.name}}</view>
+          <view class="assessment-desc">{{item.description}}</view>
+          <view class="assessment-meta">
+            <text>{{item.questions.length}}题</text>
+            <text>·</text>
+            <text>{{item.duration}}分钟</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section" wx:if="{{recentRecords.length > 0}}">
+    <view class="section-header">
+      <view class="section-title">最近记录</view>
+    </view>
+    <view class="record-list">
+      <view
+        class="record-card"
+        wx:for="{{recentRecords}}"
+        wx:key="id"
+        data-record-id="{{item.id}}"
+        bindtap="goToRecordDetail"
+      >
+        <view class="record-icon" style="background: {{item.assessmentColor}}15;">
+          {{item.assessmentIcon}}
+        </view>
+        <view class="record-info">
+          <view class="record-name">{{item.assessmentName}}</view>
+          <view class="record-result">{{item.result.title}}</view>
+          <view class="record-time">{{dateUtil.formatTime(item.createdAt)}}</view>
+        </view>
+        <view class="record-score-value">{{item.result.overallScore}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{stats.total === 0 && featuredAssessments.length === 0}}">
+    <view class="empty-icon">🌱</view>
+    <view class="empty-text">开始探索自己吧</view>
+    <view class="empty-hint">点击下方按钮，开始第一个测评</view>
+    <view class="btn-primary empty-btn" bindtap="goToLibrary">去测评库</view>
+  </view>
+</view>

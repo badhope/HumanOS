@@ -1,0 +1,69 @@
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 48rpx 24rpx;
+  background: linear-gradient(135deg, #2E7CF5 0%, #5A9CF7 100%);
+  color: white;
+  margin: 0 -24rpx 24rpx;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.user-stats {
+  font-size: 24rpx;
+  opacity: 0.9;
+  margin-top: 8rpx;
+}
+
+.menu-section {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 36rpx;
+  gap: 24rpx;
+  border-bottom: 1rpx solid #F0F2F5;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon {
+  font-size: 40rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: #1E293B;
+}
+
+.menu-arrow {
+  font-size: 40rpx;
+  color: #94A3B8;
+}

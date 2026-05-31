@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="about-header">
+    <view class="about-logo">🧠</view>
+    <view class="about-name">心镜 MindMirror</view>
+    <view class="about-version">Version 1.0.0</view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">关于心镜</view>
+    <view class="section-content">
+      心镜是一款专业的心理测评小程序，帮助用户了解自己，探索内心，记录成长。我们致力于提供科学、易用、美观的心理测评工具，让每个人都能更好地认识自己。
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">声明</view>
+    <view class="section-content">
+      本应用提供的测评结果仅供参考，不作为诊断依据。如有专业需求，请咨询专业心理医生。
+    </view>
+  </view>
+</view>

@@ -1,0 +1,19 @@
+var formatTime = function(timestamp) {
+  if (!timestamp) return '';
+  var date = getDate(timestamp);
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+  var hour = date.getHours();
+  var minute = date.getMinutes();
+  
+  var pad = function(num) {
+    return num < 10 ? '0' + num : num;
+  };
+  
+  return year + '-' + pad(month) + '-' + pad(day) + ' ' + pad(hour) + ':' + pad(minute);
+};
+
+module.exports = {
+  formatTime: formatTime
+};

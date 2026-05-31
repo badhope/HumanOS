@@ -1,0 +1,42 @@
+<view class="container" wx:if="{{!loading && record}}">
+  <view class="result-header" style="background: linear-gradient(135deg, {{record.assessmentColor}} 0%, {{record.assessmentColor}}cc 100%);">
+    <view class="result-icon">{{record.assessmentIcon}}</view>
+    <view class="result-title">{{record.result.title}}</view>
+    <view class="result-summary">{{record.result.summary}}</view>
+    <view class="result-score">{{record.result.overallScore}}</view>
+    <view class="result-label">综合得分</view>
+  </view>
+
+  <view class="section" wx:if="{{record.result.dimensions && record.result.dimensions.length > 0}}">
+    <view class="section-title">维度分析</view>
+    <view class="dimension-list">
+      <view class="dimension-item" wx:for="{{record.result.dimensions}}" wx:key="key">
+        <view class="dimension-header">
+          <view class="dimension-name">{{item.name}}</view>
+          <view class="dimension-score">{{item.score}}</view>
+        </view>
+        <view class="dimension-bar">
+          <view
+            class="dimension-fill"
+            style="width: {{item.score}}%"
+          ></view>
+        </view>
+        <view class="dimension-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">详细解读</view>
+    <view class="result-desc">{{record.result.desc}}</view>
+  </view>
+
+  <view class="time-info">
+    完成于 {{record.createdAt ? (record.createdAt | formatTime) : ''}}
+  </view>
+
+  <view class="footer">
+    <view class="btn-secondary" bindtap="retake">再测一次</view>
+    <view class="btn-primary" bindtap="goToArchive">查看档案</view>
+  </view>
+</view>

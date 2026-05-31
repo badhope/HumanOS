@@ -1,0 +1,19 @@
+<view class="container">
+  <view class="article-list">
+    <view
+      class="article-item"
+      wx:for="{{articles}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="goToArticle"
+    >
+      <view class="article-title">{{item.title}}</view>
+      <view class="article-summary">{{item.summary}}</view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{articles.length === 0}}">
+    <view class="empty-icon">📚</view>
+    <view class="empty-text">暂无文章</view>
+  </view>
+</view>

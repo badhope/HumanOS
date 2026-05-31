@@ -1,0 +1,34 @@
+<view class="container">
+  <view class="section">
+    <view class="section-title">个人信息</view>
+    <view class="form-item">
+      <view class="form-label">昵称</view>
+      <input
+        class="form-input"
+        placeholder="请输入昵称"
+        value="{{settings.nickname}}"
+        bindinput="onNicknameInput"
+      />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">功能设置</view>
+    <view class="form-item">
+      <view class="form-label">震动反馈</view>
+      <switch
+        checked="{{settings.vibration}}"
+        bindchange="onVibrationChange"
+        color="#2E7CF5"
+      />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">关于</view>
+    <view class="form-item">
+      <view class="form-label">版本</view>
+      <view class="form-value">1.0.0</view>
+    </view>
+  </view>
+</view>

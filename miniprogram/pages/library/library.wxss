@@ -1,0 +1,141 @@
+.search-bar {
+  margin-bottom: 24rpx;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  height: 88rpx;
+  border-radius: 44rpx;
+  padding: 0 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.search-icon {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  height: 100%;
+}
+
+.clear-icon {
+  font-size: 28rpx;
+  color: #94A3B8;
+  padding: 12rpx;
+  margin-left: 12rpx;
+}
+
+.category-nav {
+  margin-bottom: 36rpx;
+}
+
+.category-list {
+  display: flex;
+  gap: 16rpx;
+  padding-right: 24rpx;
+}
+
+.category-item {
+  padding: 16rpx 32rpx;
+  background: #FFFFFF;
+  border-radius: 48rpx;
+  font-size: 28rpx;
+  color: #64748B;
+  white-space: nowrap;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.category-item.active {
+  background: #2E7CF5;
+  color: white;
+}
+
+.assessment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.assessment-card {
+  display: flex;
+  gap: 24rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 36rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.assessment-icon {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  flex-shrink: 0;
+}
+
+.assessment-info {
+  flex: 1;
+}
+
+.assessment-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.assessment-desc {
+  font-size: 24rpx;
+  color: #64748B;
+  margin-top: 8rpx;
+}
+
+.assessment-tags {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 12rpx;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: #F8FAFC;
+  color: #64748B;
+  font-size: 20rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.assessment-meta {
+  font-size: 22rpx;
+  color: #94A3B8;
+  margin-top: 12rpx;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 96rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.empty-hint {
+  font-size: 24rpx;
+  color: #64748B;
+  margin-top: 12rpx;
+}

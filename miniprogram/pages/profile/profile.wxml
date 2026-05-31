@@ -1,0 +1,31 @@
+<view class="container">
+  <view class="profile-header">
+    <view class="avatar">👤</view>
+    <view class="user-info">
+      <view class="nickname">{{settings.nickname || '用户'}}</view>
+      <view class="user-stats">已完成 {{recordsCount}} 次测评</view>
+    </view>
+  </view>
+
+  <view class="menu-section">
+    <view class="menu-item" bindtap="goToSettings">
+      <view class="menu-icon">⚙️</view>
+      <view class="menu-text">设置</view>
+      <view class="menu-arrow">›</view>
+    </view>
+
+    <view class="menu-item" bindtap="goToAbout">
+      <view class="menu-icon">ℹ️</view>
+      <view class="menu-text">关于我们</view>
+      <view class="menu-arrow">›</view>
+    </view>
+  </view>
+
+  <view class="menu-section" style="margin-top:24rpx">
+    <view class="menu-item" bindtap="clearAllRecords">
+      <view class="menu-icon">🗑️</view>
+      <view class="menu-text" style="color:#EF4444">清除所有记录</view>
+      <view class="menu-arrow">›</view>
+    </view>
+  </view>
+</view>

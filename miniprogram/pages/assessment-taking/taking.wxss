@@ -1,0 +1,186 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.progress-header {
+  padding: 24rpx;
+  flex-shrink: 0;
+}
+
+.progress-bar {
+  height: 8rpx;
+  background: #E2E8F0;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2E7CF5 0%, #5A9CF7 100%);
+  border-radius: 4rpx;
+  transition: width 0.3s;
+}
+
+.progress-text {
+  font-size: 24rpx;
+  color: #64748B;
+  text-align: right;
+  margin-top: 12rpx;
+}
+
+.question-scroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.question-area {
+  padding: 0 24rpx 48rpx;
+}
+
+.question-text {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1E293B;
+  line-height: 1.6;
+  margin-bottom: 48rpx;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.option {
+  display: flex;
+  gap: 24rpx;
+  align-items: flex-start;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 36rpx;
+  border: 3rpx solid transparent;
+  transition: all 0.2s;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.option.selected {
+  border-color: #2E7CF5;
+  background: rgba(46, 124, 245, 0.05);
+}
+
+.option-circle {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 3rpx solid #E2E8F0;
+  flex-shrink: 0;
+  margin-top: 4rpx;
+}
+
+.option.selected .option-circle {
+  border-color: #2E7CF5;
+  background: #2E7CF5;
+  position: relative;
+}
+
+.option.selected .option-circle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12rpx;
+  height: 8rpx;
+  border-left: 3rpx solid white;
+  border-bottom: 3rpx solid white;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.option-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #1E293B;
+  line-height: 1.6;
+}
+
+.footer {
+  display: flex;
+  gap: 24rpx;
+  padding: 24rpx;
+  flex-shrink: 0;
+}
+
+.prev-btn {
+  flex: 0 0 160rpx;
+}
+
+.prev-btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.next-btn {
+  flex: 1;
+}
+
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 32rpx;
+  padding: 48rpx;
+  width: 80%;
+  z-index: 101;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  text-align: center;
+  color: #1E293B;
+}
+
+.modal-desc {
+  font-size: 24rpx;
+  text-align: center;
+  color: #64748B;
+  margin-top: 16rpx;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 48rpx;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  border-radius: 44rpx;
+  font-size: 28rpx;
+}
+
+.modal-btn.cancel {
+  background: #F8FAFC;
+  color: #1E293B;
+}
+
+.modal-btn.confirm {
+  background: #2E7CF5;
+  color: white;
+}

@@ -1,0 +1,60 @@
+<wxs module="dateUtil" src="../../utils/date.wxs" />
+
+<view class="container">
+  <view class="stats-section" wx:if="{{!loading && records.length > 0}}">
+    <view class="stats-card">
+      <view class="stat-item">
+        <view class="stat-value">{{records.length}}</view>
+        <view class="stat-label">完成测评</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-value">{{thisWeek}}</view>
+        <view class="stat-label">本周</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="tabs" wx:if="{{!loading && records.length > 0}}">
+    <view
+      class="tab-item {{activeTab === 'timeline' ? 'active' : ''}}"
+      data-tab="timeline"
+      bindtap="switchTab"
+    >
+      时间线
+    </view>
+    <view
+      class="tab-item {{activeTab === 'timeline' ? '' : ''}}"
+      style="opacity:0.5"
+    >
+      趋势分析
+    </view>
+  </view>
+
+  <view class="content" wx:if="{{!loading}}">
+    <view class="timeline" wx:if="{{activeTab === 'timeline'}}">
+      <view
+        class="record-item"
+        wx:for="{{records}}"
+        wx:key="id"
+        data-record-id="{{item.id}}"
+        bindtap="goToResult"
+      >
+        <view class="record-icon" style="background: {{item.assessmentColor}}15">
+          {{item.assessmentIcon}}
+        </view>
+        <view class="record-content">
+          <view class="record-title">{{item.assessmentName}}</view>
+          <view class="record-result">{{item.result.title}}</view>
+          <view class="record-time">{{dateUtil.formatTime(item.createdAt)}}</view>
+        </view>
+        <view class="record-score">{{item.result.overallScore}}</view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{records.length === 0}}">
+      <view class="empty-icon">📊</view>
+      <view class="empty-text">还没有测评记录</view>
+      <view class="empty-hint">开始你的第一个测评吧</view>
+    </view>
+  </view>
+</view>

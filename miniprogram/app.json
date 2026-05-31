@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/library/library",
+    "pages/assessment-intro/intro",
+    "pages/assessment-taking/taking",
+    "pages/assessment-result/result",
+    "pages/archive/archive",
+    "pages/knowledge/knowledge",
+    "pages/profile/profile",
+    "pages/profile-settings/settings",
+    "pages/profile-about/about"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#2E7CF5",
+    "navigationBarTitleText": "心镜",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F8FAFC"
+  },
+  "tabBar": {
+    "color": "#94A3B8",
+    "selectedColor": "#2E7CF5",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/library/library",
+        "text": "测评库"
+      },
+      {
+        "pagePath": "pages/archive/archive",
+        "text": "档案"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

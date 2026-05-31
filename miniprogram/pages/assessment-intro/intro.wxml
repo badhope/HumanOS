@@ -1,0 +1,46 @@
+<view class="container" wx:if="{{!loading && assessment}}">
+  <view class="intro-header">
+    <view class="intro-icon" style="background: {{assessment.color}}15;">
+      {{assessment.icon}}
+    </view>
+    <view class="intro-title">{{assessment.name}}</view>
+    <view class="intro-desc">{{assessment.description}}</view>
+    <view class="intro-meta">
+      <text>{{assessment.questions.length}}题</text>
+      <text>·</text>
+      <text>约{{assessment.duration}}分钟</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">测评介绍</view>
+    <view class="intro-content {{expanded ? 'expanded' : ''}}">
+      {{assessment.fullDesc}}
+    </view>
+    <view class="toggle-btn" bindtap="toggleExpand">
+      {{expanded ? '收起' : '展开'}}
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">准备事项</view>
+    <view class="tips">
+      <view class="tip-item">
+        <view class="tip-icon">💡</view>
+        <view class="tip-text">请选择一个安静的环境</view>
+      </view>
+      <view class="tip-item">
+        <view class="tip-icon">⏱️</view>
+        <view class="tip-text">预留充足的时间</view>
+      </view>
+      <view class="tip-item">
+        <view class="tip-icon">✓</view>
+        <view class="tip-text">按照第一直觉回答</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <view class="btn-primary" bindtap="startAssessment">开始测评</view>
+  </view>
+</view>

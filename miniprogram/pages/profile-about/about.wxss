@@ -1,0 +1,42 @@
+.about-header {
+  text-align: center;
+  padding: 60rpx 0;
+}
+
+.about-logo {
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+}
+
+.about-name {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.about-version {
+  font-size: 24rpx;
+  color: #64748B;
+  margin-top: 12rpx;
+}
+
+.section {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 36rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 16rpx;
+}
+
+.section-content {
+  font-size: 28rpx;
+  color: #64748B;
+  line-height: 1.8;
+}

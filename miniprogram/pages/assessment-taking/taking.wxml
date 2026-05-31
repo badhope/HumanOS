@@ -1,0 +1,56 @@
+<view class="container" wx:if="{{!loading && assessment}}">
+  <view class="progress-header">
+    <view class="progress-bar">
+      <view
+        class="progress-fill"
+        style="width: {{((currentIndex + (selectedValue ? 1 : 0)) / assessment.questions.length) * 100}}%"
+      ></view>
+    </view>
+    <view class="progress-text">{{currentIndex + 1}} / {{assessment.questions.length}}</view>
+  </view>
+
+  <scroll-view class="question-scroll" scroll-y>
+    <view class="question-area">
+      <view class="question-text">{{assessment.questions[currentIndex].text}}</view>
+
+      <view class="options">
+        <view
+          class="option {{selectedValue === item.value ? 'selected' : ''}}"
+          wx:for="{{assessment.questions[currentIndex].options}}"
+          wx:key="value"
+          data-value="{{item.value}}"
+          bindtap="selectOption"
+        >
+          <view class="option-circle"></view>
+          <view class="option-text">{{item.text}}</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="footer">
+    <view
+      class="btn-secondary prev-btn {{currentIndex === 0 ? 'disabled' : ''}}"
+      bindtap="goPrev"
+      wx:if="{{currentIndex > 0}}"
+    >
+      上一题
+    </view>
+    <view
+      class="btn-primary next-btn"
+      bindtap="confirmAnswer"
+    >
+      {{currentIndex === assessment.questions.length - 1 ? '完成' : '下一题'}}
+    </view>
+  </view>
+</view>
+
+<view class="modal-mask" wx:if="{{showExitConfirm}}" bindtap="hideExitDialog"></view>
+<view class="modal" wx:if="{{showExitConfirm}}">
+  <view class="modal-title">确定退出吗？</view>
+  <view class="modal-desc">你的进度将不会保存</view>
+  <view class="modal-buttons">
+    <view class="modal-btn cancel" bindtap="hideExitDialog">继续答题</view>
+    <view class="modal-btn confirm" bindtap="confirmExit">退出</view>
+  </view>
+</view>

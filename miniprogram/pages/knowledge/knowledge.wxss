@@ -1,0 +1,43 @@
+.article-list {
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.article-item {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 36rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.article-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1E293B;
+  line-height: 1.5;
+}
+
+.article-summary {
+  font-size: 26rpx;
+  color: #64748B;
+  margin-top: 12rpx;
+  line-height: 1.6;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 96rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1E293B;
+}

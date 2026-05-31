@@ -1,0 +1,92 @@
+page {
+  background-color: #F8FAFC;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  color: #1E293B;
+  line-height: 1.6;
+  font-size: 28rpx;
+}
+
+.container {
+  padding: 0 24rpx;
+  min-height: 100vh;
+}
+
+/* 卡片 */
+.card {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 36rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 按钮 */
+.btn-primary {
+  background: linear-gradient(135deg, #2E7CF5 0%, #5A9CF7 100%);
+  color: white;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 48rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background: #FFFFFF;
+  color: #2E7CF5;
+  border: 2rpx solid #2E7CF5;
+  height: 96rpx;
+  line-height: 92rpx;
+  border-radius: 48rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.btn-text {
+  color: #2E7CF5;
+  font-size: 28rpx;
+}
+
+/* 间距 */
+.mt-12 { margin-top: 12rpx; }
+.mt-24 { margin-top: 24rpx; }
+.mt-36 { margin-top: 36rpx; }
+.mt-48 { margin-top: 48rpx; }
+
+.mb-12 { margin-bottom: 12rpx; }
+.mb-24 { margin-bottom: 24rpx; }
+.mb-36 { margin-bottom: 36rpx; }
+.mb-48 { margin-bottom: 48rpx; }
+
+/* 文本 */
+.text-primary { color: #2E7CF5; }
+.text-secondary { color: #64748B; }
+.text-muted { color: #94A3B8; }
+.text-danger { color: #EF4444; }
+.text-success { color: #16B39A; }
+
+.text-xs { font-size: 22rpx; }
+.text-sm { font-size: 24rpx; }
+.text-base { font-size: 28rpx; }
+.text-lg { font-size: 32rpx; }
+.text-xl { font-size: 36rpx; }
+.text-2xl { font-size: 48rpx; }
+
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* Flex */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-12 { gap: 12rpx; }
+.gap-24 { gap: 24rpx; }
+.gap-36 { gap: 36rpx; }
+.flex-1 { flex: 1; }

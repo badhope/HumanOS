@@ -1,0 +1,20 @@
+.article-header {
+  padding: 48rpx 24rpx 24rpx;
+}
+
+.article-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1E293B;
+  line-height: 1.5;
+}
+
+.article-content {
+  padding: 24rpx;
+}
+
+.article-text {
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.8;
+}
