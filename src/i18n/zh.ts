@@ -11,7 +11,8 @@ export default {
     dashboard: "个人中心",
     history: "历史记录",
     settings: "设置",
-    about: "关于我们"
+    about: "关于我们",
+    profile: "个人资料"
   },
   home: {
     badge: "专业心理测评，科学自我探索",
@@ -267,6 +268,11 @@ export default {
     username: "用户名",
     confirmPassword: "确认密码",
     forgotPassword: "忘记密码？",
+    forgotPasswordTitle: "重置您的密码",
+    forgotPasswordDesc: "输入您的邮箱，我们将发送重置链接",
+    sendResetLink: "发送重置链接",
+    resetLinkSent: "重置链接已发送！请查看邮箱",
+    backToLogin: "返回登录",
     noAccount: "还没有账号？",
     hasAccount: "已有账号？",
     signUpHere: "立即注册",
@@ -278,7 +284,8 @@ export default {
     orContinueWith: "或继续使用",
     loggingIn: "登录中...",
     registering: "创建账号中...",
-    loginSuccess: "登录成功！",
+    success: "成功！",
+    loginSuccess: "欢迎回来！",
     registerSuccess: "账号创建成功！",
     logoutSuccess: "退出登录成功",
     invalidCredentials: "邮箱或密码错误",
@@ -286,7 +293,9 @@ export default {
     passwordRequired: "请输入密码",
     usernameRequired: "请输入用户名",
     confirmPasswordRequired: "请确认密码",
-    passwordsDoNotMatch: "两次密码输入不一致"
+    passwordsDoNotMatch: "两次密码输入不一致",
+    termsRequired: "您必须同意服务条款",
+    agreeTerms: "我同意服务条款和隐私政策"
   },
   profile: {
     title: "我的资料",
@@ -295,7 +304,12 @@ export default {
     lastLogin: "上次登录",
     changePassword: "修改密码",
     currentPassword: "当前密码",
-    newPassword: "新密码"
+    newPassword: "新密码",
+    confirmNewPassword: "确认新密码",
+    saveChanges: "保存更改",
+    profileUpdated: "资料已更新！",
+    passwordChanged: "密码已修改！",
+    mustLogin: "请登录以查看您的资料"
   },
   common: {
     loading: "加载中...",

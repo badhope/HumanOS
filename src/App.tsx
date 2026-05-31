@@ -13,6 +13,7 @@ import { Sidebar, MenuButton } from './components/Sidebar';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
+import { Profile } from './pages/Profile';
 import { useAppStore } from './store';
 import { getTranslation } from './i18n';
 import './index.css';
@@ -23,7 +24,7 @@ export default function App() {
 
   useEffect(() => {
     initializeAuth();
-  }, [initializeAuth]);
+  }, [initializeAuth]); // 添加正确的依赖
   
   return (
     <Router>
@@ -69,6 +70,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/assessments" element={<Assessments />} />
           <Route path="/assessments/:id" element={<AssessmentDetail />} />
           <Route path="/training" element={<Training />} />

@@ -111,16 +111,16 @@ export function Sidebar() {
                 </div>
                 <div className="mt-3 space-y-2">
                   <Link
-                    to="/settings"
+                    to="/profile"
                     className="w-full px-4 py-2 bg-white text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-center block"
                   >
-                    {i18n.nav.settings}
+                    {i18n.nav.profile}
                   </Link>
                   <button
                     onClick={handleLogout}
                     className="w-full px-4 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
                   >
-                    {i18n.auth?.logout || 'Logout'}
+                    {i18n.auth.logout}
                   </button>
                 </div>
               </div>
@@ -133,10 +133,10 @@ export function Sidebar() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-slate-700">
-                      {i18n.settings?.guestMode || 'Guest Mode'}
+                      {i18n.settings.guestMode}
                     </p>
                     <p className="text-xs text-slate-500">
-                      {i18n.settings?.loginForMore || 'Login for more features'}
+                      {i18n.settings.loginForMore}
                     </p>
                   </div>
                 </div>
@@ -145,13 +145,13 @@ export function Sidebar() {
                     to="/login"
                     className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-colors text-sm font-medium text-center block"
                   >
-                    {i18n.auth?.login || 'Login'}
+                    {i18n.auth.login}
                   </Link>
                   <Link
                     to="/register"
                     className="w-full px-4 py-2 bg-white text-slate-700 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-center block"
                   >
-                    {i18n.auth?.register || 'Register'}
+                    {i18n.auth.register}
                   </Link>
                 </div>
               </div>

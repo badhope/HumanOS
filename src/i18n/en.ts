@@ -11,7 +11,8 @@ export default {
     dashboard: "Dashboard",
     history: "History",
     settings: "Settings",
-    about: "About"
+    about: "About",
+    profile: "Profile"
   },
   home: {
     badge: "Professional psychological assessment, scientific self-exploration",
@@ -267,6 +268,11 @@ export default {
     username: "Username",
     confirmPassword: "Confirm Password",
     forgotPassword: "Forgot Password?",
+    forgotPasswordTitle: "Reset Your Password",
+    forgotPasswordDesc: "Enter your email and we'll send you a reset link",
+    sendResetLink: "Send Reset Link",
+    resetLinkSent: "Reset link sent! Check your email",
+    backToLogin: "Back to Login",
     noAccount: "Don't have an account?",
     hasAccount: "Already have an account?",
     signUpHere: "Sign up here",
@@ -278,7 +284,8 @@ export default {
     orContinueWith: "Or continue with",
     loggingIn: "Logging in...",
     registering: "Creating account...",
-    loginSuccess: "Login successful!",
+    success: "Success!",
+    loginSuccess: "Welcome back!",
     registerSuccess: "Account created successfully!",
     logoutSuccess: "Logged out successfully",
     invalidCredentials: "Invalid email or password",
@@ -286,7 +293,9 @@ export default {
     passwordRequired: "Password is required",
     usernameRequired: "Username is required",
     confirmPasswordRequired: "Please confirm your password",
-    passwordsDoNotMatch: "Passwords do not match"
+    passwordsDoNotMatch: "Passwords do not match",
+    termsRequired: "You must agree to the terms",
+    agreeTerms: "I agree to the Terms of Service and Privacy Policy"
   },
   profile: {
     title: "My Profile",
@@ -295,7 +304,12 @@ export default {
     lastLogin: "Last login",
     changePassword: "Change Password",
     currentPassword: "Current Password",
-    newPassword: "New Password"
+    newPassword: "New Password",
+    confirmNewPassword: "Confirm New Password",
+    saveChanges: "Save Changes",
+    profileUpdated: "Profile updated!",
+    passwordChanged: "Password changed!",
+    mustLogin: "Please login to view your profile"
   },
   common: {
     loading: "Loading...",
