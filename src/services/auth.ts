@@ -19,11 +19,23 @@ export class AuthService {
   }
 
   private generateToken(): string {
-    return 'token_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    return 'token_' + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('') + Date.now().toString(36);
   }
 
   private generateUserId(): string {
-    return 'user_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    const array = new Uint8Array(16);
+    crypto.getRandomValues(array);
+    return 'user_' + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  }
+
+  private async hashPassword(password: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password + 'mindmirror_salt_2024');
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
   validateEmail(email: string): string | null {
@@ -117,6 +129,8 @@ export class AuthService {
       };
     }
 
+    const passwordHash = await this.hashPassword(data.password);
+
     const newUser: User = {
       id: this.generateUserId(),
       email: data.email,
@@ -126,9 +140,13 @@ export class AuthService {
       lastLoginAt: new Date()
     };
 
-    const token = this.generateToken();
     existingUsers.push(newUser);
     localStorage.setItem('mindmirror_users', JSON.stringify(existingUsers));
+    
+    const hashKey = `mindmirror_password_${newUser.id}`;
+    localStorage.setItem(hashKey, passwordHash);
+
+    const token = this.generateToken();
     localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(newUser));
     localStorage.setItem(STORAGE_KEY_TOKEN, token);
 
@@ -168,10 +186,19 @@ export class AuthService {
       };
     }
 
-    const simulatedPasswordHash = this.hashPassword(credentials.password);
-    const storedHash = this.getPasswordHash(user.id);
+    const hashKey = `mindmirror_password_${user.id}`;
+    const storedHash = localStorage.getItem(hashKey);
 
-    if (simulatedPasswordHash !== storedHash) {
+    if (!storedHash) {
+      return {
+        success: false,
+        error: 'Account error. Please register again.'
+      };
+    }
+
+    const inputHash = await this.hashPassword(credentials.password);
+
+    if (inputHash !== storedHash) {
       return {
         success: false,
         error: 'Incorrect password'
@@ -235,25 +262,6 @@ export class AuthService {
     } catch {
       return [];
     }
-  }
-
-  private hashPassword(password: string): string {
-    return 'hash_' + btoa(password);
-  }
-
-  private getPasswordHash(userId: string): string | null {
-    const hashKey = `mindmirror_password_${userId}`;
-    const hash = localStorage.getItem(hashKey);
-    if (hash) return hash;
-    
-    const users = this.getStoredUsers();
-    const user = users.find(u => u.id === userId);
-    if (user) {
-      const newHash = this.hashPassword('password123');
-      localStorage.setItem(hashKey, newHash);
-      return newHash;
-    }
-    return null;
   }
 
   generateAvatar(username: string): string {
@@ -339,10 +347,19 @@ export class AuthService {
       };
     }
 
-    const oldHash = this.hashPassword(oldPassword);
-    const storedHash = this.getPasswordHash(currentUser.id);
+    const oldHashKey = `mindmirror_password_${currentUser.id}`;
+    const storedOldHash = localStorage.getItem(oldHashKey);
 
-    if (oldHash !== storedHash) {
+    if (!storedOldHash) {
+      return {
+        success: false,
+        error: 'Password not found. Please register again.'
+      };
+    }
+
+    const inputOldHash = await this.hashPassword(oldPassword);
+
+    if (inputOldHash !== storedOldHash) {
       return {
         success: false,
         error: 'Current password is incorrect'
@@ -357,8 +374,8 @@ export class AuthService {
       };
     }
 
-    const hashKey = `mindmirror_password_${currentUser.id}`;
-    localStorage.setItem(hashKey, this.hashPassword(newPassword));
+    const newHash = await this.hashPassword(newPassword);
+    localStorage.setItem(oldHashKey, newHash);
 
     return {
       success: true,
