@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Plugin, PluginConfig } from '../../types/plugin';
+import { useAppStore } from '../../store';
+import { getTranslation } from '../../i18n';
+import { Plugin } from '../../types/plugin';
 import { pluginRegistry } from '../../services/plugin/PluginRegistry';
 import { pluginLoader } from '../../services/plugin/PluginLoader';
 
@@ -7,6 +9,10 @@ export function PluginManager() {
   const [plugins, setPlugins] = useState<Plugin[]>([]);
   const [activePlugins, setActivePlugins] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPlugin, setSelectedPlugin] = useState<Plugin | null>(null);
+  const [filter, setFilter] = useState<'all' | 'assessment' | 'training' | 'ui' | 'core'>('all');
+  const locale = useAppStore((state) => state.locale);
+  const i18n = getTranslation(locale);
 
   useEffect(() => {
     loadPlugins();
@@ -14,7 +20,7 @@ export function PluginManager() {
 
   const loadPlugins = () => {
     const allPlugins = pluginRegistry.getAllPlugins();
-    const activeIds = Array.from(pluginRegistry.getActivePlugins().map(p => p.id));
+    const activeIds = pluginRegistry.getActivePlugins().map(p => p.id);
     
     setPlugins(allPlugins);
     setActivePlugins(activeIds);
@@ -39,161 +45,267 @@ export function PluginManager() {
     loadPlugins();
   };
 
+  const handleUninstall = (pluginId: string) => {
+    if (window.confirm(i18n.common.confirm)) {
+      pluginRegistry.unregisterPlugin(pluginId);
+      loadPlugins();
+      if (selectedPlugin?.id === pluginId) {
+        setSelectedPlugin(null);
+      }
+    }
+  };
+
   const getTypeColor = (type: string) => {
-    const colors = {
-      assessment: 'bg-blue-100 text-blue-800',
-      training: 'bg-green-100 text-green-800',
-      ui: 'bg-purple-100 text-purple-800',
-      core: 'bg-gray-100 text-gray-800'
+    const colors: Record<string, string> = {
+      assessment: 'bg-blue-100 text-blue-800 border-blue-200',
+      training: 'bg-green-100 text-green-800 border-green-200',
+      ui: 'bg-purple-100 text-purple-800 border-purple-200',
+      core: 'bg-slate-100 text-slate-800 border-slate-200'
     };
-    return colors[type as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+    return colors[type] || 'bg-slate-100 text-slate-800 border-slate-200';
   };
 
   const getTypeIcon = (type: string) => {
-    const icons = {
+    const icons: Record<string, string> = {
       assessment: '📊',
       training: '💪',
       ui: '🎨',
       core: '⚙️'
     };
-    return icons[type as keyof typeof icons] || '📦';
+    return icons[type] || '📦';
   };
+
+  const getTypeLabel = (type: string) => {
+    const labels: Record<string, string> = {
+      assessment: locale === 'zh' ? '测评' : 'Assessment',
+      training: locale === 'zh' ? '训练' : 'Training',
+      ui: locale === 'zh' ? '界面' : 'UI',
+      core: locale === 'zh' ? '核心' : 'Core'
+    };
+    return labels[type] || type;
+  };
+
+  const stats = pluginRegistry.getStats();
+
+  const filteredPlugins = filter === 'all' 
+    ? plugins 
+    : plugins.filter(p => p.type === filter);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">加载插件系统...</p>
+          <p className="text-slate-600">{locale === 'zh' ? '加载插件系统...' : 'Loading plugins...'}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">插件管理中心</h1>
-            <p className="text-indigo-100">管理系统插件，扩展功能</p>
-          </div>
-          <div className="text-right">
-            <div className="text-4xl mb-1">🧩</div>
-            <div className="text-sm opacity-90">
-              {plugins.length} 个插件 • {activePlugins.length} 个激活
-            </div>
-          </div>
+    <div className="space-y-6">
+      <div className="text-center">
+        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-2">
+          🧩 {locale === 'zh' ? '插件管理中心' : 'Plugin Manager'}
+        </h1>
+        <p className="text-slate-600 text-lg">
+          {locale === 'zh' ? '管理系统插件，扩展功能模块' : 'Manage system plugins and extend functionality'}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 text-center">
+          <div className="text-3xl mb-2">📦</div>
+          <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
+          <div className="text-sm text-slate-500">{locale === 'zh' ? '总插件数' : 'Total'}</div>
+        </div>
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 text-center">
+          <div className="text-3xl mb-2">✅</div>
+          <div className="text-2xl font-bold text-green-600">{stats.active}</div>
+          <div className="text-sm text-slate-500">{locale === 'zh' ? '已激活' : 'Active'}</div>
+        </div>
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 text-center">
+          <div className="text-3xl mb-2">⏸️</div>
+          <div className="text-2xl font-bold text-yellow-600">{stats.total - stats.active}</div>
+          <div className="text-sm text-slate-500">{locale === 'zh' ? '未激活' : 'Inactive'}</div>
+        </div>
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 text-center">
+          <div className="text-3xl mb-2">📂</div>
+          <div className="text-2xl font-bold text-purple-600">{Object.keys(stats.byType).length}</div>
+          <div className="text-sm text-slate-500">{locale === 'zh' ? '类型数' : 'Types'}</div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <PluginStatCard 
-          title="总插件数"
-          value={plugins.length}
-          icon="📦"
-          color="bg-blue-500"
-        />
-        <PluginStatCard 
-          title="激活插件"
-          value={activePlugins.length}
-          icon="✅"
-          color="bg-green-500"
-        />
-        <PluginStatCard 
-          title="待激活"
-          value={plugins.length - activePlugins.length}
-          icon="⏸️"
-          color="bg-yellow-500"
-        />
+      <div className="flex gap-2 overflow-x-auto pb-2">
+        {(['all', 'assessment', 'training', 'ui', 'core'] as const).map((type) => (
+          <button
+            key={type}
+            onClick={() => setFilter(type)}
+            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+              filter === type
+                ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md'
+                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+            }`}
+          >
+            {type === 'all' ? (locale === 'zh' ? '全部' : 'All') : getTypeIcon(type)} {getTypeLabel(type)}
+          </button>
+        ))}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-gray-800">插件列表</h2>
-        </div>
-        <div className="divide-y divide-gray-200">
-          {plugins.map(plugin => (
-            <div key={plugin.id} className="p-6 hover:bg-gray-50 transition-colors">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start space-x-4">
-                  <div className="text-3xl">
-                    {getTypeIcon(plugin.type)}
-                  </div>
-                  <div>
-                    <div className="flex items-center space-x-3">
-                      <h3 className="font-semibold text-gray-900">{plugin.name}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(plugin.type)}`}>
-                        {plugin.type}
-                      </span>
-                      <span className="text-gray-500 text-sm">v{plugin.version}</span>
-                    </div>
-                    <p className="text-gray-600 mt-1">{plugin.description}</p>
-                    <p className="text-sm text-gray-500 mt-2">作者: {plugin.author}</p>
-                    
-                    {plugin.dependencies.length > 0 && (
-                      <div className="mt-3">
-                        <span className="text-xs text-gray-500">依赖: </span>
-                        {plugin.dependencies.map(dep => (
-                          <span key={dep} className="inline-block px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs mr-1">
-                            {dep}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {plugin.permissions.length > 0 && (
-                      <div className="mt-2">
-                        <span className="text-xs text-gray-500">权限: </span>
-                        {plugin.permissions.map(perm => (
-                          <span key={perm} className="inline-block px-2 py-1 bg-yellow-50 text-yellow-700 rounded text-xs mr-1">
-                            {perm}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-3">
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={activePlugins.includes(plugin.id)}
-                      onChange={() => handleTogglePlugin(plugin.id)}
-                      disabled={!plugin.enabled}
-                      className="sr-only peer"
-                    />
-                    <div className={`w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 ${!plugin.enabled ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
-                  </label>
-                  
-                  {!plugin.enabled && (
-                    <span className="text-xs text-gray-400">已禁用</span>
-                  )}
+      <div className="grid gap-4 md:grid-cols-2">
+        {filteredPlugins.map(plugin => (
+          <div
+            key={plugin.id}
+            className={`bg-white rounded-2xl p-6 border-2 transition-all hover:shadow-lg cursor-pointer ${
+              activePlugins.includes(plugin.id)
+                ? 'border-green-200 hover:border-green-400'
+                : 'border-slate-200 hover:border-blue-300'
+            } ${selectedPlugin?.id === plugin.id ? 'ring-2 ring-blue-500' : ''}`}
+            onClick={() => setSelectedPlugin(plugin)}
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">{getTypeIcon(plugin.type)}</span>
+                <div>
+                  <h3 className="font-bold text-slate-800">{plugin.name}</h3>
+                  <p className="text-xs text-slate-500">v{plugin.version} • {plugin.author}</p>
                 </div>
               </div>
+              <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getTypeColor(plugin.type)}`}>
+                {getTypeLabel(plugin.type)}
+              </span>
             </div>
-          ))}
-        </div>
+
+            <p className="text-sm text-slate-600 mb-4 line-clamp-2">{plugin.description}</p>
+
+            {plugin.dependencies.length > 0 && (
+              <div className="mb-3">
+                <span className="text-xs text-slate-500">{locale === 'zh' ? '依赖：' : 'Deps: '}</span>
+                {plugin.dependencies.map(dep => (
+                  <span key={dep} className="inline-block px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs mr-1">
+                    {dep}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+              <div className="flex items-center gap-2">
+                <span className={`w-2.5 h-2.5 rounded-full ${activePlugins.includes(plugin.id) ? 'bg-green-500' : 'bg-slate-300'}`}></span>
+                <span className="text-xs text-slate-500">
+                  {activePlugins.includes(plugin.id) 
+                    ? (locale === 'zh' ? '已激活' : 'Active') 
+                    : (locale === 'zh' ? '未激活' : 'Inactive')}
+                </span>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleTogglePlugin(plugin.id); }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                    activePlugins.includes(plugin.id)
+                      ? 'bg-red-50 text-red-700 hover:bg-red-100'
+                      : 'bg-green-50 text-green-700 hover:bg-green-100'
+                  }`}
+                >
+                  {activePlugins.includes(plugin.id) 
+                    ? (locale === 'zh' ? '停用' : 'Deactivate') 
+                    : (locale === 'zh' ? '启用' : 'Activate')}
+                </button>
+                {!plugin.autoLoad && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleUninstall(plugin.id); }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-50 text-slate-600 hover:bg-slate-100 transition-colors"
+                  >
+                    {locale === 'zh' ? '卸载' : 'Uninstall'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {plugins.length === 0 && (
-        <div className="bg-white rounded-2xl p-12 text-center shadow-lg">
+      {filteredPlugins.length === 0 && (
+        <div className="bg-white rounded-2xl p-12 text-center shadow-sm border border-slate-200">
           <div className="text-6xl mb-4">📭</div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">暂无插件</h3>
-          <p className="text-gray-500">插件系统初始化中，请稍后再试</p>
+          <h3 className="text-xl font-semibold text-slate-800 mb-2">
+            {locale === 'zh' ? '暂无插件' : 'No Plugins'}
+          </h3>
+          <p className="text-slate-500">
+            {locale === 'zh' ? '该分类下没有插件' : 'No plugins in this category'}
+          </p>
         </div>
       )}
-    </div>
-  );
-}
 
-function PluginStatCard({ title, value, icon, color }: { title: string; value: number; icon: string; color: string }) {
-  return (
-    <div className={`${color} rounded-xl p-6 text-white shadow-lg`}>
-      <div className="text-3xl mb-2">{icon}</div>
-      <div className="text-3xl font-bold mb-1">{value}</div>
-      <div className="text-white/90 text-sm">{title}</div>
+      {selectedPlugin && (
+        <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-200">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-slate-800">{selectedPlugin.name}</h2>
+            <button
+              onClick={() => setSelectedPlugin(null)}
+              className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="bg-slate-50 rounded-xl p-3">
+                <span className="text-slate-500">{locale === 'zh' ? '版本' : 'Version'}</span>
+                <p className="font-medium text-slate-800">{selectedPlugin.version}</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl p-3">
+                <span className="text-slate-500">{locale === 'zh' ? '作者' : 'Author'}</span>
+                <p className="font-medium text-slate-800">{selectedPlugin.author}</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl p-3">
+                <span className="text-slate-500">{locale === 'zh' ? '类型' : 'Type'}</span>
+                <p className="font-medium text-slate-800">{getTypeLabel(selectedPlugin.type)}</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl p-3">
+                <span className="text-slate-500">{locale === 'zh' ? '状态' : 'Status'}</span>
+                <p className={`font-medium ${activePlugins.includes(selectedPlugin.id) ? 'text-green-600' : 'text-slate-500'}`}>
+                  {activePlugins.includes(selectedPlugin.id) 
+                    ? (locale === 'zh' ? '已激活' : 'Active') 
+                    : (locale === 'zh' ? '未激活' : 'Inactive')}
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-slate-800 mb-2">{locale === 'zh' ? '描述' : 'Description'}</h3>
+              <p className="text-slate-600 text-sm">{selectedPlugin.description}</p>
+            </div>
+
+            {selectedPlugin.permissions.length > 0 && (
+              <div>
+                <h3 className="font-semibold text-slate-800 mb-2">{locale === 'zh' ? '权限' : 'Permissions'}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedPlugin.permissions.map(perm => (
+                    <span key={perm} className="px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium border border-amber-200">
+                      🔒 {perm}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {selectedPlugin.dependencies.length > 0 && (
+              <div>
+                <h3 className="font-semibold text-slate-800 mb-2">{locale === 'zh' ? '依赖' : 'Dependencies'}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedPlugin.dependencies.map(dep => (
+                    <span key={dep} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-200">
+                      📎 {dep}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

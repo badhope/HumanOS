@@ -10,6 +10,7 @@ export default {
     training: "心理训练",
     dashboard: "个人中心",
     history: "历史记录",
+    plugins: "插件管理",
     settings: "设置",
     about: "关于我们",
     profile: "个人资料"

@@ -10,6 +10,7 @@ export default {
     training: "Training",
     dashboard: "Dashboard",
     history: "History",
+    plugins: "Plugins",
     settings: "Settings",
     about: "About",
     profile: "Profile"

@@ -27,14 +27,9 @@
       "@/*": [
         "./src/*"
       ]
-    },
-    "types": [
-      "node",
-      "express"
-    ]
+    }
   },
   "include": [
-    "src",
-    "api"
+    "src"
   ]
 }

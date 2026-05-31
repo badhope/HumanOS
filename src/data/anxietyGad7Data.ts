@@ -402,3 +402,96 @@ export const GAD7_HEALTHY_HABITS = {
     '如果需要，寻求专业支持'
   ]
 };
+
+export const ANXIETY_DIMENSIONS = {
+  worries: {
+    name: '过度担忧',
+    description: '过度和不可控的担忧是焦虑的核心特征',
+    recommendations: [
+      '学习担忧时间管理',
+      '练习正念觉察',
+      '使用认知重构技术'
+    ]
+  },
+  tension: {
+    name: '运动性紧张',
+    description: '身体表现出的紧张感和不安定',
+    recommendations: [
+      '渐进式肌肉放松',
+      '规律的轻度运动',
+      '深呼吸练习'
+    ]
+  },
+  irritability: {
+    name: '易激惹',
+    description: '情绪容易被触发，耐心下降',
+    recommendations: [
+      '暂停技巧（3秒规则）',
+      '情绪日记记录',
+      '沟通技巧训练'
+    ]
+  },
+  fear: {
+    name: '恐惧/焦虑感受',
+    description: '内心的恐惧和对未知的担忧',
+    recommendations: [
+      '暴露疗法（渐进式）',
+      '安全行为分析',
+      '不确定性容忍度训练'
+    ]
+  },
+  physical: {
+    name: '躯体症状',
+    description: '焦虑在身体层面的表现',
+    recommendations: [
+      '身心放松训练',
+      '有氧运动',
+      '健康生活作息'
+    ]
+  },
+  cognitive: {
+    name: '认知症状',
+    description: '焦虑对思维和专注力的影响',
+    recommendations: [
+      '认知重构练习',
+      '专注力训练',
+      '大脑休息（如冥想）'
+    ]
+  },
+  social: {
+    name: '社会功能影响',
+    description: '焦虑对日常社交和功能的影响程度',
+    recommendations: [
+      '渐进式社交暴露',
+      '社交技巧训练',
+      '支持系统建立'
+    ]
+  }
+};
+
+export const EXTENDED_ANXIETY_LEVELS = {
+  minimal: {
+    name: '正常范围',
+    range: [0, 16],
+    color: 'green',
+    description: '您目前的焦虑水平很低，这是很好的状态！'
+  },
+  mild: {
+    name: '轻度焦虑',
+    range: [17, 33],
+    color: 'yellow',
+    description: '您有一些轻微的焦虑症状，但总体可控。'
+  },
+  moderate: {
+    name: '中度焦虑',
+    range: [34, 50],
+    color: 'orange',
+    description: '您的焦虑症状较为明显，建议关注。'
+  },
+  severe: {
+    name: '重度焦虑',
+    range: [51, 84],
+    color: 'red',
+    description: '您的焦虑症状较重，建议寻求专业帮助。'
+  }
+};

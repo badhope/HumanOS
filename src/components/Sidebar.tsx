@@ -22,6 +22,7 @@ export function Sidebar() {
     { id: 'training', label: i18n.nav.training, href: '/training', icon: '💪' },
     { id: 'dashboard', label: i18n.nav.dashboard, href: '/dashboard', icon: '📊' },
     { id: 'history', label: i18n.nav.history, href: '/history', icon: '📚' },
+    { id: 'plugins', label: i18n.nav.plugins || 'Plugins', href: '/plugins', icon: '🧩' },
     { id: 'settings', label: i18n.nav.settings, href: '/settings', icon: '⚙️' },
     { id: 'about', label: i18n.nav.about, href: '/about', icon: 'ℹ️' }
   ];

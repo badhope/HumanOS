@@ -9,6 +9,7 @@ import { About } from './pages/About';
 import { Training } from './pages/Training';
 import TrainingDetail from './pages/TrainingDetail';
 import { PersonalDashboard } from './components/dashboard/PersonalDashboard';
+import { PluginManager } from './components/plugin/PluginManager';
 import { Sidebar, MenuButton } from './components/Sidebar';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { Login } from './pages/Login';
@@ -19,17 +20,17 @@ import { getTranslation } from './i18n';
 import './index.css';
 
 export default function App() {
-  const { locale, initializeAuth } = useAppStore();
+  const { locale, initializeAuth, initializePlugins } = useAppStore();
   const i18n = getTranslation(locale);
 
   useEffect(() => {
     initializeAuth();
-  }, [initializeAuth]); // 添加正确的依赖
+    initializePlugins();
+  }, [initializeAuth, initializePlugins]);
   
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        {/* 导航栏 */}
         <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-5">
             <div className="flex items-center justify-between">
@@ -37,22 +38,25 @@ export default function App() {
                 <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-lg sm:text-xl">
                   🧠
                 </div>
-                <span className="hidden sm:inline">{i18n.app.name}</span>
-                <span className="sm:hidden">{i18n.app.name}</span>
+                <span>{i18n.app.name}</span>
               </Link>
               
-              {/* 桌面端导航链接 */}
-              <div className="hidden md:flex items-center gap-6">
-                <Link to="/" className="text-slate-700 hover:text-blue-600 font-medium transition-colors">
+              <div className="hidden md:flex items-center gap-5">
+                <Link to="/" className="text-slate-600 hover:text-blue-600 font-medium transition-colors text-sm">
                   {i18n.nav.home}
                 </Link>
-                <Link to="/assessments" className="text-slate-700 hover:text-blue-600 font-medium transition-colors">
+                <Link to="/assessments" className="text-slate-600 hover:text-blue-600 font-medium transition-colors text-sm">
                   {i18n.nav.assessments}
+                </Link>
+                <Link to="/training" className="text-slate-600 hover:text-blue-600 font-medium transition-colors text-sm">
+                  {i18n.nav.training}
+                </Link>
+                <Link to="/dashboard" className="text-slate-600 hover:text-blue-600 font-medium transition-colors text-sm">
+                  {i18n.nav.dashboard}
                 </Link>
                 <LanguageSwitcher />
               </div>
               
-              {/* 移动端：语言切换器和菜单按钮 */}
               <div className="flex items-center gap-3 md:hidden">
                 <LanguageSwitcher />
                 <MenuButton />
@@ -61,10 +65,8 @@ export default function App() {
           </div>
         </nav>
 
-        {/* 侧边栏 */}
         <Sidebar />
 
-        {/* 主内容区 */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -76,13 +78,13 @@ export default function App() {
           <Route path="/training" element={<Training />} />
           <Route path="/training/:id" element={<TrainingDetail />} />
           <Route path="/dashboard" element={<PersonalDashboard />} />
+          <Route path="/plugins" element={<PluginManager />} />
           <Route path="/history" element={<History />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </main>
 
-        {/* 页脚 */}
         <footer className="mt-auto border-t border-slate-200 py-6 sm:py-10 bg-white/50">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center text-slate-500">
             <p className="text-sm sm:text-lg">{i18n.app.copyright}</p>

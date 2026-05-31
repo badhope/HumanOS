@@ -9,47 +9,44 @@ import {
 import { calculateStressTestTraits } from '../services/stressTestScoring';
 import { calculateGAD7Traits } from '../services/anxietyGad7Scoring';
 import { authService } from '../services/auth';
+import { pluginLoader } from '../services/plugin/PluginLoader';
 import type { Locale } from '../i18n';
 
 const STORAGE_KEY_HISTORY = 'assessmentHistory';
 const STORAGE_KEY_LOCALE = 'locale';
 
 interface AppState {
-  // 用户认证相关
   user: User | null;
   isAuthenticated: boolean;
   authLoading: boolean;
   authError: string | null;
 
-  // 测评相关
   assessments: Assessment[];
   currentAssessment: Assessment | null;
   questions: Question[];
   currentQuestionIndex: number;
   answers: Record<string, number>;
   
-  // 结果相关
   result: AssessmentResult | null;
   
-  // UI状态
   isLoading: boolean;
   currentStep: 'intro' | 'quiz' | 'result';
   isSidebarOpen: boolean;
   
-  // 语言和主题
   locale: Locale;
   
-  // 历史记录
   assessmentHistory: AssessmentResult[];
-  
-  // Actions - 用户认证
+
+  pluginInitialized: boolean;
+
   initializeAuth: () => void;
   login: (credentials: AuthCredentials) => Promise<boolean>;
   register: (data: RegisterData) => Promise<boolean>;
   logout: () => void;
   clearAuthError: () => void;
 
-  // Actions - 测评相关
+  initializePlugins: () => Promise<void>;
+
   setAssessments: (assessments: Assessment[]) => void;
   setCurrentAssessment: (assessment: Assessment | null) => void;
   setQuestions: (questions: Question[]) => void;
@@ -60,34 +57,28 @@ interface AppState {
   resetAssessment: () => void;
   calculateResult: (assessmentId: string, assessmentTitle: string) => void;
   
-  // 语言设置
   setLocale: (locale: Locale) => void;
   
-  // 历史记录相关
   loadHistory: () => void;
   addToHistory: (result: AssessmentResult) => void;
   clearHistory: () => void;
   deleteHistoryItem: (id: string) => void;
   
-  // 侧边栏
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => {
-  // 初始化时从localStorage加载数据
   const initialHistory = storage.get<AssessmentResult[]>(STORAGE_KEY_HISTORY, []);
   const initialLocale = storage.get<Locale>(STORAGE_KEY_LOCALE, 'en');
   const initialUser = authService.getCurrentUser();
   
   return {
-    // 初始状态 - 用户认证
     user: initialUser,
     isAuthenticated: !!initialUser,
     authLoading: false,
     authError: null,
 
-    // 初始状态 - 测评
     assessments: [],
     currentAssessment: null,
     questions: [],
@@ -99,8 +90,8 @@ export const useAppStore = create<AppState>((set, get) => {
     isSidebarOpen: false,
     locale: initialLocale,
     assessmentHistory: initialHistory,
+    pluginInitialized: false,
     
-    // Actions - 用户认证
     initializeAuth: () => {
       const user = authService.getCurrentUser();
       set({ 
@@ -108,6 +99,17 @@ export const useAppStore = create<AppState>((set, get) => {
         isAuthenticated: !!user,
         authError: null 
       });
+    },
+
+    initializePlugins: async () => {
+      if (get().pluginInitialized) return;
+      try {
+        await pluginLoader.initialize();
+        set({ pluginInitialized: true });
+      } catch (error) {
+        console.error('Failed to initialize plugins:', error);
+        set({ pluginInitialized: true });
+      }
     },
 
     login: async (credentials: AuthCredentials) => {
@@ -183,7 +185,6 @@ export const useAppStore = create<AppState>((set, get) => {
       set({ authError: null });
     },
 
-    // Actions - 测评相关
     setAssessments: (assessments) => set({ assessments }),
     
     setCurrentAssessment: (assessment) => set({ currentAssessment: assessment }),
@@ -220,19 +221,13 @@ export const useAppStore = create<AppState>((set, get) => {
       let traits;
       let totalScore;
       
-      // 根据测评类型使用不同的评分算法
       if (assessmentId === 'stress-test' || assessmentId === '2') {
-        // 压力测试评分
         traits = calculateStressTestTraits(answers, questions);
-        // 压力测试的总分就是压力水平得分
         totalScore = traits[0]?.score || 0;
       } else if (assessmentId === 'anxiety-gad7' || assessmentId === '3') {
-        // GAD-7焦虑测试评分
         traits = calculateGAD7Traits(answers, questions);
-        // 焦虑测试的总分就是GAD-7得分
         totalScore = traits[0]?.score || 0;
       } else {
-        // 大五人格评分（默认）
         traits = calculateBigFiveScores(answers, questions);
         totalScore = calculateOverallScore(traits);
       }
@@ -247,12 +242,9 @@ export const useAppStore = create<AppState>((set, get) => {
       };
       
       set({ result, currentStep: 'result' });
-      
-      // 自动添加到历史记录
       get().addToHistory(result);
     },
     
-    // 历史记录相关
     loadHistory: () => {
       const history = storage.get<AssessmentResult[]>(STORAGE_KEY_HISTORY, []);
       set({ assessmentHistory: history });
@@ -278,7 +270,6 @@ export const useAppStore = create<AppState>((set, get) => {
         return { assessmentHistory: newHistory };
       }),
     
-    // 侧边栏
     toggleSidebar: () => 
       set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
     
