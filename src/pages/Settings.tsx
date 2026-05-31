@@ -1,33 +1,32 @@
 import { useState } from 'react';
 import { useAppStore } from '../store';
+import { getTranslation } from '../i18n';
 
-/**
- * 设置页面
- */
 export const Settings = () => {
-  const { clearHistory, assessmentHistory } = useAppStore();
+  const { locale, clearHistory, assessmentHistory } = useAppStore();
+  const i18n = getTranslation(locale);
   const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [isClearing, setIsClearing] = useState(false);
 
   const handleClearHistory = () => {
     if (assessmentHistory.length === 0) {
-      alert('没有可清除的历史记录');
+      alert(i18n.settings.data.clearHistoryDesc);
       return;
     }
 
-    if (window.confirm(`确定要清除所有 ${assessmentHistory.length} 条历史记录吗？\n此操作不可恢复。`)) {
+    if (window.confirm(`${i18n.settings.data.clearHistory}?\n${i18n.common.confirm}`)) {
       setIsClearing(true);
       setTimeout(() => {
         clearHistory();
         setIsClearing(false);
-        alert('历史记录已清除');
+        alert(i18n.settings.data.historyCleared);
       }, 300);
     }
   };
 
   const handleResetApp = () => {
-    if (window.confirm('确定要重置应用吗？\n这将清除所有本地数据。')) {
+    if (window.confirm(i18n.settings.data.resetAppDesc)) {
       localStorage.clear();
       window.location.reload();
     }
@@ -36,22 +35,21 @@ export const Settings = () => {
   return (
     <div className="space-y-8">
       <div className="text-center py-4">
-        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-2">设置</h1>
-        <p className="text-lg text-slate-600">自定义你的使用体验</p>
+        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800 mb-2">{i18n.settings.title}</h1>
+        <p className="text-lg text-slate-600">{i18n.settings.subtitle}</p>
       </div>
 
       <div className="space-y-6 max-w-2xl mx-auto">
-        {/* 外观设置 */}
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 shadow-lg border border-slate-100">
           <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-            <span className="text-2xl">🎨</span> 外观
+            <span className="text-2xl">🎨</span> {i18n.settings.appearance.title}
           </h2>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
               <div>
-                <p className="font-medium text-slate-800">深色模式</p>
-                <p className="text-sm text-slate-500">切换深色或浅色主题</p>
+                <p className="font-medium text-slate-800">{i18n.settings.appearance.darkMode}</p>
+                <p className="text-sm text-slate-500">{i18n.settings.appearance.darkModeDesc}</p>
               </div>
               <button
                 onClick={() => setDarkMode(!darkMode)}
@@ -69,17 +67,16 @@ export const Settings = () => {
           </div>
         </div>
 
-        {/* 通知设置 */}
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 shadow-lg border border-slate-100">
           <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-            <span className="text-2xl">🔔</span> 通知
+            <span className="text-2xl">🔔</span> {i18n.settings.notifications.title}
           </h2>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
               <div>
-                <p className="font-medium text-slate-800">推送通知</p>
-                <p className="text-sm text-slate-500">接收测评提醒和更新</p>
+                <p className="font-medium text-slate-800">{i18n.settings.notifications.push}</p>
+                <p className="text-sm text-slate-500">{i18n.settings.notifications.pushDesc}</p>
               </div>
               <button
                 onClick={() => setNotifications(!notifications)}
@@ -97,10 +94,9 @@ export const Settings = () => {
           </div>
         </div>
 
-        {/* 数据管理 */}
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 shadow-lg border border-slate-100">
           <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-            <span className="text-2xl">📊</span> 数据管理
+            <span className="text-2xl">📊</span> {i18n.settings.data.title}
           </h2>
           
           <div className="space-y-4">
@@ -111,11 +107,11 @@ export const Settings = () => {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium">清除历史记录</p>
-                  <p className="text-sm text-slate-500">删除所有测评历史</p>
+                  <p className="font-medium">{i18n.settings.data.clearHistory}</p>
+                  <p className="text-sm text-slate-500">{i18n.settings.data.clearHistoryDesc}</p>
                 </div>
                 <span className="text-slate-400">
-                  {isClearing ? '清除中...' : `${assessmentHistory.length} 条记录`}
+                  {isClearing ? i18n.settings.data.clearing : i18n.settings.data.records.replace('{count}', String(assessmentHistory.length))}
                 </span>
               </div>
             </button>
@@ -126,8 +122,8 @@ export const Settings = () => {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium">重置应用</p>
-                  <p className="text-sm text-red-500">清除所有数据，恢复默认设置</p>
+                  <p className="font-medium">{i18n.settings.data.resetApp}</p>
+                  <p className="text-sm text-red-500">{i18n.settings.data.resetAppDesc}</p>
                 </div>
                 <span className="text-red-400">⚠️</span>
               </div>
@@ -135,20 +131,19 @@ export const Settings = () => {
           </div>
         </div>
 
-        {/* 关于 */}
         <div className="bg-white rounded-2xl sm:rounded-3xl p-6 shadow-lg border border-slate-100">
           <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-            <span className="text-2xl">ℹ️</span> 关于
+            <span className="text-2xl">ℹ️</span> {i18n.settings.about.title}
           </h2>
           
           <div className="space-y-4 text-sm text-slate-600">
             <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
-              <span>版本</span>
+              <span>{i18n.settings.about.version}</span>
               <span className="text-slate-400">1.0.0</span>
             </div>
             <div className="p-4 bg-slate-50 rounded-xl">
-              <p>心测助手 - 专业心理测评平台</p>
-              <p className="mt-2 text-slate-500">让每一次探索都有意义</p>
+              <p>{i18n.settings.about.description}</p>
+              <p className="mt-2 text-slate-500">{i18n.settings.about.tagline}</p>
             </div>
           </div>
         </div>

@@ -2,12 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { trainingService } from '../services/training';
 import { Training as TrainingType, TRAINING_CATEGORIES } from '../types/training';
-
-const DIFFICULTY_LABELS = {
-  beginner: '入门',
-  intermediate: '进阶',
-  advanced: '高级'
-};
+import { useAppStore } from '../store';
+import { getTranslation, t } from '../i18n';
 
 const DIFFICULTY_COLORS = {
   beginner: 'bg-green-100 text-green-700',
@@ -27,6 +23,8 @@ const STEP_TYPE_ICONS = {
 export default function TrainingDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const locale = useAppStore((state) => state.locale);
+  const i18n = getTranslation(locale);
   const [training, setTraining] = useState<TrainingType | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -113,11 +111,11 @@ export default function TrainingDetail() {
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-200 text-center">
           <div className="text-6xl mb-4">🎉</div>
-          <h1 className="text-2xl font-bold text-slate-800 mb-2">训练完成！</h1>
-          <p className="text-slate-600 mb-6">太棒了！你完成了这次训练</p>
+          <h1 className="text-2xl font-bold text-slate-800 mb-2">{i18n.results.trainingComplete}</h1>
+          <p className="text-slate-600 mb-6">{i18n.results.greatJob}</p>
           
           <div className="mb-6">
-            <p className="text-sm text-slate-600 mb-2">给这次训练评分</p>
+            <p className="text-sm text-slate-600 mb-2">{i18n.results.rateTraining}</p>
             <div className="flex justify-center gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -137,7 +135,7 @@ export default function TrainingDetail() {
             <textarea
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
-              placeholder="写下你的感受和反馈（可选）"
+              placeholder={i18n.results.feedback}
               className="w-full p-4 border border-slate-200 rounded-xl resize-none h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -146,7 +144,7 @@ export default function TrainingDetail() {
             onClick={completeTraining}
             className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all"
           >
-            完成
+            {i18n.results.complete}
           </button>
         </div>
       </div>
@@ -156,10 +154,9 @@ export default function TrainingDetail() {
   if (session) {
     return (
       <div className="max-w-2xl mx-auto">
-        {/* 进度条 */}
         <div className="mb-6">
           <div className="flex justify-between text-sm text-slate-600 mb-2">
-            <span>步骤 {currentStep + 1} / {training.steps.length}</span>
+            <span>{t(locale, 'results.step', { current: currentStep + 1, total: training.steps.length })}</span>
             <span>{Math.round(progress)}%</span>
           </div>
           <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
@@ -170,7 +167,6 @@ export default function TrainingDetail() {
           </div>
         </div>
 
-        {/* 当前步骤 */}
         <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-200 text-center">
           <div className="text-6xl mb-4">
             {STEP_TYPE_ICONS[currentStepData.type as keyof typeof STEP_TYPE_ICONS] || '📝'}
@@ -190,7 +186,7 @@ export default function TrainingDetail() {
               disabled={currentStep === 0}
               className="px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all disabled:opacity-50"
             >
-              上一步
+              {i18n.quiz.previous}
             </button>
             
             <button
@@ -201,7 +197,7 @@ export default function TrainingDetail() {
                   : 'bg-green-100 text-green-700 hover:bg-green-200'
               }`}
             >
-              {isPlaying ? '暂停' : '继续'}
+              {isPlaying ? i18n.results.pause : i18n.results.continue}
             </button>
 
             <button
@@ -209,12 +205,11 @@ export default function TrainingDetail() {
               disabled={currentStep === training.steps.length - 1}
               className="px-6 py-3 bg-blue-100 text-blue-700 rounded-xl font-semibold hover:bg-blue-200 transition-all disabled:opacity-50"
             >
-              下一步
+              {i18n.results.nextStep}
             </button>
           </div>
         </div>
 
-        {/* 步骤列表 */}
         <div className="mt-6 space-y-2">
           {training.steps.map((step, idx) => (
             <div
@@ -236,7 +231,7 @@ export default function TrainingDetail() {
                     {step.title}
                   </div>
                   {step.duration && (
-                    <div className="text-xs text-slate-500">{step.duration}秒</div>
+                    <div className="text-xs text-slate-500">{step.duration}s</div>
                   )}
                 </div>
               </div>
@@ -249,15 +244,13 @@ export default function TrainingDetail() {
 
   return (
     <div className="space-y-6">
-      {/* 返回按钮 */}
       <button
         onClick={() => navigate('/training')}
         className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition-colors"
       >
-        ← 返回训练列表
+        ← {i18n.common.return} {i18n.training.title}
       </button>
 
-      {/* 训练信息 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-200">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-4">
@@ -268,7 +261,7 @@ export default function TrainingDetail() {
             </div>
           </div>
           <span className={`px-4 py-2 rounded-full text-sm font-medium ${DIFFICULTY_COLORS[training.difficulty]}`}>
-            {DIFFICULTY_LABELS[training.difficulty]}
+            {i18n.training[training.difficulty as 'beginner' | 'intermediate' | 'advanced']}
           </span>
         </div>
 
@@ -281,12 +274,12 @@ export default function TrainingDetail() {
           </div>
           <div className="text-center p-4 bg-slate-50 rounded-xl">
             <div className="text-2xl font-bold text-purple-600">{training.steps.length}</div>
-            <div className="text-sm text-slate-600">个步骤</div>
+            <div className="text-sm text-slate-600">{i18n.training.steps}</div>
           </div>
           <div className="text-center p-4 bg-slate-50 rounded-xl">
             <div className="text-2xl font-bold text-green-600">⭐</div>
             <div className="text-sm text-slate-600">
-              {training.effectivenessScore ? `${training.effectivenessScore}分` : '推荐'}
+              {training.effectivenessScore ? `${training.effectivenessScore}${i18n.training.effectiveness}` : i18n.training.completed}
             </div>
           </div>
         </div>
@@ -295,13 +288,12 @@ export default function TrainingDetail() {
           onClick={startTraining}
           className="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold text-lg hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
         >
-          开始训练
+          {i18n.training.start}
         </button>
       </div>
 
-      {/* 益处 */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-        <h2 className="text-lg font-semibold text-slate-800 mb-4">训练益处</h2>
+        <h2 className="text-lg font-semibold text-slate-800 mb-4">{i18n.training.benefits}</h2>
         <div className="grid gap-3">
           {training.benefits.map((benefit, idx) => (
             <div key={idx} className="flex items-center gap-3">
@@ -312,9 +304,8 @@ export default function TrainingDetail() {
         </div>
       </div>
 
-      {/* 提示 */}
       <div className="bg-yellow-50 rounded-2xl p-6 border border-yellow-200">
-        <h2 className="text-lg font-semibold text-yellow-800 mb-4">💡 训练提示</h2>
+        <h2 className="text-lg font-semibold text-yellow-800 mb-4">💡 {i18n.training.tips}</h2>
         <div className="space-y-2">
           {training.tips.map((tip, idx) => (
             <p key={idx} className="text-yellow-700">• {tip}</p>
@@ -322,9 +313,8 @@ export default function TrainingDetail() {
         </div>
       </div>
 
-      {/* 步骤预览 */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-        <h2 className="text-lg font-semibold text-slate-800 mb-4">训练步骤</h2>
+        <h2 className="text-lg font-semibold text-slate-800 mb-4">{i18n.training.stepPreview}</h2>
         <div className="space-y-4">
           {training.steps.map((step, idx) => (
             <div key={step.id} className="flex gap-4">
@@ -335,7 +325,7 @@ export default function TrainingDetail() {
                 <h3 className="font-medium text-slate-800">{step.title}</h3>
                 <p className="text-sm text-slate-600">{step.description}</p>
                 {step.duration && (
-                  <span className="text-xs text-slate-400 mt-1 block">{step.duration}秒</span>
+                  <span className="text-xs text-slate-400 mt-1 block">{step.duration}s</span>
                 )}
               </div>
             </div>

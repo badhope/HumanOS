@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { dashboardService } from '../../services/dashboard/DashboardService';
 import { dataSyncService } from '../../services/dataAbstraction/DataSyncService';
 import { UnifiedAssessmentResult, DataStatistics } from '../../types/dataAbstraction';
+import { useAppStore } from '../../store';
+import { getTranslation } from '../../i18n';
 
 export function PersonalDashboard() {
   const [loading, setLoading] = useState(true);
@@ -9,6 +11,8 @@ export function PersonalDashboard() {
   const [recentResults, setRecentResults] = useState<UnifiedAssessmentResult[]>([]);
   const [insights, setInsights] = useState<string[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'quarter'>('month');
+  const locale = useAppStore((state) => state.locale);
+  const i18n = getTranslation(locale);
 
   useEffect(() => {
     loadDashboardData();
@@ -37,7 +41,7 @@ export function PersonalDashboard() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-slate-600">正在加载个人数据中心...</p>
+          <p className="text-slate-600">{i18n.dashboard.loading}</p>
         </div>
       </div>
     );
@@ -46,31 +50,31 @@ export function PersonalDashboard() {
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
-        <h1 className="text-3xl font-bold mb-2">个人数据中心</h1>
-        <p className="text-blue-100">全面了解您的心理健康状态</p>
+        <h1 className="text-3xl font-bold mb-2">{i18n.dashboard.title}</h1>
+        <p className="text-blue-100">{i18n.dashboard.subtitle}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard
-          title="总测评次数"
+          title={i18n.dashboard.totalAssessments}
           value={statistics?.totalAssessments || 0}
           icon="📋"
           color="bg-blue-500"
         />
         <StatCard
-          title="连续测评天数"
+          title={i18n.dashboard.streakDays}
           value={statistics?.streakDays || 0}
           icon="🔥"
           color="bg-orange-500"
         />
         <StatCard
-          title="平均得分"
+          title={i18n.dashboard.averageScore}
           value={Math.round(statistics?.averageScore || 0)}
           icon="📊"
           color="bg-green-500"
         />
         <StatCard
-          title="获得标签"
+          title={i18n.dashboard.tagsEarned}
           value={Object.keys(statistics?.tagDistribution || {}).length}
           icon="🏷️"
           color="bg-purple-500"
@@ -78,7 +82,7 @@ export function PersonalDashboard() {
       </div>
 
       <div className="bg-white rounded-2xl p-6 shadow-lg">
-        <h2 className="text-2xl font-bold text-slate-800 mb-4">💡 智能洞察</h2>
+        <h2 className="text-2xl font-bold text-slate-800 mb-4">💡 {i18n.dashboard.insights}</h2>
         {insights.length > 0 ? (
           <div className="space-y-3">
             {insights.map((insight, index) => (
@@ -89,29 +93,29 @@ export function PersonalDashboard() {
             ))}
           </div>
         ) : (
-          <p className="text-slate-500 text-center py-8">暂无洞察数据</p>
+          <p className="text-slate-500 text-center py-8">{i18n.dashboard.noInsights}</p>
         )}
       </div>
 
       <div className="bg-white rounded-2xl p-6 shadow-lg">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-slate-800">📈 最近测评结果</h2>
+          <h2 className="text-2xl font-bold text-slate-800">📈 {i18n.dashboard.recentResults}</h2>
           <button
             onClick={handleRefresh}
             className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition"
           >
-            刷新数据
+            {i18n.dashboard.refresh}
           </button>
         </div>
         
         {recentResults.length > 0 ? (
           <div className="space-y-4">
             {recentResults.slice(0, 5).map((result) => (
-              <ResultCard key={result.id} result={result} />
+              <ResultCard key={result.id} result={result} locale={locale} />
             ))}
           </div>
         ) : (
-          <p className="text-slate-500 text-center py-8">暂无测评数据</p>
+          <p className="text-slate-500 text-center py-8">{i18n.dashboard.noData}</p>
         )}
       </div>
     </div>
@@ -130,11 +134,13 @@ function StatCard({ title, value, icon, color }: { title: string; value: number;
   );
 }
 
-function ResultCard({ result }: { result: UnifiedAssessmentResult }) {
+function ResultCard({ result, locale }: { result: UnifiedAssessmentResult; locale: 'en' | 'zh' }) {
+  const i18n = getTranslation(locale);
+
   const typeNames: Record<string, string> = {
-    personality: '人格测评',
-    stress: '压力测评',
-    anxiety: '焦虑测评'
+    personality: i18n.dashboard.personality,
+    stress: i18n.dashboard.stress,
+    anxiety: i18n.dashboard.anxiety
   };
 
   const typeColors: Record<string, string> = {
@@ -149,7 +155,7 @@ function ResultCard({ result }: { result: UnifiedAssessmentResult }) {
         <div>
           <h3 className="font-semibold text-slate-800">{result.title}</h3>
           <p className="text-sm text-slate-500">
-            {new Date(result.timestamp).toLocaleDateString('zh-CN')}
+            {new Date(result.timestamp).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US')}
           </p>
         </div>
         <span className={`px-3 py-1 rounded-full text-sm font-medium ${typeColors[result.assessmentType]}`}>

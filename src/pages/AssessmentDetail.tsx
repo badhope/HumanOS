@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAppStore } from '../store';
+import { getTranslation } from '../i18n';
 import { mockAssessments, getQuestionsForAssessment } from '../data/mockData';
 import { RESPONSE_OPTIONS, BIG_FIVE_TRAITS } from '../data/bigFiveData';
 import { 
@@ -21,6 +22,8 @@ import { cn } from '../lib/utils';
 // 介绍页面组件
 function IntroPage({ onStart }: { onStart: () => void }) {
   const { currentAssessment } = useAppStore();
+  const { locale } = useAppStore();
+  const i18n = getTranslation(locale);
   
   if (!currentAssessment) return null;
   
@@ -36,21 +39,21 @@ function IntroPage({ onStart }: { onStart: () => void }) {
         <div className="grid sm:grid-cols-3 gap-4 mb-8">
           <div className="bg-slate-50 rounded-xl p-4">
             <div className="text-2xl font-bold text-blue-600">{currentAssessment.totalQuestions}</div>
-            <div className="text-slate-600">道题目</div>
+            <div className="text-slate-600">{i18n.quiz.intro.questions}</div>
           </div>
           <div className="bg-slate-50 rounded-xl p-4">
             <div className="text-2xl font-bold text-blue-600">{currentAssessment.difficulty}</div>
-            <div className="text-slate-600">难度等级</div>
+            <div className="text-slate-600">{i18n.quiz.intro.difficulty}</div>
           </div>
           <div className="bg-slate-50 rounded-xl p-4">
             <div className="text-2xl font-bold text-blue-600">{currentAssessment.estimatedTime}</div>
-            <div className="text-slate-600">预计时间</div>
+            <div className="text-slate-600">{i18n.quiz.intro.estimatedTime}</div>
           </div>
         </div>
         
         {currentAssessment.id === 'big-five' && (
           <div className="bg-blue-50 rounded-xl p-6 text-left mb-8">
-            <h3 className="font-semibold text-blue-800 mb-3">测评介绍</h3>
+            <h3 className="font-semibold text-blue-800 mb-3">{i18n.assessments.title}</h3>
             <p className="text-blue-700 text-sm leading-relaxed">
               大五人格测评（Five Factor Model）是当今心理学界最权威的性格测评工具之一。
               本测评从<span className="font-semibold">开放性、尽责性、外向性、宜人性、情绪稳定性</span>五个维度
@@ -68,7 +71,7 @@ function IntroPage({ onStart }: { onStart: () => void }) {
         
         {currentAssessment.id === 'stress-test' && (
           <div className="bg-purple-50 rounded-xl p-6 text-left mb-8">
-            <h3 className="font-semibold text-purple-800 mb-3">测评介绍</h3>
+            <h3 className="font-semibold text-purple-800 mb-3">{i18n.assessments.title}</h3>
             <p className="text-purple-700 text-sm leading-relaxed">
               压力水平测试基于PSS（知觉压力量表），是心理学界广泛使用的压力评估工具。
               本测评将从<span className="font-semibold">压力感受、应对能力、情绪状态</span>等方面
@@ -86,7 +89,7 @@ function IntroPage({ onStart }: { onStart: () => void }) {
         
         {(currentAssessment.id === 'anxiety-gad7' || currentAssessment.id === '3') && (
           <div className="bg-teal-50 rounded-xl p-6 text-left mb-8">
-            <h3 className="font-semibold text-teal-800 mb-3">测评介绍</h3>
+            <h3 className="font-semibold text-teal-800 mb-3">{i18n.assessments.title}</h3>
             <p className="text-teal-700 text-sm leading-relaxed">
               GAD-7是国际通用的广泛性焦虑障碍筛查量表，具有良好的信度和效度。
               本测评将评估你过去两周内的<span className="font-semibold">焦虑症状、担忧水平、身体反应</span>等方面，
@@ -103,11 +106,11 @@ function IntroPage({ onStart }: { onStart: () => void }) {
         )}
         
         <div className="bg-amber-50 rounded-xl p-6 text-left mb-8">
-          <h3 className="font-semibold text-amber-800 mb-2">💡 测评提示</h3>
+          <h3 className="font-semibold text-amber-800 mb-2">💡 {i18n.quiz.intro.tips.title}</h3>
           <ul className="text-amber-700 text-sm space-y-1">
-            <li>• 没有对错之分，请根据真实情况选择</li>
-            <li>• 第一反应往往最准确，不要过度思考</li>
-            <li>• 答案仅用于自我了解，完全保密</li>
+            <li>• {i18n.quiz.intro.tips.noRightWrong}</li>
+            <li>• {i18n.quiz.intro.tips.firstInstinct}</li>
+            <li>• {i18n.quiz.intro.tips.privacy}</li>
           </ul>
         </div>
         
@@ -115,7 +118,7 @@ function IntroPage({ onStart }: { onStart: () => void }) {
           onClick={onStart}
           className="px-12 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xl font-semibold rounded-2xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
         >
-          开始测评 →
+          {i18n.quiz.finish}
         </button>
       </div>
     </div>
@@ -133,6 +136,8 @@ function QuizPage() {
     calculateResult,
     currentAssessment
   } = useAppStore();
+  const { locale } = useAppStore();
+  const i18n = getTranslation(locale);
   
   const currentQuestion = questions[currentQuestionIndex];
   const progress = calculateProgress(answers, questions.length);
@@ -183,10 +188,10 @@ function QuizPage() {
       <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-100 mb-8">
         <div className="flex items-center justify-between mb-2 text-sm">
           <span className="text-slate-600">
-            第 {currentQuestionIndex + 1} / {questions.length} 题
+            {i18n.quiz.progress.replace('{current}', String(currentQuestionIndex + 1)).replace('{total}', String(questions.length))}
           </span>
           <span className="text-blue-600 font-medium">
-            {progress.percentage}% 已完成
+            {i18n.quiz.completed.replace('{percentage}', String(progress.percentage))}
           </span>
         </div>
         <div className="w-full bg-slate-100 rounded-full h-3">
@@ -250,7 +255,7 @@ function QuizPage() {
               onClick={handlePrevious}
               className="flex-1 py-4 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-colors"
             >
-              ← 上一题
+              {i18n.quiz.previous}
             </button>
           )}
           <button
@@ -263,7 +268,7 @@ function QuizPage() {
                 : "bg-slate-200 text-slate-400 cursor-not-allowed"
             )}
           >
-            {isLastQuestion ? "完成测评 ✓" : "下一题 →"}
+            {isLastQuestion ? i18n.quiz.finish : i18n.quiz.next}
           </button>
         </div>
       </div>
@@ -284,8 +289,9 @@ function BigFiveResultDetail({
   questions?: unknown[];
   answers?: Record<string, number>;
 }) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   void { questions, answers };
+  const { locale } = useAppStore();
+  const i18n = getTranslation(locale);
   
   const report = useMemo(() => generateBigFiveReport(result.traits), [result.traits]);
 
@@ -294,10 +300,10 @@ function BigFiveResultDetail({
       {/* 头部 */}
       <div className="text-center">
         <div className="inline-block bg-gradient-to-r from-yellow-100 to-orange-100 rounded-full px-6 py-2 mb-4">
-          <span className="font-semibold text-yellow-700">🎉 测评完成！</span>
+          <span className="font-semibold text-yellow-700">🎉 {i18n.results.completed}</span>
         </div>
-        <h2 className="text-3xl font-bold text-slate-800 mb-4">你的性格分析报告</h2>
-        <p className="text-lg text-slate-600">基于你的回答，这是你的详细分析</p>
+        <h2 className="text-3xl font-bold text-slate-800 mb-4">{i18n.results.yourPersonality}</h2>
+        <p className="text-lg text-slate-600">{i18n.results.basedOnAnswers}</p>
       </div>
 
       {/* 综合得分 */}
@@ -305,7 +311,7 @@ function BigFiveResultDetail({
         <div className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
           {report.summary.overallScore}
         </div>
-        <div className="text-slate-600 mb-4">综合得分</div>
+        <div className="text-slate-600 mb-4">{i18n.results.comprehensiveScore}</div>
         {report.summary.personalityType && (
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 mb-4">
             <h4 className="font-bold text-lg text-blue-800 mb-2">
@@ -322,7 +328,7 @@ function BigFiveResultDetail({
       {/* 优势与盲点 */}
       <div className="grid md:grid-cols-2 gap-6">
         <div className="bg-white rounded-3xl p-6 shadow-lg border border-slate-100">
-          <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">💪 你的优势</h3>
+          <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">💪 {i18n.results.strengths}</h3>
           <div className="space-y-2">
             {report.strengths.map((strength: string, index: number) => (
               <div key={index} className="flex items-start gap-2 p-3 bg-green-50 rounded-xl">
@@ -333,7 +339,7 @@ function BigFiveResultDetail({
           </div>
         </div>
         <div className="bg-white rounded-3xl p-6 shadow-lg border border-slate-100">
-          <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">🔍 注意事项</h3>
+          <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">🔍 {i18n.results.blindspots}</h3>
           <div className="space-y-2">
             {report.blindSpots.map((spot: string, index: number) => (
               <div key={index} className="flex items-start gap-2 p-3 bg-amber-50 rounded-xl">
@@ -347,7 +353,7 @@ function BigFiveResultDetail({
 
       {/* 五维度详细分析 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-8 text-center">五维度详细分析</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-8 text-center">{i18n.results.fiveFactors}</h3>
         <div className="space-y-8">
           {report.traitAnalyses.map((analysis: { 
             name: string; 
@@ -424,7 +430,7 @@ function BigFiveResultDetail({
 
       {/* 职业推荐 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">💼 适合的职业方向</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">💼 {i18n.results.career}</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {report.recommendations.career.map((career: string, index: number) => (
             <div key={index} className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 text-center">
@@ -436,7 +442,7 @@ function BigFiveResultDetail({
 
       {/* 个人成长建议 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🌱 个人成长建议</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🌱 {i18n.results.career}</h3>
         <div className="space-y-3">
           {report.recommendations.personalGrowth.map((tip: string, index: number) => (
             <div key={index} className="flex items-start gap-3 p-4 bg-blue-50 rounded-xl">
@@ -463,6 +469,9 @@ function StressTestResultDetail({
   questions: unknown[];
   answers: Record<string, number>;
 }) {
+  const { locale } = useAppStore();
+  const i18n = getTranslation(locale);
+  
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const report = useMemo(() => generateDetailedStressReport(answers, questions as any), [answers, questions]);
   const stressLevelInfo = getStressLevelInfo(result.totalScore);
@@ -472,10 +481,10 @@ function StressTestResultDetail({
       {/* 头部 */}
       <div className="text-center">
         <div className="inline-block bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full px-6 py-2 mb-4">
-          <span className="font-semibold text-blue-700">🎉 测评完成！</span>
+          <span className="font-semibold text-blue-700">🎉 {i18n.results.completed}</span>
         </div>
-        <h2 className="text-3xl font-bold text-slate-800 mb-4">你的压力分析报告</h2>
-        <p className="text-lg text-slate-600">基于你的回答，这是你的压力状态分析</p>
+        <h2 className="text-3xl font-bold text-slate-800 mb-4">{i18n.results.yourStress}</h2>
+        <p className="text-lg text-slate-600">{i18n.results.basedOnAnswers}</p>
       </div>
 
       {/* 压力水平总体评估 */}
@@ -491,11 +500,11 @@ function StressTestResultDetail({
 
       {/* 详细表现分析 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">📊 你的压力表现</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">📊 {i18n.results.stressSigns}</h3>
         <div className="grid md:grid-cols-3 gap-6">
           {report.detailedAnalysis.signs.physicalSigns && (
             <div className="bg-blue-50 rounded-xl p-4">
-              <h5 className="font-semibold text-blue-800 mb-3">🏃 身体表现</h5>
+              <h5 className="font-semibold text-blue-800 mb-3">🏃 {i18n.results.physicalSymptoms}</h5>
               <ul className="text-sm text-slate-700 space-y-2">
                 {report.detailedAnalysis.signs.physicalSigns.map((s: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
@@ -508,7 +517,7 @@ function StressTestResultDetail({
           )}
           {report.detailedAnalysis.signs.emotionalSigns && (
             <div className="bg-purple-50 rounded-xl p-4">
-              <h5 className="font-semibold text-purple-800 mb-3">💭 情绪表现</h5>
+              <h5 className="font-semibold text-purple-800 mb-3">💭 {i18n.results.emotionalSymptoms}</h5>
               <ul className="text-sm text-slate-700 space-y-2">
                 {report.detailedAnalysis.signs.emotionalSigns.map((s: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
@@ -521,7 +530,7 @@ function StressTestResultDetail({
           )}
           {report.detailedAnalysis.signs.cognitiveSigns && (
             <div className="bg-green-50 rounded-xl p-4">
-              <h5 className="font-semibold text-green-800 mb-3">🧠 思维表现</h5>
+              <h5 className="font-semibold text-green-800 mb-3">🧠 {i18n.results.cognitiveSymptoms}</h5>
               <ul className="text-sm text-slate-700 space-y-2">
                 {report.detailedAnalysis.signs.cognitiveSigns.map((s: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
@@ -537,7 +546,7 @@ function StressTestResultDetail({
 
       {/* 三维度分析 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-8 text-center">压力详细分析</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-8 text-center">{i18n.results.traits}</h3>
         <div className="space-y-6">
           {result.traits.map((trait: { name: string; score: number; description: string }, index: number) => {
             let colorClass = 'from-green-400 to-emerald-500';
@@ -572,7 +581,7 @@ function StressTestResultDetail({
 
       {/* 应对策略 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🛠️ 应对策略</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🛠️ {i18n.results.strategies}</h3>
         <div className="grid md:grid-cols-3 gap-4">
           <div className="bg-blue-50 rounded-xl p-4">
             <h4 className="font-semibold text-blue-800 mb-3">问题导向</h4>
@@ -612,7 +621,7 @@ function StressTestResultDetail({
 
       {/* 放松技术 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🧘 放松技术</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🧘 {i18n.results.relaxation}</h3>
         <div className="grid md:grid-cols-3 gap-4">
           <div className="bg-green-50 rounded-xl p-4">
             <h4 className="font-semibold text-green-800 mb-2">🌬️ 呼吸练习</h4>
@@ -631,7 +640,7 @@ function StressTestResultDetail({
 
       {/* 健康习惯 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🌿 健康习惯</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🌿 {i18n.results.healthHabits}</h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-amber-50 rounded-xl p-4">
             <h4 className="font-semibold text-amber-800 mb-2">😴 睡眠</h4>
@@ -684,6 +693,9 @@ function GAD7ResultDetail({
   questions: unknown[];
   answers: Record<string, number>;
 }) {
+  const { locale } = useAppStore();
+  const i18n = getTranslation(locale);
+  
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const report = useMemo(() => generateDetailedGAD7Report(answers, questions as any), [answers, questions]);
   const anxietyLevelInfo = getAnxietyLevelInfo(result.totalScore);
@@ -693,10 +705,10 @@ function GAD7ResultDetail({
       {/* 头部 */}
       <div className="text-center">
         <div className="inline-block bg-gradient-to-r from-teal-100 to-cyan-100 rounded-full px-6 py-2 mb-4">
-          <span className="font-semibold text-teal-700">🎉 测评完成！</span>
+          <span className="font-semibold text-teal-700">🎉 {i18n.results.completed}</span>
         </div>
-        <h2 className="text-3xl font-bold text-slate-800 mb-4">你的焦虑分析报告</h2>
-        <p className="text-lg text-slate-600">基于你的回答，这是你的焦虑状态分析</p>
+        <h2 className="text-3xl font-bold text-slate-800 mb-4">{i18n.results.yourAnxiety}</h2>
+        <p className="text-lg text-slate-600">{i18n.results.basedOnAnswers}</p>
       </div>
 
       {/* 焦虑水平总体评估 */}
@@ -712,11 +724,11 @@ function GAD7ResultDetail({
 
       {/* 主要症状分析 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">📊 你的焦虑表现</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">📊 {i18n.results.anxietySigns}</h3>
         <div className="grid md:grid-cols-3 gap-6">
           {report.detailedAnalysis.signs.physicalSigns && (
             <div className="bg-teal-50 rounded-xl p-4">
-              <h5 className="font-semibold text-teal-800 mb-3">🏃 身体表现</h5>
+              <h5 className="font-semibold text-teal-800 mb-3">🏃 {i18n.results.physicalSymptoms}</h5>
               <ul className="text-sm text-slate-700 space-y-2">
                 {report.detailedAnalysis.signs.physicalSigns.map((s: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
@@ -729,7 +741,7 @@ function GAD7ResultDetail({
           )}
           {report.detailedAnalysis.signs.emotionalSigns && (
             <div className="bg-cyan-50 rounded-xl p-4">
-              <h5 className="font-semibold text-cyan-800 mb-3">💭 情绪表现</h5>
+              <h5 className="font-semibold text-cyan-800 mb-3">💭 {i18n.results.emotionalSymptoms}</h5>
               <ul className="text-sm text-slate-700 space-y-2">
                 {report.detailedAnalysis.signs.emotionalSigns.map((s: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
@@ -742,7 +754,7 @@ function GAD7ResultDetail({
           )}
           {report.detailedAnalysis.signs.cognitiveSigns && (
             <div className="bg-blue-50 rounded-xl p-4">
-              <h5 className="font-semibold text-blue-800 mb-3">🧠 思维表现</h5>
+              <h5 className="font-semibold text-blue-800 mb-3">🧠 {i18n.results.cognitiveSymptoms}</h5>
               <ul className="text-sm text-slate-700 space-y-2">
                 {report.detailedAnalysis.signs.cognitiveSigns.map((s: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
@@ -770,7 +782,7 @@ function GAD7ResultDetail({
 
       {/* 应对策略 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🛠️ 应对策略</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🛠️ {i18n.results.strategies}</h3>
         <div className="grid md:grid-cols-3 gap-6">
           {report.recommendations.immediate && (
             <div className="bg-red-50 rounded-xl p-4">
@@ -819,7 +831,7 @@ function GAD7ResultDetail({
 
       {/* 放松技术 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🧘 放松技术</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🧘 {i18n.results.relaxation}</h3>
         <div className="grid md:grid-cols-3 gap-4">
           <div className="bg-green-50 rounded-xl p-4">
             <h4 className="font-semibold text-green-800 mb-2">🌬️ 呼吸练习</h4>
@@ -838,7 +850,7 @@ function GAD7ResultDetail({
 
       {/* 健康习惯 */}
       <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🌿 健康习惯</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🌿 {i18n.results.healthHabits}</h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-amber-50 rounded-xl p-4">
             <h4 className="font-semibold text-amber-800 mb-2">😴 睡眠</h4>
@@ -878,7 +890,7 @@ function GAD7ResultDetail({
       {/* 专业资源 */}
       {report.resources.professional && (
         <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 border-l-4 border-l-red-400">
-          <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🆘 专业资源</h3>
+          <h3 className="text-2xl font-bold text-slate-800 mb-6 text-center">🆘 {i18n.results.professionalResources}</h3>
           <div className="space-y-4">
             <div className="bg-red-50 rounded-xl p-4">
               <h4 className="font-semibold text-red-800 mb-2">寻求专业帮助</h4>
@@ -898,6 +910,9 @@ function GAD7ResultDetail({
 // 结果页面主组件
 function ResultPage() {
   const { result, resetAssessment, currentAssessment, questions, answers } = useAppStore();
+  const { locale } = useAppStore();
+  const i18n = getTranslation(locale);
+  
   const [showTracePanel, setShowTracePanel] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -941,7 +956,7 @@ function ResultPage() {
   const copyShareUrl = () => {
     if (shareUrl) {
       navigator.clipboard.writeText(shareUrl);
-      alert('链接已复制到剪贴板！');
+      alert(i18n.results.linkCopied);
     }
   };
   
@@ -958,7 +973,7 @@ function ResultPage() {
       {/* 操作工具栏 */}
       <div className="max-w-4xl mx-auto mt-12">
         <div className="bg-white rounded-2xl p-6 shadow-lg border border-slate-200">
-          <h3 className="text-lg font-semibold text-slate-800 mb-4">📋 报告操作</h3>
+          <h3 className="text-lg font-semibold text-slate-800 mb-4">📋 {i18n.results.reportActions}</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {/* 导出按钮 */}
             <div className="relative">
@@ -966,7 +981,7 @@ function ResultPage() {
                 onClick={() => setShowExportMenu(!showExportMenu)}
                 className="w-full py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-colors flex items-center justify-center gap-2"
               >
-                📥 导出
+                📥 {i18n.results.export}
               </button>
               {showExportMenu && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-200 z-10 overflow-hidden">
@@ -1003,7 +1018,7 @@ function ResultPage() {
               onClick={handleShare}
               className="w-full py-3 bg-green-100 text-green-700 rounded-xl font-semibold hover:bg-green-200 transition-colors flex items-center justify-center gap-2"
             >
-              🔗 分享
+              🔗 {i18n.results.share}
             </button>
 
             {/* 溯源按钮 */}
@@ -1011,7 +1026,7 @@ function ResultPage() {
               onClick={() => setShowTracePanel(true)}
               className="w-full py-3 bg-purple-100 text-purple-700 rounded-xl font-semibold hover:bg-purple-200 transition-colors flex items-center justify-center gap-2"
             >
-              🔍 溯源
+              🔍 {i18n.results.trace}
             </button>
 
             {/* 训练推荐 */}
@@ -1019,7 +1034,7 @@ function ResultPage() {
               to="/training"
               className="w-full py-3 bg-orange-100 text-orange-700 rounded-xl font-semibold hover:bg-orange-200 transition-colors flex items-center justify-center gap-2 text-center"
             >
-              💪 训练
+              💪 {i18n.nav.training}
             </Link>
           </div>
 
@@ -1027,7 +1042,7 @@ function ResultPage() {
           {shareUrl && (
             <div className="mt-4 p-4 bg-green-50 rounded-xl border border-green-200">
               <div className="flex items-center gap-3">
-                <span className="text-green-700 font-medium">分享链接：</span>
+                <span className="text-green-700 font-medium">{i18n.results.shareLink}</span>
                 <input
                   type="text"
                   value={shareUrl}
@@ -1038,7 +1053,7 @@ function ResultPage() {
                   onClick={copyShareUrl}
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                 >
-                  复制
+                  {i18n.results.copy}
                 </button>
               </div>
             </div>
@@ -1053,13 +1068,13 @@ function ResultPage() {
           onClick={resetAssessment}
           className="flex-1 py-4 bg-white text-blue-600 border-2 border-blue-200 rounded-xl font-semibold hover:bg-blue-50 transition-colors text-center"
         >
-          再测一次
+          {i18n.results.retake}
         </Link>
         <Link
           to="/history"
           className="flex-1 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-indigo-700 transition-all text-center shadow-lg"
         >
-          查看历史记录
+          {i18n.results.viewHistory}
         </Link>
       </div>
 

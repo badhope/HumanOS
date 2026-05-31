@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAppStore } from '../store';
+import { getTranslation } from '../i18n';
 import { trainingService } from '../services/training';
 import { Training as TrainingType, TRAINING_CATEGORIES, TrainingCategory } from '../types/training';
-
-const DIFFICULTY_LABELS = {
-  beginner: '入门',
-  intermediate: '进阶',
-  advanced: '高级'
-};
 
 const DIFFICULTY_COLORS = {
   beginner: 'bg-green-100 text-green-700',
@@ -20,6 +16,9 @@ export function Training() {
   const [selectedCategory, setSelectedCategory] = useState<TrainingCategory | 'all'>('all');
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [stats, setStats] = useState<any>(null);
+
+  const { locale } = useAppStore();
+  const i18n = getTranslation(locale);
 
   useEffect(() => {
     const allTrainings = trainingService.getAllTrainings();
@@ -38,40 +37,37 @@ export function Training() {
 
   return (
     <div className="space-y-8">
-      {/* 页面标题 */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800">心理训练</h1>
-        <p className="text-slate-600 text-lg">根据您的测评结果，为您推荐个性化的训练方案</p>
+        <h1 className="text-3xl sm:text-4xl font-bold text-slate-800">{i18n.training.title}</h1>
+        <p className="text-slate-600 text-lg">{i18n.training.subtitle}</p>
       </div>
 
-      {/* 统计卡片 */}
       {stats && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
             <div className="text-2xl font-bold text-blue-600">{stats.totalSessions}</div>
-            <div className="text-sm text-slate-500">总练习次数</div>
+            <div className="text-sm text-slate-500">{i18n.training.stats.totalSessions}</div>
           </div>
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
             <div className="text-2xl font-bold text-green-600">{stats.completedSessions}</div>
-            <div className="text-sm text-slate-500">完成次数</div>
+            <div className="text-sm text-slate-500">{i18n.training.stats.completedSessions}</div>
           </div>
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
             <div className="text-2xl font-bold text-purple-600">{stats.streak}</div>
-            <div className="text-sm text-slate-500">连续天数</div>
+            <div className="text-sm text-slate-500">{i18n.training.stats.streakDays}</div>
           </div>
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
             <div className="text-2xl font-bold text-orange-600">
               {stats.averageRating ? stats.averageRating.toFixed(1) : '-'}
             </div>
-            <div className="text-sm text-slate-500">平均评分</div>
+            <div className="text-sm text-slate-500">{i18n.training.stats.averageRating}</div>
           </div>
         </div>
       )}
 
-      {/* 推荐训练 */}
       {recommendedTrainings.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-slate-800 mb-4">为您推荐</h2>
+          <h2 className="text-xl font-semibold text-slate-800 mb-4">{i18n.training.recommended}</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {recommendedTrainings.map((training) => {
               const categoryInfo = TRAINING_CATEGORIES.find(c => c.category === training.category);
@@ -84,7 +80,7 @@ export function Training() {
                   <div className="flex items-start justify-between mb-3">
                     <span className="text-4xl">{categoryInfo?.icon || '🧘'}</span>
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${DIFFICULTY_COLORS[training.difficulty]}`}>
-                      {DIFFICULTY_LABELS[training.difficulty]}
+                      {i18n.training[training.difficulty]}
                     </span>
                   </div>
                   <h3 className="font-semibold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors">
@@ -103,7 +99,6 @@ export function Training() {
         </div>
       )}
 
-      {/* 分类筛选 */}
       <div>
         <div className="flex gap-2 overflow-x-auto pb-2 mb-4">
           <button
@@ -114,7 +109,7 @@ export function Training() {
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
-            全部
+            {i18n.training.all}
           </button>
           {TRAINING_CATEGORIES.map((category) => (
             <button
@@ -131,7 +126,6 @@ export function Training() {
           ))}
         </div>
 
-        {/* 训练列表 */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredTrainings.map((training) => {
             const categoryInfo = TRAINING_CATEGORIES.find(c => c.category === training.category);
@@ -144,7 +138,7 @@ export function Training() {
                 <div className="flex items-start justify-between mb-3">
                   <span className="text-4xl">{categoryInfo?.icon || '🧘'}</span>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${DIFFICULTY_COLORS[training.difficulty]}`}>
-                    {DIFFICULTY_LABELS[training.difficulty]}
+                    {i18n.training[training.difficulty]}
                   </span>
                 </div>
                 <h3 className="font-semibold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors">
@@ -169,7 +163,7 @@ export function Training() {
         {filteredTrainings.length === 0 && (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">📭</div>
-            <p className="text-slate-500">暂无该分类的训练内容</p>
+            <p className="text-slate-500">{i18n.training.noTraining}</p>
           </div>
         )}
       </div>

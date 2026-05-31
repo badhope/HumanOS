@@ -3,13 +3,25 @@ import { Link } from 'react-router-dom';
 import { Assessment } from '../types';
 import { mockAssessments } from '../data/mockData';
 import { useAppStore } from '../store';
+import { getTranslation } from '../i18n';
 import { cn } from '../lib/utils';
 
 const categories = ['全部', '性格', '健康', '情绪', '社交', '职业', '生活'];
 
+const categoryKeyMap: Record<string, string> = {
+  '全部': 'all',
+  '性格': 'personality',
+  '健康': 'health',
+  '情绪': 'emotion',
+  '社交': 'social',
+  '职业': 'career',
+  '生活': 'life'
+};
+
 export const Assessments = () => {
-  const { setAssessments, assessments } = useAppStore();
+  const { setAssessments, assessments, locale } = useAppStore();
   const [selectedCategory, setSelectedCategory] = useState('全部');
+  const i18n = getTranslation(locale);
   
   useEffect(() => {
     if (assessments.length === 0) {
@@ -17,7 +29,6 @@ export const Assessments = () => {
     }
   }, [assessments.length, setAssessments]);
 
-  // 根据分类筛选
   const filteredAssessments = useMemo(() => {
     if (selectedCategory === '全部') {
       return assessments;
@@ -25,19 +36,25 @@ export const Assessments = () => {
     return assessments.filter(a => a.category === selectedCategory);
   }, [assessments, selectedCategory]);
 
+  const getCategoryLabel = (category: string) => {
+    const key = categoryKeyMap[category] as keyof typeof i18n.assessments;
+    if (key && key in i18n.assessments && typeof i18n.assessments[key] === 'string') {
+      return i18n.assessments[key];
+    }
+    return category;
+  };
+
   return (
     <div className="space-y-8 sm:space-y-12">
-      {/* 页面标题 */}
       <div className="text-center py-6 sm:py-8">
         <h1 className="text-3xl sm:text-5xl font-bold text-slate-800 mb-2 sm:mb-4">
-          心理测评中心
+          {i18n.assessments.title}
         </h1>
         <p className="text-base sm:text-xl text-slate-600">
-          选择一个测评，开始了解自己
+          {i18n.assessments.subtitle}
         </p>
       </div>
 
-      {/* 分类筛选 */}
       <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
         {categories.map((category) => (
           <button
@@ -50,29 +67,27 @@ export const Assessments = () => {
                 : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 hover:border-slate-300"
             )}
           >
-            {category}
+            {getCategoryLabel(category)}
           </button>
         ))}
       </div>
 
-      {/* 测评数量显示 */}
       <div className="text-center">
         <p className="text-slate-500">
-          共找到 <span className="font-semibold text-blue-600">{filteredAssessments.length}</span> 个测评
+          {i18n.assessments.found.replace('{count}', String(filteredAssessments.length))}
         </p>
       </div>
 
-      {/* 测评列表 */}
       {filteredAssessments.length === 0 ? (
         <div className="text-center py-16">
           <div className="text-6xl mb-4">🔍</div>
-          <h3 className="text-xl font-semibold text-slate-800 mb-2">暂无测评</h3>
-          <p className="text-slate-500">该分类下暂时没有测评</p>
+          <h3 className="text-xl font-semibold text-slate-800 mb-2">{i18n.assessments.noAssessment}</h3>
+          <p className="text-slate-500">{i18n.assessments.noAssessmentDesc}</p>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredAssessments.map((assessment) => (
-            <AssessmentCard key={assessment.id} assessment={assessment} />
+            <AssessmentCard key={assessment.id} assessment={assessment} i18n={i18n} />
           ))}
         </div>
       )}
@@ -82,9 +97,10 @@ export const Assessments = () => {
 
 interface AssessmentCardProps {
   assessment: Assessment;
+  i18n: ReturnType<typeof getTranslation>;
 }
 
-function AssessmentCard({ assessment }: AssessmentCardProps) {
+function AssessmentCard({ assessment, i18n }: AssessmentCardProps) {
   return (
     <Link
       to={`/assessments/${assessment.id}`}
@@ -114,10 +130,10 @@ function AssessmentCard({ assessment }: AssessmentCardProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-slate-500">
           <span>📝</span>
-          {assessment.totalQuestions} 题
+          {i18n.assessments.questions.replace('{count}', String(assessment.totalQuestions))}
         </div>
         <div className="flex items-center gap-1.5 sm:gap-2 text-blue-600 font-semibold group-hover:gap-2.5 transition-all text-sm">
-          开始测评
+          {i18n.assessments.start}
           <span>→</span>
         </div>
       </div>

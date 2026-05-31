@@ -3,35 +3,27 @@ import { Link } from 'react-router-dom';
 import { useAppStore } from '../store';
 import { AssessmentResult } from '../types';
 import { mockAssessments, getQuestionsForAssessment } from '../data/mockData';
+import { getTranslation } from '../i18n';
 
-/**
- * 格式化日期时间
- */
-function formatDateTime(date: Date | string): string {
+function formatDateTime(date: Date | string, i18n: ReturnType<typeof getTranslation>): string {
   const d = new Date(date);
   const now = new Date();
   const diff = now.getTime() - d.getTime();
   
-  // 如果是今天
   if (diff < 24 * 60 * 60 * 1000 && d.getDate() === now.getDate()) {
-    return `今天 ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+    return `${i18n.history.today} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
   }
   
-  // 如果是昨天
   const yesterday = new Date(now);
   yesterday.setDate(yesterday.getDate() - 1);
   if (d.getDate() === yesterday.getDate() && d.getMonth() === yesterday.getMonth()) {
-    return `昨天 ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+    return `${i18n.history.yesterday} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
   }
   
-  // 其他情况显示完整日期
   return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
 }
 
-/**
- * 历史记录卡片组件
- */
-function HistoryCard({ result, onDelete }: { result: AssessmentResult; onDelete: (id: string) => void }) {
+function HistoryCard({ result, onDelete, i18n }: { result: AssessmentResult; onDelete: (id: string) => void; i18n: ReturnType<typeof getTranslation> }) {
   const { 
     setCurrentAssessment, 
     setQuestions, 
@@ -53,7 +45,7 @@ function HistoryCard({ result, onDelete }: { result: AssessmentResult; onDelete:
   };
 
   const handleDelete = () => {
-    if (window.confirm('确定要删除这条记录吗？')) {
+    if (window.confirm(i18n.common.deleteConfirm)) {
       onDelete(result.id);
     }
   };
@@ -63,7 +55,7 @@ function HistoryCard({ result, onDelete }: { result: AssessmentResult; onDelete:
       <div className="flex items-start justify-between mb-4 sm:mb-6">
         <div>
           <h3 className="text-xl sm:text-2xl font-bold text-slate-800">{result.assessmentTitle}</h3>
-          <p className="text-sm sm:text-base text-slate-500 mt-1">{formatDateTime(result.completedAt)}</p>
+          <p className="text-sm sm:text-base text-slate-500 mt-1">{formatDateTime(result.completedAt, i18n)}</p>
         </div>
         <button
           onClick={handleDelete}
@@ -77,7 +69,7 @@ function HistoryCard({ result, onDelete }: { result: AssessmentResult; onDelete:
         <div className="flex items-center justify-center">
           <div className="text-center">
             <div className="text-4xl sm:text-5xl font-bold text-blue-600">{result.totalScore}</div>
-            <div className="text-sm sm:text-base text-slate-600 mt-1">综合得分</div>
+            <div className="text-sm sm:text-base text-slate-600 mt-1">{i18n.results.comprehensiveScore}</div>
           </div>
         </div>
       </div>
@@ -99,29 +91,26 @@ function HistoryCard({ result, onDelete }: { result: AssessmentResult; onDelete:
           onClick={handleViewAgain}
           className="flex-1 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-medium hover:from-blue-600 hover:to-indigo-700 transition-all text-center shadow-md"
         >
-          查看详情
+          {i18n.history.viewDetails}
         </Link>
       </div>
     </div>
   );
 }
 
-/**
- * 空状态组件
- */
-function EmptyState() {
+function EmptyState({ i18n }: { i18n: ReturnType<typeof getTranslation> }) {
   return (
     <div className="bg-white rounded-2xl sm:rounded-3xl p-12 sm:p-16 shadow-lg border border-slate-100 text-center">
       <div className="text-6xl sm:text-7xl mb-4 sm:mb-6">📚</div>
-      <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-3 sm:mb-4">暂无测评记录</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-3 sm:mb-4">{i18n.history.empty}</h2>
       <p className="text-slate-600 mb-8 max-w-md mx-auto text-base sm:text-lg">
-        完成测评后，你的历史记录将会在这里显示，方便你查看和对比
+        {i18n.history.emptyDesc}
       </p>
       <Link
         to="/assessments"
         className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all shadow-lg"
       >
-        开始第一次测评
+        {i18n.history.startFirst}
         <span>→</span>
       </Link>
     </div>
@@ -129,14 +118,15 @@ function EmptyState() {
 }
 
 export const History = () => {
-  const { assessmentHistory, loadHistory, deleteHistoryItem, clearHistory } = useAppStore();
+  const { assessmentHistory, loadHistory, deleteHistoryItem, clearHistory, locale } = useAppStore();
+  const i18n = getTranslation(locale);
 
   useEffect(() => {
     loadHistory();
   }, [loadHistory]);
 
   const handleClearAll = () => {
-    if (window.confirm('确定要清除所有历史记录吗？此操作不可恢复。')) {
+    if (window.confirm(i18n.history.confirmClear)) {
       clearHistory();
     }
   };
@@ -145,9 +135,9 @@ export const History = () => {
     <div className="space-y-8 sm:space-y-12">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-800">历史记录</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-slate-800">{i18n.history.title}</h1>
           <p className="text-lg text-slate-600 mt-2">
-            共 {assessmentHistory.length} 条记录
+            {i18n.history.subtitle.replace('{count}', String(assessmentHistory.length))}
           </p>
         </div>
         {assessmentHistory.length > 0 && (
@@ -155,20 +145,21 @@ export const History = () => {
             onClick={handleClearAll}
             className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl font-medium transition-colors"
           >
-            清除全部
+            {i18n.history.clearAll}
           </button>
         )}
       </div>
 
       {assessmentHistory.length === 0 ? (
-        <EmptyState />
+        <EmptyState i18n={i18n} />
       ) : (
         <div className="grid gap-6">
           {assessmentHistory.map((result) => (
             <HistoryCard 
               key={result.id} 
               result={result} 
-              onDelete={deleteHistoryItem} 
+              onDelete={deleteHistoryItem}
+              i18n={i18n}
             />
           ))}
         </div>
