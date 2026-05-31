@@ -246,8 +246,8 @@ class DataValidationService {
   private getMaxScoreByAssessmentId(assessmentId: string): number {
     const maxScores: Record<string, number> = {
       'big-five': 300,
-      'stress-test': 56,
-      'anxiety-gad7': 21
+      'stress-test': 120,
+      'anxiety-gad7': 84
     };
     return maxScores[assessmentId] || 0;
   }
@@ -255,8 +255,8 @@ class DataValidationService {
   private getExpectedQuestionCount(assessmentId: string): number {
     const questionCounts: Record<string, number> = {
       'big-five': 60,
-      'stress-test': 14,
-      'anxiety-gad7': 7
+      'stress-test': 30,
+      'anxiety-gad7': 28
     };
     return questionCounts[assessmentId] || 0;
   }

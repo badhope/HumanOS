@@ -1,5 +1,5 @@
 import { useAppStore } from '../store';
-import { t, type Locale } from '../i18n';
+import { type Locale } from '../i18n';
 
 export function LanguageSwitcher() {
   const { locale, setLocale } = useAppStore();

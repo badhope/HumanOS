@@ -488,9 +488,9 @@ function StressTestResultDetail({
       </div>
 
       {/* 压力水平总体评估 */}
-      <div className={`bg-white rounded-3xl p-8 shadow-lg border-2 ${stressLevelInfo.color === 'green' ? 'border-green-200' : stressLevelInfo.color === 'yellow' ? 'border-yellow-200' : 'border-red-200'}`}>
+      <div className={`bg-white rounded-3xl p-8 shadow-lg border-2 ${stressLevelInfo.color === 'green' ? 'border-green-200' : stressLevelInfo.color === 'yellow' ? 'border-yellow-200' : stressLevelInfo.color === 'orange' ? 'border-orange-200' : 'border-red-200'}`}>
         <div className="text-center">
-          <div className="text-6xl font-bold mb-2" style={{ color: stressLevelInfo.color === 'green' ? '#10b981' : stressLevelInfo.color === 'yellow' ? '#f59e0b' : '#ef4444' }}>
+          <div className="text-6xl font-bold mb-2" style={{ color: stressLevelInfo.color === 'green' ? '#10b981' : stressLevelInfo.color === 'yellow' ? '#f59e0b' : stressLevelInfo.color === 'orange' ? '#f97316' : '#ef4444' }}>
             {report.summary.score}
           </div>
           <h3 className="text-2xl font-bold text-slate-800 mb-2">{report.summary.title}</h3>
