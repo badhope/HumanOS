@@ -430,13 +430,15 @@ const HomePage = {
           </div>
           <div class="assessment-list">
             <div class="assessment-card" v-for="item in assessments" :key="item.id" @click="startAssessment(item)">
-              <div class="assessment-icon" :style="{ background: item.color + '15' }">{{ item.icon }}</div>
+              <div class="assessment-icon-wrapper">
+                <span class="assessment-icon">{{ item.icon }}</span>
+              </div>
               <div class="assessment-info">
                 <div class="assessment-name">{{ item.name }}</div>
                 <div class="assessment-desc">{{ item.description }}</div>
                 <div class="assessment-meta">
-                  <span>{{ item.questionCount }}题</span>
-                  <span>{{ item.duration }}分钟</span>
+                  <span>📝 {{ item.questionCount }}题</span>
+                  <span>⏱️ {{ item.duration }}分钟</span>
                 </div>
               </div>
             </div>
@@ -450,7 +452,9 @@ const HomePage = {
           </div>
           <div class="record-list">
             <div class="record-card" v-for="item in recentRecords" :key="item.id" @click="viewResult(item)">
-              <div class="record-icon" :style="{ background: item.assessmentColor + '15' }">{{ item.assessmentIcon }}</div>
+              <div class="record-icon-wrapper">
+                <span class="record-icon">{{ item.assessmentIcon }}</span>
+              </div>
               <div class="record-info">
                 <div class="record-name">{{ item.assessmentName }}</div>
                 <div class="record-result">{{ item.result.title }}</div>
@@ -580,13 +584,15 @@ const LibraryPage = {
         
         <div class="assessment-list">
           <div class="assessment-card" v-for="item in filteredAssessments" :key="item.id" @click="startAssessment(item)">
-            <div class="assessment-icon" :style="{ background: item.color + '15' }">{{ item.icon }}</div>
+            <div class="assessment-icon-wrapper">
+              <span class="assessment-icon">{{ item.icon }}</span>
+            </div>
             <div class="assessment-info">
               <div class="assessment-name">{{ item.name }}</div>
               <div class="assessment-desc">{{ item.description }}</div>
               <div class="assessment-meta">
-                <span>{{ item.questionCount }}题</span>
-                <span>{{ item.duration }}分钟</span>
+                <span>📝 {{ item.questionCount }}题</span>
+                <span>⏱️ {{ item.duration }}分钟</span>
               </div>
               <div class="assessment-tags">
                 <div class="tag" v-for="tag in item.tags" :key="tag">{{ tag }}</div>
@@ -636,10 +642,15 @@ const IntroPage = {
     <div class="page fade-in" v-if="assessment">
       <div class="container">
         <div class="intro-header">
-          <div class="intro-icon" :style="{ background: assessment.color + '15' }">{{ assessment.icon }}</div>
+          <div class="intro-icon-wrapper">
+            <span class="intro-icon">{{ assessment.icon }}</span>
+          </div>
           <div class="intro-title">{{ assessment.name }}</div>
           <div class="intro-subtitle">{{ assessment.description }}</div>
-          <div class="intro-meta">{{ assessment.questionCount }}题 · 约{{ assessment.duration }}分钟</div>
+          <div class="intro-meta">
+            <span>📝 {{ assessment.questionCount }}题</span>
+            <span>⏱️ {{ assessment.duration }}分钟</span>
+          </div>
         </div>
         
         <div class="card">
@@ -653,7 +664,7 @@ const IntroPage = {
           </div>
         </div>
         
-        <div class="card" style="margin-top: 24px;">
+        <div class="card" style="margin-top: 24px; background: transparent; box-shadow: none; padding: 0; border: none;">
           <div class="btn btn-primary btn-block" @click="start">开始测评</div>
         </div>
       </div>
@@ -677,8 +688,10 @@ const TakingPage = {
     <div class="page fade-in" v-if="assessment">
       <div class="container">
         <div class="progress-header">
-          <div class="progress-bar">
-            <div class="progress-fill" :style="{ width: progress + '%' }"></div>
+          <div class="progress-bar-wrapper">
+            <div class="progress-bar">
+              <div class="progress-fill" :style="{ width: progress + '%' }"></div>
+            </div>
           </div>
           <div class="progress-text">{{ currentIndex + 1 }} / {{ assessment.questions.length }}</div>
         </div>
@@ -882,7 +895,9 @@ const ArchivePage = {
           </div>
           <div class="record-list">
             <div class="record-card" v-for="item in records" :key="item.id" @click="viewResult(item)">
-              <div class="record-icon" :style="{ background: item.assessmentColor + '15' }">{{ item.assessmentIcon }}</div>
+              <div class="record-icon-wrapper">
+                <span class="record-icon">{{ item.assessmentIcon }}</span>
+              </div>
               <div class="record-info">
                 <div class="record-name">{{ item.assessmentName }}</div>
                 <div class="record-result">{{ item.result.title }}</div>
@@ -1001,7 +1016,9 @@ const ProfilePage = {
   template: `
     <div class="page fade-in">
       <div class="profile-header">
-        <div class="profile-avatar">👤</div>
+        <div class="profile-avatar-wrapper">
+          <div class="profile-avatar">👤</div>
+        </div>
         <div class="profile-info">
           <div class="profile-name">{{ settings.userName }}</div>
           <div class="profile-stats">已完成 {{ records.length }} 个测评</div>
@@ -1104,7 +1121,9 @@ const AboutPage = {
     <div class="page fade-in">
       <div class="container">
         <div class="about-header">
-          <div class="about-logo">🧠</div>
+          <div class="about-logo-wrapper">
+            <span class="about-logo">🧠</span>
+          </div>
           <div class="about-name">心镜 MindMirror</div>
           <div class="about-version">版本 1.0.0</div>
         </div>
