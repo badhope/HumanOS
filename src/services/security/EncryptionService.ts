@@ -178,7 +178,12 @@ export class EncryptionService {
   }
 
   private uint8ArrayToBase64(array: Uint8Array): string {
-    return btoa(String.fromCharCode(...array));
+    const CHUNK = 0x8000;
+    let binary = '';
+    for (let i = 0; i < array.length; i += CHUNK) {
+      binary += String.fromCharCode(...array.subarray(i, i + CHUNK));
+    }
+    return btoa(binary);
   }
 
   private base64ToUint8Array(base64: string): Uint8Array {

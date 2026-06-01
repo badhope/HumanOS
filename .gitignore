@@ -1,103 +1,69 @@
 # Dependencies
-node_modules
+node_modules/
 .pnp
 .pnp.js
 
 # Build outputs
-dist
-dist-ssr
+dist/
+dist-ssr/
 *.local
 
-# Environment files
+# Environment variables (NEVER commit secrets)
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*.local
+.env.production
+.vercel
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Testing
-coverage
-*.lcov
-
-# Temporary files
-*.tmp
-*.temp
-.cache/
-.parcel-cache/
-
-# Development
-npm-debug.log*
-yarn-error.log
-yarn-debug.log*
-
-# OS generated files
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-
-# Debug
-.npm
-.eslintcache
-.node_repl_history
-
-# TypeScript incremental compilation
-*.tsbuildinfo
-next-env.d.ts
-
-# Python
-*.pyc
-__pycache__/
-*.py[cod]
-*$py.class
-.Python
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Vite
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
-
-# IDE
-.vscode/
+!.vscode/settings.json
 .idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Test coverage
+coverage/
+*.lcov
+
+# Temporary files
+*.tmp
+.cache/
+.parcel-cache/
+
+# Vite
+vite.config.ts.timestamp-*
+vite.config.ts.timestamp-*.log
+
+# TypeScript
+*.tsbuildinfo
+
+# API build (use Vercel deployment instead)
+/api/dist/
+
+# Supabase (local dev only)
+/supabase/.branches/
+/supabase/tmp/
+
+# Python backend (separate project)
+backend/
+*.pyc
+__pycache__/
+*.db
+*.sqlite
+
+# Internal docs
+ENHANCEMENT_PLAN.md

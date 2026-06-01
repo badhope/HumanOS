@@ -3,24 +3,47 @@ import { pluginRegistry } from './PluginRegistry';
 
 export class HookManager {
   private hooks: Map<string, Set<(data: any) => any>>;
+  private pluginHooks: Map<string, Array<{ hookName: string; callback: (data: any) => any }>>;
   private globalHooks: PluginHooks;
 
   constructor() {
     this.hooks = new Map();
+    this.pluginHooks = new Map();
     this.globalHooks = {};
   }
 
-  registerHook(hookName: string, callback: (data: any) => any): void {
+  registerHook(hookName: string, callback: (data: any) => any, pluginId?: string): void {
     if (!this.hooks.has(hookName)) {
       this.hooks.set(hookName, new Set());
     }
     this.hooks.get(hookName)!.add(callback);
+
+    if (pluginId) {
+      if (!this.pluginHooks.has(pluginId)) {
+        this.pluginHooks.set(pluginId, []);
+      }
+      this.pluginHooks.get(pluginId)!.push({ hookName, callback });
+    }
   }
 
   unregisterHook(hookName: string, callback: (data: any) => any): void {
     if (this.hooks.has(hookName)) {
       this.hooks.get(hookName)!.delete(callback);
+      if (this.hooks.get(hookName)!.size === 0) {
+        this.hooks.delete(hookName);
+      }
     }
+  }
+
+  unregisterPluginHooks(pluginId: string): void {
+    const entries = this.pluginHooks.get(pluginId);
+    if (!entries) return;
+
+    entries.forEach(({ hookName, callback }) => {
+      this.unregisterHook(hookName, callback);
+    });
+
+    this.pluginHooks.delete(pluginId);
   }
 
   async executeHook<T>(hookName: string, data: T): Promise<T> {

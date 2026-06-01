@@ -13,7 +13,11 @@ export default {
     plugins: "插件管理",
     settings: "设置",
     about: "关于我们",
-    profile: "个人资料"
+    profile: "个人资料",
+    mood: "心情追踪",
+    achievements: "成就徽章",
+    compare: "测评对比",
+    crisis: "危机资源"
   },
   home: {
     badge: "专业心理测评，科学自我探索",
@@ -45,6 +49,13 @@ export default {
       scientific: "科学理论",
       professional: "专业分析",
       privacy: "隐私保护"
+    },
+    moreFeatures: "更多功能",
+    quickLinks: {
+      mood: "心情追踪",
+      achievements: "成就徽章",
+      compare: "测评对比",
+      crisis: "危机资源"
     }
   },
   assessments: {
@@ -93,6 +104,7 @@ export default {
     areas: "成长领域",
     recommendations: "建议",
     career: "职业建议",
+    personalGrowth: "个人成长建议",
     export: "导出",
     share: "分享",
     trace: "溯源",
@@ -323,7 +335,21 @@ export default {
     confirmPasswordRequired: "请确认密码",
     passwordsDoNotMatch: "两次密码输入不一致",
     termsRequired: "您必须同意服务条款",
-    agreeTerms: "我同意服务条款和隐私政策"
+    agreeTerms: "我同意服务条款和隐私政策",
+    emailInvalid: "请输入有效的邮箱地址",
+    usernameTooShort: "用户名至少需要3个字符",
+    usernameTooLong: "用户名不能超过20个字符",
+    usernameInvalidFormat: "用户名只能包含字母、数字和下划线",
+    passwordTooShort: "密码至少需要6个字符",
+    passwordTooLong: "密码不能超过50个字符",
+    passwordStrength: {
+      weak: "弱",
+      medium: "中",
+      strong: "强",
+      veryStrong: "极强"
+    },
+    usernameHint: "3-20个字符，只能包含字母、数字和下划线",
+    passwordHint: "至少6个字符"
   },
   profile: {
     title: "我的资料",
@@ -379,5 +405,85 @@ export default {
     description: "描述",
     permissions: "权限",
     dependencies: "依赖"
+  },
+  mood: {
+    title: "心情追踪",
+    subtitle: "记录每天的心情，发现情绪规律",
+    record: "记录",
+    calendar: "日历",
+    trend: "趋势",
+    newRecord: "记录今天的心情",
+    editRecord: "编辑心情记录",
+    howAreYou: "你现在感觉如何？",
+    energyLevel: "精力水平",
+    anxietyLevel: "焦虑水平",
+    sleepHours: "睡眠时长",
+    tags: "标签",
+    note: "备注",
+    notePlaceholder: "今天发生了什么？写下你的感受...",
+    save: "保存",
+    update: "更新",
+    delete: "删除",
+    statistics: "心情统计",
+    avgMood: "平均心情",
+    avgEnergy: "平均精力",
+    avgSleep: "平均睡眠",
+    streakDays: "连续天数",
+    moodDistribution: "心情分布",
+    trend7Days: "近7天趋势"
+  },
+  achievements: {
+    title: "成就徽章",
+    subtitle: "完成挑战，解锁成就",
+    unlocked: "已解锁",
+    total: "总成就",
+    completionRate: "完成率",
+    overallProgress: "总体进度",
+    allCategories: "全部",
+    categoryAssessment: "测评",
+    categoryTraining: "训练",
+    categoryStreak: "连续",
+    categorySpecial: "特殊"
+  },
+  crisis: {
+    title: "危机资源",
+    subtitle: "紧急心理援助与自助资源",
+    emergencyTitle: "需要紧急帮助？",
+    emergencyDesc: "如果你正在经历心理危机，请立即拨打以下热线获取专业帮助。",
+    hotlines: "援助热线",
+    selfHelp: "自助方法",
+    warningSigns: "预警信号",
+    callNow: "立即拨打",
+    disclaimerTitle: "免责声明",
+    disclaimer: "本页面提供的信息仅供参考，不能替代专业心理医生的诊断和治疗。如果你正在经历严重的心理危机，请立即拨打紧急热线或前往最近的医院急诊。"
+  },
+  compare: {
+    title: "测评对比",
+    subtitle: "对比不同时间的测评结果，追踪变化趋势",
+    selectResults: "选择要对比的结果",
+    selectHint: "最多选择3个结果",
+    selectAtLeastTwo: "请至少选择2个测评结果进行对比",
+    needMoreData: "需要至少2条测评记录才能使用对比功能",
+    scoreComparison: "分数对比",
+    traitComparison: "维度对比",
+    insights: "智能洞察",
+    scoreChange: "分数变化",
+    averageScore: "平均分",
+    scoreRange: "分数范围",
+    score: "得分",
+    differentTypes: "你选择了不同类型的测评，部分对比功能可能不可用。"
+  },
+  dailyTips: {
+    title: "今日心理小贴士",
+    dailyRefresh: "每日更新",
+    categories: {
+      personality: "人格",
+      stress: "压力",
+      anxiety: "焦虑",
+      general: "通用",
+      sleep: "睡眠",
+      social: "社交",
+      mindfulness: "正念"
+    }
   }
 };

@@ -19,6 +19,17 @@ import {
  * 7. 使用5级差异化解读系统
  */
 
+/**
+ * 标准T分数常模（NORMS）
+ * 
+ * 基于大五人格理论的一般人群常模数据。
+ * 当前使用的均值和标准差为近似值，用于模拟标准T分数转换。
+ * 在实际应用中，建议使用经过实证验证的本地化常模数据。
+ * 
+ * 参考来源：
+ * 1. Costa, P.T., & McCrae, R.R. (1992). Revised NEO Personality Inventory.
+ * 2. 戴晓阳等 (2011). 大五人格问卷在中国人群中的适用性研究.
+ */
 const NORMS = {
   O: { mean: 36, sd: 7 },
   C: { mean: 38, sd: 6 },
@@ -28,6 +39,12 @@ const NORMS = {
 };
 
 const TRAIT_KEYS = ['O', 'C', 'E', 'A', 'N'] as const;
+
+function getTraitByKey(traits: TraitResult[], key: string): TraitResult | undefined {
+  const traitInfo = BIG_FIVE_TRAITS[key as keyof typeof BIG_FIVE_TRAITS];
+  if (!traitInfo) return undefined;
+  return traits.find(t => t.name === traitInfo.name);
+}
 
 /**
  * 面条权重系统
@@ -382,8 +399,10 @@ export function calculateOverallScore(traits: TraitResult[]): number {
   let total = 0;
   let weightSum = 0;
   
-  traits.forEach((trait) => {
-    const weight = trait.name.includes('情绪') ? 2 : 1;
+  TRAIT_KEYS.forEach((key) => {
+    const trait = getTraitByKey(traits, key);
+    if (!trait) return;
+    const weight = key === 'N' ? 2 : 1;
     total += trait.score * weight;
     weightSum += weight;
   });
@@ -402,16 +421,10 @@ export function generateBigFiveReport(
     const level = getScoreLevel(tScore);
     
     let interpretation;
-    if (tScore >= 60) {
+    if (tScore >= 50) {
       interpretation = TRAIT_INTERPRETATIONS[traitKey].high;
-    } else if (tScore <= 40) {
-      interpretation = TRAIT_INTERPRETATIONS[traitKey].low;
     } else {
-      interpretation = {
-        title: `${BIG_FIVE_TRAITS[traitKey].name}中等`,
-        description: trait.description,
-        detailed: null
-      };
+      interpretation = TRAIT_INTERPRETATIONS[traitKey].low;
     }
     
     return {
@@ -506,30 +519,42 @@ export function generatePersonalityProfile(traits: TraitResult[]): string {
     profileParts.push(`【${lowestTrait.name}】方面相对不那么突出。`);
   }
   
-  if (traits.find(t => t.name.includes('外向') && t.score > 60)) {
-    profileParts.push('你善于社交，喜欢与人交流。');
-  } else if (traits.find(t => t.name.includes('外向') && t.score < 40)) {
-    profileParts.push('你比较内敛，喜欢安静独处的时间。');
-  } else if (traits.find(t => t.name.includes('外向') && t.score >= 40 && t.score <= 60)) {
-    profileParts.push('你在社交与独处之间能灵活切换。');
+  const traitE = getTraitByKey(traits, 'E');
+  if (traitE) {
+    if (traitE.score > 60) {
+      profileParts.push('你善于社交，喜欢与人交流。');
+    } else if (traitE.score < 40) {
+      profileParts.push('你比较内敛，喜欢安静独处的时间。');
+    } else {
+      profileParts.push('你在社交与独处之间能灵活切换。');
+    }
   }
   
-  if (traits.find(t => t.name.includes('尽责') && t.score > 60)) {
-    profileParts.push('你做事认真负责，值得信赖。');
-  } else if (traits.find(t => t.name.includes('尽责') && t.score < 40)) {
-    profileParts.push('你更偏好灵活自由的工作方式。');
+  const traitC = getTraitByKey(traits, 'C');
+  if (traitC) {
+    if (traitC.score > 60) {
+      profileParts.push('你做事认真负责，值得信赖。');
+    } else if (traitC.score < 40) {
+      profileParts.push('你更偏好灵活自由的工作方式。');
+    }
   }
   
-  if (traits.find(t => t.name.includes('开放') && t.score > 60)) {
-    profileParts.push('你对新体验和创意充满热情。');
-  } else if (traits.find(t => t.name.includes('开放') && t.score < 40)) {
-    profileParts.push('你更重视实用性和稳定性。');
+  const traitO = getTraitByKey(traits, 'O');
+  if (traitO) {
+    if (traitO.score > 60) {
+      profileParts.push('你对新体验和创意充满热情。');
+    } else if (traitO.score < 40) {
+      profileParts.push('你更重视实用性和稳定性。');
+    }
   }
   
-  if (traits.find(t => t.name.includes('情绪') && t.score > 60)) {
-    profileParts.push('你的情绪调节能力出色，是他人眼中的稳定力量。');
-  } else if (traits.find(t => t.name.includes('情绪') && t.score < 40)) {
-    profileParts.push('你对情感体验非常敏感，这赋予你深刻的共情能力。');
+  const traitN = getTraitByKey(traits, 'N');
+  if (traitN) {
+    if (traitN.score > 60) {
+      profileParts.push('你的情绪调节能力出色，是他人眼中的稳定力量。');
+    } else if (traitN.score < 40) {
+      profileParts.push('你对情感体验非常敏感，这赋予你深刻的共情能力。');
+    }
   }
   
   return profileParts.join(' ');

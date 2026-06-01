@@ -13,7 +13,11 @@ export default {
     plugins: "Plugins",
     settings: "Settings",
     about: "About",
-    profile: "Profile"
+    profile: "Profile",
+    mood: "Mood Tracker",
+    achievements: "Achievements",
+    compare: "Compare",
+    crisis: "Crisis Resources"
   },
   home: {
     badge: "Professional psychological assessment, scientific self-exploration",
@@ -45,6 +49,13 @@ export default {
       scientific: "Scientific Theory",
       professional: "Professional Analysis",
       privacy: "Privacy Protection"
+    },
+    moreFeatures: "More Features",
+    quickLinks: {
+      mood: "Mood Tracker",
+      achievements: "Achievements",
+      compare: "Compare",
+      crisis: "Crisis Help"
     }
   },
   assessments: {
@@ -93,6 +104,7 @@ export default {
     areas: "Areas for Growth",
     recommendations: "Recommendations",
     career: "Career Suggestions",
+    personalGrowth: "Personal Growth Suggestions",
     export: "Export",
     share: "Share",
     trace: "Trace",
@@ -323,7 +335,21 @@ export default {
     confirmPasswordRequired: "Please confirm your password",
     passwordsDoNotMatch: "Passwords do not match",
     termsRequired: "You must agree to the terms",
-    agreeTerms: "I agree to the Terms of Service and Privacy Policy"
+    agreeTerms: "I agree to the Terms of Service and Privacy Policy",
+    emailInvalid: "Please enter a valid email address",
+    usernameTooShort: "Username must be at least 3 characters",
+    usernameTooLong: "Username must be less than 20 characters",
+    usernameInvalidFormat: "Username can only contain letters, numbers, and underscores",
+    passwordTooShort: "Password must be at least 6 characters",
+    passwordTooLong: "Password must be less than 50 characters",
+    passwordStrength: {
+      weak: "Weak",
+      medium: "Medium",
+      strong: "Strong",
+      veryStrong: "Very Strong"
+    },
+    usernameHint: "3-20 characters, letters, numbers, and underscores only",
+    passwordHint: "At least 6 characters"
   },
   profile: {
     title: "My Profile",
@@ -379,5 +405,85 @@ export default {
     description: "Description",
     permissions: "Permissions",
     dependencies: "Dependencies"
+  },
+  mood: {
+    title: "Mood Tracker",
+    subtitle: "Track your daily mood and discover emotional patterns",
+    record: "Record",
+    calendar: "Calendar",
+    trend: "Trend",
+    newRecord: "Record today's mood",
+    editRecord: "Edit mood record",
+    howAreYou: "How are you feeling?",
+    energyLevel: "Energy Level",
+    anxietyLevel: "Anxiety Level",
+    sleepHours: "Sleep Hours",
+    tags: "Tags",
+    note: "Note",
+    notePlaceholder: "What happened today? Write down your feelings...",
+    save: "Save",
+    update: "Update",
+    delete: "Delete",
+    statistics: "Mood Statistics",
+    avgMood: "Avg Mood",
+    avgEnergy: "Avg Energy",
+    avgSleep: "Avg Sleep",
+    streakDays: "Streak Days",
+    moodDistribution: "Mood Distribution",
+    trend7Days: "7-Day Trend"
+  },
+  achievements: {
+    title: "Achievements",
+    subtitle: "Complete challenges and unlock achievements",
+    unlocked: "Unlocked",
+    total: "Total",
+    completionRate: "Completion",
+    overallProgress: "Overall Progress",
+    allCategories: "All",
+    categoryAssessment: "Assessment",
+    categoryTraining: "Training",
+    categoryStreak: "Streak",
+    categorySpecial: "Special"
+  },
+  crisis: {
+    title: "Crisis Resources",
+    subtitle: "Emergency psychological aid and self-help resources",
+    emergencyTitle: "Need immediate help?",
+    emergencyDesc: "If you are experiencing a mental health crisis, please call the following hotlines for professional help immediately.",
+    hotlines: "Hotlines",
+    selfHelp: "Self-Help",
+    warningSigns: "Warning Signs",
+    callNow: "Call Now",
+    disclaimerTitle: "Disclaimer",
+    disclaimer: "The information provided on this page is for reference only and cannot replace professional psychiatric diagnosis and treatment. If you are experiencing a severe mental health crisis, please call an emergency hotline immediately or go to the nearest hospital emergency room."
+  },
+  compare: {
+    title: "Compare Results",
+    subtitle: "Compare assessment results from different times to track changes",
+    selectResults: "Select results to compare",
+    selectHint: "Select up to 3 results",
+    selectAtLeastTwo: "Please select at least 2 results to compare",
+    needMoreData: "At least 2 assessment records are needed to use the comparison feature",
+    scoreComparison: "Score Comparison",
+    traitComparison: "Trait Comparison",
+    insights: "Smart Insights",
+    scoreChange: "Score Change",
+    averageScore: "Average",
+    scoreRange: "Range",
+    score: "Score",
+    differentTypes: "You selected different types of assessments. Some comparison features may not be available."
+  },
+  dailyTips: {
+    title: "Daily Mental Health Tips",
+    dailyRefresh: "Refreshed daily",
+    categories: {
+      personality: "Personality",
+      stress: "Stress",
+      anxiety: "Anxiety",
+      general: "General",
+      sleep: "Sleep",
+      social: "Social",
+      mindfulness: "Mindfulness"
+    }
   }
 };

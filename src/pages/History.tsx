@@ -23,7 +23,7 @@ function formatDateTime(date: Date | string, i18n: ReturnType<typeof getTranslat
   return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
 }
 
-function HistoryCard({ result, onDelete, i18n }: { result: AssessmentResult; onDelete: (id: string) => void; i18n: ReturnType<typeof getTranslation> }) {
+function HistoryCard({ result, onDelete, i18n, locale }: { result: AssessmentResult; onDelete: (id: string) => void; i18n: ReturnType<typeof getTranslation>; locale: 'en' | 'zh' }) {
   const { 
     setCurrentAssessment, 
     setQuestions, 
@@ -80,7 +80,7 @@ function HistoryCard({ result, onDelete, i18n }: { result: AssessmentResult; onD
             key={idx} 
             className="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-full text-sm"
           >
-            {trait.name} {trait.score}分
+            {trait.name} {trait.score}{locale === 'zh' ? '分' : ''}
           </span>
         ))}
       </div>
@@ -160,6 +160,7 @@ export const History = () => {
               result={result} 
               onDelete={deleteHistoryItem}
               i18n={i18n}
+              locale={locale}
             />
           ))}
         </div>

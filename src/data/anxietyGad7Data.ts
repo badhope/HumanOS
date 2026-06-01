@@ -210,7 +210,7 @@ export const GAD7_QUESTIONS: Question[] = [
 export const ANXIETY_LEVELS = {
   minimal: {
     name: '正常水平',
-    range: [0, 4],
+    range: [0, 16],
     color: 'green',
     description: '您目前的焦虑水平在正常范围内。',
     detailed: {
@@ -232,7 +232,7 @@ export const ANXIETY_LEVELS = {
   },
   mild: {
     name: '轻度焦虑',
-    range: [5, 9],
+    range: [17, 33],
     color: 'yellow',
     description: '您可能有一些轻微的焦虑症状，但整体可控。',
     detailed: {
@@ -254,7 +254,7 @@ export const ANXIETY_LEVELS = {
   },
   moderate: {
     name: '中度焦虑',
-    range: [10, 14],
+    range: [34, 50],
     color: 'orange',
     description: '您目前有较为明显的焦虑症状，建议寻求专业帮助。',
     detailed: {
@@ -277,7 +277,7 @@ export const ANXIETY_LEVELS = {
   },
   severe: {
     name: '重度焦虑',
-    range: [15, 21],
+    range: [51, 84],
     color: 'red',
     description: '您目前的焦虑症状较为严重，强烈建议尽快寻求专业帮助。',
     detailed: {

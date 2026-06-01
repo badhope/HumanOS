@@ -186,12 +186,12 @@ export function calculateGAD7Traits(answers: Record<string, number>, questions: 
     {
       name: '焦虑水平',
       score: normalizedTotal,
-      description: `${subLevelInfo.label} - ${subLevelInfo.description.slice(0, 40)}...`
+      description: `${subLevelInfo.label} - ${subLevelInfo.description}`
     }
   ];
   
   for (const [dimKey, score] of Object.entries(dimensionScores)) {
-    const dimInfo = (ANXIETY_DIMENSIONS as any)[dimKey];
+    const dimInfo = ANXIETY_DIMENSIONS[dimKey as keyof typeof ANXIETY_DIMENSIONS];
     if (dimInfo) {
       const maxDimScore = (dimensionCounts[dimKey] || 1) * 3;
       const weight = DIMENSION_WEIGHTS[dimKey] || 1.0;
@@ -337,7 +337,7 @@ export function generateDetailedGAD7Report(
         percentage: Math.round((score / maxScore) * 100),
         weightedPercentage: Math.round((score * weight / (maxScore * weight)) * 100),
         weight,
-        info: (ANXIETY_DIMENSIONS as any)[key]
+        info: ANXIETY_DIMENSIONS[key as keyof typeof ANXIETY_DIMENSIONS]
       };
     })
     .sort((a, b) => b.weightedScore - a.weightedScore);

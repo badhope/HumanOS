@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { trainingService } from '../services/training';
-import { Training as TrainingType, TRAINING_CATEGORIES } from '../types/training';
+import { Training as TrainingType, TrainingSession, TRAINING_CATEGORIES } from '../types/training';
 import { useAppStore } from '../store';
 import { getTranslation, t } from '../i18n';
 
@@ -29,7 +29,7 @@ export default function TrainingDetail() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [timer, setTimer] = useState(0);
-  const [session, setSession] = useState<any>(null);
+  const [session, setSession] = useState<TrainingSession | null>(null);
   const [showComplete, setShowComplete] = useState(false);
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');

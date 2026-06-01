@@ -1,0 +1,66 @@
+name: 🧪 Assessment Submission
+description: Submit a new psychological assessment scale
+title: "[Assessment] "
+labels: ["assessment", "new-assessment"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🧪 Psychological Assessment Submission
+
+        Thank you for contributing an assessment to MindMirror!
+
+        **Requirements**:
+        - Must be based on validated psychological scales with published research
+        - Include proper academic references
+        - Questions must be professionally worded
+        - Include scoring algorithm and clinical thresholds
+
+  - type: input
+    id: scale-name
+    attributes:
+      label: 📋 Scale Name
+      description: The official name of the psychological scale
+      placeholder: e.g., Perceived Stress Scale (PSS-10)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Description
+      description: Brief description of what this assessment measures
+      placeholder: This scale measures...
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 📚 Academic References
+      description: Cite the original validation studies (DOI preferred)
+      placeholder: |
+        Cohen, S., Kamarck, T., & Mermelstein, R. (1983). A global measure of perceived stress. Journal of Health and Social Behavior, 24(4), 385-396. https://doi.org/...
+    validations:
+      required: true
+
+  - type: input
+    id: question-count
+    attributes:
+      label: 🔢 Number of Questions
+      description: How many items/questions are in the scale?
+      placeholder: e.g., 10
+
+  - type: textarea
+    id: scoring
+    attributes:
+      label: 📐 Scoring Algorithm
+      description: Describe the scoring method and clinical thresholds
+      placeholder: Raw score sum, then map to severity bands: 0-13 (low), 14-26 (moderate), 27-40 (high)
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📎 Additional Information
+      description: Any other information about this assessment.

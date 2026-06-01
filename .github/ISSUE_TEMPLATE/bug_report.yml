@@ -1,0 +1,85 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior
+title: "[Bug] "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐛 Bug Report
+
+        Thank you for reporting a bug! Please fill out the sections below to help us understand and fix the issue.
+
+        **Before submitting**: Search existing issues to avoid duplicates.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug in detail...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 🔄 Steps to Reproduce
+      description: How to reproduce this bug step by step.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ Expected Behavior
+      description: What should happen instead?
+      placeholder: Expected behavior...
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: ❌ Actual Behavior
+      description: What actually happens?
+      placeholder: Actual behavior...
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: 🔥 Severity
+      options:
+        - Low (minor UI issue)
+        - Medium (feature not working)
+        - High (data loss or security concern)
+        - Critical (app crash)
+
+  - type: input
+    id: browser
+    attributes:
+      label: 🌐 Browser & Version
+      description: e.g., Chrome 120.0, Firefox 121.0, Safari 17.2
+      placeholder: Chrome 120.0
+
+  - type: input
+    id: os
+    attributes:
+      label: 💻 Operating System
+      description: e.g., macOS 14.2, Windows 11, Ubuntu 22.04
+      placeholder: macOS 14.2
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 📷 Screenshots / Screenshare
+      description: Attach screenshots or screen recordings if applicable.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 💡 Additional Context
+      description: Any other context about the problem.

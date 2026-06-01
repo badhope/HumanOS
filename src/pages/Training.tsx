@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAppStore } from '../store';
 import { getTranslation } from '../i18n';
 import { trainingService } from '../services/training';
-import { Training as TrainingType, TRAINING_CATEGORIES, TrainingCategory } from '../types/training';
+import { Training as TrainingType, TrainingRecommendation, TRAINING_CATEGORIES, TrainingCategory } from '../types/training';
 
 const DIFFICULTY_COLORS = {
   beginner: 'bg-green-100 text-green-700',
@@ -14,8 +14,8 @@ const DIFFICULTY_COLORS = {
 export function Training() {
   const [trainings, setTrainings] = useState<TrainingType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<TrainingCategory | 'all'>('all');
-  const [recommendations, setRecommendations] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>(null);
+  const [recommendations, setRecommendations] = useState<TrainingRecommendation[]>([]);
+  const [stats, setStats] = useState<ReturnType<typeof trainingService.getStatistics> | null>(null);
 
   const { locale } = useAppStore();
   const i18n = getTranslation(locale);

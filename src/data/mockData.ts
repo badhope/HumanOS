@@ -14,10 +14,9 @@ import {
   GAD7_QUESTIONS 
 } from './anxietyGad7Data';
 
-// 其他测评（保留用于演示）
 const otherAssessments: Assessment[] = [
   {
-    id: '3',
+    id: 'emotion-management',
     title: '情绪管理能力',
     description: '测试你的情绪管理和社交能力。',
     category: '情绪',
@@ -28,7 +27,6 @@ const otherAssessments: Assessment[] = [
   }
 ];
 
-// 完整的测评列表
 export const mockAssessments: Assessment[] = [
   BIG_FIVE_ASSESSMENT,
   STRESS_TEST_ASSESSMENT,
@@ -36,7 +34,6 @@ export const mockAssessments: Assessment[] = [
   ...otherAssessments
 ];
 
-// 生成模拟题目（仅用于其他测评演示）
 export function generateMockQuestions(count: number): Question[] {
   const sampleQuestions: Question[] = [
     { id: 'q1', text: '你喜欢与人交往吗？', trait: 'E', reverse: false },
@@ -46,26 +43,22 @@ export function generateMockQuestions(count: number): Question[] {
     { id: 'q5', text: '你经常感到焦虑吗？', trait: 'N', reverse: true }
   ];
   
-  // 如果要大五人格题目，返回大五人格题库
   if (count === 60) {
     return BIG_FIVE_QUESTIONS;
   }
   
-  // 否则返回模拟题目
   return Array.from({ length: count }, (_, i) => ({
     ...sampleQuestions[i % sampleQuestions.length],
     id: `q${i + 1}`
   }));
 }
 
-// 保留旧的特质描述（兼容历史代码）
 export const traitDescriptions = Object.entries(BIG_FIVE_TRAITS).map(([key, trait]) => ({
   name: trait.name,
   score: 50 + Math.floor(Math.random() * 30),
   description: TRAIT_INTERPRETATIONS[key as keyof typeof TRAIT_INTERPRETATIONS].high.description
 }));
 
-// 获取特定测评的题目
 export function getQuestionsForAssessment(assessmentId: string): Question[] {
   if (assessmentId === 'big-five' || assessmentId === '1') {
     return BIG_FIVE_QUESTIONS;
@@ -75,6 +68,9 @@ export function getQuestionsForAssessment(assessmentId: string): Question[] {
   }
   if (assessmentId === 'anxiety-gad7' || assessmentId === '3') {
     return GAD7_QUESTIONS;
+  }
+  if (assessmentId === 'emotion-management') {
+    return generateMockQuestions(10);
   }
   return generateMockQuestions(10);
 }

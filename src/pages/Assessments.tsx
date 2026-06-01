@@ -6,23 +6,27 @@ import { useAppStore } from '../store';
 import { getTranslation } from '../i18n';
 import { cn } from '../lib/utils';
 
-const categories = ['全部', '性格', '健康', '情绪', '社交', '职业', '生活'];
-
-const categoryKeyMap: Record<string, string> = {
-  '全部': 'all',
-  '性格': 'personality',
-  '健康': 'health',
-  '情绪': 'emotion',
-  '社交': 'social',
-  '职业': 'career',
-  '生活': 'life'
-};
+const CATEGORY_KEYS = ['all', 'personality', 'health', 'emotion', 'social', 'career', 'life'] as const;
+type CategoryKey = typeof CATEGORY_KEYS[number];
 
 export const Assessments = () => {
   const { setAssessments, assessments, locale } = useAppStore();
-  const [selectedCategory, setSelectedCategory] = useState('全部');
+  const [selectedCategory, setSelectedCategory] = useState<CategoryKey>('all');
   const i18n = getTranslation(locale);
-  
+
+  const getCategoryLabel = (key: CategoryKey) => {
+    const map: Record<CategoryKey, string> = {
+      all: i18n.assessments.all,
+      personality: i18n.assessments.personality,
+      health: i18n.assessments.health,
+      emotion: i18n.assessments.emotion,
+      social: i18n.assessments.social,
+      career: i18n.assessments.career,
+      life: i18n.assessments.life,
+    };
+    return map[key];
+  };
+
   useEffect(() => {
     if (assessments.length === 0) {
       setAssessments(mockAssessments);
@@ -30,19 +34,10 @@ export const Assessments = () => {
   }, [assessments.length, setAssessments]);
 
   const filteredAssessments = useMemo(() => {
-    if (selectedCategory === '全部') {
-      return assessments;
-    }
-    return assessments.filter(a => a.category === selectedCategory);
-  }, [assessments, selectedCategory]);
-
-  const getCategoryLabel = (category: string) => {
-    const key = categoryKeyMap[category] as keyof typeof i18n.assessments;
-    if (key && key in i18n.assessments && typeof i18n.assessments[key] === 'string') {
-      return i18n.assessments[key];
-    }
-    return category;
-  };
+    if (selectedCategory === 'all') return assessments;
+    const label = getCategoryLabel(selectedCategory);
+    return assessments.filter((a) => a.category === label);
+  }, [assessments, selectedCategory, locale]);
 
   return (
     <div className="space-y-8 sm:space-y-12">
@@ -56,18 +51,18 @@ export const Assessments = () => {
       </div>
 
       <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
-        {categories.map((category) => (
+        {CATEGORY_KEYS.map((key) => (
           <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
+            key={key}
+            onClick={() => setSelectedCategory(key)}
             className={cn(
               "px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl font-medium transition-all text-sm",
-              selectedCategory === category
+              selectedCategory === key
                 ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg transform scale-105"
                 : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 hover:border-slate-300"
             )}
           >
-            {getCategoryLabel(category)}
+            {getCategoryLabel(key)}
           </button>
         ))}
       </div>

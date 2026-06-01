@@ -207,20 +207,9 @@ export function calculateStressTestScore(
     const weight = DIMENSION_WEIGHTS[dim] || 1.0;
     const count = dimensionCounts[dim] || 1;
     
-    if (dim === 'coping') {
-      // 应对能力反向贡献：高应对能力降低总压力分
-      // 应对维度原始分范围 0 ~ count*4，反向计分后高分=低应对
-      // 所以应对维度得分越高=应对越差=增加压力
-      // 但由于已经是反向计分（4-response），高分意味着应对差
-      // 所以直接加权即可，不需要额外反转
-      const weightedDimScore = rawScore * weight;
-      dimensionWeightedScores[dim] = weightedDimScore;
-      weightedTotalScore += weightedDimScore;
-    } else {
-      const weightedDimScore = rawScore * weight;
-      dimensionWeightedScores[dim] = weightedDimScore;
-      weightedTotalScore += weightedDimScore;
-    }
+    const weightedDimScore = rawScore * weight;
+    dimensionWeightedScores[dim] = weightedDimScore;
+    weightedTotalScore += weightedDimScore;
   }
 
   // 归一化加权总分到0-120范围
@@ -296,7 +285,7 @@ export function calculateStressTestScore(
       rawScore: dimensionRawScores[key] || 0,
       percentage: dimensionPercentages[key] || 0,
       weight: DIMENSION_WEIGHTS[key] || 1.0,
-      info: (STRESS_DIMENSIONS as any)[key] 
+      info: STRESS_DIMENSIONS[key as keyof typeof STRESS_DIMENSIONS] 
     }))
     .sort((a, b) => b.score - a.score);
 
@@ -337,12 +326,12 @@ export function calculateStressTestTraits(
     {
       name: '总体压力水平',
       score: result.totalScore,
-      description: `${result.subLevel.label} (${result.subLevel.description.slice(0, 30)}...)`
+      description: `${result.subLevel.label} - ${result.subLevel.description}`
     }
   ];
 
   for (const [key, percentage] of Object.entries(result.dimensionPercentages)) {
-    const dimensionInfo = (STRESS_DIMENSIONS as any)[key];
+    const dimensionInfo = STRESS_DIMENSIONS[key as keyof typeof STRESS_DIMENSIONS];
     if (dimensionInfo) {
       const weight = DIMENSION_WEIGHTS[key] || 1.0;
       const weightLabel = weight >= 1.3 ? ' [高临床权重]' : weight >= 1.1 ? ' [中临床权重]' : '';

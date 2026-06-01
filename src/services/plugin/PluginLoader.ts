@@ -186,20 +186,21 @@ export class PluginLoader {
   }
 
   private registerPluginHooks(config: PluginConfig, api: PluginAPI): void {
-    switch (config.id) {
+    const pid = config.id;
+    switch (pid) {
       case 'big-five-personality':
         hookManager.registerHook('beforeAssessment', (data: any) => {
           if (data.assessmentId === 'big-five') {
             return { ...data, pluginEnhanced: true, source: 'big-five-plugin' };
           }
           return data;
-        });
+        }, pid);
         hookManager.registerHook('afterAssessment', (result: any) => {
           if (result.assessmentId === 'big-five') {
             return { ...result, pluginProcessed: true };
           }
           return result;
-        });
+        }, pid);
         break;
 
       case 'stress-test':
@@ -208,10 +209,10 @@ export class PluginLoader {
             return { ...data, pluginEnhanced: true, source: 'stress-plugin' };
           }
           return data;
-        });
+        }, pid);
         hookManager.registerHook('onCalculate', (answers: any) => {
           return { ...answers, extendedScoring: true };
-        });
+        }, pid);
         break;
 
       case 'gad7-anxiety':
@@ -220,10 +221,10 @@ export class PluginLoader {
             return { ...data, pluginEnhanced: true, source: 'anxiety-plugin' };
           }
           return data;
-        });
+        }, pid);
         hookManager.registerHook('onCalculate', (answers: any) => {
           return { ...answers, dimensionAnalysis: true };
-        });
+        }, pid);
         break;
 
       case 'mindfulness-training':
@@ -232,30 +233,30 @@ export class PluginLoader {
             return { ...context, trainingPluginActive: true };
           }
           return context;
-        });
+        }, pid);
         break;
 
       case 'theme-system':
         hookManager.registerHook('beforeRender', (context: any) => {
           const theme = storage.get('theme', 'light');
           return { ...context, theme };
-        });
+        }, pid);
         break;
 
       case 'data-analytics':
         hookManager.registerHook('afterAssessment', (result: any) => {
           return { ...result, analyticsProcessed: true };
-        });
+        }, pid);
         hookManager.registerHook('onGenerateReport', (data: any) => {
           return { ...data, analyticsIncluded: true };
-        });
+        }, pid);
         break;
     }
   }
 
   private unregisterPluginHooks(config: PluginConfig): void {
-    // Hooks are managed by the hookManager and will be cleaned up on their own
-    // when plugins are deactivated. For now, we just log.
+    const pid = config.id;
+    hookManager.unregisterPluginHooks(pid);
   }
 
   private createAssessmentExports(config: PluginConfig): Record<string, any> {

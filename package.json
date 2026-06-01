@@ -1,23 +1,63 @@
 {
   "name": "mindmirror",
-  "private": false,
   "version": "1.0.0",
-  "description": "Professional psychological assessment and training platform - MindMirror: Discover yourself, grow every day. Featuring Big Five personality test, stress evaluation, anxiety assessment and personalized mental training programs.",
+  "private": false,
+  "description": "MindMirror - Open-source professional psychological assessment platform. Features Big Five personality, stress, anxiety assessments, mood tracking, and personalized mental training programs.",
+  "description_zh": "MindMirror 开源专业心理测评平台 · 大五人格/压力/焦虑测评 · 心情追踪 · 个性化心理训练",
   "type": "module",
   "scripts": {
-    "client:dev": "vite",
+    "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
     "preview": "vite preview",
-    "check": "tsc --noEmit",
-    "server:dev": "nodemon",
-    "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\""
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "server:dev": "tsx api/index.ts",
+    "server:build": "tsc -p tsconfig.node.json"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/badhope/MindMirror.git"
+  },
+  "keywords": [
+    "psychology",
+    "personality-assessment",
+    "big-five",
+    "mental-health",
+    "self-discovery",
+    "stress-test",
+    "anxiety-assessment",
+    "mood-tracker",
+    "mental-training",
+    "react",
+    "typescript",
+    "open-source",
+    "心理健康",
+    "心理测评",
+    "大五人格",
+    "心理学"
+  ],
+  "author": {
+    "name": "badhope",
+    "url": "https://github.com/badhope"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/badhope/MindMirror/issues"
+  },
+  "homepage": "https://mindmirror.app",
+  "funding": [
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/mindmirror"
+    }
+  ],
   "dependencies": {
+    "@supabase/supabase-js": "^2.106.2",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^4.21.2",
+    "framer-motion": "^12.40.0",
     "lucide-react": "^0.511.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -47,8 +87,10 @@
     "tsx": "^4.20.3",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5",
-    "vite-plugin-trae-solo-badge": "^1.0.0",
+    "vite": "^6.4.2",
     "vite-tsconfig-paths": "^5.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

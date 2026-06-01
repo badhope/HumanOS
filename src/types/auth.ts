@@ -5,6 +5,8 @@ export interface User {
   avatar?: string;
   createdAt: Date;
   lastLoginAt?: Date;
+  provider?: 'email' | 'google' | 'github';
+  metadata?: Record<string, unknown>;
 }
 
 export interface AuthCredentials {

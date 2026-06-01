@@ -1,115 +1,222 @@
 # Contributing to MindMirror
 
-Thank you for your interest in contributing to MindMirror! 🎉
+Thank you for your interest in contributing to MindMirror! This document provides guidelines and instructions for contributing.
 
-## Code of Conduct
+## 🐛 Bug Reports
 
-By participating in this project, you are expected to uphold our code of conduct:
-- Be respectful and inclusive
-- Use welcoming and inclusive language
-- Be collaborative and constructive
-- Focus on what is best for the community
+Before submitting a bug report:
 
-## How Can I Contribute?
+- Search existing issues to avoid duplicates
+- Use the [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.yml)
+- Include browser/OS information
+- Provide steps to reproduce and expected vs actual behavior
+- If possible, provide a minimal reproducible example
 
-### Reporting Bugs 🐛
+## 💡 Feature Requests
 
-Before creating bug reports, please check the existing issues to avoid duplicates. When creating a bug report, include:
-- A clear and descriptive title
-- Steps to reproduce the issue
-- Expected behavior vs actual behavior
-- Screenshots or code snippets if applicable
-- Your environment (OS, Node.js version, browser)
+We welcome feature requests! Please:
 
-### Suggesting Features 💡
+- Search existing issues and PRs first
+- Use the [Feature Request template](.github/ISSUE_TEMPLATE/feature_request.yml)
+- Clearly describe the problem you're solving
+- Explain why this feature would benefit the project
 
-We welcome feature suggestions! Please:
-- Check existing issues and pull requests first
-- Describe the feature in detail
-- Explain why this feature would be beneficial
-- Provide use cases and examples
+## 🔧 Development Setup
 
-### Pull Requests 🚀
+### Prerequisites
 
-1. **Fork the repository**
-2. **Create your feature branch**
-   ```bash
-   git checkout -b feature/AmazingFeature
-   ```
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add some AmazingFeature'
-   ```
-4. **Push to the branch**
-   ```bash
-   git push origin feature/AmazingFeature
-   ```
-5. **Open a Pull Request**
+- Node.js ≥ 18.0.0
+- npm ≥ 9.0.0
 
-#### Pull Request Guidelines
-
-- Follow the existing code style and conventions
-- Update documentation if needed
-- Add tests for new features (if applicable)
-- Keep commits atomic and well-described
-- Write clear, descriptive commit messages
-- Ensure all tests pass before submitting
-
-### Development Setup 🛠️
+### Local Development
 
 ```bash
-# Clone your fork
-git clone https://github.com/your-username/badhope.git
-cd badhope
-
-# Add upstream remote
-git remote add upstream https://github.com/badhope/badhope.git
+# Clone the repository
+git clone https://github.com/badhope/MindMirror.git
+cd MindMirror
 
 # Install dependencies
 npm install
 
 # Start development server
 npm run dev
+
+# Run type checking
+npm run typecheck
+
+# Run linter
+npm run lint
+
+# Build for production
+npm run build
 ```
 
-### Coding Standards 📝
+### Project Structure
 
-- Use TypeScript for type safety
-- Follow ESLint configuration
-- Write meaningful variable and function names
-- Add comments for complex logic
-- Keep components small and focused
-- Use functional components and hooks
-
-### Commit Message Format 🎯
-
-We follow conventional commits:
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `style:` Code style changes (formatting, etc.)
-- `refactor:` Code refactoring
-- `test:` Adding or updating tests
-- `chore:` Maintenance tasks
-
-Example:
 ```
-feat: Add career recommendation engine
-
-- Implement personality-based career matching
-- Add career suggestion algorithms
-- Include detailed career descriptions
+MindMirror/
+├── src/
+│   ├── components/    # Reusable UI components
+│   │   └── animations/  # Framer Motion animation utilities
+│   ├── data/         # Assessment question data (JSON/TS)
+│   ├── hooks/        # Custom React hooks
+│   ├── i18n/         # Translation files (en.ts, zh.ts)
+│   ├── lib/          # Client utilities (Supabase, utils)
+│   ├── pages/        # Route page components
+│   ├── services/     # Business logic (scoring algorithms)
+│   ├── store/        # Zustand state management
+│   └── types/        # TypeScript type definitions
+├── api/              # Express.js API routes
+├── supabase/         # Database migrations
+└── tests/            # Unit tests
 ```
 
-## Questions? 🤔
+## 🌐 Internationalization (i18n)
 
-Feel free to:
-- Open an issue for questions
-- Join the discussion
-- Email us (if available)
+MindMirror supports English and Chinese. When adding new features:
 
-## Attribution 🙏
+1. Add translation keys to both `src/i18n/en.ts` AND `src/i18n/zh.ts`
+2. Use the `t()` helper function from `../i18n`
+3. All user-facing text must be translated
 
-Contributors will be credited in the README and release notes.
+```typescript
+import { t } from '../i18n';
 
-Thank you for making MindMirror better! 💖
+// Usage
+t(locale, 'section.key', { param: value })
+```
+
+## 📐 Code Style
+
+- **Formatting**: ESLint + Prettier (automated via `npm run lint`)
+- **TypeScript**: Strict mode enabled, no `any` types
+- **Commits**: Conventional Commits format
+
+```
+<type>(<scope>): <description>
+
+Types: feat, fix, docs, style, refactor, test, chore
+Scope: auth, scoring, i18n, assessment, etc.
+```
+
+Examples:
+- `feat(i18n): add Portuguese language support`
+- `fix(scoring): correct T-score calculation for stress test`
+- `docs(assessments): update Big Five description text`
+
+## 🧪 Testing
+
+### Scoring Logic Tests
+
+Tests for assessment scoring algorithms are in `tests/`:
+
+```bash
+# Run tests
+npx vitest run
+
+# Run tests in watch mode
+npx vitest
+```
+
+### Writing Tests
+
+When adding new assessment scoring:
+
+```typescript
+describe('Big Five Scoring', () => {
+  it('should calculate correct O score', () => {
+    const result = calculateBigFiveScores(answers, questions);
+    expect(result[0].score).toBe(expectedScore);
+  });
+});
+```
+
+## 📋 Pull Request Process
+
+1. **Fork & Branch**: Create a feature branch from `main`
+   ```bash
+   git checkout -b feature/your-feature-name
+   git checkout -b fix/bug-description
+   ```
+
+2. **Development**: Make your changes with passing tests
+
+3. **Type Check & Lint**: Ensure clean code
+   ```bash
+   npm run typecheck
+   npm run lint
+   ```
+
+4. **Commit**: Use conventional commits format
+
+5. **Push & PR**: Open a Pull Request against `main`
+   - Fill in the PR template completely
+   - Link related issues with `Closes #123` or `Refs #456`
+   - Request review from maintainers
+
+6. **Review**: Address any feedback from maintainers
+
+## 🧭 Assessment Development Guide
+
+### Adding a New Assessment
+
+1. **Create question data** in `src/data/`:
+   ```typescript
+   // src/data/myAssessmentData.ts
+   export const myAssessmentData = {
+     id: 'my-assessment',
+     title: { en: 'My Assessment', zh: '我的测评' },
+     questions: [
+       {
+         id: 'q1',
+         text: { en: 'Question text', zh: '问题文本' },
+         options: [...],
+         reverse: false,
+       }
+     ],
+   };
+   ```
+
+2. **Create scoring service** in `src/services/`:
+   ```typescript
+   // src/services/myAssessmentScoring.ts
+   export function calculateMyAssessmentScores(answers, questions) {
+     // Implement scoring logic
+   }
+   ```
+
+3. **Add to store** in `src/store/index.ts`
+
+4. **Add translations** in `src/i18n/en.ts` and `src/i18n/zh.ts`
+
+5. **Add navigation** in `Sidebar.tsx` and `Home.tsx`
+
+## 📖 Documentation
+
+- Update README.md if adding new features
+- Add inline comments for complex logic
+- Document scoring algorithms with references to sources
+
+## ⚠️ Important Notes
+
+- **Never commit secrets**: Use `.env` for secrets, `.env.example` for templates
+- **Assessment content**: Only use scientifically validated scales with proper references
+- **Privacy**: All user data handling must comply with privacy best practices
+- **Accessibility**: Follow WCAG 2.1 guidelines for UI components
+
+## 🙏 Thank You
+
+Every contribution is valuable. Thank you for making MindMirror better!
+
+---
+
+## 🇨🇳 中文贡献指南
+
+欢迎为 MindMirror 做出贡献！请遵循以下指南：
+
+- 使用英文提交信息（Conventional Commits）
+- 文档使用中英双语
+- 所有用户可见文本必须翻译
+- 遵循上述 Pull Request 流程
+
+如有问题，可以在 [GitHub Issues](https://github.com/badhope/MindMirror/issues) 中提出。
